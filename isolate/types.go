@@ -1,7 +1,5 @@
 package isolate
 
-import "fmt"
-
 type memType struct {
 	lim limits
 }
@@ -49,21 +47,21 @@ func (vt valType) IsRefType() bool {
 
 func (vt valType) NumType() typeCode {
 	if !vt.IsNumType() {
-		panic(fmt.Errorf("valtype %d was not a numtype", vt))
+		panic("valtype was not a numtype")
 	}
 	return vt.numOrVecType
 }
 
 func (vt valType) VecType() typeCode {
 	if !vt.IsVecType() {
-		panic(fmt.Errorf("valtype %d was not a vectype", vt))
+		panic("valtype was not a vectype")
 	}
 	return vt.numOrVecType
 }
 
 func (vt valType) RefType() refType {
 	if !vt.IsRefType() {
-		panic(fmt.Errorf("valtype %d was not a reftype", vt))
+		panic("valtype was not a reftype")
 	}
 	return vt.refType
 }
