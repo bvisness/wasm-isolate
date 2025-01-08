@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/bvisness/wasm-isolate/isolate"
 	"github.com/bvisness/wasm-isolate/utils"
@@ -46,12 +48,23 @@ func main() {
 				}
 			}
 
-			err := isolate.Isolate(wasm, out, []int{})
+			var funcs []int
+			funcIndices := strings.Split(utils.Must1(rootCmd.PersistentFlags().GetString("funcs")), ",")
+			for _, idxStr := range funcIndices {
+				idx, err := strconv.Atoi(idxStr)
+				if err != nil {
+					exitWithError("invalid function index %s", idxStr)
+				}
+				funcs = append(funcs, idx)
+			}
+
+			err := isolate.Isolate(wasm, out, funcs)
 			if err != nil {
 				exitWithError("%v", err)
 			}
 		},
 	}
+	rootCmd.PersistentFlags().StringP("funcs", "f", "", "The function indices to isolate, separated by commas.")
 	rootCmd.PersistentFlags().StringP("out", "o", "-", "The file to write output to. Defaults to stdout.")
 	utils.Must(rootCmd.Execute())
 }
