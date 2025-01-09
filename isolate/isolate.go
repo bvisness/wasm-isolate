@@ -129,6 +129,8 @@ func Isolate(wasm io.Reader, out io.Writer, funcs []int) error {
 			out.Write(newBody)
 		// case 9: // element section
 		// TODO: Parse segments of funcref to make sure we don't strip declared funcs
+		case 7, 8: // export and start sections
+			// These sections are unnecessary and can be skipped.
 		case 10: // code section
 			numEntries, _, err := p.ReadU32("num code entries")
 			if err != nil {
