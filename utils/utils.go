@@ -1,5 +1,7 @@
 package utils
 
+import "fmt"
+
 // Takes an (error) return and panics if there is an error.
 // Helps avoid `if err != nil` in scripts. Use sparingly in real code.
 func Must(err error) {
@@ -15,4 +17,10 @@ func Must1[T any](v T, err error) T {
 		panic(err)
 	}
 	return v
+}
+
+func Assert(cond bool, msg string, args ...any) {
+	if !cond {
+		panic(fmt.Errorf(msg, args...))
+	}
 }
