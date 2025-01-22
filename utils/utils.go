@@ -19,8 +19,9 @@ func Must1[T any](v T, err error) T {
 	return v
 }
 
-func Assert(cond bool, msg string, args ...any) {
-	if !cond {
-		panic(fmt.Errorf(msg, args...))
+func Assert[T comparable](v T, msg string, args ...any) {
+	var zero T
+	if v == zero {
+		panic(fmt.Sprintf("Assert failed: "+msg, args...))
 	}
 }
