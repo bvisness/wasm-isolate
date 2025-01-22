@@ -6,9 +6,9 @@ func _memop(_s *Stream) (*Phrase[int], int, int) {
 	_pos := __tmp1
 	__tmp2 := _u32(_s)
 	_flags := __tmp2
-	__tmp3 := _require_4(_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
+	__tmp3 := _require_4((_flags) < (0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp3
-	__tmp5 := _Int32_logand_2(_flags, 0x40) != 0
+	__tmp5 := (_flags)&(0x40) != 0
 	_has_var := __tmp5
 	var __tmp7 any
 	if _has_var {

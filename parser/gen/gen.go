@@ -28,6 +28,11 @@ var funcs = map[string]map[string][]string{
 	// },
 }
 
+var actuallyInfix = map[string]string{
+	"I32.lt_u":     "<",
+	"Int32.logand": "&",
+}
+
 var source []byte
 var outFile *os.File
 var tmpCount int
@@ -174,12 +179,22 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		if statement {
 			w("%s := ", strings.Join(results, ", "))
 		}
-		w("%s(", funcName(s(function), len(args)))
-		for _, arg := range args {
-			parseExpr(&arg, nil, false, false)
-			w(", ")
+
+		if infixOp, ok := actuallyInfix[s(function)]; ok {
+			w("(")
+			parseExpr(&args[0], nil, false, false)
+			w(")%s(", infixOp)
+			parseExpr(&args[1], nil, false, false)
+			w(")")
+		} else {
+			w("%s(", funcName(s(function), len(args)))
+			for _, arg := range args {
+				parseExpr(&arg, nil, false, false)
+				w(", ")
+			}
+			w(")")
 		}
-		w(")")
+
 		if statement {
 			w("\n")
 		}
