@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/bvisness/wasm-isolate/utils"
 	"github.com/spf13/cobra"
@@ -107,17 +108,23 @@ var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
 
 func parseExpr(expr *tree_sitter.Node) {
 	switch expr.GrammarName() {
-	case "number", "value_path", "constructor_path", "_lowercase_identifier":
+	case "value_path", "constructor_path", "_lowercase_identifier":
 		name := reUnsafeChar.ReplaceAllString(s(expr), "_")
 		w("%s ", name)
+	case "number":
+		n := s(expr)
+		n = strings.TrimRight(n, "lL")
+		w("%s ", n)
 	case "or_pattern", "tuple_pattern":
 		parseExpr(expr.NamedChild(0))
 		w(", ")
 		parseExpr(expr.NamedChild(1))
-	case "rel_operator":
+	case "add_operator", "mult_operator", "rel_operator":
 		switch s(expr) {
 		case "=":
 			w(" == ")
+		case "land":
+			w(" & ")
 		default:
 			w(" %s ", s(expr))
 		}
@@ -127,13 +134,16 @@ func parseExpr(expr *tree_sitter.Node) {
 	case "application_expression":
 		function := expr.ChildByFieldName("function")
 		args := expr.ChildrenByFieldName("argument", expr.Walk())
-		w("_%s(", s(function))
+		w("_")
+		parseExpr(function)
+		w("(")
 		for _, arg := range args {
 			parseExpr(&arg)
 			w(", ")
 		}
 		w(")")
 	case "if_expression":
+		fmt.Fprintf(os.Stderr, "%s\n", expr.ToSexp())
 		condition := expr.ChildByFieldName("condition")
 
 		w("if ")
@@ -182,7 +192,7 @@ func parseExpr(expr *tree_sitter.Node) {
 
 		parseExpr(expr.NamedChild(1))
 	case "list_expression":
-		w("/* TODO: list_expression */")
+		w("nil /* TODO: list_expression */")
 	case "match_expression":
 		w("switch __switchVal%d := ", switchDepth)
 		parseExpr(expr.NamedChild(0))
@@ -194,7 +204,9 @@ func parseExpr(expr *tree_sitter.Node) {
 
 			switch pattern.GrammarName() {
 			case "number":
-				w("case %s:\n", s(pattern))
+				w("case ")
+				parseExpr(pattern)
+				w(":\n")
 			case "alias_pattern":
 				w("case ")
 				parseExpr(pattern.NamedChild(0))
@@ -221,6 +233,8 @@ func parseExpr(expr *tree_sitter.Node) {
 		// w("(")
 		parseExpr(expr.NamedChild(0))
 		// w(")")
+	case "product_expression":
+		w("nil /* TODO: product_expression */")
 	case "sequence_expression":
 		left := expr.ChildByFieldName("left")
 		right := expr.ChildByFieldName("right")
@@ -230,6 +244,7 @@ func parseExpr(expr *tree_sitter.Node) {
 		parseExpr(right)
 		w("\n")
 	default:
+		fmt.Fprintf(os.Stderr, "%s\n", s(expr))
 		fmt.Fprintf(os.Stderr, "%s\n", expr.ToSexp())
 		exitWithError("unknown expression type %s", expr.GrammarName())
 	}
