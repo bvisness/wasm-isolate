@@ -47,11 +47,15 @@ func _read(s *Stream) byte {
 	return s.bytes[s.pos]
 }
 
-func _peek(s *Stream) (byte, bool) {
+func _Some[T any](v T) *T {
+	return &v
+}
+
+func _peek(s *Stream) *byte {
 	if _eos(s) {
-		return 0, false
+		return nil
 	} else {
-		return _read(s), true
+		return _Some(_read(s))
 	}
 }
 

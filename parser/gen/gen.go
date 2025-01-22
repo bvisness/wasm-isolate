@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/bvisness/wasm-isolate/utils"
 	"github.com/spf13/cobra"
@@ -15,6 +16,7 @@ var specpath = filepath.Join("gen", "spec")
 
 var source []byte
 var outFile *os.File
+var switchDepth int
 
 func main() {
 	var rootCmd *cobra.Command
@@ -81,7 +83,6 @@ func parseFunc(f *tree_sitter.Node) {
 	body := Lookup{binding}.Field("body", "").Node
 	var params []*tree_sitter.Node
 	for _, child := range binding.NamedChildren(cur) {
-		fmt.Fprintf(os.Stderr, "%s\n", child.GrammarName())
 		if child.GrammarName() == "parameter" {
 			params = append(params, &child)
 		}
@@ -102,10 +103,70 @@ func parseFunc(f *tree_sitter.Node) {
 	w("}\n\n")
 }
 
+var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
+
 func parseExpr(expr *tree_sitter.Node) {
 	switch expr.GrammarName() {
-	case "value_path":
+	case "number", "value_path", "constructor_path", "_lowercase_identifier":
+		name := reUnsafeChar.ReplaceAllString(s(expr), "_")
+		w("%s ", name)
+	case "or_pattern", "tuple_pattern":
+		parseExpr(expr.NamedChild(0))
+		w(", ")
+		parseExpr(expr.NamedChild(1))
+	case "rel_operator":
+		switch s(expr) {
+		case "=":
+			w(" == ")
+		default:
+			w(" %s ", s(expr))
+		}
+	case "string":
 		w("%s", s(expr))
+
+	case "application_expression":
+		function := expr.ChildByFieldName("function")
+		args := expr.ChildrenByFieldName("argument", expr.Walk())
+		w("_%s(", s(function))
+		for _, arg := range args {
+			parseExpr(&arg)
+			w(", ")
+		}
+		w(")")
+	case "if_expression":
+		condition := expr.ChildByFieldName("condition")
+
+		w("if ")
+		parseExpr(condition)
+
+		for _, child := range expr.NamedChildren(expr.Walk()) {
+			if child.Id() == condition.Id() {
+				continue
+			}
+
+			switch child.GrammarName() {
+			case "then_clause":
+				w(" {\n")
+				parseExpr(child.NamedChild(0))
+				w("} ")
+			case "else_clause":
+				w(" else {\n")
+				parseExpr(child.NamedChild(0))
+				w("} ")
+			default:
+				exitWithError("unknown type in if expression: %s", child.GrammarName())
+			}
+		}
+
+		w("\n")
+	case "infix_expression":
+		left := expr.ChildByFieldName("left")
+		operator := expr.ChildByFieldName("operator")
+		right := expr.ChildByFieldName("right")
+
+		parseExpr(left)
+		parseExpr(operator)
+		parseExpr(right)
 	case "let_expression":
 		binding := Lookup{expr}.
 			Child(0, "value_definition").
@@ -114,39 +175,62 @@ func parseExpr(expr *tree_sitter.Node) {
 		pattern := Lookup{binding}.Field("pattern", "").Node
 		body := Lookup{binding}.Field("body", "").Node
 
-		w("%s := ", s(pattern))
+		parseExpr(pattern)
+		w(" := ")
 		parseExpr(body)
 		w("\n")
 
 		parseExpr(expr.NamedChild(1))
+	case "list_expression":
+		w("/* TODO: list_expression */")
 	case "match_expression":
-		w("switch __switchVal := ")
+		w("switch __switchVal%d := ", switchDepth)
 		parseExpr(expr.NamedChild(0))
-		w("; __switchVal {\n")
+		w("; __switchVal%d {\n", switchDepth)
 
 		for _, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
 			pattern := Lookup{&matchCase}.Field("pattern", "").Node
+			body := Lookup{&matchCase}.Field("body", "").Node
+
 			switch pattern.GrammarName() {
 			case "number":
 				w("case %s:\n", s(pattern))
 			case "alias_pattern":
+				w("case ")
+				parseExpr(pattern.NamedChild(0))
+				w(":\n")
+
+				parseExpr(pattern.NamedChild(1))
+				w(" := __switchVal%d\n", switchDepth)
 			case "_lowercase_identifier":
+				w("default:\n")
+				w("%s := __switchVal%d\n", s(pattern), switchDepth)
 			default:
 				exitWithError("unknown type of match case: %s", pattern.GrammarName())
 			}
+
+			switchDepth++
+			parseExpr(body)
+			switchDepth--
+
+			w("\n")
 		}
 
 		w("}\n")
-	case "application_expression":
-		function := Lookup{expr}.Field("function", "value_path").Node
-		args := expr.ChildrenByFieldName("argument", expr.Walk())
-		w("_%s(", s(function))
-		for _, arg := range args {
-			parseExpr(&arg)
-			w(", ")
-		}
-		w(")")
+	case "parenthesized_expression":
+		// w("(")
+		parseExpr(expr.NamedChild(0))
+		// w(")")
+	case "sequence_expression":
+		left := expr.ChildByFieldName("left")
+		right := expr.ChildByFieldName("right")
+
+		parseExpr(left)
+		w(";\n")
+		parseExpr(right)
+		w("\n")
 	default:
+		fmt.Fprintf(os.Stderr, "%s\n", expr.ToSexp())
 		exitWithError("unknown expression type %s", expr.GrammarName())
 	}
 }
@@ -159,15 +243,6 @@ func exitWithError(msg string, args ...any) {
 	msg = fmt.Sprintf(msg, args...)
 	fmt.Fprintf(os.Stderr, "ERROR: %s\n", msg)
 	os.Exit(1)
-}
-
-const ret = "__ret"
-
-var types = map[string]map[string]string{
-	"instr": {
-		"s": "*Stream",
-		ret: "",
-	},
 }
 
 type Lookup struct {
@@ -188,4 +263,13 @@ func (l Lookup) Field(fieldName string, grammarName string) Lookup {
 		utils.Assert(node.GrammarName() == grammarName, "expected %s but got %s", grammarName, node.GrammarName())
 	}
 	return Lookup{node}
+}
+
+const ret = "__ret"
+
+var types = map[string]map[string]string{
+	"instr": {
+		"s": "*Stream",
+		ret: "",
+	},
 }

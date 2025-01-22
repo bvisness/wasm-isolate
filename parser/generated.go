@@ -2,203 +2,530 @@
 package parser
 
 func _instr(s *Stream, )  {
-pos := _pos(s, )
-switch __switchVal := _op(s, ); __switchVal {
+pos  := _pos(s , )
+switch __switchVal0 := _op(s , ); __switchVal0 {
 case 0x00:
+unreachable 
 case 0x01:
+nop 
 case 0x02:
-case 0x03:
-case 0x04:
-case 0x05:
-case 0x08:
-case 0x0a:
-case 0x0b:
-case 0x0c:
-case 0x0d:
-case 0x0e:
-case 0x0f:
-case 0x10:
-case 0x11:
-case 0x12:
-case 0x13:
-case 0x14:
-case 0x15:
-case 0x1a:
-case 0x1b:
-case 0x1c:
-case 0x1f:
-case 0x20:
-case 0x21:
-case 0x22:
-case 0x23:
-case 0x24:
-case 0x25:
-case 0x26:
-case 0x28:
-case 0x29:
-case 0x2a:
-case 0x2b:
-case 0x2c:
-case 0x2d:
-case 0x2e:
-case 0x2f:
-case 0x30:
-case 0x31:
-case 0x32:
-case 0x33:
-case 0x34:
-case 0x35:
-case 0x36:
-case 0x37:
-case 0x38:
-case 0x39:
-case 0x3a:
-case 0x3b:
-case 0x3c:
-case 0x3d:
-case 0x3e:
-case 0x3f:
-case 0x40:
-case 0x41:
-case 0x42:
-case 0x43:
-case 0x44:
-case 0x45:
-case 0x46:
-case 0x47:
-case 0x48:
-case 0x49:
-case 0x4a:
-case 0x4b:
-case 0x4c:
-case 0x4d:
-case 0x4e:
-case 0x4f:
-case 0x50:
-case 0x51:
-case 0x52:
-case 0x53:
-case 0x54:
-case 0x55:
-case 0x56:
-case 0x57:
-case 0x58:
-case 0x59:
-case 0x5a:
-case 0x5b:
-case 0x5c:
-case 0x5d:
-case 0x5e:
-case 0x5f:
-case 0x60:
-case 0x61:
-case 0x62:
-case 0x63:
-case 0x64:
-case 0x65:
-case 0x66:
-case 0x67:
-case 0x68:
-case 0x69:
-case 0x6a:
-case 0x6b:
-case 0x6c:
-case 0x6d:
-case 0x6e:
-case 0x6f:
-case 0x70:
-case 0x71:
-case 0x72:
-case 0x73:
-case 0x74:
-case 0x75:
-case 0x76:
-case 0x77:
-case 0x78:
-case 0x79:
-case 0x7a:
-case 0x7b:
-case 0x7c:
-case 0x7d:
-case 0x7e:
-case 0x7f:
-case 0x80:
-case 0x81:
-case 0x82:
-case 0x83:
-case 0x84:
-case 0x85:
-case 0x86:
-case 0x87:
-case 0x88:
-case 0x89:
-case 0x8a:
-case 0x8b:
-case 0x8c:
-case 0x8d:
-case 0x8e:
-case 0x8f:
-case 0x90:
-case 0x91:
-case 0x92:
-case 0x93:
-case 0x94:
-case 0x95:
-case 0x96:
-case 0x97:
-case 0x98:
-case 0x99:
-case 0x9a:
-case 0x9b:
-case 0x9c:
-case 0x9d:
-case 0x9e:
-case 0x9f:
-case 0xa0:
-case 0xa1:
-case 0xa2:
-case 0xa3:
-case 0xa4:
-case 0xa5:
-case 0xa6:
-case 0xa7:
-case 0xa8:
-case 0xa9:
-case 0xaa:
-case 0xab:
-case 0xac:
-case 0xad:
-case 0xae:
-case 0xaf:
-case 0xb0:
-case 0xb1:
-case 0xb2:
-case 0xb3:
-case 0xb4:
-case 0xb5:
-case 0xb6:
-case 0xb7:
-case 0xb8:
-case 0xb9:
-case 0xba:
-case 0xbb:
-case 0xbc:
-case 0xbd:
-case 0xbe:
-case 0xbf:
-case 0xc0:
-case 0xc1:
-case 0xc2:
-case 0xc3:
-case 0xc4:
-case 0xd0:
-case 0xd1:
-case 0xd2:
-case 0xd3:
-case 0xd4:
-case 0xd5:
-case 0xd6:
-case 0xfd:
-}
-}
+bt  := _block_type(s , )
+es_  := _instr_block(s , )
+_end_(s , );
+_block(bt , es_ , )
 
+case 0x03:
+bt  := _block_type(s , )
+es_  := _instr_block(s , )
+_end_(s , );
+_loop(bt , es_ , )
+
+case 0x04:
+bt  := _block_type(s , )
+es1  := _instr_block(s , )
+if _peek(s , ) == _Some(0x05 , ) {
+_expect(0x05 , s , "ELSE or END opcode expected", );
+es2  := _instr_block(s , )
+_end_(s , );
+_if_(bt , es1 , es2 , )
+
+}  else {
+_end_(s , );
+_if_(bt , es1 , /* TODO: list_expression */, )
+} 
+
+case 0x05:
+_error(s , pos , "misplaced ELSE opcode", )
+case 0x06 , 0x07 :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0x08:
+_throw(_at(var , s , ), )
+case 0x09 :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0x0a:
+throw_ref 
+case 0x0b:
+_error(s , pos , "misplaced END opcode", )
+case 0x0c:
+_br(_at(var , s , ), )
+case 0x0d:
+_br_if(_at(var , s , ), )
+case 0x0e:
+xs  := _vec(_at(var , ), s , )
+x  := _at(var , s , )
+_br_table(xs , x , )
+case 0x0f:
+return 
+case 0x10:
+_call(_at(var , s , ), )
+case 0x11:
+y  := _at(var , s , )
+x  := _at(var , s , )
+_call_indirect(x , y , )
+case 0x12:
+_return_call(_at(var , s , ), )
+case 0x13:
+y  := _at(var , s , )
+x  := _at(var , s , )
+_return_call_indirect(x , y , )
+case 0x14:
+_call_ref(_at(var , s , ), )
+case 0x15:
+_return_call_ref(_at(var , s , ), )
+case 0x16 , 0x17 , 0x18 , 0x19 :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0x1a:
+drop 
+case 0x1b:
+_select(None , )
+case 0x1c:
+_select(_Some(_vec(val_type , s , ), ), )
+case 0x1d , 0x1e :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0x1f:
+bt  := _block_type(s , )
+cs  := _vec(_at(catch , ), s , )
+es  := _instr_block(s , )
+_end_(s , );
+_try_table(bt , cs , es , )
+
+case 0x20:
+_local_get(_at(var , s , ), )
+case 0x21:
+_local_set(_at(var , s , ), )
+case 0x22:
+_local_tee(_at(var , s , ), )
+case 0x23:
+_global_get(_at(var , s , ), )
+case 0x24:
+_global_set(_at(var , s , ), )
+case 0x25:
+_table_get(_at(var , s , ), )
+case 0x26:
+_table_set(_at(var , s , ), )
+case 0x27 :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0x28:
+x , a , o  := _memop(s , )
+_i32_load(x , a , o , )
+case 0x29:
+x , a , o  := _memop(s , )
+_i64_load(x , a , o , )
+case 0x2a:
+x , a , o  := _memop(s , )
+_f32_load(x , a , o , )
+case 0x2b:
+x , a , o  := _memop(s , )
+_f64_load(x , a , o , )
+case 0x2c:
+x , a , o  := _memop(s , )
+_i32_load8_s(x , a , o , )
+case 0x2d:
+x , a , o  := _memop(s , )
+_i32_load8_u(x , a , o , )
+case 0x2e:
+x , a , o  := _memop(s , )
+_i32_load16_s(x , a , o , )
+case 0x2f:
+x , a , o  := _memop(s , )
+_i32_load16_u(x , a , o , )
+case 0x30:
+x , a , o  := _memop(s , )
+_i64_load8_s(x , a , o , )
+case 0x31:
+x , a , o  := _memop(s , )
+_i64_load8_u(x , a , o , )
+case 0x32:
+x , a , o  := _memop(s , )
+_i64_load16_s(x , a , o , )
+case 0x33:
+x , a , o  := _memop(s , )
+_i64_load16_u(x , a , o , )
+case 0x34:
+x , a , o  := _memop(s , )
+_i64_load32_s(x , a , o , )
+case 0x35:
+x , a , o  := _memop(s , )
+_i64_load32_u(x , a , o , )
+case 0x36:
+x , a , o  := _memop(s , )
+_i32_store(x , a , o , )
+case 0x37:
+x , a , o  := _memop(s , )
+_i64_store(x , a , o , )
+case 0x38:
+x , a , o  := _memop(s , )
+_f32_store(x , a , o , )
+case 0x39:
+x , a , o  := _memop(s , )
+_f64_store(x , a , o , )
+case 0x3a:
+x , a , o  := _memop(s , )
+_i32_store8(x , a , o , )
+case 0x3b:
+x , a , o  := _memop(s , )
+_i32_store16(x , a , o , )
+case 0x3c:
+x , a , o  := _memop(s , )
+_i64_store8(x , a , o , )
+case 0x3d:
+x , a , o  := _memop(s , )
+_i64_store16(x , a , o , )
+case 0x3e:
+x , a , o  := _memop(s , )
+_i64_store32(x , a , o , )
+case 0x3f:
+_memory_size(_at(var , s , ), )
+case 0x40:
+_memory_grow(_at(var , s , ), )
+case 0x41:
+_i32_const(_at(s32 , s , ), )
+case 0x42:
+_i64_const(_at(s64 , s , ), )
+case 0x43:
+_f32_const(_at(f32 , s , ), )
+case 0x44:
+_f64_const(_at(f64 , s , ), )
+case 0x45:
+i32_eqz 
+case 0x46:
+i32_eq 
+case 0x47:
+i32_ne 
+case 0x48:
+i32_lt_s 
+case 0x49:
+i32_lt_u 
+case 0x4a:
+i32_gt_s 
+case 0x4b:
+i32_gt_u 
+case 0x4c:
+i32_le_s 
+case 0x4d:
+i32_le_u 
+case 0x4e:
+i32_ge_s 
+case 0x4f:
+i32_ge_u 
+case 0x50:
+i64_eqz 
+case 0x51:
+i64_eq 
+case 0x52:
+i64_ne 
+case 0x53:
+i64_lt_s 
+case 0x54:
+i64_lt_u 
+case 0x55:
+i64_gt_s 
+case 0x56:
+i64_gt_u 
+case 0x57:
+i64_le_s 
+case 0x58:
+i64_le_u 
+case 0x59:
+i64_ge_s 
+case 0x5a:
+i64_ge_u 
+case 0x5b:
+f32_eq 
+case 0x5c:
+f32_ne 
+case 0x5d:
+f32_lt 
+case 0x5e:
+f32_gt 
+case 0x5f:
+f32_le 
+case 0x60:
+f32_ge 
+case 0x61:
+f64_eq 
+case 0x62:
+f64_ne 
+case 0x63:
+f64_lt 
+case 0x64:
+f64_gt 
+case 0x65:
+f64_le 
+case 0x66:
+f64_ge 
+case 0x67:
+i32_clz 
+case 0x68:
+i32_ctz 
+case 0x69:
+i32_popcnt 
+case 0x6a:
+i32_add 
+case 0x6b:
+i32_sub 
+case 0x6c:
+i32_mul 
+case 0x6d:
+i32_div_s 
+case 0x6e:
+i32_div_u 
+case 0x6f:
+i32_rem_s 
+case 0x70:
+i32_rem_u 
+case 0x71:
+i32_and 
+case 0x72:
+i32_or 
+case 0x73:
+i32_xor 
+case 0x74:
+i32_shl 
+case 0x75:
+i32_shr_s 
+case 0x76:
+i32_shr_u 
+case 0x77:
+i32_rotl 
+case 0x78:
+i32_rotr 
+case 0x79:
+i64_clz 
+case 0x7a:
+i64_ctz 
+case 0x7b:
+i64_popcnt 
+case 0x7c:
+i64_add 
+case 0x7d:
+i64_sub 
+case 0x7e:
+i64_mul 
+case 0x7f:
+i64_div_s 
+case 0x80:
+i64_div_u 
+case 0x81:
+i64_rem_s 
+case 0x82:
+i64_rem_u 
+case 0x83:
+i64_and 
+case 0x84:
+i64_or 
+case 0x85:
+i64_xor 
+case 0x86:
+i64_shl 
+case 0x87:
+i64_shr_s 
+case 0x88:
+i64_shr_u 
+case 0x89:
+i64_rotl 
+case 0x8a:
+i64_rotr 
+case 0x8b:
+f32_abs 
+case 0x8c:
+f32_neg 
+case 0x8d:
+f32_ceil 
+case 0x8e:
+f32_floor 
+case 0x8f:
+f32_trunc 
+case 0x90:
+f32_nearest 
+case 0x91:
+f32_sqrt 
+case 0x92:
+f32_add 
+case 0x93:
+f32_sub 
+case 0x94:
+f32_mul 
+case 0x95:
+f32_div 
+case 0x96:
+f32_min 
+case 0x97:
+f32_max 
+case 0x98:
+f32_copysign 
+case 0x99:
+f64_abs 
+case 0x9a:
+f64_neg 
+case 0x9b:
+f64_ceil 
+case 0x9c:
+f64_floor 
+case 0x9d:
+f64_trunc 
+case 0x9e:
+f64_nearest 
+case 0x9f:
+f64_sqrt 
+case 0xa0:
+f64_add 
+case 0xa1:
+f64_sub 
+case 0xa2:
+f64_mul 
+case 0xa3:
+f64_div 
+case 0xa4:
+f64_min 
+case 0xa5:
+f64_max 
+case 0xa6:
+f64_copysign 
+case 0xa7:
+i32_wrap_i64 
+case 0xa8:
+i32_trunc_f32_s 
+case 0xa9:
+i32_trunc_f32_u 
+case 0xaa:
+i32_trunc_f64_s 
+case 0xab:
+i32_trunc_f64_u 
+case 0xac:
+i64_extend_i32_s 
+case 0xad:
+i64_extend_i32_u 
+case 0xae:
+i64_trunc_f32_s 
+case 0xaf:
+i64_trunc_f32_u 
+case 0xb0:
+i64_trunc_f64_s 
+case 0xb1:
+i64_trunc_f64_u 
+case 0xb2:
+f32_convert_i32_s 
+case 0xb3:
+f32_convert_i32_u 
+case 0xb4:
+f32_convert_i64_s 
+case 0xb5:
+f32_convert_i64_u 
+case 0xb6:
+f32_demote_f64 
+case 0xb7:
+f64_convert_i32_s 
+case 0xb8:
+f64_convert_i32_u 
+case 0xb9:
+f64_convert_i64_s 
+case 0xba:
+f64_convert_i64_u 
+case 0xbb:
+f64_promote_f32 
+case 0xbc:
+i32_reinterpret_f32 
+case 0xbd:
+i64_reinterpret_f64 
+case 0xbe:
+f32_reinterpret_i32 
+case 0xbf:
+f64_reinterpret_i64 
+case 0xc0:
+i32_extend8_s 
+case 0xc1:
+i32_extend16_s 
+case 0xc2:
+i64_extend8_s 
+case 0xc3:
+i64_extend16_s 
+case 0xc4:
+i64_extend32_s 
+case 0xc5 , 0xc6 , 0xc7 , 0xc8 , 0xc9 , 0xca , 0xcb , 0xcc , 0xcd , 0xce , 0xcf :
+b  := __switchVal0
+_illegal(s , pos , b , )
+case 0xd0:
+_ref_null(_heap_type(s , ), )
+case 0xd1:
+ref_is_null 
+case 0xd2:
+_ref_func(_at(var , s , ), )
+case 0xd3:
+ref_eq 
+case 0xd4:
+ref_as_non_null 
+case 0xd5:
+_br_on_null(_at(var , s , ), )
+case 0xd6:
+_br_on_non_null(_at(var , s , ), )
+case 0xfb :
+b  := __switchVal0
+switch __switchVal1 := _u32(s , ); __switchVal1 {
+case 0x00l:
+_struct_new(_at(var , s , ), )
+case 0x01l:
+_struct_new_default(_at(var , s , ), )
+case 0x02l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_struct_get(x , y , )
+case 0x03l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_struct_get_s(x , y , )
+case 0x04l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_struct_get_u(x , y , )
+case 0x05l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_struct_set(x , y , )
+case 0x06l:
+_array_new(_at(var , s , ), )
+case 0x07l:
+_array_new_default(_at(var , s , ), )
+case 0x08l:
+x  := _at(var , s , )
+n  := _u32(s , )
+_array_new_fixed(x , n , )
+case 0x09l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_array_new_data(x , y , )
+case 0x0al:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_array_new_elem(x , y , )
+case 0x0bl:
+_array_get(_at(var , s , ), )
+case 0x0cl:
+_array_get_s(_at(var , s , ), )
+case 0x0dl:
+_array_get_u(_at(var , s , ), )
+case 0x0el:
+_array_set(_at(var , s , ), )
+case 0x0fl:
+array_len 
+case 0x10l:
+_array_fill(_at(var , s , ), )
+case 0x11l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_array_copy(x , y , )
+case 0x12l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_array_init_data(x , y , )
+case 0x13l:
+x  := _at(var , s , )
+y  := _at(var , s , )
+_array_init_elem(x , y , )
+case 0x14l:
+_ref_test(
