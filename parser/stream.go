@@ -1,6 +1,11 @@
 package parser
 
-import "errors"
+import (
+	"errors"
+	"io"
+
+	"github.com/bvisness/wasm-isolate/utils"
+)
 
 // Manual translation of the "Decoding stream" section
 
@@ -8,6 +13,17 @@ type Stream struct {
 	name  string
 	bytes string
 	pos   int
+}
+
+var _ io.Reader = &Stream{}
+
+func (s *Stream) Read(p []byte) (n int, err error) {
+	utils.Assert(len(p) == 1, "can only read one byte at a time from Stream")
+	if _eos(s) {
+		return 0, io.EOF
+	}
+	p[0] = _byte(s)
+	return 1, nil
 }
 
 var EOS = errors.New("EOS")
@@ -24,21 +40,21 @@ func _eos(s *Stream) bool {
 	return _pos(s) == _len(s)
 }
 
-func _reset(s *Stream, pos int) {
+func _reset_2(s *Stream, pos int) {
 	s.pos = pos
 }
 
-func _check(n int, s *Stream) {
+func _check_2(n int, s *Stream) {
 	if _pos(s)+n > _len(s) {
 		panic(EOS)
 	}
 }
 
-func _skip(n int, s *Stream) {
+func _skip_2(n int, s *Stream) {
 	if n < 0 {
 		panic(EOS)
 	} else {
-		_check(n, s)
+		_check_2(n, s)
 		s.pos = s.pos + n
 	}
 }
@@ -60,14 +76,14 @@ func _peek(s *Stream) *byte {
 }
 
 func _get(s *Stream) byte {
-	_check(1, s)
+	_check_2(1, s)
 	b := _read(s)
-	_skip(1, s)
+	_skip_2(1, s)
 	return b
 }
 
-func _get_string(n int, s *Stream) string {
+func _get_string_2(n int, s *Stream) string {
 	i := _pos(s)
-	_skip(n, s)
+	_skip_2(n, s)
 	return s.bytes[i : i+n]
 }

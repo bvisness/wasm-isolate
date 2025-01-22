@@ -92,10 +92,10 @@ func parseFunc(f *tree_sitter.Node) {
 	name := s(pattern)
 	funcTypes := types[name]
 
-	w("func _%s(", s(pattern))
+	w("func %s(", funcName(s(pattern), len(params)))
 	for _, param := range params {
-		paramName := s(param)
-		w("%s %s, ", paramName, funcTypes[paramName])
+		paramName := safeName(s(param))
+		w("%s %s, ", paramName, funcTypes[s(param)])
 	}
 	w(") %s {\n", funcTypes[ret])
 
@@ -106,25 +106,39 @@ func parseFunc(f *tree_sitter.Node) {
 
 var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
 
+func safeName(name string) string {
+	return "_" + reUnsafeChar.ReplaceAllString(name, "_")
+}
+
+func funcName(name string, numArgs int) string {
+	name = safeName(name)
+	if numArgs > 1 {
+		name += fmt.Sprintf("_%d", numArgs)
+	}
+	return name
+}
+
 func parseExpr(expr *tree_sitter.Node) {
 	switch expr.GrammarName() {
 	case "value_path", "constructor_path", "_lowercase_identifier":
 		name := reUnsafeChar.ReplaceAllString(s(expr), "_")
-		w("%s ", name)
+		w("_%s", name)
 	case "number":
 		n := s(expr)
 		n = strings.TrimRight(n, "lL")
-		w("%s ", n)
+		w("%s", n)
 	case "or_pattern", "tuple_pattern":
 		parseExpr(expr.NamedChild(0))
 		w(", ")
 		parseExpr(expr.NamedChild(1))
 	case "add_operator", "mult_operator", "rel_operator":
+		// TODO: Implement more of these:
+		// https://ocaml.org/manual/5.3/expr.html
 		switch s(expr) {
 		case "=":
-			w(" == ")
+			w("==")
 		case "land":
-			w(" & ")
+			w("&")
 		default:
 			w(" %s ", s(expr))
 		}
@@ -134,16 +148,13 @@ func parseExpr(expr *tree_sitter.Node) {
 	case "application_expression":
 		function := expr.ChildByFieldName("function")
 		args := expr.ChildrenByFieldName("argument", expr.Walk())
-		w("_")
-		parseExpr(function)
-		w("(")
+		w("%s(", funcName(s(function), len(args)))
 		for _, arg := range args {
 			parseExpr(&arg)
 			w(", ")
 		}
 		w(")")
 	case "if_expression":
-		fmt.Fprintf(os.Stderr, "%s\n", expr.ToSexp())
 		condition := expr.ChildByFieldName("condition")
 
 		w("if ")
@@ -199,6 +210,10 @@ func parseExpr(expr *tree_sitter.Node) {
 		w("; __switchVal%d {\n", switchDepth)
 
 		for _, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
+			if matchCase.GrammarName() != "match_case" {
+				continue
+			}
+
 			pattern := Lookup{&matchCase}.Field("pattern", "").Node
 			body := Lookup{&matchCase}.Field("body", "").Node
 
@@ -240,7 +255,7 @@ func parseExpr(expr *tree_sitter.Node) {
 		right := expr.ChildByFieldName("right")
 
 		parseExpr(left)
-		w(";\n")
+		w("\n")
 		parseExpr(right)
 		w("\n")
 	default:
