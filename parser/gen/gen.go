@@ -15,9 +15,22 @@ import (
 
 var specpath = filepath.Join("gen", "spec")
 
+const ret = "__ret"
+
+var funcs = map[string]map[string][]string{
+	"memop": {
+		"s": {"*Stream"},
+		ret: {"*Phrase[int]", "int", "int"},
+	},
+	// "instr": {
+	// 	"s": "*Stream",
+	// 	ret: "",
+	// },
+}
+
 var source []byte
 var outFile *os.File
-var switchDepth int
+var tmpCount int
 
 func main() {
 	var rootCmd *cobra.Command
@@ -42,8 +55,7 @@ func main() {
 			root := tree.RootNode()
 			cur := root.Walk()
 
-			// Find `let rec instr s = ...`, the instruction-parsing function.
-			var instr *tree_sitter.Node
+			// Find and parse functions in our map
 			for _, child := range root.NamedChildren(cur) {
 				if child.GrammarName() != "value_definition" {
 					continue
@@ -53,18 +65,10 @@ func main() {
 					continue
 				}
 				pattern := binding.ChildByFieldName("pattern")
-				if s(pattern) != "instr" {
-					continue
+				if _, ok := funcs[s(pattern)]; ok {
+					parseFunc(&child)
 				}
-
-				instr = &child
-				break
 			}
-			if instr == nil {
-				exitWithError("Couldn't find `let rec instr s ...`")
-			}
-
-			parseFunc(instr)
 		},
 	}
 
@@ -76,6 +80,7 @@ func s(n *tree_sitter.Node) string {
 }
 
 func parseFunc(f *tree_sitter.Node) {
+	fmt.Fprintf(os.Stderr, "%s\n", f.ToSexp())
 	utils.Assert(f.GrammarName() == "value_definition", "expected a let")
 	cur := f.Walk()
 
@@ -90,16 +95,20 @@ func parseFunc(f *tree_sitter.Node) {
 	}
 
 	name := s(pattern)
-	funcTypes := types[name]
+	funcTypes := funcs[name]
 
 	w("func %s(", funcName(s(pattern), len(params)))
 	for _, param := range params {
 		paramName := safeName(s(param))
-		w("%s %s, ", paramName, funcTypes[s(param)])
+		w("%s %s, ", paramName, funcTypes[s(param)][0])
 	}
-	w(") %s {\n", funcTypes[ret])
+	w(") (")
+	for _, t := range funcTypes[ret] {
+		w("%s, ", t)
+	}
+	w(") {\n")
 
-	parseExpr(body)
+	parseExpr(body, funcTypes[ret], true, true)
 
 	w("}\n\n")
 }
@@ -118,25 +127,37 @@ func funcName(name string, numArgs int) string {
 	return name
 }
 
-func parseExpr(expr *tree_sitter.Node) {
+func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, returnIfTerminal bool) []string {
+	fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, statement, returnIfTerminal)
+
+	if returnIfTerminal && !statement {
+		exitWithError("for %s expression: cannot return a non-statement", expr.GrammarName())
+	}
+
 	switch expr.GrammarName() {
 	case "value_path", "constructor_path", "_lowercase_identifier":
-		name := reUnsafeChar.ReplaceAllString(s(expr), "_")
-		w("_%s", name)
+		name := safeName(s(expr))
+		if returnIfTerminal {
+			w("return %s\n", name)
+		} else {
+			w("%s", name)
+		}
 	case "number":
 		n := s(expr)
 		n = strings.TrimRight(n, "lL")
 		w("%s", n)
 	case "or_pattern", "tuple_pattern":
-		parseExpr(expr.NamedChild(0))
+		parseExpr(expr.NamedChild(0), nil, false, false)
 		w(", ")
-		parseExpr(expr.NamedChild(1))
-	case "add_operator", "mult_operator", "rel_operator":
+		parseExpr(expr.NamedChild(1), nil, false, false)
+	case "add_operator", "mult_operator", "rel_operator", "concat_operator":
 		// TODO: Implement more of these:
 		// https://ocaml.org/manual/5.3/expr.html
 		switch s(expr) {
 		case "=":
 			w("==")
+		case "<>":
+			w("!=")
 		case "land":
 			w("&")
 		default:
@@ -148,18 +169,45 @@ func parseExpr(expr *tree_sitter.Node) {
 	case "application_expression":
 		function := expr.ChildByFieldName("function")
 		args := expr.ChildrenByFieldName("argument", expr.Walk())
+
+		results := resultVars(expectedType)
+		if statement {
+			w("%s := ", strings.Join(results, ", "))
+		}
 		w("%s(", funcName(s(function), len(args)))
 		for _, arg := range args {
-			parseExpr(&arg)
+			parseExpr(&arg, nil, false, false)
 			w(", ")
 		}
 		w(")")
+		if statement {
+			w("\n")
+		}
+		if returnIfTerminal {
+			w("return %s\n", strings.Join(results, ", "))
+			return nil
+		} else if statement {
+			return results
+		} else {
+			return nil
+		}
 	case "if_expression":
+		if !statement {
+			exitWithError("cannot use if_expression as expression")
+		}
+
 		condition := expr.ChildByFieldName("condition")
 
+		results := resultVars(expectedType)
+		for i, res := range results {
+			expected := "any"
+			if i < len(expectedType) {
+				expected = expectedType[i]
+			}
+			w("var %s %s\n", res, expected)
+		}
 		w("if ")
-		parseExpr(condition)
-
+		parseExpr(condition, nil, false, false)
 		for _, child := range expr.NamedChildren(expr.Walk()) {
 			if child.Id() == condition.Id() {
 				continue
@@ -168,27 +216,70 @@ func parseExpr(expr *tree_sitter.Node) {
 			switch child.GrammarName() {
 			case "then_clause":
 				w(" {\n")
-				parseExpr(child.NamedChild(0))
+				thenRes := parseExpr(child.NamedChild(0), expectedType, true, false)
+				w("%s = %s", strings.Join(results, ", "), strings.Join(thenRes, ", "))
 				w("} ")
 			case "else_clause":
 				w(" else {\n")
-				parseExpr(child.NamedChild(0))
+				elseRes := parseExpr(child.NamedChild(0), expectedType, true, false)
+				w("%s = %s", strings.Join(results, ", "), strings.Join(elseRes, ", "))
 				w("} ")
 			default:
 				exitWithError("unknown type in if expression: %s", child.GrammarName())
 			}
 		}
-
 		w("\n")
+
+		if returnIfTerminal {
+			w("return %s\n", strings.Join(results, ", "))
+			return nil
+		} else {
+			return results
+		}
 	case "infix_expression":
 		left := expr.ChildByFieldName("left")
 		operator := expr.ChildByFieldName("operator")
 		right := expr.ChildByFieldName("right")
 
-		parseExpr(left)
-		parseExpr(operator)
-		parseExpr(right)
+		results := resultVars(expectedType)
+		if statement {
+			if expectedType != nil {
+				w("/* %s */ ", strings.Join(expectedType, ", "))
+			}
+			w("%s := ", strings.Join(results, ", "))
+		}
+
+		if s(operator) == "@@" {
+			// Super jank operator overload:
+			// val (@@) : 'a -> region -> 'a phrase
+			w("_operatorAtAt_2(")
+			parseExpr(left, nil, false, false)
+			w(", ")
+			parseExpr(right, nil, false, false)
+			w(")")
+		} else {
+			parseExpr(left, nil, false, false)
+			parseExpr(operator, nil, false, false)
+			parseExpr(right, nil, false, false)
+		}
+
+		if statement {
+			w("\n")
+		}
+
+		if returnIfTerminal {
+			w("return %s\n", strings.Join(results, ", "))
+			return nil
+		} else if statement {
+			return results
+		} else {
+			return nil
+		}
 	case "let_expression":
+		if !statement {
+			exitWithError("cannot use let_expression as an expression")
+		}
+
 		binding := Lookup{expr}.
 			Child(0, "value_definition").
 			Child(0, "let_binding").
@@ -196,18 +287,31 @@ func parseExpr(expr *tree_sitter.Node) {
 		pattern := Lookup{binding}.Field("pattern", "").Node
 		body := Lookup{binding}.Field("body", "").Node
 
-		parseExpr(pattern)
-		w(" := ")
-		parseExpr(body)
+		bindingRes := parseExpr(body, nil, true, false)
+		if len(bindingRes) != 1 {
+			exitWithError("let binding yielded %d values instead of 1", len(bindingRes))
+		}
+
+		parseExpr(pattern, nil, false, false)
+		w(" := %s", bindingRes[0])
 		w("\n")
 
-		parseExpr(expr.NamedChild(1))
+		return parseExpr(expr.NamedChild(1), expectedType, true, returnIfTerminal)
 	case "list_expression":
 		w("nil /* TODO: list_expression */")
+	case "local_open_expression":
+		// e.g. "Source.(0l @@ no_region)"
+		return parseExpr(expr.NamedChild(1), expectedType, statement, returnIfTerminal)
 	case "match_expression":
-		w("switch __switchVal%d := ", switchDepth)
-		parseExpr(expr.NamedChild(0))
-		w("; __switchVal%d {\n", switchDepth)
+		switchResults := resultVars(expectedType)
+		for i, t := range expectedType {
+			w("var %s %s\n", switchResults[i], t)
+		}
+
+		switchVar := tmpVar()
+		w("switch %s := ", switchVar)
+		parseExpr(expr.NamedChild(0), nil, false, false)
+		w("; %s {\n", switchVar)
 
 		for _, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
 			if matchCase.GrammarName() != "match_case" {
@@ -220,53 +324,98 @@ func parseExpr(expr *tree_sitter.Node) {
 			switch pattern.GrammarName() {
 			case "number":
 				w("case ")
-				parseExpr(pattern)
+				parseExpr(pattern, nil, false, false)
 				w(":\n")
 			case "alias_pattern":
 				w("case ")
-				parseExpr(pattern.NamedChild(0))
+				parseExpr(pattern.NamedChild(0), nil, false, false)
 				w(":\n")
 
-				parseExpr(pattern.NamedChild(1))
-				w(" := __switchVal%d\n", switchDepth)
+				parseExpr(pattern.NamedChild(1), nil, false, false)
+				w(" := %s\n", switchVar)
 			case "_lowercase_identifier":
 				w("default:\n")
-				w("%s := __switchVal%d\n", s(pattern), switchDepth)
+				w("%s := %s\n", s(pattern), switchVar)
 			default:
 				exitWithError("unknown type of match case: %s", pattern.GrammarName())
 			}
 
-			switchDepth++
-			parseExpr(body)
-			switchDepth--
+			res := parseExpr(body, expectedType, true, false)
+			w("%s = %s", strings.Join(switchResults, ", "), strings.Join(res, ", "))
 
 			w("\n")
 		}
 
 		w("}\n")
+
+		if returnIfTerminal {
+			w("return %s\n", strings.Join(switchResults, ", "))
+			return nil
+		} else {
+			return switchResults
+		}
 	case "parenthesized_expression":
 		// w("(")
-		parseExpr(expr.NamedChild(0))
+		parseExpr(expr.NamedChild(0), expectedType, statement, returnIfTerminal)
 		// w(")")
 	case "product_expression":
-		w("nil /* TODO: product_expression */")
-	case "sequence_expression":
 		left := expr.ChildByFieldName("left")
 		right := expr.ChildByFieldName("right")
 
-		parseExpr(left)
+		if returnIfTerminal {
+			w("return ")
+		}
+
+		parseExpr(left, nil, false, false)
+		w(", ")
+		parseExpr(right, nil, false, false)
+	case "sequence_expression":
+		if !statement {
+			exitWithError("cannot use sequence_expression as an expression")
+		}
+
+		left := expr.ChildByFieldName("left")
+		right := expr.ChildByFieldName("right")
+
+		leftRes := parseExpr(left, nil, true, false)
+		ignores := make([]string, len(leftRes))
+		for i := range len(leftRes) {
+			ignores[i] = "_"
+		}
+		w("%s = %s\n", strings.Join(ignores, ", "), strings.Join(leftRes, ", "))
+
+		rightRes := parseExpr(right, expectedType, true, returnIfTerminal)
 		w("\n")
-		parseExpr(right)
-		w("\n")
+
+		return rightRes
 	default:
 		fmt.Fprintf(os.Stderr, "%s\n", s(expr))
 		fmt.Fprintf(os.Stderr, "%s\n", expr.ToSexp())
 		exitWithError("unknown expression type %s", expr.GrammarName())
 	}
+
+	return nil
 }
 
 func w(msg string, args ...any) {
 	fmt.Fprintf(outFile, msg, args...)
+}
+
+func tmpVar() string {
+	tmpCount += 1
+	return fmt.Sprintf("__tmp%d", tmpCount)
+}
+
+func resultVars(expectedType []string) []string {
+	if len(expectedType) == 0 {
+		return []string{tmpVar()}
+	} else {
+		vars := make([]string, len(expectedType))
+		for i := range len(expectedType) {
+			vars[i] = tmpVar()
+		}
+		return vars
+	}
 }
 
 func exitWithError(msg string, args ...any) {
@@ -293,13 +442,4 @@ func (l Lookup) Field(fieldName string, grammarName string) Lookup {
 		utils.Assert(node.GrammarName() == grammarName, "expected %s but got %s", grammarName, node.GrammarName())
 	}
 	return Lookup{node}
-}
-
-const ret = "__ret"
-
-var types = map[string]map[string]string{
-	"instr": {
-		"s": "*Stream",
-		ret: "",
-	},
 }
