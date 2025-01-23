@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/bvisness/wasm-isolate/parser/gen/lsp"
 	"github.com/bvisness/wasm-isolate/utils"
 	"github.com/spf13/cobra"
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
@@ -37,16 +38,23 @@ var actuallyInfix = map[string]string{
 	"Int32.logand": "&",
 }
 
+var sourceFilepath = filepath.Join(specpath, "interpreter", "binary", "decode.ml")
 var source []byte
 var outFile *os.File
 var tmpCount int
+
+var lspClient *lsp.Client
 
 func main() {
 	var rootCmd *cobra.Command
 	rootCmd = &cobra.Command{
 		Use: "gen",
 		Run: func(cmd *cobra.Command, args []string) {
-			source = utils.Must1(os.ReadFile(filepath.Join(specpath, "interpreter", "binary", "decode.ml")))
+			lspClient = lsp.NewOCamlClient(filepath.Join(specpath, "interpreter"))
+			lspClient.DidOpen(sourceFilepath)
+			defer lspClient.Close()
+
+			source = utils.Must1(os.ReadFile(sourceFilepath))
 			outFile = utils.Must1(os.Create("generated.go"))
 			defer outFile.Close()
 
@@ -89,7 +97,6 @@ func s(n *tree_sitter.Node) string {
 }
 
 func parseFunc(f *tree_sitter.Node) {
-	fmt.Fprintf(os.Stderr, "%s\n", f.ToSexp())
 	utils.Assert(f.GrammarName() == "value_definition", "expected a let")
 	cur := f.Walk()
 
@@ -105,6 +112,9 @@ func parseFunc(f *tree_sitter.Node) {
 
 	name := s(pattern)
 	funcTypes := funcTypes[name]
+
+	hover := utils.Must1(lspClient.Hover(sourceFilepath, int(pattern.StartPosition().Row), int(pattern.StartPosition().Column)))
+	fmt.Fprintf(os.Stderr, "func %s: %s\n", name, hover["contents"].(lsp.M)["value"])
 
 	tmpCount = 0
 
@@ -139,7 +149,7 @@ func funcName(name string, numArgs int) string {
 }
 
 func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, returnIfTerminal bool) []string {
-	fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, statement, returnIfTerminal)
+	// fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, statement, returnIfTerminal)
 
 	if returnIfTerminal && !statement {
 		exitWithError("for %s expression: cannot return a non-statement", expr.GrammarName())
