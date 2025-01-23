@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/bvisness/wasm-isolate/utils"
@@ -17,15 +18,18 @@ var specpath = filepath.Join("gen", "spec")
 
 const ret = "__ret"
 
-var funcs = map[string]map[string][]string{
+var funcTypes = map[string]map[string][]string{
 	"memop": {
 		"s": {"*Stream"},
 		ret: {"*Phrase[int]", "int", "int"},
 	},
-	// "instr": {
-	// 	"s": "*Stream",
-	// 	ret: "",
-	// },
+	"instr": {
+		"s": {"*Stream"},
+		ret: {"*Instr"},
+	},
+}
+var funcsToTranslate = []string{
+	"memop", "instr",
 }
 
 var actuallyInfix = map[string]string{
@@ -70,7 +74,7 @@ func main() {
 					continue
 				}
 				pattern := binding.ChildByFieldName("pattern")
-				if _, ok := funcs[s(pattern)]; ok {
+				if slices.Contains(funcsToTranslate, s(pattern)) {
 					parseFunc(&child)
 				}
 			}
@@ -100,7 +104,9 @@ func parseFunc(f *tree_sitter.Node) {
 	}
 
 	name := s(pattern)
-	funcTypes := funcs[name]
+	funcTypes := funcTypes[name]
+
+	tmpCount = 0
 
 	w("func %s(", funcName(s(pattern), len(params)))
 	for _, param := range params {
@@ -141,11 +147,19 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 
 	switch expr.GrammarName() {
 	case "value_path", "constructor_path", "_lowercase_identifier":
+		res := tmpVar()
+		if statement {
+			w("%s := ", res)
+		}
 		name := safeName(s(expr))
-		if returnIfTerminal {
-			w("return %s\n", name)
-		} else {
-			w("%s", name)
+		w("%s", name)
+		if statement {
+			w("\n")
+			if returnIfTerminal {
+				w("return %s\n", res)
+				return nil
+			}
+			return []string{res}
 		}
 	case "number":
 		n := s(expr)
@@ -174,6 +188,12 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 	case "application_expression":
 		function := expr.ChildByFieldName("function")
 		args := expr.ChildrenByFieldName("argument", expr.Walk())
+
+		// if expectedType == nil {
+		// 	if t, ok := funcTypes[s(function)]; ok {
+		// 		expectedType = t[ret]
+		// 	}
+		// }
 
 		results := resultVars(expectedType)
 		if statement {
@@ -302,14 +322,16 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		pattern := Lookup{binding}.Field("pattern", "").Node
 		body := Lookup{binding}.Field("body", "").Node
 
-		bindingRes := parseExpr(body, nil, true, false)
-		if len(bindingRes) != 1 {
-			exitWithError("let binding yielded %d values instead of 1", len(bindingRes))
+		numResults := numValues(pattern)
+		var phonyExpectedTypes []string
+		for range numResults {
+			phonyExpectedTypes = append(phonyExpectedTypes, "phony")
 		}
 
+		bindingRes := parseExpr(body, phonyExpectedTypes, true, false)
+
 		parseExpr(pattern, nil, false, false)
-		w(" := %s", bindingRes[0])
-		w("\n")
+		w(" := %s\n", strings.Join(bindingRes, ", "))
 
 		return parseExpr(expr.NamedChild(1), expectedType, true, returnIfTerminal)
 	case "list_expression":
@@ -371,7 +393,7 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		}
 	case "parenthesized_expression":
 		// w("(")
-		parseExpr(expr.NamedChild(0), expectedType, statement, returnIfTerminal)
+		return parseExpr(expr.NamedChild(0), expectedType, statement, returnIfTerminal)
 		// w(")")
 	case "product_expression":
 		left := expr.ChildByFieldName("left")
@@ -430,6 +452,15 @@ func resultVars(expectedType []string) []string {
 			vars[i] = tmpVar()
 		}
 		return vars
+	}
+}
+
+func numValues(pattern *tree_sitter.Node) int {
+	switch pattern.GrammarName() {
+	case "tuple_pattern":
+		return numValues(pattern.NamedChild(0)) + numValues(pattern.NamedChild(1))
+	default:
+		return 1
 	}
 }
 
