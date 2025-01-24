@@ -7,11 +7,11 @@ import (
 
 // Manual translation of the "Generic values" section
 
-func _bit_2(i int, n byte) bool {
+func _bit_2(i int, n int) bool {
 	return n&(1<<i) != 0
 }
 
-func _byte(s *Stream) byte {
+func _byte(s *Stream) int {
 	return _get(s)
 }
 

@@ -22,7 +22,7 @@ func (s *Stream) Read(p []byte) (n int, err error) {
 	if _eos(s) {
 		return 0, io.EOF
 	}
-	p[0] = _byte(s)
+	p[0] = byte(_byte(s))
 	return 1, nil
 }
 
@@ -59,15 +59,15 @@ func _skip_2(n int, s *Stream) {
 	}
 }
 
-func _read(s *Stream) byte {
-	return s.bytes[s.pos]
+func _read(s *Stream) int {
+	return int(s.bytes[s.pos])
 }
 
 func _Some[T any](v T) *T {
 	return &v
 }
 
-func _peek(s *Stream) *byte {
+func _peek(s *Stream) *int {
 	if _eos(s) {
 		return nil
 	} else {
@@ -75,7 +75,7 @@ func _peek(s *Stream) *byte {
 	}
 }
 
-func _get(s *Stream) byte {
+func _get(s *Stream) int {
 	_check_2(1, s)
 	b := _read(s)
 	_skip_2(1, s)

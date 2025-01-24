@@ -58,7 +58,7 @@ func _illegal_3(s *Stream, pos int, b byte) Void {
 	return nil
 }
 
-func _illegal2_4(s *Stream, pos int, b byte, n int) Void {
+func _illegal2_4(s *Stream, pos int, b byte, n uint32) Void {
 	_error_3(s, pos, "illegal opcode "+_string_of_byte(b)+" "+_string_of_multi(n))
 	return nil
 }

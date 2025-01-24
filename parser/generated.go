@@ -4630,7 +4630,7 @@ func _instr(_s *Stream) Instruction {
 			__tmp853 := _i31_get_u
 			__tmp636 = __tmp853
 		default:
-			n := __tmp637
+			_n := __tmp637
 			__tmp854 := _illegal2_4(_s, _pos, _b, _n)
 			__tmp636 = __tmp854
 		}
@@ -4710,7 +4710,7 @@ func _instr(_s *Stream) Instruction {
 			__tmp936 := _table_fill(_at_2(_var, _s))
 			__tmp860 = __tmp936
 		default:
-			n := __tmp861
+			_n := __tmp861
 			__tmp940 := _illegal2_4(_s, _pos, _b, _n)
 			__tmp860 = __tmp940
 		}
@@ -5618,13 +5618,13 @@ func _instr(_s *Stream) Instruction {
 			__tmp1578 := _i32x4_relaxed_dot_i8x16_i7x16_add_s
 			__tmp945 = __tmp1578
 		default:
-			n := __tmp946
+			_n := __tmp946
 			__tmp1579 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
 			__tmp945 = __tmp1579
 		}
 		__tmp4 = __tmp945
 	default:
-		b := __tmp5
+		_b := __tmp5
 		__tmp1584 := _illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp1584
 	}

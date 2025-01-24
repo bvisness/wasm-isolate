@@ -631,7 +631,7 @@ func (p *ocamlParse) parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, 
 				w(" := %s\n", switchVar)
 			case "_lowercase_identifier":
 				w("default:\n")
-				w("%s := %s\n", p.s(pattern), switchVar)
+				w("%s := %s\n", safeName(p.s(pattern)), switchVar)
 			default:
 				exitWithError("unknown type of match case: %s", pattern.GrammarName())
 			}
