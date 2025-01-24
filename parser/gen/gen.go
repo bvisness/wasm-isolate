@@ -224,12 +224,12 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	tmpCount = 0
 
 	name := p.s(pattern)
-	funcType := p.getType(pattern, typeDefs).(ocaml.Func)
+	funcType := p.getTypeEnd(pattern, typeDefs).(ocaml.Func)
 
 	w("func %s(", funcName(name, len(params)))
 	for _, param := range params {
 		paramName := safeName(p.s(param))
-		paramType := p.getType(param, typeDefs)
+		paramType := p.getTypeEnd(param, typeDefs)
 		w("%s %s, ", paramName, ocaml2go(paramType))
 	}
 	w(") (")
@@ -313,9 +313,9 @@ func (p *ocamlParse) parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, 
 		var funcType ocaml.Func
 		if function.GrammarName() == "parenthesized_expression" {
 			fmt.Fprintf(os.Stderr, "HACK: A parenthesized expression as a function is spooky, but we can cheat by hovering carefully over the contents.\n")
-			funcType = p.getType(function.NamedChild(0), typeDefs).(ocaml.Func)
+			funcType = p.getTypeEnd(function.NamedChild(0), typeDefs).(ocaml.Func)
 		} else {
-			funcType = p.getType(function, typeDefs).(ocaml.Func)
+			funcType = p.getTypeEnd(function, typeDefs).(ocaml.Func)
 		}
 
 		results := resultVars(funcType.Out.Cardinality())
@@ -349,6 +349,34 @@ func (p *ocamlParse) parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, 
 		} else {
 			return nil
 		}
+	case "fun_expression":
+		body := expr.ChildByFieldName("body")
+		var params []*tree_sitter.Node
+		for i := range expr.NamedChildCount() {
+			child := expr.NamedChild(i)
+			if child.Id() == body.Id() {
+				break
+			}
+			params = append(params, child)
+		}
+
+		funcType := p.getTypeStart(expr, typeDefs).(ocaml.Func)
+
+		w("func(")
+		for _, param := range params {
+			paramName := safeName(p.s(param))
+			paramType := p.getTypeEnd(param, typeDefs)
+			w("%s %s, ", paramName, ocaml2go(paramType))
+		}
+		w(") (")
+		for i := range funcType.Out.Cardinality() {
+			w("%s, ", ocaml2go(funcType.Out.Get(i)))
+		}
+		w(") {\n")
+
+		p.parseExpr(body, funcType.Out, true, true)
+
+		w("}")
 	case "if_expression":
 		condition := expr.ChildByFieldName("condition")
 
@@ -419,7 +447,7 @@ func (p *ocamlParse) parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, 
 			p.parseExpr(right, nil, false, false)
 			w(")")
 		} else {
-			opType := p.getType(operator, typeDefs).(ocaml.Func)
+			opType := p.getTypeEnd(operator, typeDefs).(ocaml.Func)
 			p.parseExpr(left, opType.GetArgType(0), false, false)
 			p.parseExpr(operator, nil, false, false)
 			p.parseExpr(right, opType.GetArgType(1), false, false)
@@ -453,11 +481,11 @@ func (p *ocamlParse) parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, 
 		if pattern.GrammarName() == "tuple_pattern" {
 			var tup ocaml.Tuple
 			for _, v := range pattern.NamedChildren(pattern.Walk()) {
-				tup = append(tup, p.getType(&v, typeDefs))
+				tup = append(tup, p.getTypeEnd(&v, typeDefs))
 			}
 			bindingType = tup
 		} else {
-			bindingType = p.getType(pattern, typeDefs)
+			bindingType = p.getTypeEnd(pattern, typeDefs)
 		}
 		bindingRes := p.parseExpr(body, bindingType, true, false)
 
@@ -606,15 +634,28 @@ func resultVars(n int) []string {
 	}
 }
 
-func (p *ocamlParse) getType(node *tree_sitter.Node, typeDefs map[string]ocaml.Type) ocaml.Type {
+func parseHoverResponse(hover ocaml.M) ocaml.Type {
+	value := hover["contents"].(ocaml.M)["value"].(string)
+	value = strings.SplitN(value, "***", 2)[0]
+	return ocaml.ParseType(value, typeDefs)
+}
+
+func (p *ocamlParse) getTypeStart(node *tree_sitter.Node, typeDefs map[string]ocaml.Type) ocaml.Type {
+	hover := utils.Must1(lspClient.Hover(
+		p.filepath,
+		int(node.StartPosition().Row),
+		int(node.StartPosition().Column),
+	))
+	return parseHoverResponse(hover)
+}
+
+func (p *ocamlParse) getTypeEnd(node *tree_sitter.Node, typeDefs map[string]ocaml.Type) ocaml.Type {
 	hover := utils.Must1(lspClient.Hover(
 		p.filepath,
 		int(node.EndPosition().Row),
 		int(node.EndPosition().Column),
 	))
-	value := hover["contents"].(ocaml.M)["value"].(string)
-	value = strings.SplitN(value, "***", 2)[0]
-	return ocaml.ParseType(value, typeDefs)
+	return parseHoverResponse(hover)
 }
 
 func exitWithError(msg string, args ...any) {
