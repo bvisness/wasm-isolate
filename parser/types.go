@@ -7,3 +7,5 @@ type Void any
 func _var(s *Stream) uint32 {
 	return _u32(s)
 }
+
+type Instruction interface{}
