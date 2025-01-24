@@ -8,14 +8,14 @@ func _memop(_s *Stream) (*Phrase[int], int, int) {
 	_flags := __tmp4
 	__tmp7 := _require_4((_flags) < (0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
-	/* phony */ __tmp12 := (_flags)&(0x40) != 0
+	__tmp12 := (_flags)&(0x40) != 0
 	_has_var := __tmp12
-	var __tmp16 phony
+	var __tmp16 *Phrase[int]
 	if _has_var {
 		__tmp18 := _at_2(_var, _s)
 		__tmp16 = __tmp18
 	} else {
-		/* phony */ __tmp21 := _operatorAtAt_2(0, _no_region)
+		__tmp21 := _operatorAtAt_2(0, _no_region)
 		__tmp16 = __tmp21
 	}
 	_x := __tmp16
@@ -26,10 +26,10 @@ func _memop(_s *Stream) (*Phrase[int], int, int) {
 	return _x, _align, _offset
 }
 
-func _instr(_s *Stream) *Instr {
+func _instr(_s *Stream) Instruction {
 	__tmp1 := _pos(_s)
 	_pos := __tmp1
-	var __tmp4 *Instr
+	var __tmp4 int
 	switch __tmp5 := _op(_s); __tmp5 {
 	case 0x00:
 		__tmp8 := _unreachable
@@ -62,7 +62,7 @@ func _instr(_s *Stream) *Instr {
 		_bt := __tmp32
 		__tmp35 := _instr_block(_s)
 		_es1 := __tmp35
-		var __tmp38 *Instr
+		var __tmp38 TODO
 		if _peek(_s) == _Some(0x05) {
 			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43

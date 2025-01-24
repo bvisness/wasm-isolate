@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/bvisness/wasm-isolate/parser/gen/lsp"
+	"github.com/bvisness/wasm-isolate/parser/gen/ocaml"
 	"github.com/bvisness/wasm-isolate/utils"
 	"github.com/spf13/cobra"
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
@@ -17,20 +17,25 @@ import (
 
 var specpath = filepath.Join("gen", "spec")
 
-const ret = "__ret"
-
-var funcTypes = map[string]map[string][]string{
-	"memop": {
-		"s": {"*Stream"},
-		ret: {"*Phrase[int]", "int", "int"},
-	},
-	"instr": {
-		"s": {"*Stream"},
-		ret: {"*Instr"},
-	},
-}
 var funcsToTranslate = []string{
 	"memop", "instr",
+}
+
+func ocaml2go(t ocaml.Type) string {
+	m := map[string]string{
+		"int":   "int",
+		"int64": "int", // TODO: maybe actually int64?
+
+		"instr list":       "TODO",
+		"stream":           "*Stream",
+		"local_idx phrase": "*Phrase[int]",
+		"instr'":           "Instruction",
+	}
+	if goType, ok := m[t.String()]; ok {
+		return goType
+	} else {
+		panic(fmt.Sprintf("no Go type registered for OCaml type %s", t.String()))
+	}
 }
 
 var actuallyInfix = map[string]string{
@@ -43,14 +48,14 @@ var source []byte
 var outFile *os.File
 var tmpCount int
 
-var lspClient *lsp.Client
+var lspClient *ocaml.Client
 
 func main() {
 	var rootCmd *cobra.Command
 	rootCmd = &cobra.Command{
 		Use: "gen",
 		Run: func(cmd *cobra.Command, args []string) {
-			lspClient = lsp.NewOCamlClient(filepath.Join(specpath, "interpreter"))
+			lspClient = ocaml.NewOCamlClient(filepath.Join(specpath, "interpreter"))
 			lspClient.DidOpen(sourceFilepath)
 			defer lspClient.Close()
 
@@ -110,26 +115,24 @@ func parseFunc(f *tree_sitter.Node) {
 		}
 	}
 
-	name := s(pattern)
-	funcTypes := funcTypes[name]
-
-	hover := utils.Must1(lspClient.Hover(sourceFilepath, int(pattern.StartPosition().Row), int(pattern.StartPosition().Column)))
-	fmt.Fprintf(os.Stderr, "func %s: %s\n", name, hover["contents"].(lsp.M)["value"])
-
 	tmpCount = 0
 
-	w("func %s(", funcName(s(pattern), len(params)))
+	name := s(pattern)
+	funcType := getType(pattern).(ocaml.Func)
+
+	w("func %s(", funcName(name, len(params)))
 	for _, param := range params {
 		paramName := safeName(s(param))
-		w("%s %s, ", paramName, funcTypes[s(param)][0])
+		paramType := getType(param)
+		w("%s %s, ", paramName, ocaml2go(paramType))
 	}
 	w(") (")
-	for _, t := range funcTypes[ret] {
-		w("%s, ", t)
+	for i := range funcType.Out.Cardinality() {
+		w("%s, ", ocaml2go(funcType.Out.Get(i)))
 	}
 	w(") {\n")
 
-	parseExpr(body, funcTypes[ret], true, true)
+	parseExpr(body, funcType.Out, true, true)
 
 	w("}\n\n")
 }
@@ -148,7 +151,7 @@ func funcName(name string, numArgs int) string {
 	return name
 }
 
-func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, returnIfTerminal bool) []string {
+func parseExpr(expr *tree_sitter.Node, expectedType ocaml.Type, statement bool, returnIfTerminal bool) []string {
 	// fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, statement, returnIfTerminal)
 
 	if returnIfTerminal && !statement {
@@ -199,13 +202,8 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		function := expr.ChildByFieldName("function")
 		args := expr.ChildrenByFieldName("argument", expr.Walk())
 
-		// if expectedType == nil {
-		// 	if t, ok := funcTypes[s(function)]; ok {
-		// 		expectedType = t[ret]
-		// 	}
-		// }
-
-		results := resultVars(expectedType)
+		funcType := getType(function).(ocaml.Func)
+		results := resultVars(funcType.Out.Cardinality())
 		if statement {
 			w("%s := ", strings.Join(results, ", "))
 		}
@@ -243,16 +241,12 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 
 		condition := expr.ChildByFieldName("condition")
 
-		results := resultVars(expectedType)
-		for i, res := range results {
-			expected := "any"
-			if i < len(expectedType) {
-				expected = expectedType[i]
-			}
-			w("var %s %s\n", res, expected)
+		results := resultVars(expectedType.Cardinality())
+		for i := range expectedType.Cardinality() {
+			w("var %s %s\n", results[i], ocaml2go(expectedType.Get(i)))
 		}
 		w("if ")
-		parseExpr(condition, nil, false, false)
+		parseExpr(condition, ocaml.SimpleType("bool"), false, false)
 		for _, child := range expr.NamedChildren(expr.Walk()) {
 			if child.Id() == condition.Id() {
 				continue
@@ -286,11 +280,8 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		operator := expr.ChildByFieldName("operator")
 		right := expr.ChildByFieldName("right")
 
-		results := resultVars(expectedType)
+		results := resultVars(expectedType.Cardinality())
 		if statement {
-			if expectedType != nil {
-				w("/* %s */ ", strings.Join(expectedType, ", "))
-			}
 			w("%s := ", strings.Join(results, ", "))
 		}
 
@@ -332,13 +323,17 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		pattern := Lookup{binding}.Field("pattern", "").Node
 		body := Lookup{binding}.Field("body", "").Node
 
-		numResults := numValues(pattern)
-		var phonyExpectedTypes []string
-		for range numResults {
-			phonyExpectedTypes = append(phonyExpectedTypes, "phony")
+		var expectedType ocaml.Type
+		if pattern.GrammarName() == "tuple_pattern" {
+			var tup ocaml.Tuple
+			for _, p := range pattern.NamedChildren(pattern.Walk()) {
+				tup = append(tup, getType(&p))
+			}
+		} else {
+			expectedType = getType(pattern)
 		}
 
-		bindingRes := parseExpr(body, phonyExpectedTypes, true, false)
+		bindingRes := parseExpr(body, expectedType, true, false)
 
 		parseExpr(pattern, nil, false, false)
 		w(" := %s\n", strings.Join(bindingRes, ", "))
@@ -350,9 +345,9 @@ func parseExpr(expr *tree_sitter.Node, expectedType []string, statement bool, re
 		// e.g. "Source.(0l @@ no_region)"
 		return parseExpr(expr.NamedChild(1), expectedType, statement, returnIfTerminal)
 	case "match_expression":
-		switchResults := resultVars(expectedType)
-		for i, t := range expectedType {
-			w("var %s %s\n", switchResults[i], t)
+		switchResults := resultVars(expectedType.Cardinality())
+		for i := range expectedType.Cardinality() {
+			w("var %s %s\n", switchResults[i], ocaml2go(expectedType.Get(i)))
 		}
 
 		switchVar := tmpVar()
@@ -453,12 +448,12 @@ func tmpVar() string {
 	return fmt.Sprintf("__tmp%d", tmpCount)
 }
 
-func resultVars(expectedType []string) []string {
-	if len(expectedType) == 0 {
+func resultVars(n int) []string {
+	if n == 0 {
 		return []string{tmpVar()}
 	} else {
-		vars := make([]string, len(expectedType))
-		for i := range len(expectedType) {
+		vars := make([]string, n)
+		for i := range n {
 			vars[i] = tmpVar()
 		}
 		return vars
@@ -472,6 +467,17 @@ func numValues(pattern *tree_sitter.Node) int {
 	default:
 		return 1
 	}
+}
+
+func getType(node *tree_sitter.Node) ocaml.Type {
+	hover := utils.Must1(lspClient.Hover(
+		sourceFilepath,
+		int(node.EndPosition().Row),
+		int(node.EndPosition().Column),
+	))
+	value := hover["contents"].(ocaml.M)["value"].(string)
+	value = strings.SplitN(value, "***", 2)[0]
+	return ocaml.ParseType(value)
 }
 
 func exitWithError(msg string, args ...any) {
