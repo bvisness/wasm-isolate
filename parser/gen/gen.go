@@ -635,7 +635,27 @@ func (p *ocamlParse) parseExpr(
 
 		return p.parseExpr(expr.NamedChild(1), expectedType, currentModule, true, returnIfTerminal)
 	case "list_expression":
-		w("nil /* TODO: list_expression */")
+		var elemType ocaml.Type
+		if expectedType == nil {
+			exitWithError("list_expression needs an expected type")
+		}
+		if asCons, ok := expectedType.(ocaml.Cons); ok {
+			if len(asCons) != 2 || asCons[1] != ocaml.SimpleType("list") {
+				exitWithError("list_expression needs a list type, but got: %s", expectedType)
+			}
+			elemType = asCons[0]
+		} else {
+			exitWithError("list_expression needs a cons type (that is a list), but got: %s", expectedType)
+		}
+
+		// TODO: Statement mode
+
+		w("[]%s{", ocaml2go(elemType))
+		for _, child := range expr.NamedChildren(expr.Walk()) {
+			p.parseExpr(&child, elemType, currentModule, false, false)
+			w(", ")
+		}
+		w("}")
 	case "local_open_expression":
 		// e.g. "Int32.(add lo (shift_left hi 16))"
 		mod := p.s(expr.NamedChild(0))

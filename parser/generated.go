@@ -3907,7 +3907,22 @@ func _memop(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 }
 
 func _block_type(_s *Stream) BlockType {
-	__tmp1 := _either_2(nil /* TODO: list_expression */, _s)
+	__tmp1 := _either_2([]TODO /* stream -> 'a */ {func(_s *Stream) BlockType {
+		__tmp2 := _VarBlockType(_at_2(func(_s *Stream) OInt32 {
+			__tmp4 := _as_stat_var(_var_type_2(_s33, _s))
+			return __tmp4
+		}, _s))
+		return __tmp2
+	}, func(_s *Stream) BlockType {
+		__tmp9 := _expect_3(0x40, _s, "")
+		_ = __tmp9
+		__tmp11 := _ValBlockType(_None)
+		return __tmp11
+
+	}, func(_s *Stream) BlockType {
+		__tmp13 := _ValBlockType(_Some(_val_type(_s)))
+		return __tmp13
+	}}, _s)
 	return __tmp1
 }
 
@@ -3969,7 +3984,7 @@ func _instr(_s *Stream) Instruction_ {
 		} else {
 			__tmp54 := _end_(_s)
 			_ = __tmp54
-			__tmp56 := _if__3(_bt, _es1, nil /* TODO: list_expression */)
+			__tmp56 := _if__3(_bt, _es1, []*Phrase[Instruction_]{})
 
 			__tmp38 = __tmp56
 		}
