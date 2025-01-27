@@ -47,8 +47,8 @@ func ocaml2go(t ocaml.Type) string {
 		"null":       "Null",
 
 		"idx":      "*Phrase[OInt32]",
-		"address":  "TODO",
-		"type_idx": "TODO",
+		"address":  "OInt64",
+		"type_idx": "OInt32",
 
 		"int list":   "[]OInt",
 		"idx list":   "[]OInt",
@@ -56,9 +56,9 @@ func ocaml2go(t ocaml.Type) string {
 
 		"local_idx phrase": "*Phrase[OInt32]",
 		"type_idx phrase":  "*Phrase[OInt32]",
-		"address phrase":   "*Phrase[OInt]",
-		"F32.t phrase":     "*Phrase[OInt]",
-		"F64.t phrase":     "*Phrase[OInt]",
+		"address phrase":   "*Phrase[OInt64]",
+		"F32.t phrase":     "*Phrase[float32]",
+		"F64.t phrase":     "*Phrase[float64]",
 		"V128.t phrase":    "*Phrase[OInt]",
 
 		"instr'":     "Instruction",
