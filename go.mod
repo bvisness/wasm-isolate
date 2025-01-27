@@ -16,5 +16,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tree-sitter/go-tree-sitter v0.24.0 // indirect
 	github.com/tree-sitter/tree-sitter-ocaml v0.24.0 // indirect
+	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

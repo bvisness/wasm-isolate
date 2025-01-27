@@ -6,8 +6,8 @@ import "math"
 
 type Pos struct {
 	file   string
-	line   int
-	column int
+	line   OInt
+	column OInt
 }
 
 type Region struct {

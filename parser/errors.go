@@ -9,15 +9,15 @@ type CodeError struct {
 	msg    string
 }
 
-func _string_of_byte(b byte) string {
+func _string_of_byte(b OInt) string {
 	return fmt.Sprintf("%02x", b)
 }
 
-func _string_of_multi(n int) string {
+func _string_of_multi(n OInt32) string {
 	return fmt.Sprintf("%d", n)
 }
 
-func _position_2(s *Stream, pos int) *Pos {
+func _position_2(s *Stream, pos OInt) *Pos {
 	return &Pos{
 		file:   s.name,
 		line:   -1,
@@ -25,21 +25,21 @@ func _position_2(s *Stream, pos int) *Pos {
 	}
 }
 
-func _region_3(s *Stream, left int, right int) *Region {
+func _region_3(s *Stream, left OInt, right OInt) *Region {
 	return &Region{
 		left:  _position_2(s, left),
 		right: _position_2(s, right),
 	}
 }
 
-func _error_3(s *Stream, pos int, msg string) Void {
+func _error_3(s *Stream, pos OInt, msg string) Void {
 	panic(CodeError{
 		region: _region_3(s, pos, pos),
 		msg:    msg,
 	})
 }
 
-func _require_4(b bool, s *Stream, pos int, msg string) Void {
+func _require_4(b bool, s *Stream, pos OInt, msg string) Void {
 	if !b {
 		_error_3(s, pos, msg)
 	}
@@ -48,17 +48,17 @@ func _require_4(b bool, s *Stream, pos int, msg string) Void {
 
 // Skipping guarded versions of things
 
-func _expect_3(b byte, s *Stream, msg string) Void {
+func _expect_3(b OInt, s *Stream, msg string) Void {
 	_require_4(_get(s) == b, s, _pos(s)-1, msg)
 	return nil
 }
 
-func _illegal_3(s *Stream, pos int, b byte) Void {
+func _illegal_3(s *Stream, pos OInt, b OInt) Void {
 	_error_3(s, pos, "illegal opcode "+_string_of_byte(b))
 	return nil
 }
 
-func _illegal2_4(s *Stream, pos int, b byte, n uint32) Void {
+func _illegal2_4(s *Stream, pos OInt, b OInt, n OInt32) Void {
 	_error_3(s, pos, "illegal opcode "+_string_of_byte(b)+" "+_string_of_multi(n))
 	return nil
 }

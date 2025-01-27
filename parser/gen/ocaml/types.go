@@ -52,6 +52,14 @@ func (f Func) GetArgType(i int) Type {
 	return funcType.In
 }
 
+func (f Func) GetTypeAfterApplyingArgs(numArgs int) Type {
+	var res Type = f
+	for range numArgs {
+		res = res.(Func).Out
+	}
+	return res
+}
+
 type Tuple []Type
 
 func (t Tuple) String() string {

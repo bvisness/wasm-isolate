@@ -2,50 +2,50 @@
 package parser
 
 type Instr_i32_const struct {
-	N *Phrase[uint32]
+	N *Phrase[OInt32]
 }
 
-func _i32_const(_n *Phrase[uint32]) Instr_i32_const {
+func _i32_const(_n *Phrase[OInt32]) Instr_i32_const {
 	return Instr_i32_const{
 		N: _n,
 	}
 }
 
 type Instr_i64_const struct {
-	N *Phrase[int]
+	N *Phrase[OInt]
 }
 
-func _i64_const(_n *Phrase[int]) Instr_i64_const {
+func _i64_const(_n *Phrase[OInt]) Instr_i64_const {
 	return Instr_i64_const{
 		N: _n,
 	}
 }
 
 type Instr_f32_const struct {
-	N *Phrase[int]
+	N *Phrase[OInt]
 }
 
-func _f32_const(_n *Phrase[int]) Instr_f32_const {
+func _f32_const(_n *Phrase[OInt]) Instr_f32_const {
 	return Instr_f32_const{
 		N: _n,
 	}
 }
 
 type Instr_f64_const struct {
-	N *Phrase[int]
+	N *Phrase[OInt]
 }
 
-func _f64_const(_n *Phrase[int]) Instr_f64_const {
+func _f64_const(_n *Phrase[OInt]) Instr_f64_const {
 	return Instr_f64_const{
 		N: _n,
 	}
 }
 
 type Instr_v128_const struct {
-	N *Phrase[int]
+	N *Phrase[OInt]
 }
 
-func _v128_const(_n *Phrase[int]) Instr_v128_const {
+func _v128_const(_n *Phrase[OInt]) Instr_v128_const {
 	return Instr_v128_const{
 		N: _n,
 	}
@@ -62,10 +62,10 @@ func _ref_null(_t HeapType) Instr_ref_null {
 }
 
 type Instr_ref_func struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _ref_func(_x *Phrase[uint32]) Instr_ref_func {
+func _ref_func(_x *Phrase[OInt32]) Instr_ref_func {
 	return Instr_ref_func{
 		X: _x,
 	}
@@ -144,31 +144,31 @@ func _if__3(_bt BlockType, _es1 TODO, _es2 TODO) Instr_if_ {
 }
 
 type Instr_br struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _br(_x *Phrase[uint32]) Instr_br {
+func _br(_x *Phrase[OInt32]) Instr_br {
 	return Instr_br{
 		X: _x,
 	}
 }
 
 type Instr_br_if struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _br_if(_x *Phrase[uint32]) Instr_br_if {
+func _br_if(_x *Phrase[OInt32]) Instr_br_if {
 	return Instr_br_if{
 		X: _x,
 	}
 }
 
 type Instr_br_table struct {
-	Xs []int
-	X  *Phrase[uint32]
+	Xs []OInt
+	X  *Phrase[OInt32]
 }
 
-func _br_table_2(_xs []int, _x *Phrase[uint32]) Instr_br_table {
+func _br_table_2(_xs []OInt, _x *Phrase[OInt32]) Instr_br_table {
 	return Instr_br_table{
 		Xs: _xs,
 		X:  _x,
@@ -176,32 +176,32 @@ func _br_table_2(_xs []int, _x *Phrase[uint32]) Instr_br_table {
 }
 
 type Instr_br_on_null struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _br_on_null(_x *Phrase[uint32]) Instr_br_on_null {
+func _br_on_null(_x *Phrase[OInt32]) Instr_br_on_null {
 	return Instr_br_on_null{
 		X: _x,
 	}
 }
 
 type Instr_br_on_non_null struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _br_on_non_null(_x *Phrase[uint32]) Instr_br_on_non_null {
+func _br_on_non_null(_x *Phrase[OInt32]) Instr_br_on_non_null {
 	return Instr_br_on_non_null{
 		X: _x,
 	}
 }
 
 type Instr_br_on_cast struct {
-	X  *Phrase[uint32]
+	X  *Phrase[OInt32]
 	T1 RefType
 	T2 RefType
 }
 
-func _br_on_cast_3(_x *Phrase[uint32], _t1 RefType, _t2 RefType) Instr_br_on_cast {
+func _br_on_cast_3(_x *Phrase[OInt32], _t1 RefType, _t2 RefType) Instr_br_on_cast {
 	return Instr_br_on_cast{
 		X:  _x,
 		T1: _t1,
@@ -210,12 +210,12 @@ func _br_on_cast_3(_x *Phrase[uint32], _t1 RefType, _t2 RefType) Instr_br_on_cas
 }
 
 type Instr_br_on_cast_fail struct {
-	X  *Phrase[uint32]
+	X  *Phrase[OInt32]
 	T1 RefType
 	T2 RefType
 }
 
-func _br_on_cast_fail_3(_x *Phrase[uint32], _t1 RefType, _t2 RefType) Instr_br_on_cast_fail {
+func _br_on_cast_fail_3(_x *Phrase[OInt32], _t1 RefType, _t2 RefType) Instr_br_on_cast_fail {
 	return Instr_br_on_cast_fail{
 		X:  _x,
 		T1: _t1,
@@ -230,31 +230,31 @@ func _return() Instr_return {
 }
 
 type Instr_call struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _call(_x *Phrase[uint32]) Instr_call {
+func _call(_x *Phrase[OInt32]) Instr_call {
 	return Instr_call{
 		X: _x,
 	}
 }
 
 type Instr_call_ref struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _call_ref(_x *Phrase[uint32]) Instr_call_ref {
+func _call_ref(_x *Phrase[OInt32]) Instr_call_ref {
 	return Instr_call_ref{
 		X: _x,
 	}
 }
 
 type Instr_call_indirect struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _call_indirect_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_call_indirect {
+func _call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_call_indirect {
 	return Instr_call_indirect{
 		X: _x,
 		Y: _y,
@@ -262,31 +262,31 @@ func _call_indirect_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_call_indirec
 }
 
 type Instr_return_call struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _return_call(_x *Phrase[uint32]) Instr_return_call {
+func _return_call(_x *Phrase[OInt32]) Instr_return_call {
 	return Instr_return_call{
 		X: _x,
 	}
 }
 
 type Instr_return_call_ref struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _return_call_ref(_x *Phrase[uint32]) Instr_return_call_ref {
+func _return_call_ref(_x *Phrase[OInt32]) Instr_return_call_ref {
 	return Instr_return_call_ref{
 		X: _x,
 	}
 }
 
 type Instr_return_call_indirect struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _return_call_indirect_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_return_call_indirect {
+func _return_call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_return_call_indirect {
 	return Instr_return_call_indirect{
 		X: _x,
 		Y: _y,
@@ -294,10 +294,10 @@ func _return_call_indirect_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_retur
 }
 
 type Instr_throw struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _throw(_x *Phrase[uint32]) Instr_throw {
+func _throw(_x *Phrase[OInt32]) Instr_throw {
 	return Instr_throw{
 		X: _x,
 	}
@@ -324,111 +324,111 @@ func _try_table_3(_bt BlockType, _cs TODO, _es TODO) Instr_try_table {
 }
 
 type Instr_local_get struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _local_get(_x *Phrase[uint32]) Instr_local_get {
+func _local_get(_x *Phrase[OInt32]) Instr_local_get {
 	return Instr_local_get{
 		X: _x,
 	}
 }
 
 type Instr_local_set struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _local_set(_x *Phrase[uint32]) Instr_local_set {
+func _local_set(_x *Phrase[OInt32]) Instr_local_set {
 	return Instr_local_set{
 		X: _x,
 	}
 }
 
 type Instr_local_tee struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _local_tee(_x *Phrase[uint32]) Instr_local_tee {
+func _local_tee(_x *Phrase[OInt32]) Instr_local_tee {
 	return Instr_local_tee{
 		X: _x,
 	}
 }
 
 type Instr_global_get struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _global_get(_x *Phrase[uint32]) Instr_global_get {
+func _global_get(_x *Phrase[OInt32]) Instr_global_get {
 	return Instr_global_get{
 		X: _x,
 	}
 }
 
 type Instr_global_set struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _global_set(_x *Phrase[uint32]) Instr_global_set {
+func _global_set(_x *Phrase[OInt32]) Instr_global_set {
 	return Instr_global_set{
 		X: _x,
 	}
 }
 
 type Instr_table_get struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _table_get(_x *Phrase[uint32]) Instr_table_get {
+func _table_get(_x *Phrase[OInt32]) Instr_table_get {
 	return Instr_table_get{
 		X: _x,
 	}
 }
 
 type Instr_table_set struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _table_set(_x *Phrase[uint32]) Instr_table_set {
+func _table_set(_x *Phrase[OInt32]) Instr_table_set {
 	return Instr_table_set{
 		X: _x,
 	}
 }
 
 type Instr_table_size struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _table_size(_x *Phrase[uint32]) Instr_table_size {
+func _table_size(_x *Phrase[OInt32]) Instr_table_size {
 	return Instr_table_size{
 		X: _x,
 	}
 }
 
 type Instr_table_grow struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _table_grow(_x *Phrase[uint32]) Instr_table_grow {
+func _table_grow(_x *Phrase[OInt32]) Instr_table_grow {
 	return Instr_table_grow{
 		X: _x,
 	}
 }
 
 type Instr_table_fill struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _table_fill(_x *Phrase[uint32]) Instr_table_fill {
+func _table_fill(_x *Phrase[OInt32]) Instr_table_fill {
 	return Instr_table_fill{
 		X: _x,
 	}
 }
 
 type Instr_table_copy struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _table_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_table_copy {
+func _table_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_copy {
 	return Instr_table_copy{
 		X: _x,
 		Y: _y,
@@ -436,11 +436,11 @@ func _table_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_table_copy {
 }
 
 type Instr_table_init struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _table_init_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_table_init {
+func _table_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_init {
 	return Instr_table_init{
 		X: _x,
 		Y: _y,
@@ -448,22 +448,22 @@ func _table_init_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_table_init {
 }
 
 type Instr_elem_drop struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _elem_drop(_x *Phrase[uint32]) Instr_elem_drop {
+func _elem_drop(_x *Phrase[OInt32]) Instr_elem_drop {
 	return Instr_elem_drop{
 		X: _x,
 	}
 }
 
 type Instr_i32_load struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load {
+func _i32_load_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_load {
 	return Instr_i32_load{
 		X:      _x,
 		Align:  _align,
@@ -472,12 +472,12 @@ func _i32_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load {
 }
 
 type Instr_i64_load struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load {
+func _i64_load_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load {
 	return Instr_i64_load{
 		X:      _x,
 		Align:  _align,
@@ -486,12 +486,12 @@ func _i64_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load {
 }
 
 type Instr_f32_load struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _f32_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f32_load {
+func _f32_load_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_f32_load {
 	return Instr_f32_load{
 		X:      _x,
 		Align:  _align,
@@ -500,12 +500,12 @@ func _f32_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f32_load {
 }
 
 type Instr_f64_load struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _f64_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f64_load {
+func _f64_load_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_f64_load {
 	return Instr_f64_load{
 		X:      _x,
 		Align:  _align,
@@ -514,12 +514,12 @@ func _f64_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f64_load {
 }
 
 type Instr_i32_load8_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_load8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load8_s {
+func _i32_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_load8_s {
 	return Instr_i32_load8_s{
 		X:      _x,
 		Align:  _align,
@@ -528,12 +528,12 @@ func _i32_load8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load
 }
 
 type Instr_i32_load8_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_load8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load8_u {
+func _i32_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_load8_u {
 	return Instr_i32_load8_u{
 		X:      _x,
 		Align:  _align,
@@ -542,12 +542,12 @@ func _i32_load8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load
 }
 
 type Instr_i32_load16_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_load16_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load16_s {
+func _i32_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_load16_s {
 	return Instr_i32_load16_s{
 		X:      _x,
 		Align:  _align,
@@ -556,12 +556,12 @@ func _i32_load16_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_loa
 }
 
 type Instr_i32_load16_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_load16_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_load16_u {
+func _i32_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_load16_u {
 	return Instr_i32_load16_u{
 		X:      _x,
 		Align:  _align,
@@ -570,12 +570,12 @@ func _i32_load16_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_loa
 }
 
 type Instr_i64_load8_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load8_s {
+func _i64_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load8_s {
 	return Instr_i64_load8_s{
 		X:      _x,
 		Align:  _align,
@@ -584,12 +584,12 @@ func _i64_load8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load
 }
 
 type Instr_i64_load8_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load8_u {
+func _i64_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load8_u {
 	return Instr_i64_load8_u{
 		X:      _x,
 		Align:  _align,
@@ -598,12 +598,12 @@ func _i64_load8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load
 }
 
 type Instr_i64_load16_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load16_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load16_s {
+func _i64_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load16_s {
 	return Instr_i64_load16_s{
 		X:      _x,
 		Align:  _align,
@@ -612,12 +612,12 @@ func _i64_load16_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_loa
 }
 
 type Instr_i64_load16_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load16_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load16_u {
+func _i64_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load16_u {
 	return Instr_i64_load16_u{
 		X:      _x,
 		Align:  _align,
@@ -626,12 +626,12 @@ func _i64_load16_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_loa
 }
 
 type Instr_i64_load32_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load32_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load32_s {
+func _i64_load32_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load32_s {
 	return Instr_i64_load32_s{
 		X:      _x,
 		Align:  _align,
@@ -640,12 +640,12 @@ func _i64_load32_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_loa
 }
 
 type Instr_i64_load32_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_load32_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_load32_u {
+func _i64_load32_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_load32_u {
 	return Instr_i64_load32_u{
 		X:      _x,
 		Align:  _align,
@@ -654,12 +654,12 @@ func _i64_load32_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_loa
 }
 
 type Instr_i32_store struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_store {
+func _i32_store_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_store {
 	return Instr_i32_store{
 		X:      _x,
 		Align:  _align,
@@ -668,12 +668,12 @@ func _i32_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_store 
 }
 
 type Instr_i64_store struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store {
+func _i64_store_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_store {
 	return Instr_i64_store{
 		X:      _x,
 		Align:  _align,
@@ -682,12 +682,12 @@ func _i64_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store 
 }
 
 type Instr_f32_store struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _f32_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f32_store {
+func _f32_store_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_f32_store {
 	return Instr_f32_store{
 		X:      _x,
 		Align:  _align,
@@ -696,12 +696,12 @@ func _f32_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f32_store 
 }
 
 type Instr_f64_store struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _f64_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f64_store {
+func _f64_store_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_f64_store {
 	return Instr_f64_store{
 		X:      _x,
 		Align:  _align,
@@ -710,12 +710,12 @@ func _f64_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_f64_store 
 }
 
 type Instr_i32_store8 struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_store8_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_store8 {
+func _i32_store8_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_store8 {
 	return Instr_i32_store8{
 		X:      _x,
 		Align:  _align,
@@ -724,12 +724,12 @@ func _i32_store8_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_store
 }
 
 type Instr_i32_store16 struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i32_store16_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_store16 {
+func _i32_store16_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i32_store16 {
 	return Instr_i32_store16{
 		X:      _x,
 		Align:  _align,
@@ -738,12 +738,12 @@ func _i32_store16_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i32_stor
 }
 
 type Instr_i64_store8 struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_store8_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store8 {
+func _i64_store8_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_store8 {
 	return Instr_i64_store8{
 		X:      _x,
 		Align:  _align,
@@ -752,12 +752,12 @@ func _i64_store8_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store
 }
 
 type Instr_i64_store16 struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_store16_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store16 {
+func _i64_store16_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_store16 {
 	return Instr_i64_store16{
 		X:      _x,
 		Align:  _align,
@@ -766,12 +766,12 @@ func _i64_store16_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_stor
 }
 
 type Instr_i64_store32 struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _i64_store32_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_store32 {
+func _i64_store32_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_i64_store32 {
 	return Instr_i64_store32{
 		X:      _x,
 		Align:  _align,
@@ -780,12 +780,12 @@ func _i64_store32_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_i64_stor
 }
 
 type Instr_v128_load struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load {
+func _v128_load_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load {
 	return Instr_v128_load{
 		X:      _x,
 		Align:  _align,
@@ -794,12 +794,12 @@ func _v128_load_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load 
 }
 
 type Instr_v128_load8x8_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load8x8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load8x8_s {
+func _v128_load8x8_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load8x8_s {
 	return Instr_v128_load8x8_s{
 		X:      _x,
 		Align:  _align,
@@ -808,12 +808,12 @@ func _v128_load8x8_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_
 }
 
 type Instr_v128_load8x8_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load8x8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load8x8_u {
+func _v128_load8x8_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load8x8_u {
 	return Instr_v128_load8x8_u{
 		X:      _x,
 		Align:  _align,
@@ -822,12 +822,12 @@ func _v128_load8x8_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_
 }
 
 type Instr_v128_load16x4_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load16x4_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load16x4_s {
+func _v128_load16x4_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load16x4_s {
 	return Instr_v128_load16x4_s{
 		X:      _x,
 		Align:  _align,
@@ -836,12 +836,12 @@ func _v128_load16x4_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128
 }
 
 type Instr_v128_load16x4_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load16x4_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load16x4_u {
+func _v128_load16x4_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load16x4_u {
 	return Instr_v128_load16x4_u{
 		X:      _x,
 		Align:  _align,
@@ -850,12 +850,12 @@ func _v128_load16x4_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128
 }
 
 type Instr_v128_load32x2_s struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load32x2_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load32x2_s {
+func _v128_load32x2_s_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load32x2_s {
 	return Instr_v128_load32x2_s{
 		X:      _x,
 		Align:  _align,
@@ -864,12 +864,12 @@ func _v128_load32x2_s_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128
 }
 
 type Instr_v128_load32x2_u struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load32x2_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load32x2_u {
+func _v128_load32x2_u_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load32x2_u {
 	return Instr_v128_load32x2_u{
 		X:      _x,
 		Align:  _align,
@@ -878,12 +878,12 @@ func _v128_load32x2_u_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128
 }
 
 type Instr_v128_load8_splat struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load8_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load8_splat {
+func _v128_load8_splat_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load8_splat {
 	return Instr_v128_load8_splat{
 		X:      _x,
 		Align:  _align,
@@ -892,12 +892,12 @@ func _v128_load8_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v12
 }
 
 type Instr_v128_load16_splat struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load16_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load16_splat {
+func _v128_load16_splat_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load16_splat {
 	return Instr_v128_load16_splat{
 		X:      _x,
 		Align:  _align,
@@ -906,12 +906,12 @@ func _v128_load16_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v1
 }
 
 type Instr_v128_load32_splat struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load32_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load32_splat {
+func _v128_load32_splat_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load32_splat {
 	return Instr_v128_load32_splat{
 		X:      _x,
 		Align:  _align,
@@ -920,12 +920,12 @@ func _v128_load32_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v1
 }
 
 type Instr_v128_load64_splat struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load64_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load64_splat {
+func _v128_load64_splat_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load64_splat {
 	return Instr_v128_load64_splat{
 		X:      _x,
 		Align:  _align,
@@ -934,12 +934,12 @@ func _v128_load64_splat_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v1
 }
 
 type Instr_v128_load32_zero struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load32_zero_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load32_zero {
+func _v128_load32_zero_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load32_zero {
 	return Instr_v128_load32_zero{
 		X:      _x,
 		Align:  _align,
@@ -948,12 +948,12 @@ func _v128_load32_zero_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v12
 }
 
 type Instr_v128_load64_zero struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_load64_zero_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_load64_zero {
+func _v128_load64_zero_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_load64_zero {
 	return Instr_v128_load64_zero{
 		X:      _x,
 		Align:  _align,
@@ -962,13 +962,13 @@ func _v128_load64_zero_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v12
 }
 
 type Instr_v128_load8_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_load8_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_load8_lane {
+func _v128_load8_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_load8_lane {
 	return Instr_v128_load8_lane{
 		X:      _x,
 		Align:  _align,
@@ -978,13 +978,13 @@ func _v128_load8_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) In
 }
 
 type Instr_v128_load16_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_load16_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_load16_lane {
+func _v128_load16_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_load16_lane {
 	return Instr_v128_load16_lane{
 		X:      _x,
 		Align:  _align,
@@ -994,13 +994,13 @@ func _v128_load16_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) I
 }
 
 type Instr_v128_load32_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_load32_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_load32_lane {
+func _v128_load32_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_load32_lane {
 	return Instr_v128_load32_lane{
 		X:      _x,
 		Align:  _align,
@@ -1010,13 +1010,13 @@ func _v128_load32_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) I
 }
 
 type Instr_v128_load64_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_load64_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_load64_lane {
+func _v128_load64_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_load64_lane {
 	return Instr_v128_load64_lane{
 		X:      _x,
 		Align:  _align,
@@ -1026,12 +1026,12 @@ func _v128_load64_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) I
 }
 
 type Instr_v128_store struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
 }
 
-func _v128_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_store {
+func _v128_store_3(_x *Phrase[OInt32], _align OInt, _offset TODO) Instr_v128_store {
 	return Instr_v128_store{
 		X:      _x,
 		Align:  _align,
@@ -1040,13 +1040,13 @@ func _v128_store_3(_x *Phrase[uint32], _align int, _offset TODO) Instr_v128_stor
 }
 
 type Instr_v128_store8_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_store8_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_store8_lane {
+func _v128_store8_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_store8_lane {
 	return Instr_v128_store8_lane{
 		X:      _x,
 		Align:  _align,
@@ -1056,13 +1056,13 @@ func _v128_store8_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) I
 }
 
 type Instr_v128_store16_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_store16_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_store16_lane {
+func _v128_store16_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_store16_lane {
 	return Instr_v128_store16_lane{
 		X:      _x,
 		Align:  _align,
@@ -1072,13 +1072,13 @@ func _v128_store16_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) 
 }
 
 type Instr_v128_store32_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_store32_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_store32_lane {
+func _v128_store32_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_store32_lane {
 	return Instr_v128_store32_lane{
 		X:      _x,
 		Align:  _align,
@@ -1088,13 +1088,13 @@ func _v128_store32_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) 
 }
 
 type Instr_v128_store64_lane struct {
-	X      *Phrase[uint32]
-	Align  int
+	X      *Phrase[OInt32]
+	Align  OInt
 	Offset TODO
-	I      int
+	I      OInt
 }
 
-func _v128_store64_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) Instr_v128_store64_lane {
+func _v128_store64_lane_4(_x *Phrase[OInt32], _align OInt, _offset TODO, _i OInt) Instr_v128_store64_lane {
 	return Instr_v128_store64_lane{
 		X:      _x,
 		Align:  _align,
@@ -1104,41 +1104,41 @@ func _v128_store64_lane_4(_x *Phrase[uint32], _align int, _offset TODO, _i int) 
 }
 
 type Instr_memory_size struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _memory_size(_x *Phrase[uint32]) Instr_memory_size {
+func _memory_size(_x *Phrase[OInt32]) Instr_memory_size {
 	return Instr_memory_size{
 		X: _x,
 	}
 }
 
 type Instr_memory_grow struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _memory_grow(_x *Phrase[uint32]) Instr_memory_grow {
+func _memory_grow(_x *Phrase[OInt32]) Instr_memory_grow {
 	return Instr_memory_grow{
 		X: _x,
 	}
 }
 
 type Instr_memory_fill struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _memory_fill(_x *Phrase[uint32]) Instr_memory_fill {
+func _memory_fill(_x *Phrase[OInt32]) Instr_memory_fill {
 	return Instr_memory_fill{
 		X: _x,
 	}
 }
 
 type Instr_memory_copy struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _memory_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_memory_copy {
+func _memory_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_copy {
 	return Instr_memory_copy{
 		X: _x,
 		Y: _y,
@@ -1146,11 +1146,11 @@ func _memory_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_memory_copy {
 }
 
 type Instr_memory_init struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _memory_init_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_memory_init {
+func _memory_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_init {
 	return Instr_memory_init{
 		X: _x,
 		Y: _y,
@@ -1158,10 +1158,10 @@ func _memory_init_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_memory_init {
 }
 
 type Instr_data_drop struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _data_drop(_x *Phrase[uint32]) Instr_data_drop {
+func _data_drop(_x *Phrase[OInt32]) Instr_data_drop {
 	return Instr_data_drop{
 		X: _x,
 	}
@@ -1224,31 +1224,31 @@ func _i31_get_s() Instr_i31_get_s {
 }
 
 type Instr_struct_new struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _struct_new(_x *Phrase[uint32]) Instr_struct_new {
+func _struct_new(_x *Phrase[OInt32]) Instr_struct_new {
 	return Instr_struct_new{
 		X: _x,
 	}
 }
 
 type Instr_struct_new_default struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _struct_new_default(_x *Phrase[uint32]) Instr_struct_new_default {
+func _struct_new_default(_x *Phrase[OInt32]) Instr_struct_new_default {
 	return Instr_struct_new_default{
 		X: _x,
 	}
 }
 
 type Instr_struct_get struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _struct_get_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get {
+func _struct_get_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get {
 	return Instr_struct_get{
 		X: _x,
 		Y: _y,
@@ -1256,11 +1256,11 @@ func _struct_get_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get {
 }
 
 type Instr_struct_get_u struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _struct_get_u_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get_u {
+func _struct_get_u_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_u {
 	return Instr_struct_get_u{
 		X: _x,
 		Y: _y,
@@ -1268,11 +1268,11 @@ func _struct_get_u_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get_u 
 }
 
 type Instr_struct_get_s struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _struct_get_s_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get_s {
+func _struct_get_s_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_s {
 	return Instr_struct_get_s{
 		X: _x,
 		Y: _y,
@@ -1280,11 +1280,11 @@ func _struct_get_s_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_get_s 
 }
 
 type Instr_struct_set struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _struct_set_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_set {
+func _struct_set_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_set {
 	return Instr_struct_set{
 		X: _x,
 		Y: _y,
@@ -1292,31 +1292,31 @@ func _struct_set_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_struct_set {
 }
 
 type Instr_array_new struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_new(_x *Phrase[uint32]) Instr_array_new {
+func _array_new(_x *Phrase[OInt32]) Instr_array_new {
 	return Instr_array_new{
 		X: _x,
 	}
 }
 
 type Instr_array_new_default struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_new_default(_x *Phrase[uint32]) Instr_array_new_default {
+func _array_new_default(_x *Phrase[OInt32]) Instr_array_new_default {
 	return Instr_array_new_default{
 		X: _x,
 	}
 }
 
 type Instr_array_new_fixed struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 	N TODO
 }
 
-func _array_new_fixed_2(_x *Phrase[uint32], _n TODO) Instr_array_new_fixed {
+func _array_new_fixed_2(_x *Phrase[OInt32], _n TODO) Instr_array_new_fixed {
 	return Instr_array_new_fixed{
 		X: _x,
 		N: _n,
@@ -1324,11 +1324,11 @@ func _array_new_fixed_2(_x *Phrase[uint32], _n TODO) Instr_array_new_fixed {
 }
 
 type Instr_array_new_elem struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _array_new_elem_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_new_elem {
+func _array_new_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_elem {
 	return Instr_array_new_elem{
 		X: _x,
 		Y: _y,
@@ -1336,11 +1336,11 @@ func _array_new_elem_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_new_e
 }
 
 type Instr_array_new_data struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _array_new_data_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_new_data {
+func _array_new_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_data {
 	return Instr_array_new_data{
 		X: _x,
 		Y: _y,
@@ -1348,40 +1348,40 @@ func _array_new_data_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_new_d
 }
 
 type Instr_array_get struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_get(_x *Phrase[uint32]) Instr_array_get {
+func _array_get(_x *Phrase[OInt32]) Instr_array_get {
 	return Instr_array_get{
 		X: _x,
 	}
 }
 
 type Instr_array_get_u struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_get_u(_x *Phrase[uint32]) Instr_array_get_u {
+func _array_get_u(_x *Phrase[OInt32]) Instr_array_get_u {
 	return Instr_array_get_u{
 		X: _x,
 	}
 }
 
 type Instr_array_get_s struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_get_s(_x *Phrase[uint32]) Instr_array_get_s {
+func _array_get_s(_x *Phrase[OInt32]) Instr_array_get_s {
 	return Instr_array_get_s{
 		X: _x,
 	}
 }
 
 type Instr_array_set struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_set(_x *Phrase[uint32]) Instr_array_set {
+func _array_set(_x *Phrase[OInt32]) Instr_array_set {
 	return Instr_array_set{
 		X: _x,
 	}
@@ -1394,11 +1394,11 @@ func _array_len() Instr_array_len {
 }
 
 type Instr_array_copy struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _array_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_copy {
+func _array_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_copy {
 	return Instr_array_copy{
 		X: _x,
 		Y: _y,
@@ -1406,21 +1406,21 @@ func _array_copy_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_copy {
 }
 
 type Instr_array_fill struct {
-	X *Phrase[uint32]
+	X *Phrase[OInt32]
 }
 
-func _array_fill(_x *Phrase[uint32]) Instr_array_fill {
+func _array_fill(_x *Phrase[OInt32]) Instr_array_fill {
 	return Instr_array_fill{
 		X: _x,
 	}
 }
 
 type Instr_array_init_data struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _array_init_data_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_init_data {
+func _array_init_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init_data {
 	return Instr_array_init_data{
 		X: _x,
 		Y: _y,
@@ -1428,11 +1428,11 @@ func _array_init_data_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_init
 }
 
 type Instr_array_init_elem struct {
-	X *Phrase[uint32]
-	Y *Phrase[uint32]
+	X *Phrase[OInt32]
+	Y *Phrase[OInt32]
 }
 
-func _array_init_elem_2(_x *Phrase[uint32], _y *Phrase[uint32]) Instr_array_init_elem {
+func _array_init_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init_elem {
 	return Instr_array_init_elem{
 		X: _x,
 		Y: _y,
@@ -2316,10 +2316,10 @@ func _i8x16_swizzle() Instr_i8x16_swizzle {
 }
 
 type Instr_i8x16_shuffle struct {
-	Is []int
+	Is []OInt
 }
 
-func _i8x16_shuffle(_is []int) Instr_i8x16_shuffle {
+func _i8x16_shuffle(_is []OInt) Instr_i8x16_shuffle {
 	return Instr_i8x16_shuffle{
 		Is: _is,
 	}
@@ -2332,30 +2332,30 @@ func _i8x16_splat() Instr_i8x16_splat {
 }
 
 type Instr_i8x16_extract_lane_s struct {
-	I int
+	I OInt
 }
 
-func _i8x16_extract_lane_s(_i int) Instr_i8x16_extract_lane_s {
+func _i8x16_extract_lane_s(_i OInt) Instr_i8x16_extract_lane_s {
 	return Instr_i8x16_extract_lane_s{
 		I: _i,
 	}
 }
 
 type Instr_i8x16_extract_lane_u struct {
-	I int
+	I OInt
 }
 
-func _i8x16_extract_lane_u(_i int) Instr_i8x16_extract_lane_u {
+func _i8x16_extract_lane_u(_i OInt) Instr_i8x16_extract_lane_u {
 	return Instr_i8x16_extract_lane_u{
 		I: _i,
 	}
 }
 
 type Instr_i8x16_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _i8x16_replace_lane(_i int) Instr_i8x16_replace_lane {
+func _i8x16_replace_lane(_i OInt) Instr_i8x16_replace_lane {
 	return Instr_i8x16_replace_lane{
 		I: _i,
 	}
@@ -2578,30 +2578,30 @@ func _i16x8_splat() Instr_i16x8_splat {
 }
 
 type Instr_i16x8_extract_lane_s struct {
-	I int
+	I OInt
 }
 
-func _i16x8_extract_lane_s(_i int) Instr_i16x8_extract_lane_s {
+func _i16x8_extract_lane_s(_i OInt) Instr_i16x8_extract_lane_s {
 	return Instr_i16x8_extract_lane_s{
 		I: _i,
 	}
 }
 
 type Instr_i16x8_extract_lane_u struct {
-	I int
+	I OInt
 }
 
-func _i16x8_extract_lane_u(_i int) Instr_i16x8_extract_lane_u {
+func _i16x8_extract_lane_u(_i OInt) Instr_i16x8_extract_lane_u {
 	return Instr_i16x8_extract_lane_u{
 		I: _i,
 	}
 }
 
 type Instr_i16x8_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _i16x8_replace_lane(_i int) Instr_i16x8_replace_lane {
+func _i16x8_replace_lane(_i OInt) Instr_i16x8_replace_lane {
 	return Instr_i16x8_replace_lane{
 		I: _i,
 	}
@@ -2842,20 +2842,20 @@ func _i32x4_splat() Instr_i32x4_splat {
 }
 
 type Instr_i32x4_extract_lane struct {
-	I int
+	I OInt
 }
 
-func _i32x4_extract_lane(_i int) Instr_i32x4_extract_lane {
+func _i32x4_extract_lane(_i OInt) Instr_i32x4_extract_lane {
 	return Instr_i32x4_extract_lane{
 		I: _i,
 	}
 }
 
 type Instr_i32x4_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _i32x4_replace_lane(_i int) Instr_i32x4_replace_lane {
+func _i32x4_replace_lane(_i OInt) Instr_i32x4_replace_lane {
 	return Instr_i32x4_replace_lane{
 		I: _i,
 	}
@@ -3102,20 +3102,20 @@ func _i64x2_splat() Instr_i64x2_splat {
 }
 
 type Instr_i64x2_extract_lane struct {
-	I int
+	I OInt
 }
 
-func _i64x2_extract_lane(_i int) Instr_i64x2_extract_lane {
+func _i64x2_extract_lane(_i OInt) Instr_i64x2_extract_lane {
 	return Instr_i64x2_extract_lane{
 		I: _i,
 	}
 }
 
 type Instr_i64x2_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _i64x2_replace_lane(_i int) Instr_i64x2_replace_lane {
+func _i64x2_replace_lane(_i OInt) Instr_i64x2_replace_lane {
 	return Instr_i64x2_replace_lane{
 		I: _i,
 	}
@@ -3272,20 +3272,20 @@ func _f32x4_splat() Instr_f32x4_splat {
 }
 
 type Instr_f32x4_extract_lane struct {
-	I int
+	I OInt
 }
 
-func _f32x4_extract_lane(_i int) Instr_f32x4_extract_lane {
+func _f32x4_extract_lane(_i OInt) Instr_f32x4_extract_lane {
 	return Instr_f32x4_extract_lane{
 		I: _i,
 	}
 }
 
 type Instr_f32x4_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _f32x4_replace_lane(_i int) Instr_f32x4_replace_lane {
+func _f32x4_replace_lane(_i OInt) Instr_f32x4_replace_lane {
 	return Instr_f32x4_replace_lane{
 		I: _i,
 	}
@@ -3442,20 +3442,20 @@ func _f64x2_splat() Instr_f64x2_splat {
 }
 
 type Instr_f64x2_extract_lane struct {
-	I int
+	I OInt
 }
 
-func _f64x2_extract_lane(_i int) Instr_f64x2_extract_lane {
+func _f64x2_extract_lane(_i OInt) Instr_f64x2_extract_lane {
 	return Instr_f64x2_extract_lane{
 		I: _i,
 	}
 }
 
 type Instr_f64x2_replace_lane struct {
-	I int
+	I OInt
 }
 
-func _f64x2_replace_lane(_i int) Instr_f64x2_replace_lane {
+func _f64x2_replace_lane(_i OInt) Instr_f64x2_replace_lane {
 	return Instr_f64x2_replace_lane{
 		I: _i,
 	}
@@ -3724,16 +3724,172 @@ type Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s struct{}
 func _i32x4_relaxed_dot_i8x16_i7x16_add_s() Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s {
 	return Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s{}
 }
-func _memop(_s *Stream) (*Phrase[uint32], int, int) {
+func _bit_2(_i OInt, _n OInt) bool {
+	__tmp1 := _operatorNotEq_2(_int_operatorland_2(_n, _int_operatorlsl_2(1, _i)), 0)
+	return __tmp1
+}
+
+func _byte(_s *Stream) OInt {
+	__tmp1 := _get(_s)
+	return __tmp1
+}
+
+func _word16(_s *Stream) OInt {
+	__tmp1 := _byte(_s)
+	_lo := __tmp1
+	__tmp4 := _byte(_s)
+	_hi := __tmp4
+	__tmp7 := _int_operatorPlus_2(_int_operatorlsl_2(_hi, 8), _lo)
+	return __tmp7
+}
+
+func _word32(_s *Stream) OInt32 {
+	__tmp1 := _Int32_of_int(_word16(_s))
+	_lo := __tmp1
+	__tmp5 := _Int32_of_int(_word16(_s))
+	_hi := __tmp5
+	__tmp9 := _Int32_add_2(_lo, _Int32_shift_left_2(_hi, 16))
+	return __tmp9
+}
+
+func _word64(_s *Stream) OInt64 {
+	__tmp1 := _I64_convert_extend_i32_u(_word32(_s))
+	_lo := __tmp1
+	__tmp5 := _I64_convert_extend_i32_u(_word32(_s))
+	_hi := __tmp5
+	__tmp9 := _Int64_add_2(_lo, _Int64_shift_left_2(_hi, 32))
+	return __tmp9
+}
+
+func _uN_2(_n OInt, _s *Stream) OInt64 {
+	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos(_s), "integer representation too long")
+	_ = __tmp1
+	__tmp7 := _byte(_s)
+	_b := __tmp7
+	__tmp10 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_int_operatorland_2(_b, 0x7f), _int_operatorlsl_2(1, _n))), _s, _int_operatorMinus_2(_pos(_s), 1), "integer too large")
+	_ = __tmp10
+	__tmp23 := _Int64_of_int(_int_operatorland_2(_b, 0x7f))
+	_x := __tmp23
+	var __tmp27 OInt64
+	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
+		__tmp31 := _x
+		__tmp27 = __tmp31
+	} else {
+		__tmp32 := _Int64_logor_2(_x, _Int64_shift_left_2(_uN_2(_int_operatorMinus_2(_n, 7), _s), 7))
+		__tmp27 = __tmp32
+	}
+	return __tmp27
+
+}
+
+func _sN_2(_n OInt, _s *Stream) OInt64 {
+	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos(_s), "integer representation too long")
+	_ = __tmp1
+	__tmp7 := _byte(_s)
+	_b := __tmp7
+	__tmp10 := _int_operatorland_2(_int_operatorlsl_2(-(1), _int_operatorMinus_2(_n, 1)), 0x7f)
+	_mask := __tmp10
+	__tmp15 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _bool_operatorOr_2(_operatorEq_2(_int_operatorland_2(_b, _mask), 0), _operatorEq_2(_int_operatorland_2(_b, _mask), _mask))), _s, _int_operatorMinus_2(_pos(_s), 1), "integer too large")
+	_ = __tmp15
+	__tmp33 := _Int64_of_int(_int_operatorland_2(_b, 0x7f))
+	_x := __tmp33
+	var __tmp37 OInt64
+	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
+		var __tmp41 OInt64
+		if _operatorEq_2(_int_operatorland_2(_b, 0x40), 0) {
+			__tmp45 := _x
+			__tmp41 = __tmp45
+		} else {
+			__tmp46 := _Int64_logor_2(_x, _Int64_logxor_2(-(1), 0x7f))
+			__tmp41 = __tmp46
+		}
+		__tmp37 = __tmp41
+	} else {
+		__tmp49 := _Int64_logor_2(_x, _Int64_shift_left_2(_sN_2(_int_operatorMinus_2(_n, 7), _s), 7))
+		__tmp37 = __tmp49
+	}
+	return __tmp37
+
+}
+
+func _u32(_s *Stream) OInt32 {
+	__tmp1 := _Int64_to_int32(_uN_2(32, _s))
+	return __tmp1
+}
+
+func _u64(_s *Stream) OInt64 {
+	__tmp1 := _uN_2(64, _s)
+	return __tmp1
+}
+
+func _s7(_s *Stream) OInt {
+	__tmp1 := _Int64_to_int(_sN_2(7, _s))
+	return __tmp1
+}
+
+func _s32(_s *Stream) OInt32 {
+	__tmp1 := _Int64_to_int32(_sN_2(32, _s))
+	return __tmp1
+}
+
+func _s33(_s *Stream) OInt32 {
+	__tmp1 := _I32_convert_wrap_i64(_sN_2(33, _s))
+	return __tmp1
+}
+
+func _s64(_s *Stream) OInt64 {
+	__tmp1 := _sN_2(64, _s)
+	return __tmp1
+}
+
+func _f32(_s *Stream) float32 {
+	__tmp1 := _F32_of_bits(_word32(_s))
+	return __tmp1
+}
+
+func _f64(_s *Stream) float64 {
+	__tmp1 := _F64_of_bits(_word64(_s))
+	return __tmp1
+}
+
+func _len32(_s *Stream) OInt {
+	__tmp1 := _pos(_s)
+	_pos := __tmp1
+	__tmp4 := _u32(_s)
+	_n := __tmp4
+	var __tmp7 OInt
+	if _I32_le_u_2(_n, _Int32_of_int(_int_operatorMinus_2(_len(_s), _pos))) {
+		__tmp15 := _Int32_to_int(_n)
+		__tmp7 = __tmp15
+	} else {
+		__tmp17 := _error_3(_s, _pos, "length out of bounds")
+		__tmp7 = __tmp17
+	}
+	return __tmp7
+}
+
+func _string(_s *Stream) string {
+	__tmp1 := _len32(_s)
+	_n := __tmp1
+	__tmp4 := _get_string_2(_n, _s)
+	return __tmp4
+}
+
+func _op(_s *Stream) OInt {
+	__tmp1 := _byte(_s)
+	return __tmp1
+}
+
+func _memop(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 	__tmp1 := _pos(_s)
 	_pos := __tmp1
 	__tmp4 := _u32(_s)
 	_flags := __tmp4
-	__tmp7 := _require_4((_flags) < (0x80), _s, _pos, "malformed memop flags")
+	__tmp7 := _require_4(_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
-	__tmp12 := (_flags)&(0x40) != 0
+	__tmp12 := _operatorNotEq_2(_Int32_logand_2(_flags, 0x40), 0)
 	_has_var := __tmp12
-	var __tmp16 *Phrase[uint32]
+	var __tmp16 *Phrase[OInt32]
 	if _has_var {
 		__tmp18 := _at_2(_var, _s)
 		__tmp16 = __tmp18
@@ -3742,7 +3898,7 @@ func _memop(_s *Stream) (*Phrase[uint32], int, int) {
 		__tmp16 = __tmp21
 	}
 	_x := __tmp16
-	__tmp24 := _to_int(_logand_2(_flags, 0x3f))
+	__tmp24 := _Int32_to_int(_Int32_logand_2(_flags, 0x3f))
 	_align := __tmp24
 	__tmp28 := _u64(_s)
 	_offset := __tmp28
@@ -3787,7 +3943,7 @@ func _instr(_s *Stream) Instruction {
 		__tmp35 := _instr_block(_s)
 		_es1 := __tmp35
 		var __tmp38 Instruction
-		if _peek(_s) == _Some(0x05) {
+		if _operatorEq_2(_peek(_s), _Some(0x05)) {
 			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
 			__tmp45 := _instr_block(_s)
@@ -4583,7 +4739,7 @@ func _instr(_s *Stream) Instruction {
 			_opcode := __tmp637
 			__tmp811 := _byte(_s)
 			_flags := __tmp811
-			__tmp814 := _require_4(_flags&0xfc == 0, _s, _pos+2, "malformed br_on_cast flags")
+			__tmp814 := _require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfc), 0), _s, _int_operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp814
 			__tmp821 := _at_2(_var, _s)
 			_x := __tmp821
@@ -4782,7 +4938,7 @@ func _instr(_s *Stream) Instruction {
 			__tmp1081 := _v128_const(_at_2(_v128, _s))
 			__tmp945 = __tmp1081
 		case 0x0d:
-			__tmp1085 := _i8x16_shuffle(_List_init_2(16, func(__ int) int {
+			__tmp1085 := _i8x16_shuffle(_List_init_2(16, func(__ OInt) OInt {
 				__tmp1087 := _byte(_s)
 				return __tmp1087
 			}))
