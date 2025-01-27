@@ -24,7 +24,7 @@ var funcsToTranslate = []string{
 	"len32", "string",
 
 	// Instructions
-	"op", "end", "memop",
+	"op", "end_", "memop",
 	"block_type", "local",
 	"instr",
 }
@@ -189,17 +189,19 @@ func main() {
 
 				// Find and parse functions in our map
 				root := decodeParse.tree.RootNode()
-				for _, child := range root.NamedChildren(root.Walk()) {
-					if child.GrammarName() != "value_definition" {
+				for _, def := range root.NamedChildren(root.Walk()) {
+					if def.GrammarName() != "value_definition" {
 						continue
 					}
-					binding := child.NamedChild(0)
-					if binding.GrammarName() != "let_binding" {
-						continue
-					}
-					pattern := binding.ChildByFieldName("pattern")
-					if slices.Contains(funcsToTranslate, decodeParse.s(pattern)) {
-						decodeParse.parseFunc(&child)
+
+					for _, binding := range def.NamedChildren(def.Walk()) {
+						if binding.GrammarName() != "let_binding" {
+							continue
+						}
+						pattern := binding.ChildByFieldName("pattern")
+						if slices.Contains(funcsToTranslate, decodeParse.s(pattern)) {
+							decodeParse.parseFunc(&binding)
+						}
 					}
 				}
 			}
@@ -333,14 +335,13 @@ func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
 }
 
 func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
-	utils.Assert(f.GrammarName() == "value_definition", "expected a let")
+	utils.Assert(f.GrammarName() == "let_binding", "expected a let")
 	cur := f.Walk()
 
-	binding := Lookup{f}.Child(0, "let_binding").Node
-	pattern := Lookup{binding}.Field("pattern", "").Node
-	body := Lookup{binding}.Field("body", "").Node
+	pattern := Lookup{f}.Field("pattern", "").Node
+	body := Lookup{f}.Field("body", "").Node
 	var params []*tree_sitter.Node
-	for _, child := range binding.NamedChildren(cur) {
+	for _, child := range f.NamedChildren(cur) {
 		if child.GrammarName() == "parameter" {
 			params = append(params, &child)
 		}

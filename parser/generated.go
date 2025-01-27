@@ -4871,6 +4871,11 @@ func _op_1(_s *Stream) OInt {
 	return __tmp1
 }
 
+func _end__1(_s *Stream) TODO /* unit */ {
+	__tmp1 := _expect_3(0x0b, _s, "END opcode expected")
+	return __tmp1
+}
+
 func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 	__tmp1 := _pos_1(_s)
 	_pos := __tmp1
