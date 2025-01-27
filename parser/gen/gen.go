@@ -23,6 +23,13 @@ var funcsToTranslate = []string{
 	"uN", "sN", "u32", "u64", "s7", "s32", "s33", "s64", "f32", "f64", "v128",
 	"len32", "string",
 
+	// Types
+	"zero", "var",
+	"mutability", "var_type", "num_type", "vec_type", "heap_type", "ref_type",
+	"val_type", "result_type", "pack_type", "storage_type", "field_type",
+	"struct_type", "array_type", "func_type", "str_type", "sub_type", "rec_type",
+	"limits", "table_type", "global_type", "tag_type",
+
 	// Instructions
 	"op", "end_", "memop",
 	"block_type", "local",
