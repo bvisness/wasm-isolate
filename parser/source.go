@@ -38,7 +38,7 @@ var _no_region = &Region{
 	right: _no_pos,
 }
 
-func _all_region(file string) *Region {
+func _all_region_1(file string) *Region {
 	return &Region{
 		left:  &Pos{file, 0, 0},
 		right: &Pos{file, math.MaxInt, math.MaxInt},

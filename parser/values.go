@@ -12,14 +12,14 @@ func _list_3[T any](f func(s *Stream) T, n OInt, s *Stream) []T {
 
 func _opt_3[T any](f func(s *Stream) T, b bool, s *Stream) *T {
 	if b {
-		return _Some(f(s))
+		return _Some_1(f(s))
 	} else {
 		return nil
 	}
 }
 
 func _vec_2[T any](f func(s *Stream) T, s *Stream) []T {
-	n := _len32(s)
+	n := _len32_1(s)
 	return _list_3(f, n, s)
 }
 
@@ -31,7 +31,7 @@ func _either_2[T any](fs []func(s *Stream) T, s *Stream) T {
 		return fs[0](s)
 	}
 
-	pos := _pos(s)
+	pos := _pos_1(s)
 	res, exception := func() (res T, exc any) {
 		defer func() {
 			if r := recover(); r != nil {

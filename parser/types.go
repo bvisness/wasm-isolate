@@ -53,11 +53,11 @@ func _int_operatorlsl_2(a, b OInt) OInt {
 	return a << b
 }
 
-func _Int32_of_int(a OInt) OInt32 {
+func _Int32_of_int_1(a OInt) OInt32 {
 	return OInt32(a)
 }
 
-func _Int32_to_int(a OInt32) OInt {
+func _Int32_to_int_1(a OInt32) OInt {
 	return OInt(a)
 }
 
@@ -73,7 +73,7 @@ func _Int32_logand_2(a, b OInt32) OInt32 {
 	return a & b
 }
 
-func _I32_convert_wrap_i64(a OInt64) OInt32 {
+func _I32_convert_wrap_i64_1(a OInt64) OInt32 {
 	return OInt32(a)
 }
 func _I32_lt_u_2(a, b OInt32) bool {
@@ -84,23 +84,23 @@ func _I32_le_u_2(a, b OInt32) bool {
 	return uint32(a) <= uint32(b)
 }
 
-func _I32_to_int_u(a OInt32) OInt {
+func _I32_to_int_u_1(a OInt32) OInt {
 	return OInt(a)
 }
 
-func _Int64_of_int(a OInt) OInt64 {
+func _Int64_of_int_1(a OInt) OInt64 {
 	return OInt64(a)
 }
 
-func _I64_convert_extend_i32_u(a OInt32) OInt64 {
+func _I64_convert_extend_i32_u_1(a OInt32) OInt64 {
 	return OInt64(a)
 }
 
-func _Int64_to_int(a OInt64) OInt {
+func _Int64_to_int_1(a OInt64) OInt {
 	return OInt(a)
 }
 
-func _Int64_to_int32(a OInt64) OInt32 {
+func _Int64_to_int32_1(a OInt64) OInt32 {
 	return OInt32(a)
 }
 
@@ -120,11 +120,11 @@ func _Int64_logxor_2(a, b OInt64) OInt64 {
 	return a ^ b
 }
 
-func _F32_of_bits(bits OInt32) float32 {
+func _F32_of_bits_1(bits OInt32) float32 {
 	return math.Float32frombits(uint32(bits))
 }
 
-func _F64_of_bits(bits OInt64) float64 {
+func _F64_of_bits_1(bits OInt64) float64 {
 	return math.Float64frombits(uint64(bits))
 }
 
@@ -136,8 +136,10 @@ func _operatorLSL_int_2(a, b OInt) OInt {
 
 type Void any
 
-func _var(s *Stream) OInt32 {
-	return _u32(s)
+func _var_1(s *Stream) OInt32 {
+	return _u32_1(s)
 }
+
+var _var = _var_1
 
 type Instruction_ interface{}

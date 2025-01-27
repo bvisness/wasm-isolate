@@ -313,7 +313,8 @@ func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
 	}
 	w("}\n")
 
-	w("func %s(", funcName("", p.s(pattern), len(params)))
+	constructorName := funcName("", p.s(pattern), len(params))
+	w("func %s(", constructorName)
 	for _, param := range params {
 		paramType := p.getTypeStart(param, typeDefs)
 		w("%s %s, ", safeName(p.s(param)), ocaml2go(paramType))
@@ -327,6 +328,8 @@ func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
 		}
 	}
 	w("}\n}\n")
+
+	w("var %s = %s\n\n", funcName("", p.s(pattern), -1), constructorName)
 }
 
 func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
@@ -378,7 +381,7 @@ func funcName(mod, name string, numArgs int) string {
 		res += safeName(mod)
 	}
 	res += safeName(name)
-	if numArgs > 1 {
+	if numArgs >= 0 {
 		res += fmt.Sprintf("_%d", numArgs)
 	}
 	return res

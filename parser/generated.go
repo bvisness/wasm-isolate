@@ -5,105 +5,129 @@ type Instr_i32_const struct {
 	N *Phrase[OInt32]
 }
 
-func _i32_const(_n *Phrase[OInt32]) Instr_i32_const {
+func _i32_const_1(_n *Phrase[OInt32]) Instr_i32_const {
 	return Instr_i32_const{
 		N: _n,
 	}
 }
 
+var _i32_const = _i32_const_1
+
 type Instr_i64_const struct {
 	N *Phrase[OInt64]
 }
 
-func _i64_const(_n *Phrase[OInt64]) Instr_i64_const {
+func _i64_const_1(_n *Phrase[OInt64]) Instr_i64_const {
 	return Instr_i64_const{
 		N: _n,
 	}
 }
 
+var _i64_const = _i64_const_1
+
 type Instr_f32_const struct {
 	N *Phrase[float32]
 }
 
-func _f32_const(_n *Phrase[float32]) Instr_f32_const {
+func _f32_const_1(_n *Phrase[float32]) Instr_f32_const {
 	return Instr_f32_const{
 		N: _n,
 	}
 }
 
+var _f32_const = _f32_const_1
+
 type Instr_f64_const struct {
 	N *Phrase[float64]
 }
 
-func _f64_const(_n *Phrase[float64]) Instr_f64_const {
+func _f64_const_1(_n *Phrase[float64]) Instr_f64_const {
 	return Instr_f64_const{
 		N: _n,
 	}
 }
 
+var _f64_const = _f64_const_1
+
 type Instr_v128_const struct {
 	N *Phrase[TODO /* V128.t */]
 }
 
-func _v128_const(_n *Phrase[TODO /* V128.t */]) Instr_v128_const {
+func _v128_const_1(_n *Phrase[TODO /* V128.t */]) Instr_v128_const {
 	return Instr_v128_const{
 		N: _n,
 	}
 }
 
+var _v128_const = _v128_const_1
+
 type Instr_ref_null struct {
 	T HeapType
 }
 
-func _ref_null(_t HeapType) Instr_ref_null {
+func _ref_null_1(_t HeapType) Instr_ref_null {
 	return Instr_ref_null{
 		T: _t,
 	}
 }
 
+var _ref_null = _ref_null_1
+
 type Instr_ref_func struct {
 	X *Phrase[OInt32]
 }
 
-func _ref_func(_x *Phrase[OInt32]) Instr_ref_func {
+func _ref_func_1(_x *Phrase[OInt32]) Instr_ref_func {
 	return Instr_ref_func{
 		X: _x,
 	}
 }
 
+var _ref_func = _ref_func_1
+
 type Instr_at_const struct{}
 
-func _at_const() Instr_at_const {
+func _at_const_0() Instr_at_const {
 	return Instr_at_const{}
 }
 
+var _at_const = _at_const_0
+
 type Instr_unreachable struct{}
 
-func _unreachable() Instr_unreachable {
+func _unreachable_0() Instr_unreachable {
 	return Instr_unreachable{}
 }
 
+var _unreachable = _unreachable_0
+
 type Instr_nop struct{}
 
-func _nop() Instr_nop {
+func _nop_0() Instr_nop {
 	return Instr_nop{}
 }
 
+var _nop = _nop_0
+
 type Instr_drop struct{}
 
-func _drop() Instr_drop {
+func _drop_0() Instr_drop {
 	return Instr_drop{}
 }
+
+var _drop = _drop_0
 
 type Instr_select struct {
 	T *[]TODO /* val_type */
 }
 
-func _select(_t *[]TODO /* val_type */) Instr_select {
+func _select_1(_t *[]TODO /* val_type */) Instr_select {
 	return Instr_select{
 		T: _t,
 	}
 }
+
+var _select = _select_1
 
 type Instr_block struct {
 	Bt BlockType
@@ -117,6 +141,8 @@ func _block_2(_bt BlockType, _es []*Phrase[Instruction_]) Instr_block {
 	}
 }
 
+var _block = _block_2
+
 type Instr_loop struct {
 	Bt BlockType
 	Es []*Phrase[Instruction_]
@@ -128,6 +154,8 @@ func _loop_2(_bt BlockType, _es []*Phrase[Instruction_]) Instr_loop {
 		Es: _es,
 	}
 }
+
+var _loop = _loop_2
 
 type Instr_if_ struct {
 	Bt  BlockType
@@ -143,25 +171,31 @@ func _if__3(_bt BlockType, _es1 []*Phrase[Instruction_], _es2 []*Phrase[Instruct
 	}
 }
 
+var _if_ = _if__3
+
 type Instr_br struct {
 	X *Phrase[OInt32]
 }
 
-func _br(_x *Phrase[OInt32]) Instr_br {
+func _br_1(_x *Phrase[OInt32]) Instr_br {
 	return Instr_br{
 		X: _x,
 	}
 }
 
+var _br = _br_1
+
 type Instr_br_if struct {
 	X *Phrase[OInt32]
 }
 
-func _br_if(_x *Phrase[OInt32]) Instr_br_if {
+func _br_if_1(_x *Phrase[OInt32]) Instr_br_if {
 	return Instr_br_if{
 		X: _x,
 	}
 }
+
+var _br_if = _br_if_1
 
 type Instr_br_table struct {
 	Xs []*Phrase[OInt32]
@@ -175,25 +209,31 @@ func _br_table_2(_xs []*Phrase[OInt32], _x *Phrase[OInt32]) Instr_br_table {
 	}
 }
 
+var _br_table = _br_table_2
+
 type Instr_br_on_null struct {
 	X *Phrase[OInt32]
 }
 
-func _br_on_null(_x *Phrase[OInt32]) Instr_br_on_null {
+func _br_on_null_1(_x *Phrase[OInt32]) Instr_br_on_null {
 	return Instr_br_on_null{
 		X: _x,
 	}
 }
 
+var _br_on_null = _br_on_null_1
+
 type Instr_br_on_non_null struct {
 	X *Phrase[OInt32]
 }
 
-func _br_on_non_null(_x *Phrase[OInt32]) Instr_br_on_non_null {
+func _br_on_non_null_1(_x *Phrase[OInt32]) Instr_br_on_non_null {
 	return Instr_br_on_non_null{
 		X: _x,
 	}
 }
+
+var _br_on_non_null = _br_on_non_null_1
 
 type Instr_br_on_cast struct {
 	X  *Phrase[OInt32]
@@ -209,6 +249,8 @@ func _br_on_cast_3(_x *Phrase[OInt32], _t1 RefType, _t2 RefType) Instr_br_on_cas
 	}
 }
 
+var _br_on_cast = _br_on_cast_3
+
 type Instr_br_on_cast_fail struct {
 	X  *Phrase[OInt32]
 	T1 RefType
@@ -223,31 +265,39 @@ func _br_on_cast_fail_3(_x *Phrase[OInt32], _t1 RefType, _t2 RefType) Instr_br_o
 	}
 }
 
+var _br_on_cast_fail = _br_on_cast_fail_3
+
 type Instr_return struct{}
 
-func _return() Instr_return {
+func _return_0() Instr_return {
 	return Instr_return{}
 }
+
+var _return = _return_0
 
 type Instr_call struct {
 	X *Phrase[OInt32]
 }
 
-func _call(_x *Phrase[OInt32]) Instr_call {
+func _call_1(_x *Phrase[OInt32]) Instr_call {
 	return Instr_call{
 		X: _x,
 	}
 }
 
+var _call = _call_1
+
 type Instr_call_ref struct {
 	X *Phrase[OInt32]
 }
 
-func _call_ref(_x *Phrase[OInt32]) Instr_call_ref {
+func _call_ref_1(_x *Phrase[OInt32]) Instr_call_ref {
 	return Instr_call_ref{
 		X: _x,
 	}
 }
+
+var _call_ref = _call_ref_1
 
 type Instr_call_indirect struct {
 	X *Phrase[OInt32]
@@ -261,25 +311,31 @@ func _call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_call_indirec
 	}
 }
 
+var _call_indirect = _call_indirect_2
+
 type Instr_return_call struct {
 	X *Phrase[OInt32]
 }
 
-func _return_call(_x *Phrase[OInt32]) Instr_return_call {
+func _return_call_1(_x *Phrase[OInt32]) Instr_return_call {
 	return Instr_return_call{
 		X: _x,
 	}
 }
 
+var _return_call = _return_call_1
+
 type Instr_return_call_ref struct {
 	X *Phrase[OInt32]
 }
 
-func _return_call_ref(_x *Phrase[OInt32]) Instr_return_call_ref {
+func _return_call_ref_1(_x *Phrase[OInt32]) Instr_return_call_ref {
 	return Instr_return_call_ref{
 		X: _x,
 	}
 }
+
+var _return_call_ref = _return_call_ref_1
 
 type Instr_return_call_indirect struct {
 	X *Phrase[OInt32]
@@ -293,21 +349,27 @@ func _return_call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_retur
 	}
 }
 
+var _return_call_indirect = _return_call_indirect_2
+
 type Instr_throw struct {
 	X *Phrase[OInt32]
 }
 
-func _throw(_x *Phrase[OInt32]) Instr_throw {
+func _throw_1(_x *Phrase[OInt32]) Instr_throw {
 	return Instr_throw{
 		X: _x,
 	}
 }
 
+var _throw = _throw_1
+
 type Instr_throw_ref struct{}
 
-func _throw_ref() Instr_throw_ref {
+func _throw_ref_0() Instr_throw_ref {
 	return Instr_throw_ref{}
 }
+
+var _throw_ref = _throw_ref_0
 
 type Instr_try_table struct {
 	Bt BlockType
@@ -323,105 +385,127 @@ func _try_table_3(_bt BlockType, _cs []TODO /* catch */, _es []*Phrase[Instructi
 	}
 }
 
+var _try_table = _try_table_3
+
 type Instr_local_get struct {
 	X *Phrase[OInt32]
 }
 
-func _local_get(_x *Phrase[OInt32]) Instr_local_get {
+func _local_get_1(_x *Phrase[OInt32]) Instr_local_get {
 	return Instr_local_get{
 		X: _x,
 	}
 }
 
+var _local_get = _local_get_1
+
 type Instr_local_set struct {
 	X *Phrase[OInt32]
 }
 
-func _local_set(_x *Phrase[OInt32]) Instr_local_set {
+func _local_set_1(_x *Phrase[OInt32]) Instr_local_set {
 	return Instr_local_set{
 		X: _x,
 	}
 }
 
+var _local_set = _local_set_1
+
 type Instr_local_tee struct {
 	X *Phrase[OInt32]
 }
 
-func _local_tee(_x *Phrase[OInt32]) Instr_local_tee {
+func _local_tee_1(_x *Phrase[OInt32]) Instr_local_tee {
 	return Instr_local_tee{
 		X: _x,
 	}
 }
 
+var _local_tee = _local_tee_1
+
 type Instr_global_get struct {
 	X *Phrase[OInt32]
 }
 
-func _global_get(_x *Phrase[OInt32]) Instr_global_get {
+func _global_get_1(_x *Phrase[OInt32]) Instr_global_get {
 	return Instr_global_get{
 		X: _x,
 	}
 }
 
+var _global_get = _global_get_1
+
 type Instr_global_set struct {
 	X *Phrase[OInt32]
 }
 
-func _global_set(_x *Phrase[OInt32]) Instr_global_set {
+func _global_set_1(_x *Phrase[OInt32]) Instr_global_set {
 	return Instr_global_set{
 		X: _x,
 	}
 }
 
+var _global_set = _global_set_1
+
 type Instr_table_get struct {
 	X *Phrase[OInt32]
 }
 
-func _table_get(_x *Phrase[OInt32]) Instr_table_get {
+func _table_get_1(_x *Phrase[OInt32]) Instr_table_get {
 	return Instr_table_get{
 		X: _x,
 	}
 }
 
+var _table_get = _table_get_1
+
 type Instr_table_set struct {
 	X *Phrase[OInt32]
 }
 
-func _table_set(_x *Phrase[OInt32]) Instr_table_set {
+func _table_set_1(_x *Phrase[OInt32]) Instr_table_set {
 	return Instr_table_set{
 		X: _x,
 	}
 }
 
+var _table_set = _table_set_1
+
 type Instr_table_size struct {
 	X *Phrase[OInt32]
 }
 
-func _table_size(_x *Phrase[OInt32]) Instr_table_size {
+func _table_size_1(_x *Phrase[OInt32]) Instr_table_size {
 	return Instr_table_size{
 		X: _x,
 	}
 }
 
+var _table_size = _table_size_1
+
 type Instr_table_grow struct {
 	X *Phrase[OInt32]
 }
 
-func _table_grow(_x *Phrase[OInt32]) Instr_table_grow {
+func _table_grow_1(_x *Phrase[OInt32]) Instr_table_grow {
 	return Instr_table_grow{
 		X: _x,
 	}
 }
 
+var _table_grow = _table_grow_1
+
 type Instr_table_fill struct {
 	X *Phrase[OInt32]
 }
 
-func _table_fill(_x *Phrase[OInt32]) Instr_table_fill {
+func _table_fill_1(_x *Phrase[OInt32]) Instr_table_fill {
 	return Instr_table_fill{
 		X: _x,
 	}
 }
+
+var _table_fill = _table_fill_1
 
 type Instr_table_copy struct {
 	X *Phrase[OInt32]
@@ -435,6 +519,8 @@ func _table_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_copy {
 	}
 }
 
+var _table_copy = _table_copy_2
+
 type Instr_table_init struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -447,15 +533,19 @@ func _table_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_init {
 	}
 }
 
+var _table_init = _table_init_2
+
 type Instr_elem_drop struct {
 	X *Phrase[OInt32]
 }
 
-func _elem_drop(_x *Phrase[OInt32]) Instr_elem_drop {
+func _elem_drop_1(_x *Phrase[OInt32]) Instr_elem_drop {
 	return Instr_elem_drop{
 		X: _x,
 	}
 }
+
+var _elem_drop = _elem_drop_1
 
 type Instr_i32_load struct {
 	X      *Phrase[OInt32]
@@ -471,6 +561,8 @@ func _i32_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load
 	}
 }
 
+var _i32_load = _i32_load_3
+
 type Instr_i64_load struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -484,6 +576,8 @@ func _i64_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load
 		Offset: _offset,
 	}
 }
+
+var _i64_load = _i64_load_3
 
 type Instr_f32_load struct {
 	X      *Phrase[OInt32]
@@ -499,6 +593,8 @@ func _f32_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f32_load
 	}
 }
 
+var _f32_load = _f32_load_3
+
 type Instr_f64_load struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -512,6 +608,8 @@ func _f64_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f64_load
 		Offset: _offset,
 	}
 }
+
+var _f64_load = _f64_load_3
 
 type Instr_i32_load8_s struct {
 	X      *Phrase[OInt32]
@@ -527,6 +625,8 @@ func _i32_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_l
 	}
 }
 
+var _i32_load8_s = _i32_load8_s_3
+
 type Instr_i32_load8_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -540,6 +640,8 @@ func _i32_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_l
 		Offset: _offset,
 	}
 }
+
+var _i32_load8_u = _i32_load8_u_3
 
 type Instr_i32_load16_s struct {
 	X      *Phrase[OInt32]
@@ -555,6 +657,8 @@ func _i32_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_
 	}
 }
 
+var _i32_load16_s = _i32_load16_s_3
+
 type Instr_i32_load16_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -568,6 +672,8 @@ func _i32_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_
 		Offset: _offset,
 	}
 }
+
+var _i32_load16_u = _i32_load16_u_3
 
 type Instr_i64_load8_s struct {
 	X      *Phrase[OInt32]
@@ -583,6 +689,8 @@ func _i64_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_l
 	}
 }
 
+var _i64_load8_s = _i64_load8_s_3
+
 type Instr_i64_load8_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -596,6 +704,8 @@ func _i64_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_l
 		Offset: _offset,
 	}
 }
+
+var _i64_load8_u = _i64_load8_u_3
 
 type Instr_i64_load16_s struct {
 	X      *Phrase[OInt32]
@@ -611,6 +721,8 @@ func _i64_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_
 	}
 }
 
+var _i64_load16_s = _i64_load16_s_3
+
 type Instr_i64_load16_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -624,6 +736,8 @@ func _i64_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_
 		Offset: _offset,
 	}
 }
+
+var _i64_load16_u = _i64_load16_u_3
 
 type Instr_i64_load32_s struct {
 	X      *Phrase[OInt32]
@@ -639,6 +753,8 @@ func _i64_load32_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_
 	}
 }
 
+var _i64_load32_s = _i64_load32_s_3
+
 type Instr_i64_load32_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -652,6 +768,8 @@ func _i64_load32_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_
 		Offset: _offset,
 	}
 }
+
+var _i64_load32_u = _i64_load32_u_3
 
 type Instr_i32_store struct {
 	X      *Phrase[OInt32]
@@ -667,6 +785,8 @@ func _i32_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_sto
 	}
 }
 
+var _i32_store = _i32_store_3
+
 type Instr_i64_store struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -680,6 +800,8 @@ func _i64_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_sto
 		Offset: _offset,
 	}
 }
+
+var _i64_store = _i64_store_3
 
 type Instr_f32_store struct {
 	X      *Phrase[OInt32]
@@ -695,6 +817,8 @@ func _f32_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f32_sto
 	}
 }
 
+var _f32_store = _f32_store_3
+
 type Instr_f64_store struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -708,6 +832,8 @@ func _f64_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f64_sto
 		Offset: _offset,
 	}
 }
+
+var _f64_store = _f64_store_3
 
 type Instr_i32_store8 struct {
 	X      *Phrase[OInt32]
@@ -723,6 +849,8 @@ func _i32_store8_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_st
 	}
 }
 
+var _i32_store8 = _i32_store8_3
+
 type Instr_i32_store16 struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -736,6 +864,8 @@ func _i32_store16_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_s
 		Offset: _offset,
 	}
 }
+
+var _i32_store16 = _i32_store16_3
 
 type Instr_i64_store8 struct {
 	X      *Phrase[OInt32]
@@ -751,6 +881,8 @@ func _i64_store8_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_st
 	}
 }
 
+var _i64_store8 = _i64_store8_3
+
 type Instr_i64_store16 struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -764,6 +896,8 @@ func _i64_store16_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_s
 		Offset: _offset,
 	}
 }
+
+var _i64_store16 = _i64_store16_3
 
 type Instr_i64_store32 struct {
 	X      *Phrase[OInt32]
@@ -779,6 +913,8 @@ func _i64_store32_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_s
 	}
 }
 
+var _i64_store32 = _i64_store32_3
+
 type Instr_v128_load struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -792,6 +928,8 @@ func _v128_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_lo
 		Offset: _offset,
 	}
 }
+
+var _v128_load = _v128_load_3
 
 type Instr_v128_load8x8_s struct {
 	X      *Phrase[OInt32]
@@ -807,6 +945,8 @@ func _v128_load8x8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v1
 	}
 }
 
+var _v128_load8x8_s = _v128_load8x8_s_3
+
 type Instr_v128_load8x8_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -820,6 +960,8 @@ func _v128_load8x8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v1
 		Offset: _offset,
 	}
 }
+
+var _v128_load8x8_u = _v128_load8x8_u_3
 
 type Instr_v128_load16x4_s struct {
 	X      *Phrase[OInt32]
@@ -835,6 +977,8 @@ func _v128_load16x4_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v
 	}
 }
 
+var _v128_load16x4_s = _v128_load16x4_s_3
+
 type Instr_v128_load16x4_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -848,6 +992,8 @@ func _v128_load16x4_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v
 		Offset: _offset,
 	}
 }
+
+var _v128_load16x4_u = _v128_load16x4_u_3
 
 type Instr_v128_load32x2_s struct {
 	X      *Phrase[OInt32]
@@ -863,6 +1009,8 @@ func _v128_load32x2_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v
 	}
 }
 
+var _v128_load32x2_s = _v128_load32x2_s_3
+
 type Instr_v128_load32x2_u struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -876,6 +1024,8 @@ func _v128_load32x2_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v
 		Offset: _offset,
 	}
 }
+
+var _v128_load32x2_u = _v128_load32x2_u_3
 
 type Instr_v128_load8_splat struct {
 	X      *Phrase[OInt32]
@@ -891,6 +1041,8 @@ func _v128_load8_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_
 	}
 }
 
+var _v128_load8_splat = _v128_load8_splat_3
+
 type Instr_v128_load16_splat struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -904,6 +1056,8 @@ func _v128_load16_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr
 		Offset: _offset,
 	}
 }
+
+var _v128_load16_splat = _v128_load16_splat_3
 
 type Instr_v128_load32_splat struct {
 	X      *Phrase[OInt32]
@@ -919,6 +1073,8 @@ func _v128_load32_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr
 	}
 }
 
+var _v128_load32_splat = _v128_load32_splat_3
+
 type Instr_v128_load64_splat struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -932,6 +1088,8 @@ func _v128_load64_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr
 		Offset: _offset,
 	}
 }
+
+var _v128_load64_splat = _v128_load64_splat_3
 
 type Instr_v128_load32_zero struct {
 	X      *Phrase[OInt32]
@@ -947,6 +1105,8 @@ func _v128_load32_zero_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_
 	}
 }
 
+var _v128_load32_zero = _v128_load32_zero_3
+
 type Instr_v128_load64_zero struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -960,6 +1120,8 @@ func _v128_load64_zero_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_
 		Offset: _offset,
 	}
 }
+
+var _v128_load64_zero = _v128_load64_zero_3
 
 type Instr_v128_load8_lane struct {
 	X      *Phrase[OInt32]
@@ -977,6 +1139,8 @@ func _v128_load8_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt
 	}
 }
 
+var _v128_load8_lane = _v128_load8_lane_4
+
 type Instr_v128_load16_lane struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -992,6 +1156,8 @@ func _v128_load16_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OIn
 		I:      _i,
 	}
 }
+
+var _v128_load16_lane = _v128_load16_lane_4
 
 type Instr_v128_load32_lane struct {
 	X      *Phrase[OInt32]
@@ -1009,6 +1175,8 @@ func _v128_load32_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OIn
 	}
 }
 
+var _v128_load32_lane = _v128_load32_lane_4
+
 type Instr_v128_load64_lane struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -1025,6 +1193,8 @@ func _v128_load64_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OIn
 	}
 }
 
+var _v128_load64_lane = _v128_load64_lane_4
+
 type Instr_v128_store struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -1038,6 +1208,8 @@ func _v128_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_s
 		Offset: _offset,
 	}
 }
+
+var _v128_store = _v128_store_3
 
 type Instr_v128_store8_lane struct {
 	X      *Phrase[OInt32]
@@ -1055,6 +1227,8 @@ func _v128_store8_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OIn
 	}
 }
 
+var _v128_store8_lane = _v128_store8_lane_4
+
 type Instr_v128_store16_lane struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -1070,6 +1244,8 @@ func _v128_store16_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OI
 		I:      _i,
 	}
 }
+
+var _v128_store16_lane = _v128_store16_lane_4
 
 type Instr_v128_store32_lane struct {
 	X      *Phrase[OInt32]
@@ -1087,6 +1263,8 @@ func _v128_store32_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OI
 	}
 }
 
+var _v128_store32_lane = _v128_store32_lane_4
+
 type Instr_v128_store64_lane struct {
 	X      *Phrase[OInt32]
 	Align  OInt
@@ -1103,35 +1281,43 @@ func _v128_store64_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OI
 	}
 }
 
+var _v128_store64_lane = _v128_store64_lane_4
+
 type Instr_memory_size struct {
 	X *Phrase[OInt32]
 }
 
-func _memory_size(_x *Phrase[OInt32]) Instr_memory_size {
+func _memory_size_1(_x *Phrase[OInt32]) Instr_memory_size {
 	return Instr_memory_size{
 		X: _x,
 	}
 }
 
+var _memory_size = _memory_size_1
+
 type Instr_memory_grow struct {
 	X *Phrase[OInt32]
 }
 
-func _memory_grow(_x *Phrase[OInt32]) Instr_memory_grow {
+func _memory_grow_1(_x *Phrase[OInt32]) Instr_memory_grow {
 	return Instr_memory_grow{
 		X: _x,
 	}
 }
 
+var _memory_grow = _memory_grow_1
+
 type Instr_memory_fill struct {
 	X *Phrase[OInt32]
 }
 
-func _memory_fill(_x *Phrase[OInt32]) Instr_memory_fill {
+func _memory_fill_1(_x *Phrase[OInt32]) Instr_memory_fill {
 	return Instr_memory_fill{
 		X: _x,
 	}
 }
+
+var _memory_fill = _memory_fill_1
 
 type Instr_memory_copy struct {
 	X *Phrase[OInt32]
@@ -1145,6 +1331,8 @@ func _memory_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_copy {
 	}
 }
 
+var _memory_copy = _memory_copy_2
+
 type Instr_memory_init struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -1157,91 +1345,115 @@ func _memory_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_init {
 	}
 }
 
+var _memory_init = _memory_init_2
+
 type Instr_data_drop struct {
 	X *Phrase[OInt32]
 }
 
-func _data_drop(_x *Phrase[OInt32]) Instr_data_drop {
+func _data_drop_1(_x *Phrase[OInt32]) Instr_data_drop {
 	return Instr_data_drop{
 		X: _x,
 	}
 }
 
+var _data_drop = _data_drop_1
+
 type Instr_ref_is_null struct{}
 
-func _ref_is_null() Instr_ref_is_null {
+func _ref_is_null_0() Instr_ref_is_null {
 	return Instr_ref_is_null{}
 }
 
+var _ref_is_null = _ref_is_null_0
+
 type Instr_ref_as_non_null struct{}
 
-func _ref_as_non_null() Instr_ref_as_non_null {
+func _ref_as_non_null_0() Instr_ref_as_non_null {
 	return Instr_ref_as_non_null{}
 }
+
+var _ref_as_non_null = _ref_as_non_null_0
 
 type Instr_ref_test struct {
 	T RefType
 }
 
-func _ref_test(_t RefType) Instr_ref_test {
+func _ref_test_1(_t RefType) Instr_ref_test {
 	return Instr_ref_test{
 		T: _t,
 	}
 }
 
+var _ref_test = _ref_test_1
+
 type Instr_ref_cast struct {
 	T RefType
 }
 
-func _ref_cast(_t RefType) Instr_ref_cast {
+func _ref_cast_1(_t RefType) Instr_ref_cast {
 	return Instr_ref_cast{
 		T: _t,
 	}
 }
 
+var _ref_cast = _ref_cast_1
+
 type Instr_ref_eq struct{}
 
-func _ref_eq() Instr_ref_eq {
+func _ref_eq_0() Instr_ref_eq {
 	return Instr_ref_eq{}
 }
 
+var _ref_eq = _ref_eq_0
+
 type Instr_ref_i31 struct{}
 
-func _ref_i31() Instr_ref_i31 {
+func _ref_i31_0() Instr_ref_i31 {
 	return Instr_ref_i31{}
 }
 
+var _ref_i31 = _ref_i31_0
+
 type Instr_i31_get_u struct{}
 
-func _i31_get_u() Instr_i31_get_u {
+func _i31_get_u_0() Instr_i31_get_u {
 	return Instr_i31_get_u{}
 }
 
+var _i31_get_u = _i31_get_u_0
+
 type Instr_i31_get_s struct{}
 
-func _i31_get_s() Instr_i31_get_s {
+func _i31_get_s_0() Instr_i31_get_s {
 	return Instr_i31_get_s{}
 }
+
+var _i31_get_s = _i31_get_s_0
 
 type Instr_struct_new struct {
 	X *Phrase[OInt32]
 }
 
-func _struct_new(_x *Phrase[OInt32]) Instr_struct_new {
+func _struct_new_1(_x *Phrase[OInt32]) Instr_struct_new {
 	return Instr_struct_new{
 		X: _x,
 	}
 }
 
+var _struct_new = _struct_new_1
+
 type Instr_struct_new_default struct {
 	X *Phrase[OInt32]
 }
 
-func _struct_new_default(_x *Phrase[OInt32]) Instr_struct_new_default {
+func _struct_new_default_1(_x *Phrase[OInt32]) Instr_struct_new_default {
 	return Instr_struct_new_default{
 		X: _x,
 	}
 }
+
+var _struct_new_default = _struct_new_default_1
 
 type Instr_struct_get struct {
 	X *Phrase[OInt32]
@@ -1255,6 +1467,8 @@ func _struct_get_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get {
 	}
 }
 
+var _struct_get = _struct_get_2
+
 type Instr_struct_get_u struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -1266,6 +1480,8 @@ func _struct_get_u_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_u 
 		Y: _y,
 	}
 }
+
+var _struct_get_u = _struct_get_u_2
 
 type Instr_struct_get_s struct {
 	X *Phrase[OInt32]
@@ -1279,6 +1495,8 @@ func _struct_get_s_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_s 
 	}
 }
 
+var _struct_get_s = _struct_get_s_2
+
 type Instr_struct_set struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -1291,25 +1509,31 @@ func _struct_set_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_set {
 	}
 }
 
+var _struct_set = _struct_set_2
+
 type Instr_array_new struct {
 	X *Phrase[OInt32]
 }
 
-func _array_new(_x *Phrase[OInt32]) Instr_array_new {
+func _array_new_1(_x *Phrase[OInt32]) Instr_array_new {
 	return Instr_array_new{
 		X: _x,
 	}
 }
 
+var _array_new = _array_new_1
+
 type Instr_array_new_default struct {
 	X *Phrase[OInt32]
 }
 
-func _array_new_default(_x *Phrase[OInt32]) Instr_array_new_default {
+func _array_new_default_1(_x *Phrase[OInt32]) Instr_array_new_default {
 	return Instr_array_new_default{
 		X: _x,
 	}
 }
+
+var _array_new_default = _array_new_default_1
 
 type Instr_array_new_fixed struct {
 	X *Phrase[OInt32]
@@ -1323,6 +1547,8 @@ func _array_new_fixed_2(_x *Phrase[OInt32], _n OInt32) Instr_array_new_fixed {
 	}
 }
 
+var _array_new_fixed = _array_new_fixed_2
+
 type Instr_array_new_elem struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -1334,6 +1560,8 @@ func _array_new_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_e
 		Y: _y,
 	}
 }
+
+var _array_new_elem = _array_new_elem_2
 
 type Instr_array_new_data struct {
 	X *Phrase[OInt32]
@@ -1347,51 +1575,63 @@ func _array_new_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_d
 	}
 }
 
+var _array_new_data = _array_new_data_2
+
 type Instr_array_get struct {
 	X *Phrase[OInt32]
 }
 
-func _array_get(_x *Phrase[OInt32]) Instr_array_get {
+func _array_get_1(_x *Phrase[OInt32]) Instr_array_get {
 	return Instr_array_get{
 		X: _x,
 	}
 }
 
+var _array_get = _array_get_1
+
 type Instr_array_get_u struct {
 	X *Phrase[OInt32]
 }
 
-func _array_get_u(_x *Phrase[OInt32]) Instr_array_get_u {
+func _array_get_u_1(_x *Phrase[OInt32]) Instr_array_get_u {
 	return Instr_array_get_u{
 		X: _x,
 	}
 }
 
+var _array_get_u = _array_get_u_1
+
 type Instr_array_get_s struct {
 	X *Phrase[OInt32]
 }
 
-func _array_get_s(_x *Phrase[OInt32]) Instr_array_get_s {
+func _array_get_s_1(_x *Phrase[OInt32]) Instr_array_get_s {
 	return Instr_array_get_s{
 		X: _x,
 	}
 }
 
+var _array_get_s = _array_get_s_1
+
 type Instr_array_set struct {
 	X *Phrase[OInt32]
 }
 
-func _array_set(_x *Phrase[OInt32]) Instr_array_set {
+func _array_set_1(_x *Phrase[OInt32]) Instr_array_set {
 	return Instr_array_set{
 		X: _x,
 	}
 }
 
+var _array_set = _array_set_1
+
 type Instr_array_len struct{}
 
-func _array_len() Instr_array_len {
+func _array_len_0() Instr_array_len {
 	return Instr_array_len{}
 }
+
+var _array_len = _array_len_0
 
 type Instr_array_copy struct {
 	X *Phrase[OInt32]
@@ -1405,15 +1645,19 @@ func _array_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_copy {
 	}
 }
 
+var _array_copy = _array_copy_2
+
 type Instr_array_fill struct {
 	X *Phrase[OInt32]
 }
 
-func _array_fill(_x *Phrase[OInt32]) Instr_array_fill {
+func _array_fill_1(_x *Phrase[OInt32]) Instr_array_fill {
 	return Instr_array_fill{
 		X: _x,
 	}
 }
+
+var _array_fill = _array_fill_1
 
 type Instr_array_init_data struct {
 	X *Phrase[OInt32]
@@ -1427,6 +1671,8 @@ func _array_init_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init
 	}
 }
 
+var _array_init_data = _array_init_data_2
+
 type Instr_array_init_elem struct {
 	X *Phrase[OInt32]
 	Y *Phrase[OInt32]
@@ -1439,2336 +1685,3081 @@ func _array_init_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init
 	}
 }
 
+var _array_init_elem = _array_init_elem_2
+
 type Instr_any_convert_extern struct{}
 
-func _any_convert_extern() Instr_any_convert_extern {
+func _any_convert_extern_0() Instr_any_convert_extern {
 	return Instr_any_convert_extern{}
 }
 
+var _any_convert_extern = _any_convert_extern_0
+
 type Instr_extern_convert_any struct{}
 
-func _extern_convert_any() Instr_extern_convert_any {
+func _extern_convert_any_0() Instr_extern_convert_any {
 	return Instr_extern_convert_any{}
 }
 
+var _extern_convert_any = _extern_convert_any_0
+
 type Instr_i32_clz struct{}
 
-func _i32_clz() Instr_i32_clz {
+func _i32_clz_0() Instr_i32_clz {
 	return Instr_i32_clz{}
 }
 
+var _i32_clz = _i32_clz_0
+
 type Instr_i32_ctz struct{}
 
-func _i32_ctz() Instr_i32_ctz {
+func _i32_ctz_0() Instr_i32_ctz {
 	return Instr_i32_ctz{}
 }
 
+var _i32_ctz = _i32_ctz_0
+
 type Instr_i32_popcnt struct{}
 
-func _i32_popcnt() Instr_i32_popcnt {
+func _i32_popcnt_0() Instr_i32_popcnt {
 	return Instr_i32_popcnt{}
 }
 
+var _i32_popcnt = _i32_popcnt_0
+
 type Instr_i64_clz struct{}
 
-func _i64_clz() Instr_i64_clz {
+func _i64_clz_0() Instr_i64_clz {
 	return Instr_i64_clz{}
 }
 
+var _i64_clz = _i64_clz_0
+
 type Instr_i64_ctz struct{}
 
-func _i64_ctz() Instr_i64_ctz {
+func _i64_ctz_0() Instr_i64_ctz {
 	return Instr_i64_ctz{}
 }
 
+var _i64_ctz = _i64_ctz_0
+
 type Instr_i64_popcnt struct{}
 
-func _i64_popcnt() Instr_i64_popcnt {
+func _i64_popcnt_0() Instr_i64_popcnt {
 	return Instr_i64_popcnt{}
 }
 
+var _i64_popcnt = _i64_popcnt_0
+
 type Instr_f32_neg struct{}
 
-func _f32_neg() Instr_f32_neg {
+func _f32_neg_0() Instr_f32_neg {
 	return Instr_f32_neg{}
 }
 
+var _f32_neg = _f32_neg_0
+
 type Instr_f32_abs struct{}
 
-func _f32_abs() Instr_f32_abs {
+func _f32_abs_0() Instr_f32_abs {
 	return Instr_f32_abs{}
 }
 
+var _f32_abs = _f32_abs_0
+
 type Instr_f32_sqrt struct{}
 
-func _f32_sqrt() Instr_f32_sqrt {
+func _f32_sqrt_0() Instr_f32_sqrt {
 	return Instr_f32_sqrt{}
 }
 
+var _f32_sqrt = _f32_sqrt_0
+
 type Instr_f32_ceil struct{}
 
-func _f32_ceil() Instr_f32_ceil {
+func _f32_ceil_0() Instr_f32_ceil {
 	return Instr_f32_ceil{}
 }
 
+var _f32_ceil = _f32_ceil_0
+
 type Instr_f32_floor struct{}
 
-func _f32_floor() Instr_f32_floor {
+func _f32_floor_0() Instr_f32_floor {
 	return Instr_f32_floor{}
 }
 
+var _f32_floor = _f32_floor_0
+
 type Instr_f32_trunc struct{}
 
-func _f32_trunc() Instr_f32_trunc {
+func _f32_trunc_0() Instr_f32_trunc {
 	return Instr_f32_trunc{}
 }
 
+var _f32_trunc = _f32_trunc_0
+
 type Instr_f32_nearest struct{}
 
-func _f32_nearest() Instr_f32_nearest {
+func _f32_nearest_0() Instr_f32_nearest {
 	return Instr_f32_nearest{}
 }
 
+var _f32_nearest = _f32_nearest_0
+
 type Instr_f64_neg struct{}
 
-func _f64_neg() Instr_f64_neg {
+func _f64_neg_0() Instr_f64_neg {
 	return Instr_f64_neg{}
 }
 
+var _f64_neg = _f64_neg_0
+
 type Instr_f64_abs struct{}
 
-func _f64_abs() Instr_f64_abs {
+func _f64_abs_0() Instr_f64_abs {
 	return Instr_f64_abs{}
 }
 
+var _f64_abs = _f64_abs_0
+
 type Instr_f64_sqrt struct{}
 
-func _f64_sqrt() Instr_f64_sqrt {
+func _f64_sqrt_0() Instr_f64_sqrt {
 	return Instr_f64_sqrt{}
 }
 
+var _f64_sqrt = _f64_sqrt_0
+
 type Instr_f64_ceil struct{}
 
-func _f64_ceil() Instr_f64_ceil {
+func _f64_ceil_0() Instr_f64_ceil {
 	return Instr_f64_ceil{}
 }
 
+var _f64_ceil = _f64_ceil_0
+
 type Instr_f64_floor struct{}
 
-func _f64_floor() Instr_f64_floor {
+func _f64_floor_0() Instr_f64_floor {
 	return Instr_f64_floor{}
 }
 
+var _f64_floor = _f64_floor_0
+
 type Instr_f64_trunc struct{}
 
-func _f64_trunc() Instr_f64_trunc {
+func _f64_trunc_0() Instr_f64_trunc {
 	return Instr_f64_trunc{}
 }
 
+var _f64_trunc = _f64_trunc_0
+
 type Instr_f64_nearest struct{}
 
-func _f64_nearest() Instr_f64_nearest {
+func _f64_nearest_0() Instr_f64_nearest {
 	return Instr_f64_nearest{}
 }
 
+var _f64_nearest = _f64_nearest_0
+
 type Instr_i32_add struct{}
 
-func _i32_add() Instr_i32_add {
+func _i32_add_0() Instr_i32_add {
 	return Instr_i32_add{}
 }
 
+var _i32_add = _i32_add_0
+
 type Instr_i32_sub struct{}
 
-func _i32_sub() Instr_i32_sub {
+func _i32_sub_0() Instr_i32_sub {
 	return Instr_i32_sub{}
 }
 
+var _i32_sub = _i32_sub_0
+
 type Instr_i32_mul struct{}
 
-func _i32_mul() Instr_i32_mul {
+func _i32_mul_0() Instr_i32_mul {
 	return Instr_i32_mul{}
 }
 
+var _i32_mul = _i32_mul_0
+
 type Instr_i32_div_s struct{}
 
-func _i32_div_s() Instr_i32_div_s {
+func _i32_div_s_0() Instr_i32_div_s {
 	return Instr_i32_div_s{}
 }
 
+var _i32_div_s = _i32_div_s_0
+
 type Instr_i32_div_u struct{}
 
-func _i32_div_u() Instr_i32_div_u {
+func _i32_div_u_0() Instr_i32_div_u {
 	return Instr_i32_div_u{}
 }
 
+var _i32_div_u = _i32_div_u_0
+
 type Instr_i32_rem_s struct{}
 
-func _i32_rem_s() Instr_i32_rem_s {
+func _i32_rem_s_0() Instr_i32_rem_s {
 	return Instr_i32_rem_s{}
 }
 
+var _i32_rem_s = _i32_rem_s_0
+
 type Instr_i32_rem_u struct{}
 
-func _i32_rem_u() Instr_i32_rem_u {
+func _i32_rem_u_0() Instr_i32_rem_u {
 	return Instr_i32_rem_u{}
 }
 
+var _i32_rem_u = _i32_rem_u_0
+
 type Instr_i32_and struct{}
 
-func _i32_and() Instr_i32_and {
+func _i32_and_0() Instr_i32_and {
 	return Instr_i32_and{}
 }
 
+var _i32_and = _i32_and_0
+
 type Instr_i32_or struct{}
 
-func _i32_or() Instr_i32_or {
+func _i32_or_0() Instr_i32_or {
 	return Instr_i32_or{}
 }
 
+var _i32_or = _i32_or_0
+
 type Instr_i32_xor struct{}
 
-func _i32_xor() Instr_i32_xor {
+func _i32_xor_0() Instr_i32_xor {
 	return Instr_i32_xor{}
 }
 
+var _i32_xor = _i32_xor_0
+
 type Instr_i32_shl struct{}
 
-func _i32_shl() Instr_i32_shl {
+func _i32_shl_0() Instr_i32_shl {
 	return Instr_i32_shl{}
 }
 
+var _i32_shl = _i32_shl_0
+
 type Instr_i32_shr_s struct{}
 
-func _i32_shr_s() Instr_i32_shr_s {
+func _i32_shr_s_0() Instr_i32_shr_s {
 	return Instr_i32_shr_s{}
 }
 
+var _i32_shr_s = _i32_shr_s_0
+
 type Instr_i32_shr_u struct{}
 
-func _i32_shr_u() Instr_i32_shr_u {
+func _i32_shr_u_0() Instr_i32_shr_u {
 	return Instr_i32_shr_u{}
 }
 
+var _i32_shr_u = _i32_shr_u_0
+
 type Instr_i32_rotl struct{}
 
-func _i32_rotl() Instr_i32_rotl {
+func _i32_rotl_0() Instr_i32_rotl {
 	return Instr_i32_rotl{}
 }
 
+var _i32_rotl = _i32_rotl_0
+
 type Instr_i32_rotr struct{}
 
-func _i32_rotr() Instr_i32_rotr {
+func _i32_rotr_0() Instr_i32_rotr {
 	return Instr_i32_rotr{}
 }
 
+var _i32_rotr = _i32_rotr_0
+
 type Instr_i64_add struct{}
 
-func _i64_add() Instr_i64_add {
+func _i64_add_0() Instr_i64_add {
 	return Instr_i64_add{}
 }
 
+var _i64_add = _i64_add_0
+
 type Instr_i64_sub struct{}
 
-func _i64_sub() Instr_i64_sub {
+func _i64_sub_0() Instr_i64_sub {
 	return Instr_i64_sub{}
 }
 
+var _i64_sub = _i64_sub_0
+
 type Instr_i64_mul struct{}
 
-func _i64_mul() Instr_i64_mul {
+func _i64_mul_0() Instr_i64_mul {
 	return Instr_i64_mul{}
 }
 
+var _i64_mul = _i64_mul_0
+
 type Instr_i64_div_s struct{}
 
-func _i64_div_s() Instr_i64_div_s {
+func _i64_div_s_0() Instr_i64_div_s {
 	return Instr_i64_div_s{}
 }
 
+var _i64_div_s = _i64_div_s_0
+
 type Instr_i64_div_u struct{}
 
-func _i64_div_u() Instr_i64_div_u {
+func _i64_div_u_0() Instr_i64_div_u {
 	return Instr_i64_div_u{}
 }
 
+var _i64_div_u = _i64_div_u_0
+
 type Instr_i64_rem_s struct{}
 
-func _i64_rem_s() Instr_i64_rem_s {
+func _i64_rem_s_0() Instr_i64_rem_s {
 	return Instr_i64_rem_s{}
 }
 
+var _i64_rem_s = _i64_rem_s_0
+
 type Instr_i64_rem_u struct{}
 
-func _i64_rem_u() Instr_i64_rem_u {
+func _i64_rem_u_0() Instr_i64_rem_u {
 	return Instr_i64_rem_u{}
 }
 
+var _i64_rem_u = _i64_rem_u_0
+
 type Instr_i64_and struct{}
 
-func _i64_and() Instr_i64_and {
+func _i64_and_0() Instr_i64_and {
 	return Instr_i64_and{}
 }
 
+var _i64_and = _i64_and_0
+
 type Instr_i64_or struct{}
 
-func _i64_or() Instr_i64_or {
+func _i64_or_0() Instr_i64_or {
 	return Instr_i64_or{}
 }
 
+var _i64_or = _i64_or_0
+
 type Instr_i64_xor struct{}
 
-func _i64_xor() Instr_i64_xor {
+func _i64_xor_0() Instr_i64_xor {
 	return Instr_i64_xor{}
 }
 
+var _i64_xor = _i64_xor_0
+
 type Instr_i64_shl struct{}
 
-func _i64_shl() Instr_i64_shl {
+func _i64_shl_0() Instr_i64_shl {
 	return Instr_i64_shl{}
 }
 
+var _i64_shl = _i64_shl_0
+
 type Instr_i64_shr_s struct{}
 
-func _i64_shr_s() Instr_i64_shr_s {
+func _i64_shr_s_0() Instr_i64_shr_s {
 	return Instr_i64_shr_s{}
 }
 
+var _i64_shr_s = _i64_shr_s_0
+
 type Instr_i64_shr_u struct{}
 
-func _i64_shr_u() Instr_i64_shr_u {
+func _i64_shr_u_0() Instr_i64_shr_u {
 	return Instr_i64_shr_u{}
 }
 
+var _i64_shr_u = _i64_shr_u_0
+
 type Instr_i64_rotl struct{}
 
-func _i64_rotl() Instr_i64_rotl {
+func _i64_rotl_0() Instr_i64_rotl {
 	return Instr_i64_rotl{}
 }
 
+var _i64_rotl = _i64_rotl_0
+
 type Instr_i64_rotr struct{}
 
-func _i64_rotr() Instr_i64_rotr {
+func _i64_rotr_0() Instr_i64_rotr {
 	return Instr_i64_rotr{}
 }
 
+var _i64_rotr = _i64_rotr_0
+
 type Instr_f32_add struct{}
 
-func _f32_add() Instr_f32_add {
+func _f32_add_0() Instr_f32_add {
 	return Instr_f32_add{}
 }
 
+var _f32_add = _f32_add_0
+
 type Instr_f32_sub struct{}
 
-func _f32_sub() Instr_f32_sub {
+func _f32_sub_0() Instr_f32_sub {
 	return Instr_f32_sub{}
 }
 
+var _f32_sub = _f32_sub_0
+
 type Instr_f32_mul struct{}
 
-func _f32_mul() Instr_f32_mul {
+func _f32_mul_0() Instr_f32_mul {
 	return Instr_f32_mul{}
 }
 
+var _f32_mul = _f32_mul_0
+
 type Instr_f32_div struct{}
 
-func _f32_div() Instr_f32_div {
+func _f32_div_0() Instr_f32_div {
 	return Instr_f32_div{}
 }
 
+var _f32_div = _f32_div_0
+
 type Instr_f32_min struct{}
 
-func _f32_min() Instr_f32_min {
+func _f32_min_0() Instr_f32_min {
 	return Instr_f32_min{}
 }
 
+var _f32_min = _f32_min_0
+
 type Instr_f32_max struct{}
 
-func _f32_max() Instr_f32_max {
+func _f32_max_0() Instr_f32_max {
 	return Instr_f32_max{}
 }
 
+var _f32_max = _f32_max_0
+
 type Instr_f32_copysign struct{}
 
-func _f32_copysign() Instr_f32_copysign {
+func _f32_copysign_0() Instr_f32_copysign {
 	return Instr_f32_copysign{}
 }
 
+var _f32_copysign = _f32_copysign_0
+
 type Instr_f64_add struct{}
 
-func _f64_add() Instr_f64_add {
+func _f64_add_0() Instr_f64_add {
 	return Instr_f64_add{}
 }
 
+var _f64_add = _f64_add_0
+
 type Instr_f64_sub struct{}
 
-func _f64_sub() Instr_f64_sub {
+func _f64_sub_0() Instr_f64_sub {
 	return Instr_f64_sub{}
 }
 
+var _f64_sub = _f64_sub_0
+
 type Instr_f64_mul struct{}
 
-func _f64_mul() Instr_f64_mul {
+func _f64_mul_0() Instr_f64_mul {
 	return Instr_f64_mul{}
 }
 
+var _f64_mul = _f64_mul_0
+
 type Instr_f64_div struct{}
 
-func _f64_div() Instr_f64_div {
+func _f64_div_0() Instr_f64_div {
 	return Instr_f64_div{}
 }
 
+var _f64_div = _f64_div_0
+
 type Instr_f64_min struct{}
 
-func _f64_min() Instr_f64_min {
+func _f64_min_0() Instr_f64_min {
 	return Instr_f64_min{}
 }
 
+var _f64_min = _f64_min_0
+
 type Instr_f64_max struct{}
 
-func _f64_max() Instr_f64_max {
+func _f64_max_0() Instr_f64_max {
 	return Instr_f64_max{}
 }
 
+var _f64_max = _f64_max_0
+
 type Instr_f64_copysign struct{}
 
-func _f64_copysign() Instr_f64_copysign {
+func _f64_copysign_0() Instr_f64_copysign {
 	return Instr_f64_copysign{}
 }
 
+var _f64_copysign = _f64_copysign_0
+
 type Instr_i32_eqz struct{}
 
-func _i32_eqz() Instr_i32_eqz {
+func _i32_eqz_0() Instr_i32_eqz {
 	return Instr_i32_eqz{}
 }
 
+var _i32_eqz = _i32_eqz_0
+
 type Instr_i64_eqz struct{}
 
-func _i64_eqz() Instr_i64_eqz {
+func _i64_eqz_0() Instr_i64_eqz {
 	return Instr_i64_eqz{}
 }
 
+var _i64_eqz = _i64_eqz_0
+
 type Instr_i32_eq struct{}
 
-func _i32_eq() Instr_i32_eq {
+func _i32_eq_0() Instr_i32_eq {
 	return Instr_i32_eq{}
 }
 
+var _i32_eq = _i32_eq_0
+
 type Instr_i32_ne struct{}
 
-func _i32_ne() Instr_i32_ne {
+func _i32_ne_0() Instr_i32_ne {
 	return Instr_i32_ne{}
 }
 
+var _i32_ne = _i32_ne_0
+
 type Instr_i32_lt_s struct{}
 
-func _i32_lt_s() Instr_i32_lt_s {
+func _i32_lt_s_0() Instr_i32_lt_s {
 	return Instr_i32_lt_s{}
 }
 
+var _i32_lt_s = _i32_lt_s_0
+
 type Instr_i32_lt_u struct{}
 
-func _i32_lt_u() Instr_i32_lt_u {
+func _i32_lt_u_0() Instr_i32_lt_u {
 	return Instr_i32_lt_u{}
 }
 
+var _i32_lt_u = _i32_lt_u_0
+
 type Instr_i32_le_s struct{}
 
-func _i32_le_s() Instr_i32_le_s {
+func _i32_le_s_0() Instr_i32_le_s {
 	return Instr_i32_le_s{}
 }
 
+var _i32_le_s = _i32_le_s_0
+
 type Instr_i32_le_u struct{}
 
-func _i32_le_u() Instr_i32_le_u {
+func _i32_le_u_0() Instr_i32_le_u {
 	return Instr_i32_le_u{}
 }
 
+var _i32_le_u = _i32_le_u_0
+
 type Instr_i32_gt_s struct{}
 
-func _i32_gt_s() Instr_i32_gt_s {
+func _i32_gt_s_0() Instr_i32_gt_s {
 	return Instr_i32_gt_s{}
 }
 
+var _i32_gt_s = _i32_gt_s_0
+
 type Instr_i32_gt_u struct{}
 
-func _i32_gt_u() Instr_i32_gt_u {
+func _i32_gt_u_0() Instr_i32_gt_u {
 	return Instr_i32_gt_u{}
 }
 
+var _i32_gt_u = _i32_gt_u_0
+
 type Instr_i32_ge_s struct{}
 
-func _i32_ge_s() Instr_i32_ge_s {
+func _i32_ge_s_0() Instr_i32_ge_s {
 	return Instr_i32_ge_s{}
 }
 
+var _i32_ge_s = _i32_ge_s_0
+
 type Instr_i32_ge_u struct{}
 
-func _i32_ge_u() Instr_i32_ge_u {
+func _i32_ge_u_0() Instr_i32_ge_u {
 	return Instr_i32_ge_u{}
 }
 
+var _i32_ge_u = _i32_ge_u_0
+
 type Instr_i64_eq struct{}
 
-func _i64_eq() Instr_i64_eq {
+func _i64_eq_0() Instr_i64_eq {
 	return Instr_i64_eq{}
 }
 
+var _i64_eq = _i64_eq_0
+
 type Instr_i64_ne struct{}
 
-func _i64_ne() Instr_i64_ne {
+func _i64_ne_0() Instr_i64_ne {
 	return Instr_i64_ne{}
 }
 
+var _i64_ne = _i64_ne_0
+
 type Instr_i64_lt_s struct{}
 
-func _i64_lt_s() Instr_i64_lt_s {
+func _i64_lt_s_0() Instr_i64_lt_s {
 	return Instr_i64_lt_s{}
 }
 
+var _i64_lt_s = _i64_lt_s_0
+
 type Instr_i64_lt_u struct{}
 
-func _i64_lt_u() Instr_i64_lt_u {
+func _i64_lt_u_0() Instr_i64_lt_u {
 	return Instr_i64_lt_u{}
 }
 
+var _i64_lt_u = _i64_lt_u_0
+
 type Instr_i64_le_s struct{}
 
-func _i64_le_s() Instr_i64_le_s {
+func _i64_le_s_0() Instr_i64_le_s {
 	return Instr_i64_le_s{}
 }
 
+var _i64_le_s = _i64_le_s_0
+
 type Instr_i64_le_u struct{}
 
-func _i64_le_u() Instr_i64_le_u {
+func _i64_le_u_0() Instr_i64_le_u {
 	return Instr_i64_le_u{}
 }
 
+var _i64_le_u = _i64_le_u_0
+
 type Instr_i64_gt_s struct{}
 
-func _i64_gt_s() Instr_i64_gt_s {
+func _i64_gt_s_0() Instr_i64_gt_s {
 	return Instr_i64_gt_s{}
 }
 
+var _i64_gt_s = _i64_gt_s_0
+
 type Instr_i64_gt_u struct{}
 
-func _i64_gt_u() Instr_i64_gt_u {
+func _i64_gt_u_0() Instr_i64_gt_u {
 	return Instr_i64_gt_u{}
 }
 
+var _i64_gt_u = _i64_gt_u_0
+
 type Instr_i64_ge_s struct{}
 
-func _i64_ge_s() Instr_i64_ge_s {
+func _i64_ge_s_0() Instr_i64_ge_s {
 	return Instr_i64_ge_s{}
 }
 
+var _i64_ge_s = _i64_ge_s_0
+
 type Instr_i64_ge_u struct{}
 
-func _i64_ge_u() Instr_i64_ge_u {
+func _i64_ge_u_0() Instr_i64_ge_u {
 	return Instr_i64_ge_u{}
 }
 
+var _i64_ge_u = _i64_ge_u_0
+
 type Instr_f32_eq struct{}
 
-func _f32_eq() Instr_f32_eq {
+func _f32_eq_0() Instr_f32_eq {
 	return Instr_f32_eq{}
 }
 
+var _f32_eq = _f32_eq_0
+
 type Instr_f32_ne struct{}
 
-func _f32_ne() Instr_f32_ne {
+func _f32_ne_0() Instr_f32_ne {
 	return Instr_f32_ne{}
 }
 
+var _f32_ne = _f32_ne_0
+
 type Instr_f32_lt struct{}
 
-func _f32_lt() Instr_f32_lt {
+func _f32_lt_0() Instr_f32_lt {
 	return Instr_f32_lt{}
 }
 
+var _f32_lt = _f32_lt_0
+
 type Instr_f32_le struct{}
 
-func _f32_le() Instr_f32_le {
+func _f32_le_0() Instr_f32_le {
 	return Instr_f32_le{}
 }
 
+var _f32_le = _f32_le_0
+
 type Instr_f32_gt struct{}
 
-func _f32_gt() Instr_f32_gt {
+func _f32_gt_0() Instr_f32_gt {
 	return Instr_f32_gt{}
 }
 
+var _f32_gt = _f32_gt_0
+
 type Instr_f32_ge struct{}
 
-func _f32_ge() Instr_f32_ge {
+func _f32_ge_0() Instr_f32_ge {
 	return Instr_f32_ge{}
 }
 
+var _f32_ge = _f32_ge_0
+
 type Instr_f64_eq struct{}
 
-func _f64_eq() Instr_f64_eq {
+func _f64_eq_0() Instr_f64_eq {
 	return Instr_f64_eq{}
 }
 
+var _f64_eq = _f64_eq_0
+
 type Instr_f64_ne struct{}
 
-func _f64_ne() Instr_f64_ne {
+func _f64_ne_0() Instr_f64_ne {
 	return Instr_f64_ne{}
 }
 
+var _f64_ne = _f64_ne_0
+
 type Instr_f64_lt struct{}
 
-func _f64_lt() Instr_f64_lt {
+func _f64_lt_0() Instr_f64_lt {
 	return Instr_f64_lt{}
 }
 
+var _f64_lt = _f64_lt_0
+
 type Instr_f64_le struct{}
 
-func _f64_le() Instr_f64_le {
+func _f64_le_0() Instr_f64_le {
 	return Instr_f64_le{}
 }
 
+var _f64_le = _f64_le_0
+
 type Instr_f64_gt struct{}
 
-func _f64_gt() Instr_f64_gt {
+func _f64_gt_0() Instr_f64_gt {
 	return Instr_f64_gt{}
 }
 
+var _f64_gt = _f64_gt_0
+
 type Instr_f64_ge struct{}
 
-func _f64_ge() Instr_f64_ge {
+func _f64_ge_0() Instr_f64_ge {
 	return Instr_f64_ge{}
 }
 
+var _f64_ge = _f64_ge_0
+
 type Instr_i32_extend8_s struct{}
 
-func _i32_extend8_s() Instr_i32_extend8_s {
+func _i32_extend8_s_0() Instr_i32_extend8_s {
 	return Instr_i32_extend8_s{}
 }
 
+var _i32_extend8_s = _i32_extend8_s_0
+
 type Instr_i32_extend16_s struct{}
 
-func _i32_extend16_s() Instr_i32_extend16_s {
+func _i32_extend16_s_0() Instr_i32_extend16_s {
 	return Instr_i32_extend16_s{}
 }
 
+var _i32_extend16_s = _i32_extend16_s_0
+
 type Instr_i64_extend8_s struct{}
 
-func _i64_extend8_s() Instr_i64_extend8_s {
+func _i64_extend8_s_0() Instr_i64_extend8_s {
 	return Instr_i64_extend8_s{}
 }
 
+var _i64_extend8_s = _i64_extend8_s_0
+
 type Instr_i64_extend16_s struct{}
 
-func _i64_extend16_s() Instr_i64_extend16_s {
+func _i64_extend16_s_0() Instr_i64_extend16_s {
 	return Instr_i64_extend16_s{}
 }
 
+var _i64_extend16_s = _i64_extend16_s_0
+
 type Instr_i64_extend32_s struct{}
 
-func _i64_extend32_s() Instr_i64_extend32_s {
+func _i64_extend32_s_0() Instr_i64_extend32_s {
 	return Instr_i64_extend32_s{}
 }
 
+var _i64_extend32_s = _i64_extend32_s_0
+
 type Instr_i32_wrap_i64 struct{}
 
-func _i32_wrap_i64() Instr_i32_wrap_i64 {
+func _i32_wrap_i64_0() Instr_i32_wrap_i64 {
 	return Instr_i32_wrap_i64{}
 }
 
+var _i32_wrap_i64 = _i32_wrap_i64_0
+
 type Instr_i32_trunc_f32_s struct{}
 
-func _i32_trunc_f32_s() Instr_i32_trunc_f32_s {
+func _i32_trunc_f32_s_0() Instr_i32_trunc_f32_s {
 	return Instr_i32_trunc_f32_s{}
 }
 
+var _i32_trunc_f32_s = _i32_trunc_f32_s_0
+
 type Instr_i32_trunc_f32_u struct{}
 
-func _i32_trunc_f32_u() Instr_i32_trunc_f32_u {
+func _i32_trunc_f32_u_0() Instr_i32_trunc_f32_u {
 	return Instr_i32_trunc_f32_u{}
 }
 
+var _i32_trunc_f32_u = _i32_trunc_f32_u_0
+
 type Instr_i32_trunc_f64_s struct{}
 
-func _i32_trunc_f64_s() Instr_i32_trunc_f64_s {
+func _i32_trunc_f64_s_0() Instr_i32_trunc_f64_s {
 	return Instr_i32_trunc_f64_s{}
 }
 
+var _i32_trunc_f64_s = _i32_trunc_f64_s_0
+
 type Instr_i32_trunc_f64_u struct{}
 
-func _i32_trunc_f64_u() Instr_i32_trunc_f64_u {
+func _i32_trunc_f64_u_0() Instr_i32_trunc_f64_u {
 	return Instr_i32_trunc_f64_u{}
 }
 
+var _i32_trunc_f64_u = _i32_trunc_f64_u_0
+
 type Instr_i32_trunc_sat_f32_s struct{}
 
-func _i32_trunc_sat_f32_s() Instr_i32_trunc_sat_f32_s {
+func _i32_trunc_sat_f32_s_0() Instr_i32_trunc_sat_f32_s {
 	return Instr_i32_trunc_sat_f32_s{}
 }
 
+var _i32_trunc_sat_f32_s = _i32_trunc_sat_f32_s_0
+
 type Instr_i32_trunc_sat_f32_u struct{}
 
-func _i32_trunc_sat_f32_u() Instr_i32_trunc_sat_f32_u {
+func _i32_trunc_sat_f32_u_0() Instr_i32_trunc_sat_f32_u {
 	return Instr_i32_trunc_sat_f32_u{}
 }
 
+var _i32_trunc_sat_f32_u = _i32_trunc_sat_f32_u_0
+
 type Instr_i32_trunc_sat_f64_s struct{}
 
-func _i32_trunc_sat_f64_s() Instr_i32_trunc_sat_f64_s {
+func _i32_trunc_sat_f64_s_0() Instr_i32_trunc_sat_f64_s {
 	return Instr_i32_trunc_sat_f64_s{}
 }
 
+var _i32_trunc_sat_f64_s = _i32_trunc_sat_f64_s_0
+
 type Instr_i32_trunc_sat_f64_u struct{}
 
-func _i32_trunc_sat_f64_u() Instr_i32_trunc_sat_f64_u {
+func _i32_trunc_sat_f64_u_0() Instr_i32_trunc_sat_f64_u {
 	return Instr_i32_trunc_sat_f64_u{}
 }
 
+var _i32_trunc_sat_f64_u = _i32_trunc_sat_f64_u_0
+
 type Instr_i64_extend_i32_s struct{}
 
-func _i64_extend_i32_s() Instr_i64_extend_i32_s {
+func _i64_extend_i32_s_0() Instr_i64_extend_i32_s {
 	return Instr_i64_extend_i32_s{}
 }
 
+var _i64_extend_i32_s = _i64_extend_i32_s_0
+
 type Instr_i64_extend_i32_u struct{}
 
-func _i64_extend_i32_u() Instr_i64_extend_i32_u {
+func _i64_extend_i32_u_0() Instr_i64_extend_i32_u {
 	return Instr_i64_extend_i32_u{}
 }
 
+var _i64_extend_i32_u = _i64_extend_i32_u_0
+
 type Instr_i64_trunc_f32_s struct{}
 
-func _i64_trunc_f32_s() Instr_i64_trunc_f32_s {
+func _i64_trunc_f32_s_0() Instr_i64_trunc_f32_s {
 	return Instr_i64_trunc_f32_s{}
 }
 
+var _i64_trunc_f32_s = _i64_trunc_f32_s_0
+
 type Instr_i64_trunc_f32_u struct{}
 
-func _i64_trunc_f32_u() Instr_i64_trunc_f32_u {
+func _i64_trunc_f32_u_0() Instr_i64_trunc_f32_u {
 	return Instr_i64_trunc_f32_u{}
 }
 
+var _i64_trunc_f32_u = _i64_trunc_f32_u_0
+
 type Instr_i64_trunc_f64_s struct{}
 
-func _i64_trunc_f64_s() Instr_i64_trunc_f64_s {
+func _i64_trunc_f64_s_0() Instr_i64_trunc_f64_s {
 	return Instr_i64_trunc_f64_s{}
 }
 
+var _i64_trunc_f64_s = _i64_trunc_f64_s_0
+
 type Instr_i64_trunc_f64_u struct{}
 
-func _i64_trunc_f64_u() Instr_i64_trunc_f64_u {
+func _i64_trunc_f64_u_0() Instr_i64_trunc_f64_u {
 	return Instr_i64_trunc_f64_u{}
 }
 
+var _i64_trunc_f64_u = _i64_trunc_f64_u_0
+
 type Instr_f32_convert_i32_s struct{}
 
-func _f32_convert_i32_s() Instr_f32_convert_i32_s {
+func _f32_convert_i32_s_0() Instr_f32_convert_i32_s {
 	return Instr_f32_convert_i32_s{}
 }
 
+var _f32_convert_i32_s = _f32_convert_i32_s_0
+
 type Instr_f32_convert_i32_u struct{}
 
-func _f32_convert_i32_u() Instr_f32_convert_i32_u {
+func _f32_convert_i32_u_0() Instr_f32_convert_i32_u {
 	return Instr_f32_convert_i32_u{}
 }
 
+var _f32_convert_i32_u = _f32_convert_i32_u_0
+
 type Instr_f32_convert_i64_s struct{}
 
-func _f32_convert_i64_s() Instr_f32_convert_i64_s {
+func _f32_convert_i64_s_0() Instr_f32_convert_i64_s {
 	return Instr_f32_convert_i64_s{}
 }
 
+var _f32_convert_i64_s = _f32_convert_i64_s_0
+
 type Instr_f32_convert_i64_u struct{}
 
-func _f32_convert_i64_u() Instr_f32_convert_i64_u {
+func _f32_convert_i64_u_0() Instr_f32_convert_i64_u {
 	return Instr_f32_convert_i64_u{}
 }
 
+var _f32_convert_i64_u = _f32_convert_i64_u_0
+
 type Instr_i64_trunc_sat_f32_s struct{}
 
-func _i64_trunc_sat_f32_s() Instr_i64_trunc_sat_f32_s {
+func _i64_trunc_sat_f32_s_0() Instr_i64_trunc_sat_f32_s {
 	return Instr_i64_trunc_sat_f32_s{}
 }
 
+var _i64_trunc_sat_f32_s = _i64_trunc_sat_f32_s_0
+
 type Instr_i64_trunc_sat_f32_u struct{}
 
-func _i64_trunc_sat_f32_u() Instr_i64_trunc_sat_f32_u {
+func _i64_trunc_sat_f32_u_0() Instr_i64_trunc_sat_f32_u {
 	return Instr_i64_trunc_sat_f32_u{}
 }
 
+var _i64_trunc_sat_f32_u = _i64_trunc_sat_f32_u_0
+
 type Instr_i64_trunc_sat_f64_s struct{}
 
-func _i64_trunc_sat_f64_s() Instr_i64_trunc_sat_f64_s {
+func _i64_trunc_sat_f64_s_0() Instr_i64_trunc_sat_f64_s {
 	return Instr_i64_trunc_sat_f64_s{}
 }
 
+var _i64_trunc_sat_f64_s = _i64_trunc_sat_f64_s_0
+
 type Instr_i64_trunc_sat_f64_u struct{}
 
-func _i64_trunc_sat_f64_u() Instr_i64_trunc_sat_f64_u {
+func _i64_trunc_sat_f64_u_0() Instr_i64_trunc_sat_f64_u {
 	return Instr_i64_trunc_sat_f64_u{}
 }
 
+var _i64_trunc_sat_f64_u = _i64_trunc_sat_f64_u_0
+
 type Instr_f32_demote_f64 struct{}
 
-func _f32_demote_f64() Instr_f32_demote_f64 {
+func _f32_demote_f64_0() Instr_f32_demote_f64 {
 	return Instr_f32_demote_f64{}
 }
 
+var _f32_demote_f64 = _f32_demote_f64_0
+
 type Instr_f64_convert_i32_s struct{}
 
-func _f64_convert_i32_s() Instr_f64_convert_i32_s {
+func _f64_convert_i32_s_0() Instr_f64_convert_i32_s {
 	return Instr_f64_convert_i32_s{}
 }
 
+var _f64_convert_i32_s = _f64_convert_i32_s_0
+
 type Instr_f64_convert_i32_u struct{}
 
-func _f64_convert_i32_u() Instr_f64_convert_i32_u {
+func _f64_convert_i32_u_0() Instr_f64_convert_i32_u {
 	return Instr_f64_convert_i32_u{}
 }
 
+var _f64_convert_i32_u = _f64_convert_i32_u_0
+
 type Instr_f64_convert_i64_s struct{}
 
-func _f64_convert_i64_s() Instr_f64_convert_i64_s {
+func _f64_convert_i64_s_0() Instr_f64_convert_i64_s {
 	return Instr_f64_convert_i64_s{}
 }
 
+var _f64_convert_i64_s = _f64_convert_i64_s_0
+
 type Instr_f64_convert_i64_u struct{}
 
-func _f64_convert_i64_u() Instr_f64_convert_i64_u {
+func _f64_convert_i64_u_0() Instr_f64_convert_i64_u {
 	return Instr_f64_convert_i64_u{}
 }
 
+var _f64_convert_i64_u = _f64_convert_i64_u_0
+
 type Instr_f64_promote_f32 struct{}
 
-func _f64_promote_f32() Instr_f64_promote_f32 {
+func _f64_promote_f32_0() Instr_f64_promote_f32 {
 	return Instr_f64_promote_f32{}
 }
 
+var _f64_promote_f32 = _f64_promote_f32_0
+
 type Instr_i32_reinterpret_f32 struct{}
 
-func _i32_reinterpret_f32() Instr_i32_reinterpret_f32 {
+func _i32_reinterpret_f32_0() Instr_i32_reinterpret_f32 {
 	return Instr_i32_reinterpret_f32{}
 }
 
+var _i32_reinterpret_f32 = _i32_reinterpret_f32_0
+
 type Instr_i64_reinterpret_f64 struct{}
 
-func _i64_reinterpret_f64() Instr_i64_reinterpret_f64 {
+func _i64_reinterpret_f64_0() Instr_i64_reinterpret_f64 {
 	return Instr_i64_reinterpret_f64{}
 }
 
+var _i64_reinterpret_f64 = _i64_reinterpret_f64_0
+
 type Instr_f32_reinterpret_i32 struct{}
 
-func _f32_reinterpret_i32() Instr_f32_reinterpret_i32 {
+func _f32_reinterpret_i32_0() Instr_f32_reinterpret_i32 {
 	return Instr_f32_reinterpret_i32{}
 }
 
+var _f32_reinterpret_i32 = _f32_reinterpret_i32_0
+
 type Instr_f64_reinterpret_i64 struct{}
 
-func _f64_reinterpret_i64() Instr_f64_reinterpret_i64 {
+func _f64_reinterpret_i64_0() Instr_f64_reinterpret_i64 {
 	return Instr_f64_reinterpret_i64{}
 }
 
+var _f64_reinterpret_i64 = _f64_reinterpret_i64_0
+
 type Instr_v128_not struct{}
 
-func _v128_not() Instr_v128_not {
+func _v128_not_0() Instr_v128_not {
 	return Instr_v128_not{}
 }
 
+var _v128_not = _v128_not_0
+
 type Instr_v128_and struct{}
 
-func _v128_and() Instr_v128_and {
+func _v128_and_0() Instr_v128_and {
 	return Instr_v128_and{}
 }
 
+var _v128_and = _v128_and_0
+
 type Instr_v128_andnot struct{}
 
-func _v128_andnot() Instr_v128_andnot {
+func _v128_andnot_0() Instr_v128_andnot {
 	return Instr_v128_andnot{}
 }
 
+var _v128_andnot = _v128_andnot_0
+
 type Instr_v128_or struct{}
 
-func _v128_or() Instr_v128_or {
+func _v128_or_0() Instr_v128_or {
 	return Instr_v128_or{}
 }
 
+var _v128_or = _v128_or_0
+
 type Instr_v128_xor struct{}
 
-func _v128_xor() Instr_v128_xor {
+func _v128_xor_0() Instr_v128_xor {
 	return Instr_v128_xor{}
 }
 
+var _v128_xor = _v128_xor_0
+
 type Instr_v128_bitselect struct{}
 
-func _v128_bitselect() Instr_v128_bitselect {
+func _v128_bitselect_0() Instr_v128_bitselect {
 	return Instr_v128_bitselect{}
 }
 
+var _v128_bitselect = _v128_bitselect_0
+
 type Instr_v128_any_true struct{}
 
-func _v128_any_true() Instr_v128_any_true {
+func _v128_any_true_0() Instr_v128_any_true {
 	return Instr_v128_any_true{}
 }
 
+var _v128_any_true = _v128_any_true_0
+
 type Instr_i8x16_swizzle struct{}
 
-func _i8x16_swizzle() Instr_i8x16_swizzle {
+func _i8x16_swizzle_0() Instr_i8x16_swizzle {
 	return Instr_i8x16_swizzle{}
 }
+
+var _i8x16_swizzle = _i8x16_swizzle_0
 
 type Instr_i8x16_shuffle struct {
 	Is []OInt
 }
 
-func _i8x16_shuffle(_is []OInt) Instr_i8x16_shuffle {
+func _i8x16_shuffle_1(_is []OInt) Instr_i8x16_shuffle {
 	return Instr_i8x16_shuffle{
 		Is: _is,
 	}
 }
 
+var _i8x16_shuffle = _i8x16_shuffle_1
+
 type Instr_i8x16_splat struct{}
 
-func _i8x16_splat() Instr_i8x16_splat {
+func _i8x16_splat_0() Instr_i8x16_splat {
 	return Instr_i8x16_splat{}
 }
+
+var _i8x16_splat = _i8x16_splat_0
 
 type Instr_i8x16_extract_lane_s struct {
 	I OInt
 }
 
-func _i8x16_extract_lane_s(_i OInt) Instr_i8x16_extract_lane_s {
+func _i8x16_extract_lane_s_1(_i OInt) Instr_i8x16_extract_lane_s {
 	return Instr_i8x16_extract_lane_s{
 		I: _i,
 	}
 }
 
+var _i8x16_extract_lane_s = _i8x16_extract_lane_s_1
+
 type Instr_i8x16_extract_lane_u struct {
 	I OInt
 }
 
-func _i8x16_extract_lane_u(_i OInt) Instr_i8x16_extract_lane_u {
+func _i8x16_extract_lane_u_1(_i OInt) Instr_i8x16_extract_lane_u {
 	return Instr_i8x16_extract_lane_u{
 		I: _i,
 	}
 }
 
+var _i8x16_extract_lane_u = _i8x16_extract_lane_u_1
+
 type Instr_i8x16_replace_lane struct {
 	I OInt
 }
 
-func _i8x16_replace_lane(_i OInt) Instr_i8x16_replace_lane {
+func _i8x16_replace_lane_1(_i OInt) Instr_i8x16_replace_lane {
 	return Instr_i8x16_replace_lane{
 		I: _i,
 	}
 }
 
+var _i8x16_replace_lane = _i8x16_replace_lane_1
+
 type Instr_i8x16_eq struct{}
 
-func _i8x16_eq() Instr_i8x16_eq {
+func _i8x16_eq_0() Instr_i8x16_eq {
 	return Instr_i8x16_eq{}
 }
 
+var _i8x16_eq = _i8x16_eq_0
+
 type Instr_i8x16_ne struct{}
 
-func _i8x16_ne() Instr_i8x16_ne {
+func _i8x16_ne_0() Instr_i8x16_ne {
 	return Instr_i8x16_ne{}
 }
 
+var _i8x16_ne = _i8x16_ne_0
+
 type Instr_i8x16_lt_s struct{}
 
-func _i8x16_lt_s() Instr_i8x16_lt_s {
+func _i8x16_lt_s_0() Instr_i8x16_lt_s {
 	return Instr_i8x16_lt_s{}
 }
 
+var _i8x16_lt_s = _i8x16_lt_s_0
+
 type Instr_i8x16_lt_u struct{}
 
-func _i8x16_lt_u() Instr_i8x16_lt_u {
+func _i8x16_lt_u_0() Instr_i8x16_lt_u {
 	return Instr_i8x16_lt_u{}
 }
 
+var _i8x16_lt_u = _i8x16_lt_u_0
+
 type Instr_i8x16_le_s struct{}
 
-func _i8x16_le_s() Instr_i8x16_le_s {
+func _i8x16_le_s_0() Instr_i8x16_le_s {
 	return Instr_i8x16_le_s{}
 }
 
+var _i8x16_le_s = _i8x16_le_s_0
+
 type Instr_i8x16_le_u struct{}
 
-func _i8x16_le_u() Instr_i8x16_le_u {
+func _i8x16_le_u_0() Instr_i8x16_le_u {
 	return Instr_i8x16_le_u{}
 }
 
+var _i8x16_le_u = _i8x16_le_u_0
+
 type Instr_i8x16_gt_s struct{}
 
-func _i8x16_gt_s() Instr_i8x16_gt_s {
+func _i8x16_gt_s_0() Instr_i8x16_gt_s {
 	return Instr_i8x16_gt_s{}
 }
 
+var _i8x16_gt_s = _i8x16_gt_s_0
+
 type Instr_i8x16_gt_u struct{}
 
-func _i8x16_gt_u() Instr_i8x16_gt_u {
+func _i8x16_gt_u_0() Instr_i8x16_gt_u {
 	return Instr_i8x16_gt_u{}
 }
 
+var _i8x16_gt_u = _i8x16_gt_u_0
+
 type Instr_i8x16_ge_s struct{}
 
-func _i8x16_ge_s() Instr_i8x16_ge_s {
+func _i8x16_ge_s_0() Instr_i8x16_ge_s {
 	return Instr_i8x16_ge_s{}
 }
 
+var _i8x16_ge_s = _i8x16_ge_s_0
+
 type Instr_i8x16_ge_u struct{}
 
-func _i8x16_ge_u() Instr_i8x16_ge_u {
+func _i8x16_ge_u_0() Instr_i8x16_ge_u {
 	return Instr_i8x16_ge_u{}
 }
 
+var _i8x16_ge_u = _i8x16_ge_u_0
+
 type Instr_i8x16_neg struct{}
 
-func _i8x16_neg() Instr_i8x16_neg {
+func _i8x16_neg_0() Instr_i8x16_neg {
 	return Instr_i8x16_neg{}
 }
 
+var _i8x16_neg = _i8x16_neg_0
+
 type Instr_i8x16_bitmask struct{}
 
-func _i8x16_bitmask() Instr_i8x16_bitmask {
+func _i8x16_bitmask_0() Instr_i8x16_bitmask {
 	return Instr_i8x16_bitmask{}
 }
 
+var _i8x16_bitmask = _i8x16_bitmask_0
+
 type Instr_i8x16_all_true struct{}
 
-func _i8x16_all_true() Instr_i8x16_all_true {
+func _i8x16_all_true_0() Instr_i8x16_all_true {
 	return Instr_i8x16_all_true{}
 }
 
+var _i8x16_all_true = _i8x16_all_true_0
+
 type Instr_i8x16_narrow_i16x8_s struct{}
 
-func _i8x16_narrow_i16x8_s() Instr_i8x16_narrow_i16x8_s {
+func _i8x16_narrow_i16x8_s_0() Instr_i8x16_narrow_i16x8_s {
 	return Instr_i8x16_narrow_i16x8_s{}
 }
 
+var _i8x16_narrow_i16x8_s = _i8x16_narrow_i16x8_s_0
+
 type Instr_i8x16_narrow_i16x8_u struct{}
 
-func _i8x16_narrow_i16x8_u() Instr_i8x16_narrow_i16x8_u {
+func _i8x16_narrow_i16x8_u_0() Instr_i8x16_narrow_i16x8_u {
 	return Instr_i8x16_narrow_i16x8_u{}
 }
 
+var _i8x16_narrow_i16x8_u = _i8x16_narrow_i16x8_u_0
+
 type Instr_i16x8_extend_low_i8x16_s struct{}
 
-func _i16x8_extend_low_i8x16_s() Instr_i16x8_extend_low_i8x16_s {
+func _i16x8_extend_low_i8x16_s_0() Instr_i16x8_extend_low_i8x16_s {
 	return Instr_i16x8_extend_low_i8x16_s{}
 }
 
+var _i16x8_extend_low_i8x16_s = _i16x8_extend_low_i8x16_s_0
+
 type Instr_i16x8_extend_high_i8x16_s struct{}
 
-func _i16x8_extend_high_i8x16_s() Instr_i16x8_extend_high_i8x16_s {
+func _i16x8_extend_high_i8x16_s_0() Instr_i16x8_extend_high_i8x16_s {
 	return Instr_i16x8_extend_high_i8x16_s{}
 }
 
+var _i16x8_extend_high_i8x16_s = _i16x8_extend_high_i8x16_s_0
+
 type Instr_i16x8_extend_low_i8x16_u struct{}
 
-func _i16x8_extend_low_i8x16_u() Instr_i16x8_extend_low_i8x16_u {
+func _i16x8_extend_low_i8x16_u_0() Instr_i16x8_extend_low_i8x16_u {
 	return Instr_i16x8_extend_low_i8x16_u{}
 }
 
+var _i16x8_extend_low_i8x16_u = _i16x8_extend_low_i8x16_u_0
+
 type Instr_i16x8_extend_high_i8x16_u struct{}
 
-func _i16x8_extend_high_i8x16_u() Instr_i16x8_extend_high_i8x16_u {
+func _i16x8_extend_high_i8x16_u_0() Instr_i16x8_extend_high_i8x16_u {
 	return Instr_i16x8_extend_high_i8x16_u{}
 }
 
+var _i16x8_extend_high_i8x16_u = _i16x8_extend_high_i8x16_u_0
+
 type Instr_i8x16_shl struct{}
 
-func _i8x16_shl() Instr_i8x16_shl {
+func _i8x16_shl_0() Instr_i8x16_shl {
 	return Instr_i8x16_shl{}
 }
 
+var _i8x16_shl = _i8x16_shl_0
+
 type Instr_i8x16_shr_s struct{}
 
-func _i8x16_shr_s() Instr_i8x16_shr_s {
+func _i8x16_shr_s_0() Instr_i8x16_shr_s {
 	return Instr_i8x16_shr_s{}
 }
 
+var _i8x16_shr_s = _i8x16_shr_s_0
+
 type Instr_i8x16_shr_u struct{}
 
-func _i8x16_shr_u() Instr_i8x16_shr_u {
+func _i8x16_shr_u_0() Instr_i8x16_shr_u {
 	return Instr_i8x16_shr_u{}
 }
 
+var _i8x16_shr_u = _i8x16_shr_u_0
+
 type Instr_i8x16_add struct{}
 
-func _i8x16_add() Instr_i8x16_add {
+func _i8x16_add_0() Instr_i8x16_add {
 	return Instr_i8x16_add{}
 }
 
+var _i8x16_add = _i8x16_add_0
+
 type Instr_i8x16_add_sat_s struct{}
 
-func _i8x16_add_sat_s() Instr_i8x16_add_sat_s {
+func _i8x16_add_sat_s_0() Instr_i8x16_add_sat_s {
 	return Instr_i8x16_add_sat_s{}
 }
 
+var _i8x16_add_sat_s = _i8x16_add_sat_s_0
+
 type Instr_i8x16_add_sat_u struct{}
 
-func _i8x16_add_sat_u() Instr_i8x16_add_sat_u {
+func _i8x16_add_sat_u_0() Instr_i8x16_add_sat_u {
 	return Instr_i8x16_add_sat_u{}
 }
 
+var _i8x16_add_sat_u = _i8x16_add_sat_u_0
+
 type Instr_i8x16_sub struct{}
 
-func _i8x16_sub() Instr_i8x16_sub {
+func _i8x16_sub_0() Instr_i8x16_sub {
 	return Instr_i8x16_sub{}
 }
 
+var _i8x16_sub = _i8x16_sub_0
+
 type Instr_i8x16_sub_sat_s struct{}
 
-func _i8x16_sub_sat_s() Instr_i8x16_sub_sat_s {
+func _i8x16_sub_sat_s_0() Instr_i8x16_sub_sat_s {
 	return Instr_i8x16_sub_sat_s{}
 }
 
+var _i8x16_sub_sat_s = _i8x16_sub_sat_s_0
+
 type Instr_i8x16_sub_sat_u struct{}
 
-func _i8x16_sub_sat_u() Instr_i8x16_sub_sat_u {
+func _i8x16_sub_sat_u_0() Instr_i8x16_sub_sat_u {
 	return Instr_i8x16_sub_sat_u{}
 }
 
+var _i8x16_sub_sat_u = _i8x16_sub_sat_u_0
+
 type Instr_i8x16_abs struct{}
 
-func _i8x16_abs() Instr_i8x16_abs {
+func _i8x16_abs_0() Instr_i8x16_abs {
 	return Instr_i8x16_abs{}
 }
 
+var _i8x16_abs = _i8x16_abs_0
+
 type Instr_i8x16_popcnt struct{}
 
-func _i8x16_popcnt() Instr_i8x16_popcnt {
+func _i8x16_popcnt_0() Instr_i8x16_popcnt {
 	return Instr_i8x16_popcnt{}
 }
 
+var _i8x16_popcnt = _i8x16_popcnt_0
+
 type Instr_i8x16_min_s struct{}
 
-func _i8x16_min_s() Instr_i8x16_min_s {
+func _i8x16_min_s_0() Instr_i8x16_min_s {
 	return Instr_i8x16_min_s{}
 }
 
+var _i8x16_min_s = _i8x16_min_s_0
+
 type Instr_i8x16_min_u struct{}
 
-func _i8x16_min_u() Instr_i8x16_min_u {
+func _i8x16_min_u_0() Instr_i8x16_min_u {
 	return Instr_i8x16_min_u{}
 }
 
+var _i8x16_min_u = _i8x16_min_u_0
+
 type Instr_i8x16_max_s struct{}
 
-func _i8x16_max_s() Instr_i8x16_max_s {
+func _i8x16_max_s_0() Instr_i8x16_max_s {
 	return Instr_i8x16_max_s{}
 }
 
+var _i8x16_max_s = _i8x16_max_s_0
+
 type Instr_i8x16_max_u struct{}
 
-func _i8x16_max_u() Instr_i8x16_max_u {
+func _i8x16_max_u_0() Instr_i8x16_max_u {
 	return Instr_i8x16_max_u{}
 }
 
+var _i8x16_max_u = _i8x16_max_u_0
+
 type Instr_i8x16_avgr_u struct{}
 
-func _i8x16_avgr_u() Instr_i8x16_avgr_u {
+func _i8x16_avgr_u_0() Instr_i8x16_avgr_u {
 	return Instr_i8x16_avgr_u{}
 }
 
+var _i8x16_avgr_u = _i8x16_avgr_u_0
+
 type Instr_i16x8_splat struct{}
 
-func _i16x8_splat() Instr_i16x8_splat {
+func _i16x8_splat_0() Instr_i16x8_splat {
 	return Instr_i16x8_splat{}
 }
+
+var _i16x8_splat = _i16x8_splat_0
 
 type Instr_i16x8_extract_lane_s struct {
 	I OInt
 }
 
-func _i16x8_extract_lane_s(_i OInt) Instr_i16x8_extract_lane_s {
+func _i16x8_extract_lane_s_1(_i OInt) Instr_i16x8_extract_lane_s {
 	return Instr_i16x8_extract_lane_s{
 		I: _i,
 	}
 }
 
+var _i16x8_extract_lane_s = _i16x8_extract_lane_s_1
+
 type Instr_i16x8_extract_lane_u struct {
 	I OInt
 }
 
-func _i16x8_extract_lane_u(_i OInt) Instr_i16x8_extract_lane_u {
+func _i16x8_extract_lane_u_1(_i OInt) Instr_i16x8_extract_lane_u {
 	return Instr_i16x8_extract_lane_u{
 		I: _i,
 	}
 }
 
+var _i16x8_extract_lane_u = _i16x8_extract_lane_u_1
+
 type Instr_i16x8_replace_lane struct {
 	I OInt
 }
 
-func _i16x8_replace_lane(_i OInt) Instr_i16x8_replace_lane {
+func _i16x8_replace_lane_1(_i OInt) Instr_i16x8_replace_lane {
 	return Instr_i16x8_replace_lane{
 		I: _i,
 	}
 }
 
+var _i16x8_replace_lane = _i16x8_replace_lane_1
+
 type Instr_i16x8_eq struct{}
 
-func _i16x8_eq() Instr_i16x8_eq {
+func _i16x8_eq_0() Instr_i16x8_eq {
 	return Instr_i16x8_eq{}
 }
 
+var _i16x8_eq = _i16x8_eq_0
+
 type Instr_i16x8_ne struct{}
 
-func _i16x8_ne() Instr_i16x8_ne {
+func _i16x8_ne_0() Instr_i16x8_ne {
 	return Instr_i16x8_ne{}
 }
 
+var _i16x8_ne = _i16x8_ne_0
+
 type Instr_i16x8_lt_s struct{}
 
-func _i16x8_lt_s() Instr_i16x8_lt_s {
+func _i16x8_lt_s_0() Instr_i16x8_lt_s {
 	return Instr_i16x8_lt_s{}
 }
 
+var _i16x8_lt_s = _i16x8_lt_s_0
+
 type Instr_i16x8_lt_u struct{}
 
-func _i16x8_lt_u() Instr_i16x8_lt_u {
+func _i16x8_lt_u_0() Instr_i16x8_lt_u {
 	return Instr_i16x8_lt_u{}
 }
 
+var _i16x8_lt_u = _i16x8_lt_u_0
+
 type Instr_i16x8_le_s struct{}
 
-func _i16x8_le_s() Instr_i16x8_le_s {
+func _i16x8_le_s_0() Instr_i16x8_le_s {
 	return Instr_i16x8_le_s{}
 }
 
+var _i16x8_le_s = _i16x8_le_s_0
+
 type Instr_i16x8_le_u struct{}
 
-func _i16x8_le_u() Instr_i16x8_le_u {
+func _i16x8_le_u_0() Instr_i16x8_le_u {
 	return Instr_i16x8_le_u{}
 }
 
+var _i16x8_le_u = _i16x8_le_u_0
+
 type Instr_i16x8_gt_s struct{}
 
-func _i16x8_gt_s() Instr_i16x8_gt_s {
+func _i16x8_gt_s_0() Instr_i16x8_gt_s {
 	return Instr_i16x8_gt_s{}
 }
 
+var _i16x8_gt_s = _i16x8_gt_s_0
+
 type Instr_i16x8_gt_u struct{}
 
-func _i16x8_gt_u() Instr_i16x8_gt_u {
+func _i16x8_gt_u_0() Instr_i16x8_gt_u {
 	return Instr_i16x8_gt_u{}
 }
 
+var _i16x8_gt_u = _i16x8_gt_u_0
+
 type Instr_i16x8_ge_s struct{}
 
-func _i16x8_ge_s() Instr_i16x8_ge_s {
+func _i16x8_ge_s_0() Instr_i16x8_ge_s {
 	return Instr_i16x8_ge_s{}
 }
 
+var _i16x8_ge_s = _i16x8_ge_s_0
+
 type Instr_i16x8_ge_u struct{}
 
-func _i16x8_ge_u() Instr_i16x8_ge_u {
+func _i16x8_ge_u_0() Instr_i16x8_ge_u {
 	return Instr_i16x8_ge_u{}
 }
 
+var _i16x8_ge_u = _i16x8_ge_u_0
+
 type Instr_i16x8_neg struct{}
 
-func _i16x8_neg() Instr_i16x8_neg {
+func _i16x8_neg_0() Instr_i16x8_neg {
 	return Instr_i16x8_neg{}
 }
 
+var _i16x8_neg = _i16x8_neg_0
+
 type Instr_i16x8_bitmask struct{}
 
-func _i16x8_bitmask() Instr_i16x8_bitmask {
+func _i16x8_bitmask_0() Instr_i16x8_bitmask {
 	return Instr_i16x8_bitmask{}
 }
 
+var _i16x8_bitmask = _i16x8_bitmask_0
+
 type Instr_i16x8_all_true struct{}
 
-func _i16x8_all_true() Instr_i16x8_all_true {
+func _i16x8_all_true_0() Instr_i16x8_all_true {
 	return Instr_i16x8_all_true{}
 }
 
+var _i16x8_all_true = _i16x8_all_true_0
+
 type Instr_i16x8_narrow_i32x4_s struct{}
 
-func _i16x8_narrow_i32x4_s() Instr_i16x8_narrow_i32x4_s {
+func _i16x8_narrow_i32x4_s_0() Instr_i16x8_narrow_i32x4_s {
 	return Instr_i16x8_narrow_i32x4_s{}
 }
 
+var _i16x8_narrow_i32x4_s = _i16x8_narrow_i32x4_s_0
+
 type Instr_i16x8_narrow_i32x4_u struct{}
 
-func _i16x8_narrow_i32x4_u() Instr_i16x8_narrow_i32x4_u {
+func _i16x8_narrow_i32x4_u_0() Instr_i16x8_narrow_i32x4_u {
 	return Instr_i16x8_narrow_i32x4_u{}
 }
 
+var _i16x8_narrow_i32x4_u = _i16x8_narrow_i32x4_u_0
+
 type Instr_i16x8_shl struct{}
 
-func _i16x8_shl() Instr_i16x8_shl {
+func _i16x8_shl_0() Instr_i16x8_shl {
 	return Instr_i16x8_shl{}
 }
 
+var _i16x8_shl = _i16x8_shl_0
+
 type Instr_i16x8_shr_s struct{}
 
-func _i16x8_shr_s() Instr_i16x8_shr_s {
+func _i16x8_shr_s_0() Instr_i16x8_shr_s {
 	return Instr_i16x8_shr_s{}
 }
 
+var _i16x8_shr_s = _i16x8_shr_s_0
+
 type Instr_i16x8_shr_u struct{}
 
-func _i16x8_shr_u() Instr_i16x8_shr_u {
+func _i16x8_shr_u_0() Instr_i16x8_shr_u {
 	return Instr_i16x8_shr_u{}
 }
 
+var _i16x8_shr_u = _i16x8_shr_u_0
+
 type Instr_i16x8_add struct{}
 
-func _i16x8_add() Instr_i16x8_add {
+func _i16x8_add_0() Instr_i16x8_add {
 	return Instr_i16x8_add{}
 }
 
+var _i16x8_add = _i16x8_add_0
+
 type Instr_i16x8_add_sat_s struct{}
 
-func _i16x8_add_sat_s() Instr_i16x8_add_sat_s {
+func _i16x8_add_sat_s_0() Instr_i16x8_add_sat_s {
 	return Instr_i16x8_add_sat_s{}
 }
 
+var _i16x8_add_sat_s = _i16x8_add_sat_s_0
+
 type Instr_i16x8_add_sat_u struct{}
 
-func _i16x8_add_sat_u() Instr_i16x8_add_sat_u {
+func _i16x8_add_sat_u_0() Instr_i16x8_add_sat_u {
 	return Instr_i16x8_add_sat_u{}
 }
 
+var _i16x8_add_sat_u = _i16x8_add_sat_u_0
+
 type Instr_i16x8_sub struct{}
 
-func _i16x8_sub() Instr_i16x8_sub {
+func _i16x8_sub_0() Instr_i16x8_sub {
 	return Instr_i16x8_sub{}
 }
 
+var _i16x8_sub = _i16x8_sub_0
+
 type Instr_i16x8_sub_sat_s struct{}
 
-func _i16x8_sub_sat_s() Instr_i16x8_sub_sat_s {
+func _i16x8_sub_sat_s_0() Instr_i16x8_sub_sat_s {
 	return Instr_i16x8_sub_sat_s{}
 }
 
+var _i16x8_sub_sat_s = _i16x8_sub_sat_s_0
+
 type Instr_i16x8_sub_sat_u struct{}
 
-func _i16x8_sub_sat_u() Instr_i16x8_sub_sat_u {
+func _i16x8_sub_sat_u_0() Instr_i16x8_sub_sat_u {
 	return Instr_i16x8_sub_sat_u{}
 }
 
+var _i16x8_sub_sat_u = _i16x8_sub_sat_u_0
+
 type Instr_i16x8_mul struct{}
 
-func _i16x8_mul() Instr_i16x8_mul {
+func _i16x8_mul_0() Instr_i16x8_mul {
 	return Instr_i16x8_mul{}
 }
 
+var _i16x8_mul = _i16x8_mul_0
+
 type Instr_i16x8_abs struct{}
 
-func _i16x8_abs() Instr_i16x8_abs {
+func _i16x8_abs_0() Instr_i16x8_abs {
 	return Instr_i16x8_abs{}
 }
 
+var _i16x8_abs = _i16x8_abs_0
+
 type Instr_i16x8_min_s struct{}
 
-func _i16x8_min_s() Instr_i16x8_min_s {
+func _i16x8_min_s_0() Instr_i16x8_min_s {
 	return Instr_i16x8_min_s{}
 }
 
+var _i16x8_min_s = _i16x8_min_s_0
+
 type Instr_i16x8_min_u struct{}
 
-func _i16x8_min_u() Instr_i16x8_min_u {
+func _i16x8_min_u_0() Instr_i16x8_min_u {
 	return Instr_i16x8_min_u{}
 }
 
+var _i16x8_min_u = _i16x8_min_u_0
+
 type Instr_i16x8_max_s struct{}
 
-func _i16x8_max_s() Instr_i16x8_max_s {
+func _i16x8_max_s_0() Instr_i16x8_max_s {
 	return Instr_i16x8_max_s{}
 }
 
+var _i16x8_max_s = _i16x8_max_s_0
+
 type Instr_i16x8_max_u struct{}
 
-func _i16x8_max_u() Instr_i16x8_max_u {
+func _i16x8_max_u_0() Instr_i16x8_max_u {
 	return Instr_i16x8_max_u{}
 }
 
+var _i16x8_max_u = _i16x8_max_u_0
+
 type Instr_i16x8_avgr_u struct{}
 
-func _i16x8_avgr_u() Instr_i16x8_avgr_u {
+func _i16x8_avgr_u_0() Instr_i16x8_avgr_u {
 	return Instr_i16x8_avgr_u{}
 }
 
+var _i16x8_avgr_u = _i16x8_avgr_u_0
+
 type Instr_i16x8_extmul_low_i8x16_s struct{}
 
-func _i16x8_extmul_low_i8x16_s() Instr_i16x8_extmul_low_i8x16_s {
+func _i16x8_extmul_low_i8x16_s_0() Instr_i16x8_extmul_low_i8x16_s {
 	return Instr_i16x8_extmul_low_i8x16_s{}
 }
 
+var _i16x8_extmul_low_i8x16_s = _i16x8_extmul_low_i8x16_s_0
+
 type Instr_i16x8_extmul_high_i8x16_s struct{}
 
-func _i16x8_extmul_high_i8x16_s() Instr_i16x8_extmul_high_i8x16_s {
+func _i16x8_extmul_high_i8x16_s_0() Instr_i16x8_extmul_high_i8x16_s {
 	return Instr_i16x8_extmul_high_i8x16_s{}
 }
 
+var _i16x8_extmul_high_i8x16_s = _i16x8_extmul_high_i8x16_s_0
+
 type Instr_i16x8_extmul_low_i8x16_u struct{}
 
-func _i16x8_extmul_low_i8x16_u() Instr_i16x8_extmul_low_i8x16_u {
+func _i16x8_extmul_low_i8x16_u_0() Instr_i16x8_extmul_low_i8x16_u {
 	return Instr_i16x8_extmul_low_i8x16_u{}
 }
 
+var _i16x8_extmul_low_i8x16_u = _i16x8_extmul_low_i8x16_u_0
+
 type Instr_i16x8_extmul_high_i8x16_u struct{}
 
-func _i16x8_extmul_high_i8x16_u() Instr_i16x8_extmul_high_i8x16_u {
+func _i16x8_extmul_high_i8x16_u_0() Instr_i16x8_extmul_high_i8x16_u {
 	return Instr_i16x8_extmul_high_i8x16_u{}
 }
 
+var _i16x8_extmul_high_i8x16_u = _i16x8_extmul_high_i8x16_u_0
+
 type Instr_i16x8_q15mulr_sat_s struct{}
 
-func _i16x8_q15mulr_sat_s() Instr_i16x8_q15mulr_sat_s {
+func _i16x8_q15mulr_sat_s_0() Instr_i16x8_q15mulr_sat_s {
 	return Instr_i16x8_q15mulr_sat_s{}
 }
 
+var _i16x8_q15mulr_sat_s = _i16x8_q15mulr_sat_s_0
+
 type Instr_i16x8_extadd_pairwise_i8x16_s struct{}
 
-func _i16x8_extadd_pairwise_i8x16_s() Instr_i16x8_extadd_pairwise_i8x16_s {
+func _i16x8_extadd_pairwise_i8x16_s_0() Instr_i16x8_extadd_pairwise_i8x16_s {
 	return Instr_i16x8_extadd_pairwise_i8x16_s{}
 }
 
+var _i16x8_extadd_pairwise_i8x16_s = _i16x8_extadd_pairwise_i8x16_s_0
+
 type Instr_i16x8_extadd_pairwise_i8x16_u struct{}
 
-func _i16x8_extadd_pairwise_i8x16_u() Instr_i16x8_extadd_pairwise_i8x16_u {
+func _i16x8_extadd_pairwise_i8x16_u_0() Instr_i16x8_extadd_pairwise_i8x16_u {
 	return Instr_i16x8_extadd_pairwise_i8x16_u{}
 }
 
+var _i16x8_extadd_pairwise_i8x16_u = _i16x8_extadd_pairwise_i8x16_u_0
+
 type Instr_i32x4_splat struct{}
 
-func _i32x4_splat() Instr_i32x4_splat {
+func _i32x4_splat_0() Instr_i32x4_splat {
 	return Instr_i32x4_splat{}
 }
+
+var _i32x4_splat = _i32x4_splat_0
 
 type Instr_i32x4_extract_lane struct {
 	I OInt
 }
 
-func _i32x4_extract_lane(_i OInt) Instr_i32x4_extract_lane {
+func _i32x4_extract_lane_1(_i OInt) Instr_i32x4_extract_lane {
 	return Instr_i32x4_extract_lane{
 		I: _i,
 	}
 }
 
+var _i32x4_extract_lane = _i32x4_extract_lane_1
+
 type Instr_i32x4_replace_lane struct {
 	I OInt
 }
 
-func _i32x4_replace_lane(_i OInt) Instr_i32x4_replace_lane {
+func _i32x4_replace_lane_1(_i OInt) Instr_i32x4_replace_lane {
 	return Instr_i32x4_replace_lane{
 		I: _i,
 	}
 }
 
+var _i32x4_replace_lane = _i32x4_replace_lane_1
+
 type Instr_i32x4_eq struct{}
 
-func _i32x4_eq() Instr_i32x4_eq {
+func _i32x4_eq_0() Instr_i32x4_eq {
 	return Instr_i32x4_eq{}
 }
 
+var _i32x4_eq = _i32x4_eq_0
+
 type Instr_i32x4_ne struct{}
 
-func _i32x4_ne() Instr_i32x4_ne {
+func _i32x4_ne_0() Instr_i32x4_ne {
 	return Instr_i32x4_ne{}
 }
 
+var _i32x4_ne = _i32x4_ne_0
+
 type Instr_i32x4_lt_s struct{}
 
-func _i32x4_lt_s() Instr_i32x4_lt_s {
+func _i32x4_lt_s_0() Instr_i32x4_lt_s {
 	return Instr_i32x4_lt_s{}
 }
 
+var _i32x4_lt_s = _i32x4_lt_s_0
+
 type Instr_i32x4_lt_u struct{}
 
-func _i32x4_lt_u() Instr_i32x4_lt_u {
+func _i32x4_lt_u_0() Instr_i32x4_lt_u {
 	return Instr_i32x4_lt_u{}
 }
 
+var _i32x4_lt_u = _i32x4_lt_u_0
+
 type Instr_i32x4_le_s struct{}
 
-func _i32x4_le_s() Instr_i32x4_le_s {
+func _i32x4_le_s_0() Instr_i32x4_le_s {
 	return Instr_i32x4_le_s{}
 }
 
+var _i32x4_le_s = _i32x4_le_s_0
+
 type Instr_i32x4_le_u struct{}
 
-func _i32x4_le_u() Instr_i32x4_le_u {
+func _i32x4_le_u_0() Instr_i32x4_le_u {
 	return Instr_i32x4_le_u{}
 }
 
+var _i32x4_le_u = _i32x4_le_u_0
+
 type Instr_i32x4_gt_s struct{}
 
-func _i32x4_gt_s() Instr_i32x4_gt_s {
+func _i32x4_gt_s_0() Instr_i32x4_gt_s {
 	return Instr_i32x4_gt_s{}
 }
 
+var _i32x4_gt_s = _i32x4_gt_s_0
+
 type Instr_i32x4_gt_u struct{}
 
-func _i32x4_gt_u() Instr_i32x4_gt_u {
+func _i32x4_gt_u_0() Instr_i32x4_gt_u {
 	return Instr_i32x4_gt_u{}
 }
 
+var _i32x4_gt_u = _i32x4_gt_u_0
+
 type Instr_i32x4_ge_s struct{}
 
-func _i32x4_ge_s() Instr_i32x4_ge_s {
+func _i32x4_ge_s_0() Instr_i32x4_ge_s {
 	return Instr_i32x4_ge_s{}
 }
 
+var _i32x4_ge_s = _i32x4_ge_s_0
+
 type Instr_i32x4_ge_u struct{}
 
-func _i32x4_ge_u() Instr_i32x4_ge_u {
+func _i32x4_ge_u_0() Instr_i32x4_ge_u {
 	return Instr_i32x4_ge_u{}
 }
 
+var _i32x4_ge_u = _i32x4_ge_u_0
+
 type Instr_i32x4_abs struct{}
 
-func _i32x4_abs() Instr_i32x4_abs {
+func _i32x4_abs_0() Instr_i32x4_abs {
 	return Instr_i32x4_abs{}
 }
 
+var _i32x4_abs = _i32x4_abs_0
+
 type Instr_i32x4_neg struct{}
 
-func _i32x4_neg() Instr_i32x4_neg {
+func _i32x4_neg_0() Instr_i32x4_neg {
 	return Instr_i32x4_neg{}
 }
 
+var _i32x4_neg = _i32x4_neg_0
+
 type Instr_i32x4_bitmask struct{}
 
-func _i32x4_bitmask() Instr_i32x4_bitmask {
+func _i32x4_bitmask_0() Instr_i32x4_bitmask {
 	return Instr_i32x4_bitmask{}
 }
 
+var _i32x4_bitmask = _i32x4_bitmask_0
+
 type Instr_i32x4_all_true struct{}
 
-func _i32x4_all_true() Instr_i32x4_all_true {
+func _i32x4_all_true_0() Instr_i32x4_all_true {
 	return Instr_i32x4_all_true{}
 }
 
+var _i32x4_all_true = _i32x4_all_true_0
+
 type Instr_i32x4_extend_low_i16x8_s struct{}
 
-func _i32x4_extend_low_i16x8_s() Instr_i32x4_extend_low_i16x8_s {
+func _i32x4_extend_low_i16x8_s_0() Instr_i32x4_extend_low_i16x8_s {
 	return Instr_i32x4_extend_low_i16x8_s{}
 }
 
+var _i32x4_extend_low_i16x8_s = _i32x4_extend_low_i16x8_s_0
+
 type Instr_i32x4_extend_high_i16x8_s struct{}
 
-func _i32x4_extend_high_i16x8_s() Instr_i32x4_extend_high_i16x8_s {
+func _i32x4_extend_high_i16x8_s_0() Instr_i32x4_extend_high_i16x8_s {
 	return Instr_i32x4_extend_high_i16x8_s{}
 }
 
+var _i32x4_extend_high_i16x8_s = _i32x4_extend_high_i16x8_s_0
+
 type Instr_i32x4_extend_low_i16x8_u struct{}
 
-func _i32x4_extend_low_i16x8_u() Instr_i32x4_extend_low_i16x8_u {
+func _i32x4_extend_low_i16x8_u_0() Instr_i32x4_extend_low_i16x8_u {
 	return Instr_i32x4_extend_low_i16x8_u{}
 }
 
+var _i32x4_extend_low_i16x8_u = _i32x4_extend_low_i16x8_u_0
+
 type Instr_i32x4_extend_high_i16x8_u struct{}
 
-func _i32x4_extend_high_i16x8_u() Instr_i32x4_extend_high_i16x8_u {
+func _i32x4_extend_high_i16x8_u_0() Instr_i32x4_extend_high_i16x8_u {
 	return Instr_i32x4_extend_high_i16x8_u{}
 }
 
+var _i32x4_extend_high_i16x8_u = _i32x4_extend_high_i16x8_u_0
+
 type Instr_i32x4_shl struct{}
 
-func _i32x4_shl() Instr_i32x4_shl {
+func _i32x4_shl_0() Instr_i32x4_shl {
 	return Instr_i32x4_shl{}
 }
 
+var _i32x4_shl = _i32x4_shl_0
+
 type Instr_i32x4_shr_s struct{}
 
-func _i32x4_shr_s() Instr_i32x4_shr_s {
+func _i32x4_shr_s_0() Instr_i32x4_shr_s {
 	return Instr_i32x4_shr_s{}
 }
 
+var _i32x4_shr_s = _i32x4_shr_s_0
+
 type Instr_i32x4_shr_u struct{}
 
-func _i32x4_shr_u() Instr_i32x4_shr_u {
+func _i32x4_shr_u_0() Instr_i32x4_shr_u {
 	return Instr_i32x4_shr_u{}
 }
 
+var _i32x4_shr_u = _i32x4_shr_u_0
+
 type Instr_i32x4_add struct{}
 
-func _i32x4_add() Instr_i32x4_add {
+func _i32x4_add_0() Instr_i32x4_add {
 	return Instr_i32x4_add{}
 }
 
+var _i32x4_add = _i32x4_add_0
+
 type Instr_i32x4_sub struct{}
 
-func _i32x4_sub() Instr_i32x4_sub {
+func _i32x4_sub_0() Instr_i32x4_sub {
 	return Instr_i32x4_sub{}
 }
 
+var _i32x4_sub = _i32x4_sub_0
+
 type Instr_i32x4_min_s struct{}
 
-func _i32x4_min_s() Instr_i32x4_min_s {
+func _i32x4_min_s_0() Instr_i32x4_min_s {
 	return Instr_i32x4_min_s{}
 }
 
+var _i32x4_min_s = _i32x4_min_s_0
+
 type Instr_i32x4_min_u struct{}
 
-func _i32x4_min_u() Instr_i32x4_min_u {
+func _i32x4_min_u_0() Instr_i32x4_min_u {
 	return Instr_i32x4_min_u{}
 }
 
+var _i32x4_min_u = _i32x4_min_u_0
+
 type Instr_i32x4_max_s struct{}
 
-func _i32x4_max_s() Instr_i32x4_max_s {
+func _i32x4_max_s_0() Instr_i32x4_max_s {
 	return Instr_i32x4_max_s{}
 }
 
+var _i32x4_max_s = _i32x4_max_s_0
+
 type Instr_i32x4_max_u struct{}
 
-func _i32x4_max_u() Instr_i32x4_max_u {
+func _i32x4_max_u_0() Instr_i32x4_max_u {
 	return Instr_i32x4_max_u{}
 }
 
+var _i32x4_max_u = _i32x4_max_u_0
+
 type Instr_i32x4_mul struct{}
 
-func _i32x4_mul() Instr_i32x4_mul {
+func _i32x4_mul_0() Instr_i32x4_mul {
 	return Instr_i32x4_mul{}
 }
 
+var _i32x4_mul = _i32x4_mul_0
+
 type Instr_i32x4_dot_i16x8_s struct{}
 
-func _i32x4_dot_i16x8_s() Instr_i32x4_dot_i16x8_s {
+func _i32x4_dot_i16x8_s_0() Instr_i32x4_dot_i16x8_s {
 	return Instr_i32x4_dot_i16x8_s{}
 }
 
+var _i32x4_dot_i16x8_s = _i32x4_dot_i16x8_s_0
+
 type Instr_i32x4_trunc_sat_f32x4_s struct{}
 
-func _i32x4_trunc_sat_f32x4_s() Instr_i32x4_trunc_sat_f32x4_s {
+func _i32x4_trunc_sat_f32x4_s_0() Instr_i32x4_trunc_sat_f32x4_s {
 	return Instr_i32x4_trunc_sat_f32x4_s{}
 }
 
+var _i32x4_trunc_sat_f32x4_s = _i32x4_trunc_sat_f32x4_s_0
+
 type Instr_i32x4_trunc_sat_f32x4_u struct{}
 
-func _i32x4_trunc_sat_f32x4_u() Instr_i32x4_trunc_sat_f32x4_u {
+func _i32x4_trunc_sat_f32x4_u_0() Instr_i32x4_trunc_sat_f32x4_u {
 	return Instr_i32x4_trunc_sat_f32x4_u{}
 }
 
+var _i32x4_trunc_sat_f32x4_u = _i32x4_trunc_sat_f32x4_u_0
+
 type Instr_i32x4_trunc_sat_f64x2_s_zero struct{}
 
-func _i32x4_trunc_sat_f64x2_s_zero() Instr_i32x4_trunc_sat_f64x2_s_zero {
+func _i32x4_trunc_sat_f64x2_s_zero_0() Instr_i32x4_trunc_sat_f64x2_s_zero {
 	return Instr_i32x4_trunc_sat_f64x2_s_zero{}
 }
 
+var _i32x4_trunc_sat_f64x2_s_zero = _i32x4_trunc_sat_f64x2_s_zero_0
+
 type Instr_i32x4_trunc_sat_f64x2_u_zero struct{}
 
-func _i32x4_trunc_sat_f64x2_u_zero() Instr_i32x4_trunc_sat_f64x2_u_zero {
+func _i32x4_trunc_sat_f64x2_u_zero_0() Instr_i32x4_trunc_sat_f64x2_u_zero {
 	return Instr_i32x4_trunc_sat_f64x2_u_zero{}
 }
 
+var _i32x4_trunc_sat_f64x2_u_zero = _i32x4_trunc_sat_f64x2_u_zero_0
+
 type Instr_i32x4_extmul_low_i16x8_s struct{}
 
-func _i32x4_extmul_low_i16x8_s() Instr_i32x4_extmul_low_i16x8_s {
+func _i32x4_extmul_low_i16x8_s_0() Instr_i32x4_extmul_low_i16x8_s {
 	return Instr_i32x4_extmul_low_i16x8_s{}
 }
 
+var _i32x4_extmul_low_i16x8_s = _i32x4_extmul_low_i16x8_s_0
+
 type Instr_i32x4_extmul_high_i16x8_s struct{}
 
-func _i32x4_extmul_high_i16x8_s() Instr_i32x4_extmul_high_i16x8_s {
+func _i32x4_extmul_high_i16x8_s_0() Instr_i32x4_extmul_high_i16x8_s {
 	return Instr_i32x4_extmul_high_i16x8_s{}
 }
 
+var _i32x4_extmul_high_i16x8_s = _i32x4_extmul_high_i16x8_s_0
+
 type Instr_i32x4_extmul_low_i16x8_u struct{}
 
-func _i32x4_extmul_low_i16x8_u() Instr_i32x4_extmul_low_i16x8_u {
+func _i32x4_extmul_low_i16x8_u_0() Instr_i32x4_extmul_low_i16x8_u {
 	return Instr_i32x4_extmul_low_i16x8_u{}
 }
 
+var _i32x4_extmul_low_i16x8_u = _i32x4_extmul_low_i16x8_u_0
+
 type Instr_i32x4_extmul_high_i16x8_u struct{}
 
-func _i32x4_extmul_high_i16x8_u() Instr_i32x4_extmul_high_i16x8_u {
+func _i32x4_extmul_high_i16x8_u_0() Instr_i32x4_extmul_high_i16x8_u {
 	return Instr_i32x4_extmul_high_i16x8_u{}
 }
 
+var _i32x4_extmul_high_i16x8_u = _i32x4_extmul_high_i16x8_u_0
+
 type Instr_i32x4_extadd_pairwise_i16x8_s struct{}
 
-func _i32x4_extadd_pairwise_i16x8_s() Instr_i32x4_extadd_pairwise_i16x8_s {
+func _i32x4_extadd_pairwise_i16x8_s_0() Instr_i32x4_extadd_pairwise_i16x8_s {
 	return Instr_i32x4_extadd_pairwise_i16x8_s{}
 }
 
+var _i32x4_extadd_pairwise_i16x8_s = _i32x4_extadd_pairwise_i16x8_s_0
+
 type Instr_i32x4_extadd_pairwise_i16x8_u struct{}
 
-func _i32x4_extadd_pairwise_i16x8_u() Instr_i32x4_extadd_pairwise_i16x8_u {
+func _i32x4_extadd_pairwise_i16x8_u_0() Instr_i32x4_extadd_pairwise_i16x8_u {
 	return Instr_i32x4_extadd_pairwise_i16x8_u{}
 }
 
+var _i32x4_extadd_pairwise_i16x8_u = _i32x4_extadd_pairwise_i16x8_u_0
+
 type Instr_i64x2_splat struct{}
 
-func _i64x2_splat() Instr_i64x2_splat {
+func _i64x2_splat_0() Instr_i64x2_splat {
 	return Instr_i64x2_splat{}
 }
+
+var _i64x2_splat = _i64x2_splat_0
 
 type Instr_i64x2_extract_lane struct {
 	I OInt
 }
 
-func _i64x2_extract_lane(_i OInt) Instr_i64x2_extract_lane {
+func _i64x2_extract_lane_1(_i OInt) Instr_i64x2_extract_lane {
 	return Instr_i64x2_extract_lane{
 		I: _i,
 	}
 }
 
+var _i64x2_extract_lane = _i64x2_extract_lane_1
+
 type Instr_i64x2_replace_lane struct {
 	I OInt
 }
 
-func _i64x2_replace_lane(_i OInt) Instr_i64x2_replace_lane {
+func _i64x2_replace_lane_1(_i OInt) Instr_i64x2_replace_lane {
 	return Instr_i64x2_replace_lane{
 		I: _i,
 	}
 }
 
+var _i64x2_replace_lane = _i64x2_replace_lane_1
+
 type Instr_i64x2_extend_low_i32x4_s struct{}
 
-func _i64x2_extend_low_i32x4_s() Instr_i64x2_extend_low_i32x4_s {
+func _i64x2_extend_low_i32x4_s_0() Instr_i64x2_extend_low_i32x4_s {
 	return Instr_i64x2_extend_low_i32x4_s{}
 }
 
+var _i64x2_extend_low_i32x4_s = _i64x2_extend_low_i32x4_s_0
+
 type Instr_i64x2_extend_high_i32x4_s struct{}
 
-func _i64x2_extend_high_i32x4_s() Instr_i64x2_extend_high_i32x4_s {
+func _i64x2_extend_high_i32x4_s_0() Instr_i64x2_extend_high_i32x4_s {
 	return Instr_i64x2_extend_high_i32x4_s{}
 }
 
+var _i64x2_extend_high_i32x4_s = _i64x2_extend_high_i32x4_s_0
+
 type Instr_i64x2_extend_low_i32x4_u struct{}
 
-func _i64x2_extend_low_i32x4_u() Instr_i64x2_extend_low_i32x4_u {
+func _i64x2_extend_low_i32x4_u_0() Instr_i64x2_extend_low_i32x4_u {
 	return Instr_i64x2_extend_low_i32x4_u{}
 }
 
+var _i64x2_extend_low_i32x4_u = _i64x2_extend_low_i32x4_u_0
+
 type Instr_i64x2_extend_high_i32x4_u struct{}
 
-func _i64x2_extend_high_i32x4_u() Instr_i64x2_extend_high_i32x4_u {
+func _i64x2_extend_high_i32x4_u_0() Instr_i64x2_extend_high_i32x4_u {
 	return Instr_i64x2_extend_high_i32x4_u{}
 }
 
+var _i64x2_extend_high_i32x4_u = _i64x2_extend_high_i32x4_u_0
+
 type Instr_i64x2_eq struct{}
 
-func _i64x2_eq() Instr_i64x2_eq {
+func _i64x2_eq_0() Instr_i64x2_eq {
 	return Instr_i64x2_eq{}
 }
 
+var _i64x2_eq = _i64x2_eq_0
+
 type Instr_i64x2_ne struct{}
 
-func _i64x2_ne() Instr_i64x2_ne {
+func _i64x2_ne_0() Instr_i64x2_ne {
 	return Instr_i64x2_ne{}
 }
 
+var _i64x2_ne = _i64x2_ne_0
+
 type Instr_i64x2_lt_s struct{}
 
-func _i64x2_lt_s() Instr_i64x2_lt_s {
+func _i64x2_lt_s_0() Instr_i64x2_lt_s {
 	return Instr_i64x2_lt_s{}
 }
 
+var _i64x2_lt_s = _i64x2_lt_s_0
+
 type Instr_i64x2_le_s struct{}
 
-func _i64x2_le_s() Instr_i64x2_le_s {
+func _i64x2_le_s_0() Instr_i64x2_le_s {
 	return Instr_i64x2_le_s{}
 }
 
+var _i64x2_le_s = _i64x2_le_s_0
+
 type Instr_i64x2_gt_s struct{}
 
-func _i64x2_gt_s() Instr_i64x2_gt_s {
+func _i64x2_gt_s_0() Instr_i64x2_gt_s {
 	return Instr_i64x2_gt_s{}
 }
 
+var _i64x2_gt_s = _i64x2_gt_s_0
+
 type Instr_i64x2_ge_s struct{}
 
-func _i64x2_ge_s() Instr_i64x2_ge_s {
+func _i64x2_ge_s_0() Instr_i64x2_ge_s {
 	return Instr_i64x2_ge_s{}
 }
 
+var _i64x2_ge_s = _i64x2_ge_s_0
+
 type Instr_i64x2_abs struct{}
 
-func _i64x2_abs() Instr_i64x2_abs {
+func _i64x2_abs_0() Instr_i64x2_abs {
 	return Instr_i64x2_abs{}
 }
 
+var _i64x2_abs = _i64x2_abs_0
+
 type Instr_i64x2_neg struct{}
 
-func _i64x2_neg() Instr_i64x2_neg {
+func _i64x2_neg_0() Instr_i64x2_neg {
 	return Instr_i64x2_neg{}
 }
 
+var _i64x2_neg = _i64x2_neg_0
+
 type Instr_i64x2_bitmask struct{}
 
-func _i64x2_bitmask() Instr_i64x2_bitmask {
+func _i64x2_bitmask_0() Instr_i64x2_bitmask {
 	return Instr_i64x2_bitmask{}
 }
 
+var _i64x2_bitmask = _i64x2_bitmask_0
+
 type Instr_i64x2_all_true struct{}
 
-func _i64x2_all_true() Instr_i64x2_all_true {
+func _i64x2_all_true_0() Instr_i64x2_all_true {
 	return Instr_i64x2_all_true{}
 }
 
+var _i64x2_all_true = _i64x2_all_true_0
+
 type Instr_i64x2_add struct{}
 
-func _i64x2_add() Instr_i64x2_add {
+func _i64x2_add_0() Instr_i64x2_add {
 	return Instr_i64x2_add{}
 }
 
+var _i64x2_add = _i64x2_add_0
+
 type Instr_i64x2_sub struct{}
 
-func _i64x2_sub() Instr_i64x2_sub {
+func _i64x2_sub_0() Instr_i64x2_sub {
 	return Instr_i64x2_sub{}
 }
 
+var _i64x2_sub = _i64x2_sub_0
+
 type Instr_i64x2_mul struct{}
 
-func _i64x2_mul() Instr_i64x2_mul {
+func _i64x2_mul_0() Instr_i64x2_mul {
 	return Instr_i64x2_mul{}
 }
 
+var _i64x2_mul = _i64x2_mul_0
+
 type Instr_i64x2_shl struct{}
 
-func _i64x2_shl() Instr_i64x2_shl {
+func _i64x2_shl_0() Instr_i64x2_shl {
 	return Instr_i64x2_shl{}
 }
 
+var _i64x2_shl = _i64x2_shl_0
+
 type Instr_i64x2_shr_s struct{}
 
-func _i64x2_shr_s() Instr_i64x2_shr_s {
+func _i64x2_shr_s_0() Instr_i64x2_shr_s {
 	return Instr_i64x2_shr_s{}
 }
 
+var _i64x2_shr_s = _i64x2_shr_s_0
+
 type Instr_i64x2_shr_u struct{}
 
-func _i64x2_shr_u() Instr_i64x2_shr_u {
+func _i64x2_shr_u_0() Instr_i64x2_shr_u {
 	return Instr_i64x2_shr_u{}
 }
 
+var _i64x2_shr_u = _i64x2_shr_u_0
+
 type Instr_i64x2_extmul_low_i32x4_s struct{}
 
-func _i64x2_extmul_low_i32x4_s() Instr_i64x2_extmul_low_i32x4_s {
+func _i64x2_extmul_low_i32x4_s_0() Instr_i64x2_extmul_low_i32x4_s {
 	return Instr_i64x2_extmul_low_i32x4_s{}
 }
 
+var _i64x2_extmul_low_i32x4_s = _i64x2_extmul_low_i32x4_s_0
+
 type Instr_i64x2_extmul_high_i32x4_s struct{}
 
-func _i64x2_extmul_high_i32x4_s() Instr_i64x2_extmul_high_i32x4_s {
+func _i64x2_extmul_high_i32x4_s_0() Instr_i64x2_extmul_high_i32x4_s {
 	return Instr_i64x2_extmul_high_i32x4_s{}
 }
 
+var _i64x2_extmul_high_i32x4_s = _i64x2_extmul_high_i32x4_s_0
+
 type Instr_i64x2_extmul_low_i32x4_u struct{}
 
-func _i64x2_extmul_low_i32x4_u() Instr_i64x2_extmul_low_i32x4_u {
+func _i64x2_extmul_low_i32x4_u_0() Instr_i64x2_extmul_low_i32x4_u {
 	return Instr_i64x2_extmul_low_i32x4_u{}
 }
 
+var _i64x2_extmul_low_i32x4_u = _i64x2_extmul_low_i32x4_u_0
+
 type Instr_i64x2_extmul_high_i32x4_u struct{}
 
-func _i64x2_extmul_high_i32x4_u() Instr_i64x2_extmul_high_i32x4_u {
+func _i64x2_extmul_high_i32x4_u_0() Instr_i64x2_extmul_high_i32x4_u {
 	return Instr_i64x2_extmul_high_i32x4_u{}
 }
 
+var _i64x2_extmul_high_i32x4_u = _i64x2_extmul_high_i32x4_u_0
+
 type Instr_f32x4_splat struct{}
 
-func _f32x4_splat() Instr_f32x4_splat {
+func _f32x4_splat_0() Instr_f32x4_splat {
 	return Instr_f32x4_splat{}
 }
+
+var _f32x4_splat = _f32x4_splat_0
 
 type Instr_f32x4_extract_lane struct {
 	I OInt
 }
 
-func _f32x4_extract_lane(_i OInt) Instr_f32x4_extract_lane {
+func _f32x4_extract_lane_1(_i OInt) Instr_f32x4_extract_lane {
 	return Instr_f32x4_extract_lane{
 		I: _i,
 	}
 }
 
+var _f32x4_extract_lane = _f32x4_extract_lane_1
+
 type Instr_f32x4_replace_lane struct {
 	I OInt
 }
 
-func _f32x4_replace_lane(_i OInt) Instr_f32x4_replace_lane {
+func _f32x4_replace_lane_1(_i OInt) Instr_f32x4_replace_lane {
 	return Instr_f32x4_replace_lane{
 		I: _i,
 	}
 }
 
+var _f32x4_replace_lane = _f32x4_replace_lane_1
+
 type Instr_f32x4_eq struct{}
 
-func _f32x4_eq() Instr_f32x4_eq {
+func _f32x4_eq_0() Instr_f32x4_eq {
 	return Instr_f32x4_eq{}
 }
 
+var _f32x4_eq = _f32x4_eq_0
+
 type Instr_f32x4_ne struct{}
 
-func _f32x4_ne() Instr_f32x4_ne {
+func _f32x4_ne_0() Instr_f32x4_ne {
 	return Instr_f32x4_ne{}
 }
 
+var _f32x4_ne = _f32x4_ne_0
+
 type Instr_f32x4_lt struct{}
 
-func _f32x4_lt() Instr_f32x4_lt {
+func _f32x4_lt_0() Instr_f32x4_lt {
 	return Instr_f32x4_lt{}
 }
 
+var _f32x4_lt = _f32x4_lt_0
+
 type Instr_f32x4_le struct{}
 
-func _f32x4_le() Instr_f32x4_le {
+func _f32x4_le_0() Instr_f32x4_le {
 	return Instr_f32x4_le{}
 }
 
+var _f32x4_le = _f32x4_le_0
+
 type Instr_f32x4_gt struct{}
 
-func _f32x4_gt() Instr_f32x4_gt {
+func _f32x4_gt_0() Instr_f32x4_gt {
 	return Instr_f32x4_gt{}
 }
 
+var _f32x4_gt = _f32x4_gt_0
+
 type Instr_f32x4_ge struct{}
 
-func _f32x4_ge() Instr_f32x4_ge {
+func _f32x4_ge_0() Instr_f32x4_ge {
 	return Instr_f32x4_ge{}
 }
 
+var _f32x4_ge = _f32x4_ge_0
+
 type Instr_f32x4_abs struct{}
 
-func _f32x4_abs() Instr_f32x4_abs {
+func _f32x4_abs_0() Instr_f32x4_abs {
 	return Instr_f32x4_abs{}
 }
 
+var _f32x4_abs = _f32x4_abs_0
+
 type Instr_f32x4_neg struct{}
 
-func _f32x4_neg() Instr_f32x4_neg {
+func _f32x4_neg_0() Instr_f32x4_neg {
 	return Instr_f32x4_neg{}
 }
 
+var _f32x4_neg = _f32x4_neg_0
+
 type Instr_f32x4_sqrt struct{}
 
-func _f32x4_sqrt() Instr_f32x4_sqrt {
+func _f32x4_sqrt_0() Instr_f32x4_sqrt {
 	return Instr_f32x4_sqrt{}
 }
 
+var _f32x4_sqrt = _f32x4_sqrt_0
+
 type Instr_f32x4_ceil struct{}
 
-func _f32x4_ceil() Instr_f32x4_ceil {
+func _f32x4_ceil_0() Instr_f32x4_ceil {
 	return Instr_f32x4_ceil{}
 }
 
+var _f32x4_ceil = _f32x4_ceil_0
+
 type Instr_f32x4_floor struct{}
 
-func _f32x4_floor() Instr_f32x4_floor {
+func _f32x4_floor_0() Instr_f32x4_floor {
 	return Instr_f32x4_floor{}
 }
 
+var _f32x4_floor = _f32x4_floor_0
+
 type Instr_f32x4_trunc struct{}
 
-func _f32x4_trunc() Instr_f32x4_trunc {
+func _f32x4_trunc_0() Instr_f32x4_trunc {
 	return Instr_f32x4_trunc{}
 }
 
+var _f32x4_trunc = _f32x4_trunc_0
+
 type Instr_f32x4_nearest struct{}
 
-func _f32x4_nearest() Instr_f32x4_nearest {
+func _f32x4_nearest_0() Instr_f32x4_nearest {
 	return Instr_f32x4_nearest{}
 }
 
+var _f32x4_nearest = _f32x4_nearest_0
+
 type Instr_f32x4_add struct{}
 
-func _f32x4_add() Instr_f32x4_add {
+func _f32x4_add_0() Instr_f32x4_add {
 	return Instr_f32x4_add{}
 }
 
+var _f32x4_add = _f32x4_add_0
+
 type Instr_f32x4_sub struct{}
 
-func _f32x4_sub() Instr_f32x4_sub {
+func _f32x4_sub_0() Instr_f32x4_sub {
 	return Instr_f32x4_sub{}
 }
 
+var _f32x4_sub = _f32x4_sub_0
+
 type Instr_f32x4_mul struct{}
 
-func _f32x4_mul() Instr_f32x4_mul {
+func _f32x4_mul_0() Instr_f32x4_mul {
 	return Instr_f32x4_mul{}
 }
 
+var _f32x4_mul = _f32x4_mul_0
+
 type Instr_f32x4_div struct{}
 
-func _f32x4_div() Instr_f32x4_div {
+func _f32x4_div_0() Instr_f32x4_div {
 	return Instr_f32x4_div{}
 }
 
+var _f32x4_div = _f32x4_div_0
+
 type Instr_f32x4_min struct{}
 
-func _f32x4_min() Instr_f32x4_min {
+func _f32x4_min_0() Instr_f32x4_min {
 	return Instr_f32x4_min{}
 }
 
+var _f32x4_min = _f32x4_min_0
+
 type Instr_f32x4_max struct{}
 
-func _f32x4_max() Instr_f32x4_max {
+func _f32x4_max_0() Instr_f32x4_max {
 	return Instr_f32x4_max{}
 }
 
+var _f32x4_max = _f32x4_max_0
+
 type Instr_f32x4_pmin struct{}
 
-func _f32x4_pmin() Instr_f32x4_pmin {
+func _f32x4_pmin_0() Instr_f32x4_pmin {
 	return Instr_f32x4_pmin{}
 }
 
+var _f32x4_pmin = _f32x4_pmin_0
+
 type Instr_f32x4_pmax struct{}
 
-func _f32x4_pmax() Instr_f32x4_pmax {
+func _f32x4_pmax_0() Instr_f32x4_pmax {
 	return Instr_f32x4_pmax{}
 }
 
+var _f32x4_pmax = _f32x4_pmax_0
+
 type Instr_f32x4_demote_f64x2_zero struct{}
 
-func _f32x4_demote_f64x2_zero() Instr_f32x4_demote_f64x2_zero {
+func _f32x4_demote_f64x2_zero_0() Instr_f32x4_demote_f64x2_zero {
 	return Instr_f32x4_demote_f64x2_zero{}
 }
 
+var _f32x4_demote_f64x2_zero = _f32x4_demote_f64x2_zero_0
+
 type Instr_f32x4_convert_i32x4_s struct{}
 
-func _f32x4_convert_i32x4_s() Instr_f32x4_convert_i32x4_s {
+func _f32x4_convert_i32x4_s_0() Instr_f32x4_convert_i32x4_s {
 	return Instr_f32x4_convert_i32x4_s{}
 }
 
+var _f32x4_convert_i32x4_s = _f32x4_convert_i32x4_s_0
+
 type Instr_f32x4_convert_i32x4_u struct{}
 
-func _f32x4_convert_i32x4_u() Instr_f32x4_convert_i32x4_u {
+func _f32x4_convert_i32x4_u_0() Instr_f32x4_convert_i32x4_u {
 	return Instr_f32x4_convert_i32x4_u{}
 }
 
+var _f32x4_convert_i32x4_u = _f32x4_convert_i32x4_u_0
+
 type Instr_f64x2_splat struct{}
 
-func _f64x2_splat() Instr_f64x2_splat {
+func _f64x2_splat_0() Instr_f64x2_splat {
 	return Instr_f64x2_splat{}
 }
+
+var _f64x2_splat = _f64x2_splat_0
 
 type Instr_f64x2_extract_lane struct {
 	I OInt
 }
 
-func _f64x2_extract_lane(_i OInt) Instr_f64x2_extract_lane {
+func _f64x2_extract_lane_1(_i OInt) Instr_f64x2_extract_lane {
 	return Instr_f64x2_extract_lane{
 		I: _i,
 	}
 }
 
+var _f64x2_extract_lane = _f64x2_extract_lane_1
+
 type Instr_f64x2_replace_lane struct {
 	I OInt
 }
 
-func _f64x2_replace_lane(_i OInt) Instr_f64x2_replace_lane {
+func _f64x2_replace_lane_1(_i OInt) Instr_f64x2_replace_lane {
 	return Instr_f64x2_replace_lane{
 		I: _i,
 	}
 }
 
+var _f64x2_replace_lane = _f64x2_replace_lane_1
+
 type Instr_f64x2_eq struct{}
 
-func _f64x2_eq() Instr_f64x2_eq {
+func _f64x2_eq_0() Instr_f64x2_eq {
 	return Instr_f64x2_eq{}
 }
 
+var _f64x2_eq = _f64x2_eq_0
+
 type Instr_f64x2_ne struct{}
 
-func _f64x2_ne() Instr_f64x2_ne {
+func _f64x2_ne_0() Instr_f64x2_ne {
 	return Instr_f64x2_ne{}
 }
 
+var _f64x2_ne = _f64x2_ne_0
+
 type Instr_f64x2_lt struct{}
 
-func _f64x2_lt() Instr_f64x2_lt {
+func _f64x2_lt_0() Instr_f64x2_lt {
 	return Instr_f64x2_lt{}
 }
 
+var _f64x2_lt = _f64x2_lt_0
+
 type Instr_f64x2_le struct{}
 
-func _f64x2_le() Instr_f64x2_le {
+func _f64x2_le_0() Instr_f64x2_le {
 	return Instr_f64x2_le{}
 }
 
+var _f64x2_le = _f64x2_le_0
+
 type Instr_f64x2_gt struct{}
 
-func _f64x2_gt() Instr_f64x2_gt {
+func _f64x2_gt_0() Instr_f64x2_gt {
 	return Instr_f64x2_gt{}
 }
 
+var _f64x2_gt = _f64x2_gt_0
+
 type Instr_f64x2_ge struct{}
 
-func _f64x2_ge() Instr_f64x2_ge {
+func _f64x2_ge_0() Instr_f64x2_ge {
 	return Instr_f64x2_ge{}
 }
 
+var _f64x2_ge = _f64x2_ge_0
+
 type Instr_f64x2_neg struct{}
 
-func _f64x2_neg() Instr_f64x2_neg {
+func _f64x2_neg_0() Instr_f64x2_neg {
 	return Instr_f64x2_neg{}
 }
 
+var _f64x2_neg = _f64x2_neg_0
+
 type Instr_f64x2_sqrt struct{}
 
-func _f64x2_sqrt() Instr_f64x2_sqrt {
+func _f64x2_sqrt_0() Instr_f64x2_sqrt {
 	return Instr_f64x2_sqrt{}
 }
 
+var _f64x2_sqrt = _f64x2_sqrt_0
+
 type Instr_f64x2_ceil struct{}
 
-func _f64x2_ceil() Instr_f64x2_ceil {
+func _f64x2_ceil_0() Instr_f64x2_ceil {
 	return Instr_f64x2_ceil{}
 }
 
+var _f64x2_ceil = _f64x2_ceil_0
+
 type Instr_f64x2_floor struct{}
 
-func _f64x2_floor() Instr_f64x2_floor {
+func _f64x2_floor_0() Instr_f64x2_floor {
 	return Instr_f64x2_floor{}
 }
 
+var _f64x2_floor = _f64x2_floor_0
+
 type Instr_f64x2_trunc struct{}
 
-func _f64x2_trunc() Instr_f64x2_trunc {
+func _f64x2_trunc_0() Instr_f64x2_trunc {
 	return Instr_f64x2_trunc{}
 }
 
+var _f64x2_trunc = _f64x2_trunc_0
+
 type Instr_f64x2_nearest struct{}
 
-func _f64x2_nearest() Instr_f64x2_nearest {
+func _f64x2_nearest_0() Instr_f64x2_nearest {
 	return Instr_f64x2_nearest{}
 }
 
+var _f64x2_nearest = _f64x2_nearest_0
+
 type Instr_f64x2_add struct{}
 
-func _f64x2_add() Instr_f64x2_add {
+func _f64x2_add_0() Instr_f64x2_add {
 	return Instr_f64x2_add{}
 }
 
+var _f64x2_add = _f64x2_add_0
+
 type Instr_f64x2_sub struct{}
 
-func _f64x2_sub() Instr_f64x2_sub {
+func _f64x2_sub_0() Instr_f64x2_sub {
 	return Instr_f64x2_sub{}
 }
 
+var _f64x2_sub = _f64x2_sub_0
+
 type Instr_f64x2_mul struct{}
 
-func _f64x2_mul() Instr_f64x2_mul {
+func _f64x2_mul_0() Instr_f64x2_mul {
 	return Instr_f64x2_mul{}
 }
 
+var _f64x2_mul = _f64x2_mul_0
+
 type Instr_f64x2_div struct{}
 
-func _f64x2_div() Instr_f64x2_div {
+func _f64x2_div_0() Instr_f64x2_div {
 	return Instr_f64x2_div{}
 }
 
+var _f64x2_div = _f64x2_div_0
+
 type Instr_f64x2_min struct{}
 
-func _f64x2_min() Instr_f64x2_min {
+func _f64x2_min_0() Instr_f64x2_min {
 	return Instr_f64x2_min{}
 }
 
+var _f64x2_min = _f64x2_min_0
+
 type Instr_f64x2_max struct{}
 
-func _f64x2_max() Instr_f64x2_max {
+func _f64x2_max_0() Instr_f64x2_max {
 	return Instr_f64x2_max{}
 }
 
+var _f64x2_max = _f64x2_max_0
+
 type Instr_f64x2_abs struct{}
 
-func _f64x2_abs() Instr_f64x2_abs {
+func _f64x2_abs_0() Instr_f64x2_abs {
 	return Instr_f64x2_abs{}
 }
 
+var _f64x2_abs = _f64x2_abs_0
+
 type Instr_f64x2_pmin struct{}
 
-func _f64x2_pmin() Instr_f64x2_pmin {
+func _f64x2_pmin_0() Instr_f64x2_pmin {
 	return Instr_f64x2_pmin{}
 }
 
+var _f64x2_pmin = _f64x2_pmin_0
+
 type Instr_f64x2_pmax struct{}
 
-func _f64x2_pmax() Instr_f64x2_pmax {
+func _f64x2_pmax_0() Instr_f64x2_pmax {
 	return Instr_f64x2_pmax{}
 }
 
+var _f64x2_pmax = _f64x2_pmax_0
+
 type Instr_f64x2_promote_low_f32x4 struct{}
 
-func _f64x2_promote_low_f32x4() Instr_f64x2_promote_low_f32x4 {
+func _f64x2_promote_low_f32x4_0() Instr_f64x2_promote_low_f32x4 {
 	return Instr_f64x2_promote_low_f32x4{}
 }
 
+var _f64x2_promote_low_f32x4 = _f64x2_promote_low_f32x4_0
+
 type Instr_f64x2_convert_low_i32x4_s struct{}
 
-func _f64x2_convert_low_i32x4_s() Instr_f64x2_convert_low_i32x4_s {
+func _f64x2_convert_low_i32x4_s_0() Instr_f64x2_convert_low_i32x4_s {
 	return Instr_f64x2_convert_low_i32x4_s{}
 }
 
+var _f64x2_convert_low_i32x4_s = _f64x2_convert_low_i32x4_s_0
+
 type Instr_f64x2_convert_low_i32x4_u struct{}
 
-func _f64x2_convert_low_i32x4_u() Instr_f64x2_convert_low_i32x4_u {
+func _f64x2_convert_low_i32x4_u_0() Instr_f64x2_convert_low_i32x4_u {
 	return Instr_f64x2_convert_low_i32x4_u{}
 }
 
+var _f64x2_convert_low_i32x4_u = _f64x2_convert_low_i32x4_u_0
+
 type Instr_i8x16_relaxed_swizzle struct{}
 
-func _i8x16_relaxed_swizzle() Instr_i8x16_relaxed_swizzle {
+func _i8x16_relaxed_swizzle_0() Instr_i8x16_relaxed_swizzle {
 	return Instr_i8x16_relaxed_swizzle{}
 }
 
+var _i8x16_relaxed_swizzle = _i8x16_relaxed_swizzle_0
+
 type Instr_i8x16_relaxed_laneselect struct{}
 
-func _i8x16_relaxed_laneselect() Instr_i8x16_relaxed_laneselect {
+func _i8x16_relaxed_laneselect_0() Instr_i8x16_relaxed_laneselect {
 	return Instr_i8x16_relaxed_laneselect{}
 }
 
+var _i8x16_relaxed_laneselect = _i8x16_relaxed_laneselect_0
+
 type Instr_i16x8_relaxed_q15mulr_s struct{}
 
-func _i16x8_relaxed_q15mulr_s() Instr_i16x8_relaxed_q15mulr_s {
+func _i16x8_relaxed_q15mulr_s_0() Instr_i16x8_relaxed_q15mulr_s {
 	return Instr_i16x8_relaxed_q15mulr_s{}
 }
 
+var _i16x8_relaxed_q15mulr_s = _i16x8_relaxed_q15mulr_s_0
+
 type Instr_i16x8_relaxed_laneselect struct{}
 
-func _i16x8_relaxed_laneselect() Instr_i16x8_relaxed_laneselect {
+func _i16x8_relaxed_laneselect_0() Instr_i16x8_relaxed_laneselect {
 	return Instr_i16x8_relaxed_laneselect{}
 }
 
+var _i16x8_relaxed_laneselect = _i16x8_relaxed_laneselect_0
+
 type Instr_i32x4_relaxed_trunc_f32x4_s struct{}
 
-func _i32x4_relaxed_trunc_f32x4_s() Instr_i32x4_relaxed_trunc_f32x4_s {
+func _i32x4_relaxed_trunc_f32x4_s_0() Instr_i32x4_relaxed_trunc_f32x4_s {
 	return Instr_i32x4_relaxed_trunc_f32x4_s{}
 }
 
+var _i32x4_relaxed_trunc_f32x4_s = _i32x4_relaxed_trunc_f32x4_s_0
+
 type Instr_i32x4_relaxed_trunc_f32x4_u struct{}
 
-func _i32x4_relaxed_trunc_f32x4_u() Instr_i32x4_relaxed_trunc_f32x4_u {
+func _i32x4_relaxed_trunc_f32x4_u_0() Instr_i32x4_relaxed_trunc_f32x4_u {
 	return Instr_i32x4_relaxed_trunc_f32x4_u{}
 }
 
+var _i32x4_relaxed_trunc_f32x4_u = _i32x4_relaxed_trunc_f32x4_u_0
+
 type Instr_i32x4_relaxed_trunc_f64x2_s_zero struct{}
 
-func _i32x4_relaxed_trunc_f64x2_s_zero() Instr_i32x4_relaxed_trunc_f64x2_s_zero {
+func _i32x4_relaxed_trunc_f64x2_s_zero_0() Instr_i32x4_relaxed_trunc_f64x2_s_zero {
 	return Instr_i32x4_relaxed_trunc_f64x2_s_zero{}
 }
 
+var _i32x4_relaxed_trunc_f64x2_s_zero = _i32x4_relaxed_trunc_f64x2_s_zero_0
+
 type Instr_i32x4_relaxed_trunc_f64x2_u_zero struct{}
 
-func _i32x4_relaxed_trunc_f64x2_u_zero() Instr_i32x4_relaxed_trunc_f64x2_u_zero {
+func _i32x4_relaxed_trunc_f64x2_u_zero_0() Instr_i32x4_relaxed_trunc_f64x2_u_zero {
 	return Instr_i32x4_relaxed_trunc_f64x2_u_zero{}
 }
 
+var _i32x4_relaxed_trunc_f64x2_u_zero = _i32x4_relaxed_trunc_f64x2_u_zero_0
+
 type Instr_i32x4_relaxed_laneselect struct{}
 
-func _i32x4_relaxed_laneselect() Instr_i32x4_relaxed_laneselect {
+func _i32x4_relaxed_laneselect_0() Instr_i32x4_relaxed_laneselect {
 	return Instr_i32x4_relaxed_laneselect{}
 }
 
+var _i32x4_relaxed_laneselect = _i32x4_relaxed_laneselect_0
+
 type Instr_i64x2_relaxed_laneselect struct{}
 
-func _i64x2_relaxed_laneselect() Instr_i64x2_relaxed_laneselect {
+func _i64x2_relaxed_laneselect_0() Instr_i64x2_relaxed_laneselect {
 	return Instr_i64x2_relaxed_laneselect{}
 }
 
+var _i64x2_relaxed_laneselect = _i64x2_relaxed_laneselect_0
+
 type Instr_f32x4_relaxed_madd struct{}
 
-func _f32x4_relaxed_madd() Instr_f32x4_relaxed_madd {
+func _f32x4_relaxed_madd_0() Instr_f32x4_relaxed_madd {
 	return Instr_f32x4_relaxed_madd{}
 }
 
+var _f32x4_relaxed_madd = _f32x4_relaxed_madd_0
+
 type Instr_f32x4_relaxed_nmadd struct{}
 
-func _f32x4_relaxed_nmadd() Instr_f32x4_relaxed_nmadd {
+func _f32x4_relaxed_nmadd_0() Instr_f32x4_relaxed_nmadd {
 	return Instr_f32x4_relaxed_nmadd{}
 }
 
+var _f32x4_relaxed_nmadd = _f32x4_relaxed_nmadd_0
+
 type Instr_f32x4_relaxed_min struct{}
 
-func _f32x4_relaxed_min() Instr_f32x4_relaxed_min {
+func _f32x4_relaxed_min_0() Instr_f32x4_relaxed_min {
 	return Instr_f32x4_relaxed_min{}
 }
 
+var _f32x4_relaxed_min = _f32x4_relaxed_min_0
+
 type Instr_f32x4_relaxed_max struct{}
 
-func _f32x4_relaxed_max() Instr_f32x4_relaxed_max {
+func _f32x4_relaxed_max_0() Instr_f32x4_relaxed_max {
 	return Instr_f32x4_relaxed_max{}
 }
 
+var _f32x4_relaxed_max = _f32x4_relaxed_max_0
+
 type Instr_f64x2_relaxed_madd struct{}
 
-func _f64x2_relaxed_madd() Instr_f64x2_relaxed_madd {
+func _f64x2_relaxed_madd_0() Instr_f64x2_relaxed_madd {
 	return Instr_f64x2_relaxed_madd{}
 }
 
+var _f64x2_relaxed_madd = _f64x2_relaxed_madd_0
+
 type Instr_f64x2_relaxed_nmadd struct{}
 
-func _f64x2_relaxed_nmadd() Instr_f64x2_relaxed_nmadd {
+func _f64x2_relaxed_nmadd_0() Instr_f64x2_relaxed_nmadd {
 	return Instr_f64x2_relaxed_nmadd{}
 }
 
+var _f64x2_relaxed_nmadd = _f64x2_relaxed_nmadd_0
+
 type Instr_f64x2_relaxed_min struct{}
 
-func _f64x2_relaxed_min() Instr_f64x2_relaxed_min {
+func _f64x2_relaxed_min_0() Instr_f64x2_relaxed_min {
 	return Instr_f64x2_relaxed_min{}
 }
 
+var _f64x2_relaxed_min = _f64x2_relaxed_min_0
+
 type Instr_f64x2_relaxed_max struct{}
 
-func _f64x2_relaxed_max() Instr_f64x2_relaxed_max {
+func _f64x2_relaxed_max_0() Instr_f64x2_relaxed_max {
 	return Instr_f64x2_relaxed_max{}
 }
 
+var _f64x2_relaxed_max = _f64x2_relaxed_max_0
+
 type Instr_i16x8_relaxed_dot_i8x16_i7x16_s struct{}
 
-func _i16x8_relaxed_dot_i8x16_i7x16_s() Instr_i16x8_relaxed_dot_i8x16_i7x16_s {
+func _i16x8_relaxed_dot_i8x16_i7x16_s_0() Instr_i16x8_relaxed_dot_i8x16_i7x16_s {
 	return Instr_i16x8_relaxed_dot_i8x16_i7x16_s{}
 }
 
+var _i16x8_relaxed_dot_i8x16_i7x16_s = _i16x8_relaxed_dot_i8x16_i7x16_s_0
+
 type Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s struct{}
 
-func _i32x4_relaxed_dot_i8x16_i7x16_add_s() Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s {
+func _i32x4_relaxed_dot_i8x16_i7x16_add_s_0() Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s {
 	return Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s{}
 }
+
+var _i32x4_relaxed_dot_i8x16_i7x16_add_s = _i32x4_relaxed_dot_i8x16_i7x16_add_s_0
+
 func _bit_2(_i OInt, _n OInt) bool {
 	__tmp1 := _operatorNotEq_2(_int_operatorland_2(_n, _int_operatorlsl_2(1, _i)), 0)
 	return __tmp1
 }
 
-func _byte(_s *Stream) OInt {
-	__tmp1 := _get(_s)
+func _byte_1(_s *Stream) OInt {
+	__tmp1 := _get_1(_s)
 	return __tmp1
 }
 
-func _word16(_s *Stream) OInt {
-	__tmp1 := _byte(_s)
+func _word16_1(_s *Stream) OInt {
+	__tmp1 := _byte_1(_s)
 	_lo := __tmp1
-	__tmp4 := _byte(_s)
+	__tmp4 := _byte_1(_s)
 	_hi := __tmp4
 	__tmp7 := _int_operatorPlus_2(_int_operatorlsl_2(_hi, 8), _lo)
 	return __tmp7
 }
 
-func _word32(_s *Stream) OInt32 {
-	__tmp1 := _Int32_of_int(_word16(_s))
+func _word32_1(_s *Stream) OInt32 {
+	__tmp1 := _Int32_of_int_1(_word16_1(_s))
 	_lo := __tmp1
-	__tmp5 := _Int32_of_int(_word16(_s))
+	__tmp5 := _Int32_of_int_1(_word16_1(_s))
 	_hi := __tmp5
 	__tmp9 := _Int32_add_2(_lo, _Int32_shift_left_2(_hi, 16))
 	return __tmp9
 }
 
-func _word64(_s *Stream) OInt64 {
-	__tmp1 := _I64_convert_extend_i32_u(_word32(_s))
+func _word64_1(_s *Stream) OInt64 {
+	__tmp1 := _I64_convert_extend_i32_u_1(_word32_1(_s))
 	_lo := __tmp1
-	__tmp5 := _I64_convert_extend_i32_u(_word32(_s))
+	__tmp5 := _I64_convert_extend_i32_u_1(_word32_1(_s))
 	_hi := __tmp5
 	__tmp9 := _Int64_add_2(_lo, _Int64_shift_left_2(_hi, 32))
 	return __tmp9
 }
 
 func _uN_2(_n OInt, _s *Stream) OInt64 {
-	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos(_s), "integer representation too long")
+	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := _byte(_s)
+	__tmp7 := _byte_1(_s)
 	_b := __tmp7
-	__tmp10 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_int_operatorland_2(_b, 0x7f), _int_operatorlsl_2(1, _n))), _s, _int_operatorMinus_2(_pos(_s), 1), "integer too large")
+	__tmp10 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_int_operatorland_2(_b, 0x7f), _int_operatorlsl_2(1, _n))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
 	_ = __tmp10
-	__tmp23 := _Int64_of_int(_int_operatorland_2(_b, 0x7f))
+	__tmp23 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
 	_x := __tmp23
 	var __tmp27 OInt64
 	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
@@ -3783,15 +4774,15 @@ func _uN_2(_n OInt, _s *Stream) OInt64 {
 }
 
 func _sN_2(_n OInt, _s *Stream) OInt64 {
-	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos(_s), "integer representation too long")
+	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := _byte(_s)
+	__tmp7 := _byte_1(_s)
 	_b := __tmp7
 	__tmp10 := _int_operatorland_2(_int_operatorlsl_2(-(1), _int_operatorMinus_2(_n, 1)), 0x7f)
 	_mask := __tmp10
-	__tmp15 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _bool_operatorOr_2(_operatorEq_2(_int_operatorland_2(_b, _mask), 0), _operatorEq_2(_int_operatorland_2(_b, _mask), _mask))), _s, _int_operatorMinus_2(_pos(_s), 1), "integer too large")
+	__tmp15 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _bool_operatorOr_2(_operatorEq_2(_int_operatorland_2(_b, _mask), 0), _operatorEq_2(_int_operatorland_2(_b, _mask), _mask))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
 	_ = __tmp15
-	__tmp33 := _Int64_of_int(_int_operatorland_2(_b, 0x7f))
+	__tmp33 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
 	_x := __tmp33
 	var __tmp37 OInt64
 	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
@@ -3812,54 +4803,54 @@ func _sN_2(_n OInt, _s *Stream) OInt64 {
 
 }
 
-func _u32(_s *Stream) OInt32 {
-	__tmp1 := _Int64_to_int32(_uN_2(32, _s))
+func _u32_1(_s *Stream) OInt32 {
+	__tmp1 := _Int64_to_int32_1(_uN_2(32, _s))
 	return __tmp1
 }
 
-func _u64(_s *Stream) OInt64 {
+func _u64_1(_s *Stream) OInt64 {
 	__tmp1 := _uN_2(64, _s)
 	return __tmp1
 }
 
-func _s7(_s *Stream) OInt {
-	__tmp1 := _Int64_to_int(_sN_2(7, _s))
+func _s7_1(_s *Stream) OInt {
+	__tmp1 := _Int64_to_int_1(_sN_2(7, _s))
 	return __tmp1
 }
 
-func _s32(_s *Stream) OInt32 {
-	__tmp1 := _Int64_to_int32(_sN_2(32, _s))
+func _s32_1(_s *Stream) OInt32 {
+	__tmp1 := _Int64_to_int32_1(_sN_2(32, _s))
 	return __tmp1
 }
 
-func _s33(_s *Stream) OInt32 {
-	__tmp1 := _I32_convert_wrap_i64(_sN_2(33, _s))
+func _s33_1(_s *Stream) OInt32 {
+	__tmp1 := _I32_convert_wrap_i64_1(_sN_2(33, _s))
 	return __tmp1
 }
 
-func _s64(_s *Stream) OInt64 {
+func _s64_1(_s *Stream) OInt64 {
 	__tmp1 := _sN_2(64, _s)
 	return __tmp1
 }
 
-func _f32(_s *Stream) float32 {
-	__tmp1 := _F32_of_bits(_word32(_s))
+func _f32_1(_s *Stream) float32 {
+	__tmp1 := _F32_of_bits_1(_word32_1(_s))
 	return __tmp1
 }
 
-func _f64(_s *Stream) float64 {
-	__tmp1 := _F64_of_bits(_word64(_s))
+func _f64_1(_s *Stream) float64 {
+	__tmp1 := _F64_of_bits_1(_word64_1(_s))
 	return __tmp1
 }
 
-func _len32(_s *Stream) OInt {
-	__tmp1 := _pos(_s)
+func _len32_1(_s *Stream) OInt {
+	__tmp1 := _pos_1(_s)
 	_pos := __tmp1
-	__tmp4 := _u32(_s)
+	__tmp4 := _u32_1(_s)
 	_n := __tmp4
 	var __tmp7 OInt
-	if _I32_le_u_2(_n, _Int32_of_int(_int_operatorMinus_2(_len(_s), _pos))) {
-		__tmp15 := _Int32_to_int(_n)
+	if _I32_le_u_2(_n, _Int32_of_int_1(_int_operatorMinus_2(_len_1(_s), _pos))) {
+		__tmp15 := _Int32_to_int_1(_n)
 		__tmp7 = __tmp15
 	} else {
 		__tmp17 := _error_3(_s, _pos, "length out of bounds")
@@ -3868,22 +4859,22 @@ func _len32(_s *Stream) OInt {
 	return __tmp7
 }
 
-func _string(_s *Stream) string {
-	__tmp1 := _len32(_s)
+func _string_1(_s *Stream) string {
+	__tmp1 := _len32_1(_s)
 	_n := __tmp1
 	__tmp4 := _get_string_2(_n, _s)
 	return __tmp4
 }
 
-func _op(_s *Stream) OInt {
-	__tmp1 := _byte(_s)
+func _op_1(_s *Stream) OInt {
+	__tmp1 := _byte_1(_s)
 	return __tmp1
 }
 
-func _memop(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
-	__tmp1 := _pos(_s)
+func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
+	__tmp1 := _pos_1(_s)
 	_pos := __tmp1
-	__tmp4 := _u32(_s)
+	__tmp4 := _u32_1(_s)
 	_flags := __tmp4
 	__tmp7 := _require_4(_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
@@ -3898,47 +4889,47 @@ func _memop(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 		__tmp16 = __tmp21
 	}
 	_x := __tmp16
-	__tmp24 := _Int32_to_int(_Int32_logand_2(_flags, 0x3f))
+	__tmp24 := _Int32_to_int_1(_Int32_logand_2(_flags, 0x3f))
 	_align := __tmp24
-	__tmp28 := _u64(_s)
+	__tmp28 := _u64_1(_s)
 	_offset := __tmp28
 	return _x, _align, _offset
 
 }
 
-func _block_type(_s *Stream) BlockType {
+func _block_type_1(_s *Stream) BlockType {
 	__tmp1 := _either_2([]TODO /* stream -> 'a */ {func(_s *Stream) BlockType {
-		__tmp2 := _VarBlockType(_at_2(func(_s *Stream) OInt32 {
-			__tmp4 := _as_stat_var(_var_type_2(_s33, _s))
+		__tmp2 := _VarBlockType_1(_at_2(func(_s *Stream) OInt32 {
+			__tmp4 := _as_stat_var_1(_var_type_2(_s33, _s))
 			return __tmp4
 		}, _s))
 		return __tmp2
 	}, func(_s *Stream) BlockType {
 		__tmp9 := _expect_3(0x40, _s, "")
 		_ = __tmp9
-		__tmp11 := _ValBlockType(_None)
+		__tmp11 := _ValBlockType_1(_None)
 		return __tmp11
 
 	}, func(_s *Stream) BlockType {
-		__tmp13 := _ValBlockType(_Some(_val_type(_s)))
+		__tmp13 := _ValBlockType_1(_Some_1(_val_type_1(_s)))
 		return __tmp13
 	}}, _s)
 	return __tmp1
 }
 
-func _local(_s *Stream) (OInt32, *Phrase[Local_]) {
-	__tmp1 := _u32(_s)
+func _local_1(_s *Stream) (OInt32, *Phrase[Local_]) {
+	__tmp1 := _u32_1(_s)
 	_n := __tmp1
 	__tmp4 := _at_2(_val_type, _s)
 	_t := __tmp4
 	return _n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)
 }
 
-func _instr(_s *Stream) Instruction_ {
-	__tmp1 := _pos(_s)
+func _instr_1(_s *Stream) Instruction_ {
+	__tmp1 := _pos_1(_s)
 	_pos := __tmp1
 	var __tmp4 Instruction_
-	switch __tmp5 := _op(_s); __tmp5 {
+	switch __tmp5 := _op_1(_s); __tmp5 {
 	case 0x00:
 		__tmp8 := _unreachable
 		__tmp4 = __tmp8
@@ -3946,43 +4937,43 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp9 := _nop
 		__tmp4 = __tmp9
 	case 0x02:
-		__tmp10 := _block_type(_s)
+		__tmp10 := _block_type_1(_s)
 		_bt := __tmp10
-		__tmp13 := _instr_block(_s)
+		__tmp13 := _instr_block_1(_s)
 		_es_ := __tmp13
-		__tmp16 := _end_(_s)
+		__tmp16 := _end__1(_s)
 		_ = __tmp16
 		__tmp18 := _block_2(_bt, _es_)
 
 		__tmp4 = __tmp18
 	case 0x03:
-		__tmp21 := _block_type(_s)
+		__tmp21 := _block_type_1(_s)
 		_bt := __tmp21
-		__tmp24 := _instr_block(_s)
+		__tmp24 := _instr_block_1(_s)
 		_es_ := __tmp24
-		__tmp27 := _end_(_s)
+		__tmp27 := _end__1(_s)
 		_ = __tmp27
 		__tmp29 := _loop_2(_bt, _es_)
 
 		__tmp4 = __tmp29
 	case 0x04:
-		__tmp32 := _block_type(_s)
+		__tmp32 := _block_type_1(_s)
 		_bt := __tmp32
-		__tmp35 := _instr_block(_s)
+		__tmp35 := _instr_block_1(_s)
 		_es1 := __tmp35
 		var __tmp38 Instruction_
-		if _operatorEq_2(_peek(_s), _Some(0x05)) {
+		if _operatorEq_2(_peek_1(_s), _Some_1(0x05)) {
 			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
-			__tmp45 := _instr_block(_s)
+			__tmp45 := _instr_block_1(_s)
 			_es2 := __tmp45
-			__tmp48 := _end_(_s)
+			__tmp48 := _end__1(_s)
 			_ = __tmp48
 			__tmp50 := _if__3(_bt, _es1, _es2)
 
 			__tmp38 = __tmp50
 		} else {
-			__tmp54 := _end_(_s)
+			__tmp54 := _end__1(_s)
 			_ = __tmp54
 			__tmp56 := _if__3(_bt, _es1, []*Phrase[Instruction_]{})
 
@@ -3997,7 +4988,7 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp63 := _illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp63
 	case 0x08:
-		__tmp67 := _throw(_at_2(_var, _s))
+		__tmp67 := _throw_1(_at_2(_var, _s))
 		__tmp4 = __tmp67
 	case 0x09:
 		_b := __tmp5
@@ -4010,13 +5001,13 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp77 := _error_3(_s, _pos, "misplaced END opcode")
 		__tmp4 = __tmp77
 	case 0x0c:
-		__tmp80 := _br(_at_2(_var, _s))
+		__tmp80 := _br_1(_at_2(_var, _s))
 		__tmp4 = __tmp80
 	case 0x0d:
-		__tmp84 := _br_if(_at_2(_var, _s))
+		__tmp84 := _br_if_1(_at_2(_var, _s))
 		__tmp4 = __tmp84
 	case 0x0e:
-		__tmp88 := _vec_2(_at(_var), _s)
+		__tmp88 := _vec_2(_at_1(_var), _s)
 		_xs := __tmp88
 		__tmp93 := _at_2(_var, _s)
 		_x := __tmp93
@@ -4026,7 +5017,7 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp100 := _return
 		__tmp4 = __tmp100
 	case 0x10:
-		__tmp101 := _call(_at_2(_var, _s))
+		__tmp101 := _call_1(_at_2(_var, _s))
 		__tmp4 = __tmp101
 	case 0x11:
 		__tmp105 := _at_2(_var, _s)
@@ -4036,7 +5027,7 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp113 := _call_indirect_2(_x, _y)
 		__tmp4 = __tmp113
 	case 0x12:
-		__tmp116 := _return_call(_at_2(_var, _s))
+		__tmp116 := _return_call_1(_at_2(_var, _s))
 		__tmp4 = __tmp116
 	case 0x13:
 		__tmp120 := _at_2(_var, _s)
@@ -4046,10 +5037,10 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp128 := _return_call_indirect_2(_x, _y)
 		__tmp4 = __tmp128
 	case 0x14:
-		__tmp131 := _call_ref(_at_2(_var, _s))
+		__tmp131 := _call_ref_1(_at_2(_var, _s))
 		__tmp4 = __tmp131
 	case 0x15:
-		__tmp135 := _return_call_ref(_at_2(_var, _s))
+		__tmp135 := _return_call_ref_1(_at_2(_var, _s))
 		__tmp4 = __tmp135
 	case 0x16, 0x17, 0x18, 0x19:
 		_b := __tmp5
@@ -4059,184 +5050,184 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp144 := _drop
 		__tmp4 = __tmp144
 	case 0x1b:
-		__tmp145 := _select(_None)
+		__tmp145 := _select_1(_None)
 		__tmp4 = __tmp145
 	case 0x1c:
-		__tmp147 := _select(_Some(_vec_2(_val_type, _s)))
+		__tmp147 := _select_1(_Some_1(_vec_2(_val_type, _s)))
 		__tmp4 = __tmp147
 	case 0x1d, 0x1e:
 		_b := __tmp5
 		__tmp153 := _illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp153
 	case 0x1f:
-		__tmp157 := _block_type(_s)
+		__tmp157 := _block_type_1(_s)
 		_bt := __tmp157
-		__tmp160 := _vec_2(_at(_catch), _s)
+		__tmp160 := _vec_2(_at_1(_catch), _s)
 		_cs := __tmp160
-		__tmp165 := _instr_block(_s)
+		__tmp165 := _instr_block_1(_s)
 		_es := __tmp165
-		__tmp168 := _end_(_s)
+		__tmp168 := _end__1(_s)
 		_ = __tmp168
 		__tmp170 := _try_table_3(_bt, _cs, _es)
 
 		__tmp4 = __tmp170
 	case 0x20:
-		__tmp174 := _local_get(_at_2(_var, _s))
+		__tmp174 := _local_get_1(_at_2(_var, _s))
 		__tmp4 = __tmp174
 	case 0x21:
-		__tmp178 := _local_set(_at_2(_var, _s))
+		__tmp178 := _local_set_1(_at_2(_var, _s))
 		__tmp4 = __tmp178
 	case 0x22:
-		__tmp182 := _local_tee(_at_2(_var, _s))
+		__tmp182 := _local_tee_1(_at_2(_var, _s))
 		__tmp4 = __tmp182
 	case 0x23:
-		__tmp186 := _global_get(_at_2(_var, _s))
+		__tmp186 := _global_get_1(_at_2(_var, _s))
 		__tmp4 = __tmp186
 	case 0x24:
-		__tmp190 := _global_set(_at_2(_var, _s))
+		__tmp190 := _global_set_1(_at_2(_var, _s))
 		__tmp4 = __tmp190
 	case 0x25:
-		__tmp194 := _table_get(_at_2(_var, _s))
+		__tmp194 := _table_get_1(_at_2(_var, _s))
 		__tmp4 = __tmp194
 	case 0x26:
-		__tmp198 := _table_set(_at_2(_var, _s))
+		__tmp198 := _table_set_1(_at_2(_var, _s))
 		__tmp4 = __tmp198
 	case 0x27:
 		_b := __tmp5
 		__tmp203 := _illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp203
 	case 0x28:
-		__tmp207, __tmp208, __tmp209 := _memop(_s)
+		__tmp207, __tmp208, __tmp209 := _memop_1(_s)
 		_x, _a, _o := __tmp207, __tmp208, __tmp209
 		__tmp214 := _i32_load_3(_x, _a, _o)
 		__tmp4 = __tmp214
 	case 0x29:
-		__tmp218, __tmp219, __tmp220 := _memop(_s)
+		__tmp218, __tmp219, __tmp220 := _memop_1(_s)
 		_x, _a, _o := __tmp218, __tmp219, __tmp220
 		__tmp225 := _i64_load_3(_x, _a, _o)
 		__tmp4 = __tmp225
 	case 0x2a:
-		__tmp229, __tmp230, __tmp231 := _memop(_s)
+		__tmp229, __tmp230, __tmp231 := _memop_1(_s)
 		_x, _a, _o := __tmp229, __tmp230, __tmp231
 		__tmp236 := _f32_load_3(_x, _a, _o)
 		__tmp4 = __tmp236
 	case 0x2b:
-		__tmp240, __tmp241, __tmp242 := _memop(_s)
+		__tmp240, __tmp241, __tmp242 := _memop_1(_s)
 		_x, _a, _o := __tmp240, __tmp241, __tmp242
 		__tmp247 := _f64_load_3(_x, _a, _o)
 		__tmp4 = __tmp247
 	case 0x2c:
-		__tmp251, __tmp252, __tmp253 := _memop(_s)
+		__tmp251, __tmp252, __tmp253 := _memop_1(_s)
 		_x, _a, _o := __tmp251, __tmp252, __tmp253
 		__tmp258 := _i32_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp258
 	case 0x2d:
-		__tmp262, __tmp263, __tmp264 := _memop(_s)
+		__tmp262, __tmp263, __tmp264 := _memop_1(_s)
 		_x, _a, _o := __tmp262, __tmp263, __tmp264
 		__tmp269 := _i32_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp269
 	case 0x2e:
-		__tmp273, __tmp274, __tmp275 := _memop(_s)
+		__tmp273, __tmp274, __tmp275 := _memop_1(_s)
 		_x, _a, _o := __tmp273, __tmp274, __tmp275
 		__tmp280 := _i32_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp280
 	case 0x2f:
-		__tmp284, __tmp285, __tmp286 := _memop(_s)
+		__tmp284, __tmp285, __tmp286 := _memop_1(_s)
 		_x, _a, _o := __tmp284, __tmp285, __tmp286
 		__tmp291 := _i32_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp291
 	case 0x30:
-		__tmp295, __tmp296, __tmp297 := _memop(_s)
+		__tmp295, __tmp296, __tmp297 := _memop_1(_s)
 		_x, _a, _o := __tmp295, __tmp296, __tmp297
 		__tmp302 := _i64_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp302
 	case 0x31:
-		__tmp306, __tmp307, __tmp308 := _memop(_s)
+		__tmp306, __tmp307, __tmp308 := _memop_1(_s)
 		_x, _a, _o := __tmp306, __tmp307, __tmp308
 		__tmp313 := _i64_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp313
 	case 0x32:
-		__tmp317, __tmp318, __tmp319 := _memop(_s)
+		__tmp317, __tmp318, __tmp319 := _memop_1(_s)
 		_x, _a, _o := __tmp317, __tmp318, __tmp319
 		__tmp324 := _i64_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp324
 	case 0x33:
-		__tmp328, __tmp329, __tmp330 := _memop(_s)
+		__tmp328, __tmp329, __tmp330 := _memop_1(_s)
 		_x, _a, _o := __tmp328, __tmp329, __tmp330
 		__tmp335 := _i64_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp335
 	case 0x34:
-		__tmp339, __tmp340, __tmp341 := _memop(_s)
+		__tmp339, __tmp340, __tmp341 := _memop_1(_s)
 		_x, _a, _o := __tmp339, __tmp340, __tmp341
 		__tmp346 := _i64_load32_s_3(_x, _a, _o)
 		__tmp4 = __tmp346
 	case 0x35:
-		__tmp350, __tmp351, __tmp352 := _memop(_s)
+		__tmp350, __tmp351, __tmp352 := _memop_1(_s)
 		_x, _a, _o := __tmp350, __tmp351, __tmp352
 		__tmp357 := _i64_load32_u_3(_x, _a, _o)
 		__tmp4 = __tmp357
 	case 0x36:
-		__tmp361, __tmp362, __tmp363 := _memop(_s)
+		__tmp361, __tmp362, __tmp363 := _memop_1(_s)
 		_x, _a, _o := __tmp361, __tmp362, __tmp363
 		__tmp368 := _i32_store_3(_x, _a, _o)
 		__tmp4 = __tmp368
 	case 0x37:
-		__tmp372, __tmp373, __tmp374 := _memop(_s)
+		__tmp372, __tmp373, __tmp374 := _memop_1(_s)
 		_x, _a, _o := __tmp372, __tmp373, __tmp374
 		__tmp379 := _i64_store_3(_x, _a, _o)
 		__tmp4 = __tmp379
 	case 0x38:
-		__tmp383, __tmp384, __tmp385 := _memop(_s)
+		__tmp383, __tmp384, __tmp385 := _memop_1(_s)
 		_x, _a, _o := __tmp383, __tmp384, __tmp385
 		__tmp390 := _f32_store_3(_x, _a, _o)
 		__tmp4 = __tmp390
 	case 0x39:
-		__tmp394, __tmp395, __tmp396 := _memop(_s)
+		__tmp394, __tmp395, __tmp396 := _memop_1(_s)
 		_x, _a, _o := __tmp394, __tmp395, __tmp396
 		__tmp401 := _f64_store_3(_x, _a, _o)
 		__tmp4 = __tmp401
 	case 0x3a:
-		__tmp405, __tmp406, __tmp407 := _memop(_s)
+		__tmp405, __tmp406, __tmp407 := _memop_1(_s)
 		_x, _a, _o := __tmp405, __tmp406, __tmp407
 		__tmp412 := _i32_store8_3(_x, _a, _o)
 		__tmp4 = __tmp412
 	case 0x3b:
-		__tmp416, __tmp417, __tmp418 := _memop(_s)
+		__tmp416, __tmp417, __tmp418 := _memop_1(_s)
 		_x, _a, _o := __tmp416, __tmp417, __tmp418
 		__tmp423 := _i32_store16_3(_x, _a, _o)
 		__tmp4 = __tmp423
 	case 0x3c:
-		__tmp427, __tmp428, __tmp429 := _memop(_s)
+		__tmp427, __tmp428, __tmp429 := _memop_1(_s)
 		_x, _a, _o := __tmp427, __tmp428, __tmp429
 		__tmp434 := _i64_store8_3(_x, _a, _o)
 		__tmp4 = __tmp434
 	case 0x3d:
-		__tmp438, __tmp439, __tmp440 := _memop(_s)
+		__tmp438, __tmp439, __tmp440 := _memop_1(_s)
 		_x, _a, _o := __tmp438, __tmp439, __tmp440
 		__tmp445 := _i64_store16_3(_x, _a, _o)
 		__tmp4 = __tmp445
 	case 0x3e:
-		__tmp449, __tmp450, __tmp451 := _memop(_s)
+		__tmp449, __tmp450, __tmp451 := _memop_1(_s)
 		_x, _a, _o := __tmp449, __tmp450, __tmp451
 		__tmp456 := _i64_store32_3(_x, _a, _o)
 		__tmp4 = __tmp456
 	case 0x3f:
-		__tmp460 := _memory_size(_at_2(_var, _s))
+		__tmp460 := _memory_size_1(_at_2(_var, _s))
 		__tmp4 = __tmp460
 	case 0x40:
-		__tmp464 := _memory_grow(_at_2(_var, _s))
+		__tmp464 := _memory_grow_1(_at_2(_var, _s))
 		__tmp4 = __tmp464
 	case 0x41:
-		__tmp468 := _i32_const(_at_2(_s32, _s))
+		__tmp468 := _i32_const_1(_at_2(_s32, _s))
 		__tmp4 = __tmp468
 	case 0x42:
-		__tmp472 := _i64_const(_at_2(_s64, _s))
+		__tmp472 := _i64_const_1(_at_2(_s64, _s))
 		__tmp4 = __tmp472
 	case 0x43:
-		__tmp476 := _f32_const(_at_2(_f32, _s))
+		__tmp476 := _f32_const_1(_at_2(_f32, _s))
 		__tmp4 = __tmp476
 	case 0x44:
-		__tmp480 := _f64_const(_at_2(_f64, _s))
+		__tmp480 := _f64_const_1(_at_2(_f64, _s))
 		__tmp4 = __tmp480
 	case 0x45:
 		__tmp484 := _i32_eqz
@@ -4627,13 +5618,13 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp613 := _illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp613
 	case 0xd0:
-		__tmp617 := _ref_null(_heap_type(_s))
+		__tmp617 := _ref_null_1(_heap_type_1(_s))
 		__tmp4 = __tmp617
 	case 0xd1:
 		__tmp620 := _ref_is_null
 		__tmp4 = __tmp620
 	case 0xd2:
-		__tmp621 := _ref_func(_at_2(_var, _s))
+		__tmp621 := _ref_func_1(_at_2(_var, _s))
 		__tmp4 = __tmp621
 	case 0xd3:
 		__tmp625 := _ref_eq
@@ -4642,20 +5633,20 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp626 := _ref_as_non_null
 		__tmp4 = __tmp626
 	case 0xd5:
-		__tmp627 := _br_on_null(_at_2(_var, _s))
+		__tmp627 := _br_on_null_1(_at_2(_var, _s))
 		__tmp4 = __tmp627
 	case 0xd6:
-		__tmp631 := _br_on_non_null(_at_2(_var, _s))
+		__tmp631 := _br_on_non_null_1(_at_2(_var, _s))
 		__tmp4 = __tmp631
 	case 0xfb:
 		_b := __tmp5
 		var __tmp636 Instruction_
-		switch __tmp637 := _u32(_s); __tmp637 {
+		switch __tmp637 := _u32_1(_s); __tmp637 {
 		case 0x00:
-			__tmp640 := _struct_new(_at_2(_var, _s))
+			__tmp640 := _struct_new_1(_at_2(_var, _s))
 			__tmp636 = __tmp640
 		case 0x01:
-			__tmp644 := _struct_new_default(_at_2(_var, _s))
+			__tmp644 := _struct_new_default_1(_at_2(_var, _s))
 			__tmp636 = __tmp644
 		case 0x02:
 			__tmp648 := _at_2(_var, _s)
@@ -4686,15 +5677,15 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp689 := _struct_set_2(_x, _y)
 			__tmp636 = __tmp689
 		case 0x06:
-			__tmp692 := _array_new(_at_2(_var, _s))
+			__tmp692 := _array_new_1(_at_2(_var, _s))
 			__tmp636 = __tmp692
 		case 0x07:
-			__tmp696 := _array_new_default(_at_2(_var, _s))
+			__tmp696 := _array_new_default_1(_at_2(_var, _s))
 			__tmp636 = __tmp696
 		case 0x08:
 			__tmp700 := _at_2(_var, _s)
 			_x := __tmp700
-			__tmp704 := _u32(_s)
+			__tmp704 := _u32_1(_s)
 			_n := __tmp704
 			__tmp707 := _array_new_fixed_2(_x, _n)
 			__tmp636 = __tmp707
@@ -4713,22 +5704,22 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp729 := _array_new_elem_2(_x, _y)
 			__tmp636 = __tmp729
 		case 0x0b:
-			__tmp732 := _array_get(_at_2(_var, _s))
+			__tmp732 := _array_get_1(_at_2(_var, _s))
 			__tmp636 = __tmp732
 		case 0x0c:
-			__tmp736 := _array_get_s(_at_2(_var, _s))
+			__tmp736 := _array_get_s_1(_at_2(_var, _s))
 			__tmp636 = __tmp736
 		case 0x0d:
-			__tmp740 := _array_get_u(_at_2(_var, _s))
+			__tmp740 := _array_get_u_1(_at_2(_var, _s))
 			__tmp636 = __tmp740
 		case 0x0e:
-			__tmp744 := _array_set(_at_2(_var, _s))
+			__tmp744 := _array_set_1(_at_2(_var, _s))
 			__tmp636 = __tmp744
 		case 0x0f:
 			__tmp748 := _array_len
 			__tmp636 = __tmp748
 		case 0x10:
-			__tmp749 := _array_fill(_at_2(_var, _s))
+			__tmp749 := _array_fill_1(_at_2(_var, _s))
 			__tmp636 = __tmp749
 		case 0x11:
 			__tmp753 := _at_2(_var, _s)
@@ -4752,20 +5743,20 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp783 := _array_init_elem_2(_x, _y)
 			__tmp636 = __tmp783
 		case 0x14:
-			__tmp786 := _ref_test(_NoNull, _heap_type(_s))
+			__tmp786 := _ref_test_1(_NoNull, _heap_type_1(_s))
 			__tmp636 = __tmp786
 		case 0x15:
-			__tmp792 := _ref_test(_Null, _heap_type(_s))
+			__tmp792 := _ref_test_1(_Null, _heap_type_1(_s))
 			__tmp636 = __tmp792
 		case 0x16:
-			__tmp798 := _ref_cast(_NoNull, _heap_type(_s))
+			__tmp798 := _ref_cast_1(_NoNull, _heap_type_1(_s))
 			__tmp636 = __tmp798
 		case 0x17:
-			__tmp804 := _ref_cast(_Null, _heap_type(_s))
+			__tmp804 := _ref_cast_1(_Null, _heap_type_1(_s))
 			__tmp636 = __tmp804
 		case 0x18, 0x19:
 			_opcode := __tmp637
-			__tmp811 := _byte(_s)
+			__tmp811 := _byte_1(_s)
 			_flags := __tmp811
 			__tmp814 := _require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfc), 0), _s, _int_operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp814
@@ -4781,7 +5772,7 @@ func _instr(_s *Stream) Instruction_ {
 					__tmp827 = __tmp831
 				}
 				return __tmp827
-			}(), _heap_type(_s)
+			}(), _heap_type_1(_s)
 			_rt1 := __tmp825, __tmp826
 			__tmp835, __tmp836 := func() Null {
 				var __tmp837 Null
@@ -4793,7 +5784,7 @@ func _instr(_s *Stream) Instruction_ {
 					__tmp837 = __tmp841
 				}
 				return __tmp837
-			}(), _heap_type(_s)
+			}(), _heap_type_1(_s)
 			_rt2 := __tmp835, __tmp836
 			__tmp845 := __if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
 
@@ -4822,7 +5813,7 @@ func _instr(_s *Stream) Instruction_ {
 	case 0xfc:
 		_b := __tmp5
 		var __tmp860 Instruction_
-		switch __tmp861 := _u32(_s); __tmp861 {
+		switch __tmp861 := _u32_1(_s); __tmp861 {
 		case 0x00:
 			__tmp864 := _i32_trunc_sat_f32_s
 			__tmp860 = __tmp864
@@ -4855,7 +5846,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp880 := _memory_init_2(_x, _y)
 			__tmp860 = __tmp880
 		case 0x09:
-			__tmp883 := _data_drop(_at_2(_var, _s))
+			__tmp883 := _data_drop_1(_at_2(_var, _s))
 			__tmp860 = __tmp883
 		case 0x0a:
 			__tmp887 := _at_2(_var, _s)
@@ -4865,7 +5856,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp895 := _memory_copy_2(_x, _y)
 			__tmp860 = __tmp895
 		case 0x0b:
-			__tmp898 := _memory_fill(_at_2(_var, _s))
+			__tmp898 := _memory_fill_1(_at_2(_var, _s))
 			__tmp860 = __tmp898
 		case 0x0c:
 			__tmp902 := _at_2(_var, _s)
@@ -4875,7 +5866,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp910 := _table_init_2(_x, _y)
 			__tmp860 = __tmp910
 		case 0x0d:
-			__tmp913 := _elem_drop(_at_2(_var, _s))
+			__tmp913 := _elem_drop_1(_at_2(_var, _s))
 			__tmp860 = __tmp913
 		case 0x0e:
 			__tmp917 := _at_2(_var, _s)
@@ -4885,13 +5876,13 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp925 := _table_copy_2(_x, _y)
 			__tmp860 = __tmp925
 		case 0x0f:
-			__tmp928 := _table_grow(_at_2(_var, _s))
+			__tmp928 := _table_grow_1(_at_2(_var, _s))
 			__tmp860 = __tmp928
 		case 0x10:
-			__tmp932 := _table_size(_at_2(_var, _s))
+			__tmp932 := _table_size_1(_at_2(_var, _s))
 			__tmp860 = __tmp932
 		case 0x11:
-			__tmp936 := _table_fill(_at_2(_var, _s))
+			__tmp936 := _table_fill_1(_at_2(_var, _s))
 			__tmp860 = __tmp936
 		default:
 			_n := __tmp861
@@ -4901,73 +5892,73 @@ func _instr(_s *Stream) Instruction_ {
 		__tmp4 = __tmp860
 	case 0xfd:
 		var __tmp945 Instruction_
-		switch __tmp946 := _u32(_s); __tmp946 {
+		switch __tmp946 := _u32_1(_s); __tmp946 {
 		case 0x00:
-			__tmp949, __tmp950, __tmp951 := _memop(_s)
+			__tmp949, __tmp950, __tmp951 := _memop_1(_s)
 			_x, _a, _o := __tmp949, __tmp950, __tmp951
 			__tmp956 := _v128_load_3(_x, _a, _o)
 			__tmp945 = __tmp956
 		case 0x01:
-			__tmp960, __tmp961, __tmp962 := _memop(_s)
+			__tmp960, __tmp961, __tmp962 := _memop_1(_s)
 			_x, _a, _o := __tmp960, __tmp961, __tmp962
 			__tmp967 := _v128_load8x8_s_3(_x, _a, _o)
 			__tmp945 = __tmp967
 		case 0x02:
-			__tmp971, __tmp972, __tmp973 := _memop(_s)
+			__tmp971, __tmp972, __tmp973 := _memop_1(_s)
 			_x, _a, _o := __tmp971, __tmp972, __tmp973
 			__tmp978 := _v128_load8x8_u_3(_x, _a, _o)
 			__tmp945 = __tmp978
 		case 0x03:
-			__tmp982, __tmp983, __tmp984 := _memop(_s)
+			__tmp982, __tmp983, __tmp984 := _memop_1(_s)
 			_x, _a, _o := __tmp982, __tmp983, __tmp984
 			__tmp989 := _v128_load16x4_s_3(_x, _a, _o)
 			__tmp945 = __tmp989
 		case 0x04:
-			__tmp993, __tmp994, __tmp995 := _memop(_s)
+			__tmp993, __tmp994, __tmp995 := _memop_1(_s)
 			_x, _a, _o := __tmp993, __tmp994, __tmp995
 			__tmp1000 := _v128_load16x4_u_3(_x, _a, _o)
 			__tmp945 = __tmp1000
 		case 0x05:
-			__tmp1004, __tmp1005, __tmp1006 := _memop(_s)
+			__tmp1004, __tmp1005, __tmp1006 := _memop_1(_s)
 			_x, _a, _o := __tmp1004, __tmp1005, __tmp1006
 			__tmp1011 := _v128_load32x2_s_3(_x, _a, _o)
 			__tmp945 = __tmp1011
 		case 0x06:
-			__tmp1015, __tmp1016, __tmp1017 := _memop(_s)
+			__tmp1015, __tmp1016, __tmp1017 := _memop_1(_s)
 			_x, _a, _o := __tmp1015, __tmp1016, __tmp1017
 			__tmp1022 := _v128_load32x2_u_3(_x, _a, _o)
 			__tmp945 = __tmp1022
 		case 0x07:
-			__tmp1026, __tmp1027, __tmp1028 := _memop(_s)
+			__tmp1026, __tmp1027, __tmp1028 := _memop_1(_s)
 			_x, _a, _o := __tmp1026, __tmp1027, __tmp1028
 			__tmp1033 := _v128_load8_splat_3(_x, _a, _o)
 			__tmp945 = __tmp1033
 		case 0x08:
-			__tmp1037, __tmp1038, __tmp1039 := _memop(_s)
+			__tmp1037, __tmp1038, __tmp1039 := _memop_1(_s)
 			_x, _a, _o := __tmp1037, __tmp1038, __tmp1039
 			__tmp1044 := _v128_load16_splat_3(_x, _a, _o)
 			__tmp945 = __tmp1044
 		case 0x09:
-			__tmp1048, __tmp1049, __tmp1050 := _memop(_s)
+			__tmp1048, __tmp1049, __tmp1050 := _memop_1(_s)
 			_x, _a, _o := __tmp1048, __tmp1049, __tmp1050
 			__tmp1055 := _v128_load32_splat_3(_x, _a, _o)
 			__tmp945 = __tmp1055
 		case 0x0a:
-			__tmp1059, __tmp1060, __tmp1061 := _memop(_s)
+			__tmp1059, __tmp1060, __tmp1061 := _memop_1(_s)
 			_x, _a, _o := __tmp1059, __tmp1060, __tmp1061
 			__tmp1066 := _v128_load64_splat_3(_x, _a, _o)
 			__tmp945 = __tmp1066
 		case 0x0b:
-			__tmp1070, __tmp1071, __tmp1072 := _memop(_s)
+			__tmp1070, __tmp1071, __tmp1072 := _memop_1(_s)
 			_x, _a, _o := __tmp1070, __tmp1071, __tmp1072
 			__tmp1077 := _v128_store_3(_x, _a, _o)
 			__tmp945 = __tmp1077
 		case 0x0c:
-			__tmp1081 := _v128_const(_at_2(_v128, _s))
+			__tmp1081 := _v128_const_1(_at_2(_v128, _s))
 			__tmp945 = __tmp1081
 		case 0x0d:
-			__tmp1085 := _i8x16_shuffle(_List_init_2(16, func(__ OInt) OInt {
-				__tmp1087 := _byte(_s)
+			__tmp1085 := _i8x16_shuffle_1(_List_init_2(16, func(__ OInt) OInt {
+				__tmp1087 := _byte_1(_s)
 				return __tmp1087
 			}))
 			__tmp945 = __tmp1085
@@ -4993,74 +5984,74 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp1095 := _f64x2_splat
 			__tmp945 = __tmp1095
 		case 0x15:
-			__tmp1096 := _byte(_s)
+			__tmp1096 := _byte_1(_s)
 			_i := __tmp1096
-			__tmp1099 := _i8x16_extract_lane_s(_i)
+			__tmp1099 := _i8x16_extract_lane_s_1(_i)
 			__tmp945 = __tmp1099
 		case 0x16:
-			__tmp1101 := _byte(_s)
+			__tmp1101 := _byte_1(_s)
 			_i := __tmp1101
-			__tmp1104 := _i8x16_extract_lane_u(_i)
+			__tmp1104 := _i8x16_extract_lane_u_1(_i)
 			__tmp945 = __tmp1104
 		case 0x17:
-			__tmp1106 := _byte(_s)
+			__tmp1106 := _byte_1(_s)
 			_i := __tmp1106
-			__tmp1109 := _i8x16_replace_lane(_i)
+			__tmp1109 := _i8x16_replace_lane_1(_i)
 			__tmp945 = __tmp1109
 		case 0x18:
-			__tmp1111 := _byte(_s)
+			__tmp1111 := _byte_1(_s)
 			_i := __tmp1111
-			__tmp1114 := _i16x8_extract_lane_s(_i)
+			__tmp1114 := _i16x8_extract_lane_s_1(_i)
 			__tmp945 = __tmp1114
 		case 0x19:
-			__tmp1116 := _byte(_s)
+			__tmp1116 := _byte_1(_s)
 			_i := __tmp1116
-			__tmp1119 := _i16x8_extract_lane_u(_i)
+			__tmp1119 := _i16x8_extract_lane_u_1(_i)
 			__tmp945 = __tmp1119
 		case 0x1a:
-			__tmp1121 := _byte(_s)
+			__tmp1121 := _byte_1(_s)
 			_i := __tmp1121
-			__tmp1124 := _i16x8_replace_lane(_i)
+			__tmp1124 := _i16x8_replace_lane_1(_i)
 			__tmp945 = __tmp1124
 		case 0x1b:
-			__tmp1126 := _byte(_s)
+			__tmp1126 := _byte_1(_s)
 			_i := __tmp1126
-			__tmp1129 := _i32x4_extract_lane(_i)
+			__tmp1129 := _i32x4_extract_lane_1(_i)
 			__tmp945 = __tmp1129
 		case 0x1c:
-			__tmp1131 := _byte(_s)
+			__tmp1131 := _byte_1(_s)
 			_i := __tmp1131
-			__tmp1134 := _i32x4_replace_lane(_i)
+			__tmp1134 := _i32x4_replace_lane_1(_i)
 			__tmp945 = __tmp1134
 		case 0x1d:
-			__tmp1136 := _byte(_s)
+			__tmp1136 := _byte_1(_s)
 			_i := __tmp1136
-			__tmp1139 := _i64x2_extract_lane(_i)
+			__tmp1139 := _i64x2_extract_lane_1(_i)
 			__tmp945 = __tmp1139
 		case 0x1e:
-			__tmp1141 := _byte(_s)
+			__tmp1141 := _byte_1(_s)
 			_i := __tmp1141
-			__tmp1144 := _i64x2_replace_lane(_i)
+			__tmp1144 := _i64x2_replace_lane_1(_i)
 			__tmp945 = __tmp1144
 		case 0x1f:
-			__tmp1146 := _byte(_s)
+			__tmp1146 := _byte_1(_s)
 			_i := __tmp1146
-			__tmp1149 := _f32x4_extract_lane(_i)
+			__tmp1149 := _f32x4_extract_lane_1(_i)
 			__tmp945 = __tmp1149
 		case 0x20:
-			__tmp1151 := _byte(_s)
+			__tmp1151 := _byte_1(_s)
 			_i := __tmp1151
-			__tmp1154 := _f32x4_replace_lane(_i)
+			__tmp1154 := _f32x4_replace_lane_1(_i)
 			__tmp945 = __tmp1154
 		case 0x21:
-			__tmp1156 := _byte(_s)
+			__tmp1156 := _byte_1(_s)
 			_i := __tmp1156
-			__tmp1159 := _f64x2_extract_lane(_i)
+			__tmp1159 := _f64x2_extract_lane_1(_i)
 			__tmp945 = __tmp1159
 		case 0x22:
-			__tmp1161 := _byte(_s)
+			__tmp1161 := _byte_1(_s)
 			_i := __tmp1161
-			__tmp1164 := _f64x2_replace_lane(_i)
+			__tmp1164 := _f64x2_replace_lane_1(_i)
 			__tmp945 = __tmp1164
 		case 0x23:
 			__tmp1166 := _i8x16_eq
@@ -5210,68 +6201,68 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp1214 := _v128_any_true
 			__tmp945 = __tmp1214
 		case 0x54:
-			__tmp1215, __tmp1216, __tmp1217 := _memop(_s)
+			__tmp1215, __tmp1216, __tmp1217 := _memop_1(_s)
 			_x, _a, _o := __tmp1215, __tmp1216, __tmp1217
-			__tmp1222 := _byte(_s)
+			__tmp1222 := _byte_1(_s)
 			_lane := __tmp1222
 			__tmp1225 := _v128_load8_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1225
 		case 0x55:
-			__tmp1230, __tmp1231, __tmp1232 := _memop(_s)
+			__tmp1230, __tmp1231, __tmp1232 := _memop_1(_s)
 			_x, _a, _o := __tmp1230, __tmp1231, __tmp1232
-			__tmp1237 := _byte(_s)
+			__tmp1237 := _byte_1(_s)
 			_lane := __tmp1237
 			__tmp1240 := _v128_load16_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1240
 		case 0x56:
-			__tmp1245, __tmp1246, __tmp1247 := _memop(_s)
+			__tmp1245, __tmp1246, __tmp1247 := _memop_1(_s)
 			_x, _a, _o := __tmp1245, __tmp1246, __tmp1247
-			__tmp1252 := _byte(_s)
+			__tmp1252 := _byte_1(_s)
 			_lane := __tmp1252
 			__tmp1255 := _v128_load32_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1255
 		case 0x57:
-			__tmp1260, __tmp1261, __tmp1262 := _memop(_s)
+			__tmp1260, __tmp1261, __tmp1262 := _memop_1(_s)
 			_x, _a, _o := __tmp1260, __tmp1261, __tmp1262
-			__tmp1267 := _byte(_s)
+			__tmp1267 := _byte_1(_s)
 			_lane := __tmp1267
 			__tmp1270 := _v128_load64_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1270
 		case 0x58:
-			__tmp1275, __tmp1276, __tmp1277 := _memop(_s)
+			__tmp1275, __tmp1276, __tmp1277 := _memop_1(_s)
 			_x, _a, _o := __tmp1275, __tmp1276, __tmp1277
-			__tmp1282 := _byte(_s)
+			__tmp1282 := _byte_1(_s)
 			_lane := __tmp1282
 			__tmp1285 := _v128_store8_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1285
 		case 0x59:
-			__tmp1290, __tmp1291, __tmp1292 := _memop(_s)
+			__tmp1290, __tmp1291, __tmp1292 := _memop_1(_s)
 			_x, _a, _o := __tmp1290, __tmp1291, __tmp1292
-			__tmp1297 := _byte(_s)
+			__tmp1297 := _byte_1(_s)
 			_lane := __tmp1297
 			__tmp1300 := _v128_store16_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1300
 		case 0x5a:
-			__tmp1305, __tmp1306, __tmp1307 := _memop(_s)
+			__tmp1305, __tmp1306, __tmp1307 := _memop_1(_s)
 			_x, _a, _o := __tmp1305, __tmp1306, __tmp1307
-			__tmp1312 := _byte(_s)
+			__tmp1312 := _byte_1(_s)
 			_lane := __tmp1312
 			__tmp1315 := _v128_store32_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1315
 		case 0x5b:
-			__tmp1320, __tmp1321, __tmp1322 := _memop(_s)
+			__tmp1320, __tmp1321, __tmp1322 := _memop_1(_s)
 			_x, _a, _o := __tmp1320, __tmp1321, __tmp1322
-			__tmp1327 := _byte(_s)
+			__tmp1327 := _byte_1(_s)
 			_lane := __tmp1327
 			__tmp1330 := _v128_store64_lane_4(_x, _a, _o, _lane)
 			__tmp945 = __tmp1330
 		case 0x5c:
-			__tmp1335, __tmp1336, __tmp1337 := _memop(_s)
+			__tmp1335, __tmp1336, __tmp1337 := _memop_1(_s)
 			_x, _a, _o := __tmp1335, __tmp1336, __tmp1337
 			__tmp1342 := _v128_load32_zero_3(_x, _a, _o)
 			__tmp945 = __tmp1342
 		case 0x5d:
-			__tmp1346, __tmp1347, __tmp1348 := _memop(_s)
+			__tmp1346, __tmp1347, __tmp1348 := _memop_1(_s)
 			_x, _a, _o := __tmp1346, __tmp1347, __tmp1348
 			__tmp1353 := _v128_load64_zero_3(_x, _a, _o)
 			__tmp945 = __tmp1353
@@ -5457,7 +6448,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1416
 		case 0x9a:
 			_n := __tmp946
-			__tmp1418 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1418 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1418
 		case 0x9b:
 			__tmp1423 := _i16x8_avgr_u
@@ -5482,7 +6473,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1429
 		case 0xa2:
 			_n := __tmp946
-			__tmp1431 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1431 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1431
 		case 0xa3:
 			__tmp1436 := _i32x4_all_true
@@ -5492,7 +6483,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1437
 		case 0xa5, 0xa6:
 			_n := __tmp946
-			__tmp1439 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1439 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1439
 		case 0xa7:
 			__tmp1444 := _i32x4_extend_low_i16x8_s
@@ -5520,14 +6511,14 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1451
 		case 0xaf, 0xb0:
 			_n := __tmp946
-			__tmp1453 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1453 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1453
 		case 0xb1:
 			__tmp1458 := _i32x4_sub
 			__tmp945 = __tmp1458
 		case 0xb2, 0xb3, 0xb4:
 			_n := __tmp946
-			__tmp1460 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1460 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1460
 		case 0xb5:
 			__tmp1465 := _i32x4_mul
@@ -5567,7 +6558,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1476
 		case 0xc2:
 			_n := __tmp946
-			__tmp1478 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1478 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1478
 		case 0xc3:
 			__tmp1483 := _i64x2_all_true
@@ -5577,7 +6568,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1484
 		case 0xc5, 0xc6:
 			_n := __tmp946
-			__tmp1486 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1486 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1486
 		case 0xc7:
 			__tmp1491 := _i64x2_extend_low_i32x4_s
@@ -5605,14 +6596,14 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1498
 		case 0xcf, 0xd0:
 			_n := __tmp946
-			__tmp1500 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1500 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1500
 		case 0xd1:
 			__tmp1505 := _i64x2_sub
 			__tmp945 = __tmp1505
 		case 0xd2, 0xd3, 0xd4:
 			_n := __tmp946
-			__tmp1507 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1507 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1507
 		case 0xd5:
 			__tmp1512 := _i64x2_mul
@@ -5655,7 +6646,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1524
 		case 0xe2:
 			_n := __tmp946
-			__tmp1526 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1526 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1526
 		case 0xe3:
 			__tmp1531 := _f32x4_sqrt
@@ -5803,7 +6794,7 @@ func _instr(_s *Stream) Instruction_ {
 			__tmp945 = __tmp1578
 		default:
 			_n := __tmp946
-			__tmp1579 := _illegal_3(_s, _pos, _I32_to_int_u(_n))
+			__tmp1579 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
 			__tmp945 = __tmp1579
 		}
 		__tmp4 = __tmp945

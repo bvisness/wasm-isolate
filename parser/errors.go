@@ -9,11 +9,11 @@ type CodeError struct {
 	msg    string
 }
 
-func _string_of_byte(b OInt) string {
+func _string_of_byte_1(b OInt) string {
 	return fmt.Sprintf("%02x", b)
 }
 
-func _string_of_multi(n OInt32) string {
+func _string_of_multi_1(n OInt32) string {
 	return fmt.Sprintf("%d", n)
 }
 
@@ -49,32 +49,32 @@ func _require_4(b bool, s *Stream, pos OInt, msg string) Void {
 // Skipping guarded versions of things
 
 func _expect_3(b OInt, s *Stream, msg string) Void {
-	_require_4(_get(s) == b, s, _pos(s)-1, msg)
+	_require_4(_get_1(s) == b, s, _pos_1(s)-1, msg)
 	return nil
 }
 
 func _illegal_3(s *Stream, pos OInt, b OInt) Void {
-	_error_3(s, pos, "illegal opcode "+_string_of_byte(b))
+	_error_3(s, pos, "illegal opcode "+_string_of_byte_1(b))
 	return nil
 }
 
 func _illegal2_4(s *Stream, pos OInt, b OInt, n OInt32) Void {
-	_error_3(s, pos, "illegal opcode "+_string_of_byte(b)+" "+_string_of_multi(n))
+	_error_3(s, pos, "illegal opcode "+_string_of_byte_1(b)+" "+_string_of_multi_1(n))
 	return nil
 }
 
-func _at[T any](f func(s *Stream) T) func(s *Stream) *Phrase[T] {
-	return func(s *Stream) *Phrase[T] {
-		return _at_2(f, s)
-	}
-}
-
 func _at_2[T any](f func(s *Stream) T, s *Stream) *Phrase[T] {
-	left := _pos(s)
+	left := _pos_1(s)
 	x := f(s)
-	right := _pos(s)
+	right := _pos_1(s)
 	return &Phrase[T]{
 		at: _region_3(s, left, right),
 		it: x,
+	}
+}
+
+func _at_1[T any](f func(s *Stream) T) func(s *Stream) *Phrase[T] {
+	return func(s *Stream) *Phrase[T] {
+		return _at_2(f, s)
 	}
 }
