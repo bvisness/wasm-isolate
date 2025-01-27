@@ -25,10 +25,11 @@ var funcsToTranslate = []string{
 
 	// Instructions
 	"op", "end", "memop",
+	"block_type", "local",
 	"instr",
 }
 
-func ocaml2go(t ocaml.Type) string {
+func ocaml2go_(t string) string {
 	m := map[string]string{
 		"bool":   "bool",
 		"string": "string",
@@ -39,38 +40,43 @@ func ocaml2go(t ocaml.Type) string {
 		"F32.t": "float32",
 		"F64.t": "float64",
 
-		"stream": "*Stream",
+		"address":   "OInt64",
+		"type_idx":  "OInt32",
+		"local_idx": "OInt32",
 
 		"block_type": "BlockType",
 		"heap_type":  "HeapType",
 		"ref_type":   "RefType",
 		"null":       "Null",
 
-		"idx":      "*Phrase[OInt32]",
-		"address":  "OInt64",
-		"type_idx": "OInt32",
+		"idx":    "*Phrase[OInt32]",
+		"instr'": "Instruction_",
+		"instr":  "*Phrase[Instruction_]",
+		"local'": "Local_",
+		"local":  "*Phrase[Local_]",
 
-		"int list":   "[]OInt",
-		"idx list":   "[]OInt",
-		"catch list": "TODO",
-
-		"local_idx phrase": "*Phrase[OInt32]",
-		"type_idx phrase":  "*Phrase[OInt32]",
-		"address phrase":   "*Phrase[OInt64]",
-		"F32.t phrase":     "*Phrase[float32]",
-		"F64.t phrase":     "*Phrase[float64]",
-		"V128.t phrase":    "*Phrase[OInt]",
-
-		"instr'":     "Instruction",
-		"instr list": "TODO",
-
-		"val_type list option": "TODO",
+		"stream": "*Stream",
 	}
-	if goType, ok := m[t.String()]; ok {
+
+	parts := strings.Split(t, " ")
+	switch parts[len(parts)-1] {
+	case "list":
+		return fmt.Sprintf("[]%s", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
+	case "phrase":
+		return fmt.Sprintf("*Phrase[%s]", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
+	case "option":
+		return fmt.Sprintf("*%s", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
+	}
+
+	if goType, ok := m[t]; ok {
 		return goType
 	} else {
-		panic(fmt.Sprintf("no Go type registered for OCaml type \"%s\"", t.String()))
+		return fmt.Sprintf("TODO /* %s */", t)
 	}
+}
+
+func ocaml2go(t ocaml.Type) string {
+	return ocaml2go_(t.String())
 }
 
 var opNames = map[string]string{
@@ -480,6 +486,8 @@ func (p *ocamlParse) parseExpr(
 		} else {
 			return nil
 		}
+	case "field_get_expression":
+		w("nil /* TODO: field_get_expression */")
 	case "fun_expression":
 		body := expr.ChildByFieldName("body")
 		var params []*tree_sitter.Node
@@ -719,6 +727,8 @@ func (p *ocamlParse) parseExpr(
 				return results
 			}
 		}
+	case "record_expression":
+		w("nil /* TODO: record_expression */")
 	case "sequence_expression":
 		if !statement {
 			exitWithError("cannot use sequence_expression as an expression")

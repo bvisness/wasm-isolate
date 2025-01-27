@@ -22,3 +22,31 @@ func _vec_2[T any](f func(s *Stream) T, s *Stream) []T {
 	n := _len32(s)
 	return _list_3(f, n, s)
 }
+
+func _either_2[T any](fs []func(s *Stream) T, s *Stream) T {
+	if len(fs) == 0 {
+		panic("`either` called with no options")
+	}
+	if len(fs) == 1 {
+		return fs[0](s)
+	}
+
+	pos := _pos(s)
+	res, exception := func() (res T, exc any) {
+		defer func() {
+			if r := recover(); r != nil {
+				exc = r
+			}
+		}()
+		res = fs[0](s)
+		return
+	}()
+	if exception == nil {
+		return res
+	} else if _, ok := exception.(CodeError); ok {
+		_reset_2(s, pos)
+		return _either_2(fs[1:], s)
+	} else {
+		panic(exception)
+	}
+}

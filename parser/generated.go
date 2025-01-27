@@ -42,10 +42,10 @@ func _f64_const(_n *Phrase[float64]) Instr_f64_const {
 }
 
 type Instr_v128_const struct {
-	N *Phrase[OInt]
+	N *Phrase[TODO /* V128.t */]
 }
 
-func _v128_const(_n *Phrase[OInt]) Instr_v128_const {
+func _v128_const(_n *Phrase[TODO /* V128.t */]) Instr_v128_const {
 	return Instr_v128_const{
 		N: _n,
 	}
@@ -96,10 +96,10 @@ func _drop() Instr_drop {
 }
 
 type Instr_select struct {
-	T TODO
+	T *[]TODO /* val_type */
 }
 
-func _select(_t TODO) Instr_select {
+func _select(_t *[]TODO /* val_type */) Instr_select {
 	return Instr_select{
 		T: _t,
 	}
@@ -107,10 +107,10 @@ func _select(_t TODO) Instr_select {
 
 type Instr_block struct {
 	Bt BlockType
-	Es TODO
+	Es []*Phrase[Instruction_]
 }
 
-func _block_2(_bt BlockType, _es TODO) Instr_block {
+func _block_2(_bt BlockType, _es []*Phrase[Instruction_]) Instr_block {
 	return Instr_block{
 		Bt: _bt,
 		Es: _es,
@@ -119,10 +119,10 @@ func _block_2(_bt BlockType, _es TODO) Instr_block {
 
 type Instr_loop struct {
 	Bt BlockType
-	Es TODO
+	Es []*Phrase[Instruction_]
 }
 
-func _loop_2(_bt BlockType, _es TODO) Instr_loop {
+func _loop_2(_bt BlockType, _es []*Phrase[Instruction_]) Instr_loop {
 	return Instr_loop{
 		Bt: _bt,
 		Es: _es,
@@ -131,11 +131,11 @@ func _loop_2(_bt BlockType, _es TODO) Instr_loop {
 
 type Instr_if_ struct {
 	Bt  BlockType
-	Es1 TODO
-	Es2 TODO
+	Es1 []*Phrase[Instruction_]
+	Es2 []*Phrase[Instruction_]
 }
 
-func _if__3(_bt BlockType, _es1 TODO, _es2 TODO) Instr_if_ {
+func _if__3(_bt BlockType, _es1 []*Phrase[Instruction_], _es2 []*Phrase[Instruction_]) Instr_if_ {
 	return Instr_if_{
 		Bt:  _bt,
 		Es1: _es1,
@@ -164,11 +164,11 @@ func _br_if(_x *Phrase[OInt32]) Instr_br_if {
 }
 
 type Instr_br_table struct {
-	Xs []OInt
+	Xs []*Phrase[OInt32]
 	X  *Phrase[OInt32]
 }
 
-func _br_table_2(_xs []OInt, _x *Phrase[OInt32]) Instr_br_table {
+func _br_table_2(_xs []*Phrase[OInt32], _x *Phrase[OInt32]) Instr_br_table {
 	return Instr_br_table{
 		Xs: _xs,
 		X:  _x,
@@ -311,11 +311,11 @@ func _throw_ref() Instr_throw_ref {
 
 type Instr_try_table struct {
 	Bt BlockType
-	Cs TODO
-	Es TODO
+	Cs []TODO /* catch */
+	Es []*Phrase[Instruction_]
 }
 
-func _try_table_3(_bt BlockType, _cs TODO, _es TODO) Instr_try_table {
+func _try_table_3(_bt BlockType, _cs []TODO /* catch */, _es []*Phrase[Instruction_]) Instr_try_table {
 	return Instr_try_table{
 		Bt: _bt,
 		Cs: _cs,
@@ -3906,10 +3906,23 @@ func _memop(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 
 }
 
-func _instr(_s *Stream) Instruction {
+func _block_type(_s *Stream) BlockType {
+	__tmp1 := _either_2(nil /* TODO: list_expression */, _s)
+	return __tmp1
+}
+
+func _local(_s *Stream) (OInt32, *Phrase[Local_]) {
+	__tmp1 := _u32(_s)
+	_n := __tmp1
+	__tmp4 := _at_2(_val_type, _s)
+	_t := __tmp4
+	return _n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)
+}
+
+func _instr(_s *Stream) Instruction_ {
 	__tmp1 := _pos(_s)
 	_pos := __tmp1
-	var __tmp4 Instruction
+	var __tmp4 Instruction_
 	switch __tmp5 := _op(_s); __tmp5 {
 	case 0x00:
 		__tmp8 := _unreachable
@@ -3942,7 +3955,7 @@ func _instr(_s *Stream) Instruction {
 		_bt := __tmp32
 		__tmp35 := _instr_block(_s)
 		_es1 := __tmp35
-		var __tmp38 Instruction
+		var __tmp38 Instruction_
 		if _operatorEq_2(_peek(_s), _Some(0x05)) {
 			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
@@ -4621,7 +4634,7 @@ func _instr(_s *Stream) Instruction {
 		__tmp4 = __tmp631
 	case 0xfb:
 		_b := __tmp5
-		var __tmp636 Instruction
+		var __tmp636 Instruction_
 		switch __tmp637 := _u32(_s); __tmp637 {
 		case 0x00:
 			__tmp640 := _struct_new(_at_2(_var, _s))
@@ -4793,7 +4806,7 @@ func _instr(_s *Stream) Instruction {
 		__tmp4 = __tmp636
 	case 0xfc:
 		_b := __tmp5
-		var __tmp860 Instruction
+		var __tmp860 Instruction_
 		switch __tmp861 := _u32(_s); __tmp861 {
 		case 0x00:
 			__tmp864 := _i32_trunc_sat_f32_s
@@ -4872,7 +4885,7 @@ func _instr(_s *Stream) Instruction {
 		}
 		__tmp4 = __tmp860
 	case 0xfd:
-		var __tmp945 Instruction
+		var __tmp945 Instruction_
 		switch __tmp946 := _u32(_s); __tmp946 {
 		case 0x00:
 			__tmp949, __tmp950, __tmp951 := _memop(_s)

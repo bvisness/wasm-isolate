@@ -140,4 +140,4 @@ func _var(s *Stream) OInt32 {
 	return _u32(s)
 }
 
-type Instruction interface{}
+type Instruction_ interface{}
