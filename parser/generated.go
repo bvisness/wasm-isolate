@@ -50,10 +50,10 @@ func _f64_const_1(_n *Phrase[float64]) Instr_f64_const {
 var _f64_const = _f64_const_1
 
 type Instr_v128_const struct {
-	N *Phrase[TODO /* V128.t */]
+	N *Phrase[V128]
 }
 
-func _v128_const_1(_n *Phrase[TODO /* V128.t */]) Instr_v128_const {
+func _v128_const_1(_n *Phrase[V128]) Instr_v128_const {
 	return Instr_v128_const{
 		N: _n,
 	}
@@ -4720,10 +4720,14 @@ func _bit_2(_i OInt, _n OInt) bool {
 	return __tmp1
 }
 
+var _bit = _bit_2
+
 func _byte_1(_s *Stream) OInt {
 	__tmp1 := _get_1(_s)
 	return __tmp1
 }
+
+var _byte = _byte_1
 
 func _word16_1(_s *Stream) OInt {
 	__tmp1 := _byte_1(_s)
@@ -4734,6 +4738,8 @@ func _word16_1(_s *Stream) OInt {
 	return __tmp7
 }
 
+var _word16 = _word16_1
+
 func _word32_1(_s *Stream) OInt32 {
 	__tmp1 := _Int32_of_int_1(_word16_1(_s))
 	_lo := __tmp1
@@ -4743,6 +4749,8 @@ func _word32_1(_s *Stream) OInt32 {
 	return __tmp9
 }
 
+var _word32 = _word32_1
+
 func _word64_1(_s *Stream) OInt64 {
 	__tmp1 := _I64_convert_extend_i32_u_1(_word32_1(_s))
 	_lo := __tmp1
@@ -4751,6 +4759,8 @@ func _word64_1(_s *Stream) OInt64 {
 	__tmp9 := _Int64_add_2(_lo, _Int64_shift_left_2(_hi, 32))
 	return __tmp9
 }
+
+var _word64 = _word64_1
 
 func _uN_2(_n OInt, _s *Stream) OInt64 {
 	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
@@ -4772,6 +4782,8 @@ func _uN_2(_n OInt, _s *Stream) OInt64 {
 	return __tmp27
 
 }
+
+var _uN = _uN_2
 
 func _sN_2(_n OInt, _s *Stream) OInt64 {
 	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
@@ -4803,45 +4815,70 @@ func _sN_2(_n OInt, _s *Stream) OInt64 {
 
 }
 
+var _sN = _sN_2
+
 func _u32_1(_s *Stream) OInt32 {
 	__tmp1 := _Int64_to_int32_1(_uN_2(32, _s))
 	return __tmp1
 }
+
+var _u32 = _u32_1
 
 func _u64_1(_s *Stream) OInt64 {
 	__tmp1 := _uN_2(64, _s)
 	return __tmp1
 }
 
+var _u64 = _u64_1
+
 func _s7_1(_s *Stream) OInt {
 	__tmp1 := _Int64_to_int_1(_sN_2(7, _s))
 	return __tmp1
 }
+
+var _s7 = _s7_1
 
 func _s32_1(_s *Stream) OInt32 {
 	__tmp1 := _Int64_to_int32_1(_sN_2(32, _s))
 	return __tmp1
 }
 
+var _s32 = _s32_1
+
 func _s33_1(_s *Stream) OInt32 {
 	__tmp1 := _I32_convert_wrap_i64_1(_sN_2(33, _s))
 	return __tmp1
 }
+
+var _s33 = _s33_1
 
 func _s64_1(_s *Stream) OInt64 {
 	__tmp1 := _sN_2(64, _s)
 	return __tmp1
 }
 
+var _s64 = _s64_1
+
 func _f32_1(_s *Stream) float32 {
 	__tmp1 := _F32_of_bits_1(_word32_1(_s))
 	return __tmp1
 }
 
+var _f32 = _f32_1
+
 func _f64_1(_s *Stream) float64 {
 	__tmp1 := _F64_of_bits_1(_word64_1(_s))
 	return __tmp1
 }
+
+var _f64 = _f64_1
+
+func _v128_1(_s *Stream) V128 {
+	__tmp1 := _V128_of_bits_1(_get_string_2(16, _s))
+	return __tmp1
+}
+
+var _v128 = _v128_1
 
 func _len32_1(_s *Stream) OInt {
 	__tmp1 := _pos_1(_s)
@@ -4859,6 +4896,8 @@ func _len32_1(_s *Stream) OInt {
 	return __tmp7
 }
 
+var _len32 = _len32_1
+
 func _string_1(_s *Stream) string {
 	__tmp1 := _len32_1(_s)
 	_n := __tmp1
@@ -4866,15 +4905,21 @@ func _string_1(_s *Stream) string {
 	return __tmp4
 }
 
+var _string = _string_1
+
 func _op_1(_s *Stream) OInt {
 	__tmp1 := _byte_1(_s)
 	return __tmp1
 }
 
+var _op = _op_1
+
 func _end__1(_s *Stream) TODO /* unit */ {
 	__tmp1 := _expect_3(0x0b, _s, "END opcode expected")
 	return __tmp1
 }
+
+var _end_ = _end__1
 
 func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 	__tmp1 := _pos_1(_s)
@@ -4902,6 +4947,8 @@ func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 
 }
 
+var _memop = _memop_1
+
 func _block_type_1(_s *Stream) BlockType {
 	__tmp1 := _either_2([]TODO /* stream -> 'a */ {func(_s *Stream) BlockType {
 		__tmp2 := _VarBlockType_1(_at_2(func(_s *Stream) OInt32 {
@@ -4922,6 +4969,8 @@ func _block_type_1(_s *Stream) BlockType {
 	return __tmp1
 }
 
+var _block_type = _block_type_1
+
 func _local_1(_s *Stream) (OInt32, *Phrase[Local_]) {
 	__tmp1 := _u32_1(_s)
 	_n := __tmp1
@@ -4929,6 +4978,8 @@ func _local_1(_s *Stream) (OInt32, *Phrase[Local_]) {
 	_t := __tmp4
 	return _n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)
 }
+
+var _local = _local_1
 
 func _instr_1(_s *Stream) Instruction_ {
 	__tmp1 := _pos_1(_s)
@@ -6810,3 +6861,5 @@ func _instr_1(_s *Stream) Instruction_ {
 	}
 	return __tmp4
 }
+
+var _instr = _instr_1

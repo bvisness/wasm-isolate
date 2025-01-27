@@ -143,3 +143,11 @@ func _var_1(s *Stream) OInt32 {
 var _var = _var_1
 
 type Instruction_ interface{}
+
+type V128 [16]byte
+
+func _V128_of_bits_1(bits string) V128 {
+	var res V128
+	copy(res[:], bits)
+	return res
+}

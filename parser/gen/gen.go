@@ -20,7 +20,7 @@ var specpath = filepath.Join("gen", "spec")
 var funcsToTranslate = []string{
 	// Generic values
 	"bit", "byte", "word16", "word32", "word64",
-	"uN", "sN", "u32", "u64", "s7", "s32", "s33", "s64", "f32", "f64", /*"v128",*/
+	"uN", "sN", "u32", "u64", "s7", "s32", "s33", "s64", "f32", "f64", "v128",
 	"len32", "string",
 
 	// Instructions
@@ -34,11 +34,12 @@ func ocaml2go_(t string) string {
 		"bool":   "bool",
 		"string": "string",
 
-		"int":   "OInt",
-		"int32": "OInt32",
-		"int64": "OInt64",
-		"F32.t": "float32",
-		"F64.t": "float64",
+		"int":    "OInt",
+		"int32":  "OInt32",
+		"int64":  "OInt64",
+		"F32.t":  "float32",
+		"F64.t":  "float64",
+		"V128.t": "V128",
 
 		"address":   "OInt64",
 		"type_idx":  "OInt32",
@@ -353,7 +354,8 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	funcType := p.getTypeStart(pattern, typeDefs).(ocaml.Func)
 	funcResultType := funcType.GetTypeAfterApplyingArgs(len(params))
 
-	w("func %s(", funcName("", name, len(params)))
+	fullFuncName := funcName("", name, len(params))
+	w("func %s(", fullFuncName)
 	for _, param := range params {
 		paramName := safeName(p.s(param))
 		paramType := p.getTypeEnd(param, typeDefs)
@@ -368,6 +370,8 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	p.parseExpr(body, funcResultType, "", true, true)
 
 	w("}\n\n")
+
+	w("var %s = %s\n\n", funcName("", p.s(pattern), -1), fullFuncName)
 }
 
 var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
