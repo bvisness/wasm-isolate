@@ -4950,7 +4950,7 @@ func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 var _memop = _memop_1
 
 func _block_type_1(_s *Stream) BlockType {
-	__tmp1 := _either_2([]TODO /* stream -> 'a */ {func(_s *Stream) BlockType {
+	__tmp1 := _either_2([]func(*Stream) BlockType{func(_s *Stream) BlockType {
 		__tmp2 := _VarBlockType_1(_at_2(func(_s *Stream) OInt32 {
 			__tmp4 := _as_stat_var_1(_var_type_2(_s33, _s))
 			return __tmp4

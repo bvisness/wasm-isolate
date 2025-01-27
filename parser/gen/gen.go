@@ -29,7 +29,7 @@ var funcsToTranslate = []string{
 	"instr",
 }
 
-func ocaml2go_(t string) string {
+func ocaml2go(t ocaml.Type) string {
 	m := map[string]string{
 		"bool":   "bool",
 		"string": "string",
@@ -59,25 +59,23 @@ func ocaml2go_(t string) string {
 		"stream": "*Stream",
 	}
 
-	parts := strings.Split(t, " ")
-	switch parts[len(parts)-1] {
-	case "list":
-		return fmt.Sprintf("[]%s", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
-	case "phrase":
-		return fmt.Sprintf("*Phrase[%s]", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
-	case "option":
-		return fmt.Sprintf("*%s", ocaml2go_(strings.Join(parts[:len(parts)-1], " ")))
-	}
-
-	if goType, ok := m[t]; ok {
+	if goType, ok := m[t.String()]; ok {
 		return goType
-	} else {
-		return fmt.Sprintf("TODO /* %s */", t)
+	} else if asCons, ok := t.(ocaml.Cons); ok {
+		last := asCons[len(asCons)-1]
+		switch last {
+		case ocaml.SimpleType("list"):
+			return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1]))
+		case ocaml.SimpleType("phrase"):
+			return fmt.Sprintf("*Phrase[%s]", ocaml2go(asCons[:len(asCons)-1]))
+		case ocaml.SimpleType("option"):
+			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1]))
+		}
+	} else if asFunc, ok := t.(ocaml.Func); ok {
+		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In), ocaml2go(asFunc.Out))
 	}
-}
 
-func ocaml2go(t ocaml.Type) string {
-	return ocaml2go_(t.String())
+	return fmt.Sprintf("TODO /* %s */", t)
 }
 
 var opNames = map[string]string{
@@ -643,11 +641,10 @@ func (p *ocamlParse) parseExpr(
 
 		return p.parseExpr(expr.NamedChild(1), expectedType, currentModule, true, returnIfTerminal)
 	case "list_expression":
+		listType := p.getTypeEnd(expr, typeDefs)
 		var elemType ocaml.Type
-		if expectedType == nil {
-			exitWithError("list_expression needs an expected type")
-		}
-		if asCons, ok := expectedType.(ocaml.Cons); ok {
+
+		if asCons, ok := listType.(ocaml.Cons); ok {
 			if len(asCons) != 2 || asCons[1] != ocaml.SimpleType("list") {
 				exitWithError("list_expression needs a list type, but got: %s", expectedType)
 			}
