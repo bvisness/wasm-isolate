@@ -32,35 +32,33 @@ func _region_3(s *Stream, left OInt, right OInt) *Region {
 	}
 }
 
-func _error_3(s *Stream, pos OInt, msg string) Void {
+func _error_3[T any](s *Stream, pos OInt, msg string) T {
 	panic(CodeError{
 		region: _region_3(s, pos, pos),
 		msg:    msg,
 	})
 }
 
-func _require_4(b bool, s *Stream, pos OInt, msg string) Void {
+func _require_4[T any](b bool, s *Stream, pos OInt, msg string) T {
 	if !b {
-		_error_3(s, pos, msg)
+		return _error_3[T](s, pos, msg)
 	}
-	return nil
+	var zero T
+	return zero
 }
 
 // Skipping guarded versions of things
 
-func _expect_3(b OInt, s *Stream, msg string) Void {
-	_require_4(_get_1(s) == b, s, _pos_1(s)-1, msg)
-	return nil
+func _expect_3[T any](b OInt, s *Stream, msg string) T {
+	return _require_4[T](_get_1(s) == b, s, _pos_1(s)-1, msg)
 }
 
-func _illegal_3(s *Stream, pos OInt, b OInt) Void {
-	_error_3(s, pos, "illegal opcode "+_string_of_byte_1(b))
-	return nil
+func _illegal_3[T any](s *Stream, pos OInt, b OInt) T {
+	return _error_3[T](s, pos, "illegal opcode "+_string_of_byte_1(b))
 }
 
-func _illegal2_4(s *Stream, pos OInt, b OInt, n OInt32) Void {
-	_error_3(s, pos, "illegal opcode "+_string_of_byte_1(b)+" "+_string_of_multi_1(n))
-	return nil
+func _illegal2_4[T any](s *Stream, pos OInt, b OInt, n OInt32) T {
+	return _error_3[T](s, pos, "illegal opcode "+_string_of_byte_1(b)+" "+_string_of_multi_1(n))
 }
 
 func _at_2[T any](f func(s *Stream) T, s *Stream) *Phrase[T] {

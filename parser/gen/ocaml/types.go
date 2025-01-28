@@ -144,6 +144,9 @@ func (t SimpleType) String() string {
 }
 
 func (t SimpleType) Cardinality() int {
+	if string(t) == "unit" {
+		return 0
+	}
 	return 1
 }
 

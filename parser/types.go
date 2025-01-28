@@ -141,12 +141,6 @@ func _operatorLSL_int_2(a, b OInt) OInt {
 
 // Manual translation of the "Types" section
 
-func _var_1(s *Stream) OInt32 {
-	return _u32_1(s)
-}
-
-var _var = _var_1
-
 type Instruction_ interface{}
 
 type V128 [16]byte

@@ -469,8 +469,8 @@ func (p *ocamlParse) parseExpr(
 			funcType = p.getTypeEnd(function, typeDefs).(ocaml.Func)
 		}
 
-		results := resultVars(funcType.Out.Cardinality())
-		if statement {
+		results := resultVars(funcType.GetTypeAfterApplyingArgs(len(args)).Cardinality())
+		if len(results) > 0 && statement {
 			w("%s := ", strings.Join(results, ", "))
 		}
 
@@ -557,12 +557,16 @@ func (p *ocamlParse) parseExpr(
 			case "then_clause":
 				w(" {\n")
 				thenRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
-				w("%s = %s\n", strings.Join(results, ", "), strings.Join(thenRes, ", "))
+				if len(results) > 0 {
+					w("%s = %s\n", strings.Join(results, ", "), strings.Join(thenRes, ", "))
+				}
 				w("} ")
 			case "else_clause":
 				w(" else {\n")
 				elseRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
-				w("%s = %s\n", strings.Join(results, ", "), strings.Join(elseRes, ", "))
+				if len(results) > 0 {
+					w("%s = %s\n", strings.Join(results, ", "), strings.Join(elseRes, ", "))
+				}
 				w("} ")
 			default:
 				exitWithError("unknown type in if expression: %s", child.GrammarName())
@@ -586,7 +590,7 @@ func (p *ocamlParse) parseExpr(
 		right := expr.ChildByFieldName("right")
 
 		results := resultVars(expectedType.Cardinality())
-		if statement {
+		if len(results) > 0 && statement {
 			w("%s := ", strings.Join(results, ", "))
 		}
 
@@ -707,7 +711,9 @@ func (p *ocamlParse) parseExpr(
 			p.parseMatchPattern(pattern, matchVar, guard)
 
 			res := p.parseExpr(body, expectedType, currentModule, true, false)
-			w("%s = %s", strings.Join(matchResults, ", "), strings.Join(res, ", "))
+			if len(matchResults) > 0 {
+				w("%s = %s", strings.Join(matchResults, ", "), strings.Join(res, ", "))
+			}
 
 			w("\n")
 		}
@@ -726,6 +732,7 @@ func (p *ocamlParse) parseExpr(
 		left := expr.ChildByFieldName("left")
 		right := expr.ChildByFieldName("right")
 
+		utils.Assert(expectedType.Cardinality() > 0, "surely we can't have a product type with zero elements?")
 		results := resultVars(expectedType.Cardinality())
 		if returnIfTerminal {
 			w("return ")
@@ -770,7 +777,9 @@ func (p *ocamlParse) parseExpr(
 		for i := range len(leftRes) {
 			ignores[i] = "_"
 		}
-		w("%s = %s\n", strings.Join(ignores, ", "), strings.Join(leftRes, ", "))
+		if len(ignores) > 0 {
+			w("%s = %s\n", strings.Join(ignores, ", "), strings.Join(leftRes, ", "))
+		}
 
 		rightRes := p.parseExpr(right, expectedType, currentModule, true, returnIfTerminal)
 		w("\n")
@@ -877,15 +886,11 @@ func tmpVar() string {
 }
 
 func resultVars(n int) []string {
-	if n == 0 {
-		return []string{tmpVar()}
-	} else {
-		vars := make([]string, n)
-		for i := range n {
-			vars[i] = tmpVar()
-		}
-		return vars
+	vars := make([]string, n)
+	for i := range n {
+		vars[i] = tmpVar()
 	}
+	return vars
 }
 
 func parseHoverResponse(hover ocaml.M) ocaml.Type {

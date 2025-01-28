@@ -49,55 +49,51 @@ func _word64_1(_s *Stream) OInt64 {
 var _word64 = _word64_1
 
 func _uN_2(_n OInt, _s *Stream) OInt64 {
-	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
-	_ = __tmp1
-	__tmp7 := _byte_1(_s)
-	_b := __tmp7
-	__tmp10 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_int_operatorland_2(_b, 0x7f), _int_operatorlsl_2(1, _n))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
-	_ = __tmp10
-	__tmp23 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
-	_x := __tmp23
-	var __tmp27 OInt64
+	_require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
+	__tmp6 := _byte_1(_s)
+	_b := __tmp6
+	_require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_int_operatorland_2(_b, 0x7f), _int_operatorlsl_2(1, _n))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
+	__tmp21 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
+	_x := __tmp21
+	var __tmp25 OInt64
 	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
-		__tmp31 := _x
-		__tmp27 = __tmp31
+		__tmp29 := _x
+		__tmp25 = __tmp29
 	} else {
-		__tmp32 := _Int64_logor_2(_x, _Int64_shift_left_2(_uN_2(_int_operatorMinus_2(_n, 7), _s), 7))
-		__tmp27 = __tmp32
+		__tmp30 := _Int64_logor_2(_x, _Int64_shift_left_2(_uN_2(_int_operatorMinus_2(_n, 7), _s), 7))
+		__tmp25 = __tmp30
 	}
-	return __tmp27
+	return __tmp25
 
 }
 
 var _uN = _uN_2
 
 func _sN_2(_n OInt, _s *Stream) OInt64 {
-	__tmp1 := _require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
-	_ = __tmp1
-	__tmp7 := _byte_1(_s)
-	_b := __tmp7
-	__tmp10 := _int_operatorland_2(_int_operatorlsl_2(-(1), _int_operatorMinus_2(_n, 1)), 0x7f)
-	_mask := __tmp10
-	__tmp15 := _require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _bool_operatorOr_2(_operatorEq_2(_int_operatorland_2(_b, _mask), 0), _operatorEq_2(_int_operatorland_2(_b, _mask), _mask))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
-	_ = __tmp15
-	__tmp33 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
-	_x := __tmp33
-	var __tmp37 OInt64
+	_require_4(_operatorGt_2(_n, 0), _s, _pos_1(_s), "integer representation too long")
+	__tmp6 := _byte_1(_s)
+	_b := __tmp6
+	__tmp9 := _int_operatorland_2(_int_operatorlsl_2(-(1), _int_operatorMinus_2(_n, 1)), 0x7f)
+	_mask := __tmp9
+	_require_4(_bool_operatorOr_2(_operatorGte_2(_n, 7), _bool_operatorOr_2(_operatorEq_2(_int_operatorland_2(_b, _mask), 0), _operatorEq_2(_int_operatorland_2(_b, _mask), _mask))), _s, _int_operatorMinus_2(_pos_1(_s), 1), "integer too large")
+	__tmp31 := _Int64_of_int_1(_int_operatorland_2(_b, 0x7f))
+	_x := __tmp31
+	var __tmp35 OInt64
 	if _operatorEq_2(_int_operatorland_2(_b, 0x80), 0) {
-		var __tmp41 OInt64
+		var __tmp39 OInt64
 		if _operatorEq_2(_int_operatorland_2(_b, 0x40), 0) {
-			__tmp45 := _x
-			__tmp41 = __tmp45
+			__tmp43 := _x
+			__tmp39 = __tmp43
 		} else {
-			__tmp46 := _Int64_logor_2(_x, _Int64_logxor_2(-(1), 0x7f))
-			__tmp41 = __tmp46
+			__tmp44 := _Int64_logor_2(_x, _Int64_logxor_2(-(1), 0x7f))
+			__tmp39 = __tmp44
 		}
-		__tmp37 = __tmp41
+		__tmp35 = __tmp39
 	} else {
-		__tmp49 := _Int64_logor_2(_x, _Int64_shift_left_2(_sN_2(_int_operatorMinus_2(_n, 7), _s), 7))
-		__tmp37 = __tmp49
+		__tmp47 := _Int64_logor_2(_x, _Int64_shift_left_2(_sN_2(_int_operatorMinus_2(_n, 7), _s), 7))
+		__tmp35 = __tmp47
 	}
-	return __tmp37
+	return __tmp35
 
 }
 
@@ -193,9 +189,9 @@ func _string_1(_s *Stream) string {
 
 var _string = _string_1
 
-func _zero_1(_s *Stream) TODO /* unit */ {
-	__tmp1 := _expect_3(0x00, _s, "zero byte expected")
-	return __tmp1
+func _zero_1(_s *Stream) {
+	_expect_3(0x00, _s, "zero byte expected")
+	return
 }
 
 var _zero = _zero_1
@@ -520,31 +516,29 @@ func _sub_type_1(_s *Stream) TODO /* SubT of final * heap_type list * str_type *
 	var __tmp1 TODO /* SubT of final * heap_type list * str_type */
 	__tmp2 := _peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _int_operatorland_2(-(0x30), 0x7f))) {
-		__tmp9 := _skip_2(1, _s)
-		_ = __tmp9
-		__tmp11 := _vec_2(_var_type_1(_u32), _s)
-		_xs := __tmp11
-		__tmp16 := _SubT_1(_NoFinal, _List_map_2(func(_x TODO /* var */) TODO /* AnyHT | NoneHT | EqHT | I31HT | StructHT | ArrayHT | FuncHT | NoFuncHT | ExnHT | NoExnHT | ExternHT | NoExternHT | VarHT of var | DefHT of def_type | BotHT */ {
-			__tmp24 := _VarHT_1(_x)
-			return __tmp24
+		_skip_2(1, _s)
+		__tmp10 := _vec_2(_var_type_1(_u32), _s)
+		_xs := __tmp10
+		__tmp15 := _SubT_1(_NoFinal, _List_map_2(func(_x TODO /* var */) TODO /* AnyHT | NoneHT | EqHT | I31HT | StructHT | ArrayHT | FuncHT | NoFuncHT | ExnHT | NoExnHT | ExternHT | NoExternHT | VarHT of var | DefHT of def_type | BotHT */ {
+			__tmp23 := _VarHT_1(_x)
+			return __tmp23
 		}, _xs), _str_type_1(_s))
 
-		__tmp1 = __tmp16
+		__tmp1 = __tmp15
 	} else if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _int_operatorland_2(-(0x31), 0x7f))) {
-		__tmp33 := _skip_2(1, _s)
-		_ = __tmp33
-		__tmp35 := _vec_2(_var_type_1(_u32), _s)
-		_xs := __tmp35
-		__tmp40 := _SubT_1(_Final, _List_map_2(func(_x TODO /* var */) TODO /* AnyHT | NoneHT | EqHT | I31HT | StructHT | ArrayHT | FuncHT | NoFuncHT | ExnHT | NoExnHT | ExternHT | NoExternHT | VarHT of var | DefHT of def_type | BotHT */ {
-			__tmp48 := _VarHT_1(_x)
-			return __tmp48
+		_skip_2(1, _s)
+		__tmp33 := _vec_2(_var_type_1(_u32), _s)
+		_xs := __tmp33
+		__tmp38 := _SubT_1(_Final, _List_map_2(func(_x TODO /* var */) TODO /* AnyHT | NoneHT | EqHT | I31HT | StructHT | ArrayHT | FuncHT | NoFuncHT | ExnHT | NoExnHT | ExternHT | NoExternHT | VarHT of var | DefHT of def_type | BotHT */ {
+			__tmp46 := _VarHT_1(_x)
+			return __tmp46
 		}, _xs), _str_type_1(_s))
 
-		__tmp1 = __tmp40
+		__tmp1 = __tmp38
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp55 := _SubT_1(_Final, []HeapType{}, _str_type_1(_s))
-		__tmp1 = __tmp55
+		__tmp53 := _SubT_1(_Final, []HeapType{}, _str_type_1(_s))
+		__tmp1 = __tmp53
 	}
 	return __tmp1
 }
@@ -555,15 +549,14 @@ func _rec_type_1(_s *Stream) TODO /* RecT of sub_type list */ {
 	var __tmp1 TODO /* RecT of sub_type list */
 	__tmp2 := _peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _int_operatorland_2(-(0x32), 0x7f))) {
-		__tmp9 := _skip_2(1, _s)
-		_ = __tmp9
-		__tmp11 := _RecT_1(_vec_2(_sub_type, _s))
+		_skip_2(1, _s)
+		__tmp10 := _RecT_1(_vec_2(_sub_type, _s))
 
-		__tmp1 = __tmp11
+		__tmp1 = __tmp10
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp17 := _RecT_1([]TODO /* sub_type */ {_sub_type_1(_s)})
-		__tmp1 = __tmp17
+		__tmp16 := _RecT_1([]TODO /* sub_type */ {_sub_type_1(_s)})
+		__tmp1 = __tmp16
 	}
 	return __tmp1
 }
@@ -573,23 +566,22 @@ var _rec_type = _rec_type_1
 func _limits_2(_uN func(*Stream) OInt64, _s *Stream) (TODO /* addr_type */, TODO /* limits */) {
 	__tmp1 := _byte_1(_s)
 	_flags := __tmp1
-	__tmp4 := _require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfa), 0), _s, _int_operatorMinus_2(_pos_1(_s), 1), "malformed limits flags")
-	_ = __tmp4
-	__tmp12 := _operatorEq_2(_int_operatorland_2(_flags, 1), 1)
-	_has_max := __tmp12
-	var __tmp16 TODO /* I32AT | I64AT */
+	_require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfa), 0), _s, _int_operatorMinus_2(_pos_1(_s), 1), "malformed limits flags")
+	__tmp11 := _operatorEq_2(_int_operatorland_2(_flags, 1), 1)
+	_has_max := __tmp11
+	var __tmp15 TODO /* I32AT | I64AT */
 	if _operatorEq_2(_int_operatorland_2(_flags, 4), 4) {
-		__tmp20 := _I64AT
-		__tmp16 = __tmp20
+		__tmp19 := _I64AT
+		__tmp15 = __tmp19
 	} else {
-		__tmp21 := _I32AT
-		__tmp16 = __tmp21
+		__tmp20 := _I32AT
+		__tmp15 = __tmp20
 	}
-	_at := __tmp16
-	__tmp23 := _uN_1(_s)
-	_min := __tmp23
-	__tmp26 := _opt_3(_uN, _has_max, _s)
-	_max := __tmp26
+	_at := __tmp15
+	__tmp22 := _uN_1(_s)
+	_min := __tmp22
+	__tmp25 := _opt_3(_uN, _has_max, _s)
+	_max := __tmp25
 	return _at, nil /* TODO: record_expression */
 
 }
@@ -599,10 +591,10 @@ var _limits = _limits_2
 func _table_type_1(_s *Stream) TODO /* TableT of addr_type * limits * ref_type */ {
 	__tmp1, __tmp2 := _ref_type_1(_s)
 	_t := __tmp1, __tmp2
-	__tmp5 := _limits_2(_u64, _s)
-	_at, _lim := __tmp5
-	__tmp10 := _TableT_1(_at, _lim, _t)
-	return __tmp10
+	__tmp5, __tmp6 := _limits_2(_u64, _s)
+	_at, _lim := __tmp5, __tmp6
+	__tmp11 := _TableT_1(_at, _lim, _t)
+	return __tmp11
 }
 
 var _table_type = _table_type_1
@@ -619,10 +611,9 @@ func _global_type_1(_s *Stream) TODO /* GlobalT of mut * val_type */ {
 var _global_type = _global_type_1
 
 func _tag_type_1(_s *Stream) *Phrase[OInt32] {
-	__tmp1 := _zero_1(_s)
-	_ = __tmp1
-	__tmp3 := _at_2(_var, _s)
-	return __tmp3
+	_zero_1(_s)
+	__tmp2 := _at_2(_var, _s)
+	return __tmp2
 
 }
 
@@ -635,9 +626,9 @@ func _op_1(_s *Stream) OInt {
 
 var _op = _op_1
 
-func _end__1(_s *Stream) TODO /* unit */ {
-	__tmp1 := _expect_3(0x0b, _s, "END opcode expected")
-	return __tmp1
+func _end__1(_s *Stream) {
+	_expect_3(0x0b, _s, "END opcode expected")
+	return
 }
 
 var _end_ = _end__1
@@ -647,23 +638,22 @@ func _memop_1(_s *Stream) (*Phrase[OInt32], OInt, OInt64) {
 	_pos := __tmp1
 	__tmp4 := _u32_1(_s)
 	_flags := __tmp4
-	__tmp7 := _require_4(_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
-	_ = __tmp7
-	__tmp12 := _operatorNotEq_2(_Int32_logand_2(_flags, 0x40), 0)
-	_has_var := __tmp12
-	var __tmp16 *Phrase[OInt32]
+	_require_4(_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
+	__tmp11 := _operatorNotEq_2(_Int32_logand_2(_flags, 0x40), 0)
+	_has_var := __tmp11
+	var __tmp15 *Phrase[OInt32]
 	if _has_var {
-		__tmp18 := _at_2(_var, _s)
-		__tmp16 = __tmp18
+		__tmp17 := _at_2(_var, _s)
+		__tmp15 = __tmp17
 	} else {
-		__tmp21 := _operatorAtAt_2(0, _no_region)
-		__tmp16 = __tmp21
+		__tmp20 := _operatorAtAt_2(0, _no_region)
+		__tmp15 = __tmp20
 	}
-	_x := __tmp16
-	__tmp24 := _Int32_to_int_1(_Int32_logand_2(_flags, 0x3f))
-	_align := __tmp24
-	__tmp28 := _u64_1(_s)
-	_offset := __tmp28
+	_x := __tmp15
+	__tmp23 := _Int32_to_int_1(_Int32_logand_2(_flags, 0x3f))
+	_align := __tmp23
+	__tmp27 := _u64_1(_s)
+	_offset := __tmp27
 	return _x, _align, _offset
 
 }
@@ -678,14 +668,13 @@ func _block_type_1(_s *Stream) BlockType {
 		}, _s))
 		return __tmp2
 	}, func(_s *Stream) BlockType {
-		__tmp9 := _expect_3(0x40, _s, "")
-		_ = __tmp9
-		__tmp11 := _ValBlockType_1(_None)
-		return __tmp11
+		_expect_3(0x40, _s, "")
+		__tmp10 := _ValBlockType_1(_None)
+		return __tmp10
 
 	}, func(_s *Stream) BlockType {
-		__tmp13 := _ValBlockType_1(_Some_1(_val_type_1(_s)))
-		return __tmp13
+		__tmp12 := _ValBlockType_1(_Some_1(_val_type_1(_s)))
+		return __tmp12
 	}}, _s)
 	return __tmp1
 }
@@ -718,1867 +707,1860 @@ func _instr_1(_s *Stream) Instruction_ {
 		_bt := __tmp10
 		__tmp13 := _instr_block_1(_s)
 		_es_ := __tmp13
-		__tmp16 := _end__1(_s)
-		_ = __tmp16
-		__tmp18 := _block_2(_bt, _es_)
+		_end__1(_s)
+		__tmp17 := _block_2(_bt, _es_)
 
-		__tmp4 = __tmp18
+		__tmp4 = __tmp17
 	} else if __tmp5 == 0x03 {
-		__tmp21 := _block_type_1(_s)
-		_bt := __tmp21
-		__tmp24 := _instr_block_1(_s)
-		_es_ := __tmp24
-		__tmp27 := _end__1(_s)
-		_ = __tmp27
-		__tmp29 := _loop_2(_bt, _es_)
+		__tmp20 := _block_type_1(_s)
+		_bt := __tmp20
+		__tmp23 := _instr_block_1(_s)
+		_es_ := __tmp23
+		_end__1(_s)
+		__tmp27 := _loop_2(_bt, _es_)
 
-		__tmp4 = __tmp29
+		__tmp4 = __tmp27
 	} else if __tmp5 == 0x04 {
-		__tmp32 := _block_type_1(_s)
-		_bt := __tmp32
-		__tmp35 := _instr_block_1(_s)
-		_es1 := __tmp35
-		var __tmp38 Instruction_
+		__tmp30 := _block_type_1(_s)
+		_bt := __tmp30
+		__tmp33 := _instr_block_1(_s)
+		_es1 := __tmp33
+		var __tmp36 Instruction_
 		if _operatorEq_2(_peek_1(_s), _Some_1(0x05)) {
-			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
-			_ = __tmp43
-			__tmp45 := _instr_block_1(_s)
-			_es2 := __tmp45
-			__tmp48 := _end__1(_s)
-			_ = __tmp48
-			__tmp50 := _if__3(_bt, _es1, _es2)
+			_expect_3(0x05, _s, "ELSE or END opcode expected")
+			__tmp42 := _instr_block_1(_s)
+			_es2 := __tmp42
+			_end__1(_s)
+			__tmp46 := _if__3(_bt, _es1, _es2)
 
-			__tmp38 = __tmp50
+			__tmp36 = __tmp46
 		} else {
-			__tmp54 := _end__1(_s)
-			_ = __tmp54
-			__tmp56 := _if__3(_bt, _es1, []*Phrase[Instruction_]{})
+			_end__1(_s)
+			__tmp51 := _if__3(_bt, _es1, []*Phrase[Instruction_]{})
 
-			__tmp38 = __tmp56
+			__tmp36 = __tmp51
 		}
-		__tmp4 = __tmp38
+		__tmp4 = __tmp36
 	} else if __tmp5 == 0x05 {
-		__tmp59 := _error_3(_s, _pos, "misplaced ELSE opcode")
-		__tmp4 = __tmp59
+		__tmp54 := _error_3(_s, _pos, "misplaced ELSE opcode")
+		__tmp4 = __tmp54
 	} else if __tmp5 == 0x06 || __tmp5 == 0x07 {
 		_b := __tmp5
-		__tmp63 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp63
+		__tmp58 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp58
 	} else if __tmp5 == 0x08 {
-		__tmp67 := _throw_1(_at_2(_var, _s))
-		__tmp4 = __tmp67
+		__tmp62 := _throw_1(_at_2(_var, _s))
+		__tmp4 = __tmp62
 	} else if __tmp5 == 0x09 {
 		_b := __tmp5
-		__tmp72 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp72
+		__tmp67 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp67
 	} else if __tmp5 == 0x0a {
-		__tmp76 := _throw_ref
-		__tmp4 = __tmp76
+		__tmp71 := _throw_ref
+		__tmp4 = __tmp71
 	} else if __tmp5 == 0x0b {
-		__tmp77 := _error_3(_s, _pos, "misplaced END opcode")
-		__tmp4 = __tmp77
+		__tmp72 := _error_3(_s, _pos, "misplaced END opcode")
+		__tmp4 = __tmp72
 	} else if __tmp5 == 0x0c {
-		__tmp80 := _br_1(_at_2(_var, _s))
-		__tmp4 = __tmp80
+		__tmp75 := _br_1(_at_2(_var, _s))
+		__tmp4 = __tmp75
 	} else if __tmp5 == 0x0d {
-		__tmp84 := _br_if_1(_at_2(_var, _s))
-		__tmp4 = __tmp84
+		__tmp79 := _br_if_1(_at_2(_var, _s))
+		__tmp4 = __tmp79
 	} else if __tmp5 == 0x0e {
-		__tmp88 := _vec_2(_at_1(_var), _s)
-		_xs := __tmp88
-		__tmp93 := _at_2(_var, _s)
-		_x := __tmp93
-		__tmp97 := _br_table_2(_xs, _x)
-		__tmp4 = __tmp97
+		__tmp83 := _vec_2(_at_1(_var), _s)
+		_xs := __tmp83
+		__tmp88 := _at_2(_var, _s)
+		_x := __tmp88
+		__tmp92 := _br_table_2(_xs, _x)
+		__tmp4 = __tmp92
 	} else if __tmp5 == 0x0f {
-		__tmp100 := _return
-		__tmp4 = __tmp100
+		__tmp95 := _return
+		__tmp4 = __tmp95
 	} else if __tmp5 == 0x10 {
-		__tmp101 := _call_1(_at_2(_var, _s))
-		__tmp4 = __tmp101
+		__tmp96 := _call_1(_at_2(_var, _s))
+		__tmp4 = __tmp96
 	} else if __tmp5 == 0x11 {
-		__tmp105 := _at_2(_var, _s)
-		_y := __tmp105
-		__tmp109 := _at_2(_var, _s)
-		_x := __tmp109
-		__tmp113 := _call_indirect_2(_x, _y)
-		__tmp4 = __tmp113
+		__tmp100 := _at_2(_var, _s)
+		_y := __tmp100
+		__tmp104 := _at_2(_var, _s)
+		_x := __tmp104
+		__tmp108 := _call_indirect_2(_x, _y)
+		__tmp4 = __tmp108
 	} else if __tmp5 == 0x12 {
-		__tmp116 := _return_call_1(_at_2(_var, _s))
-		__tmp4 = __tmp116
+		__tmp111 := _return_call_1(_at_2(_var, _s))
+		__tmp4 = __tmp111
 	} else if __tmp5 == 0x13 {
-		__tmp120 := _at_2(_var, _s)
-		_y := __tmp120
-		__tmp124 := _at_2(_var, _s)
-		_x := __tmp124
-		__tmp128 := _return_call_indirect_2(_x, _y)
-		__tmp4 = __tmp128
+		__tmp115 := _at_2(_var, _s)
+		_y := __tmp115
+		__tmp119 := _at_2(_var, _s)
+		_x := __tmp119
+		__tmp123 := _return_call_indirect_2(_x, _y)
+		__tmp4 = __tmp123
 	} else if __tmp5 == 0x14 {
-		__tmp131 := _call_ref_1(_at_2(_var, _s))
-		__tmp4 = __tmp131
+		__tmp126 := _call_ref_1(_at_2(_var, _s))
+		__tmp4 = __tmp126
 	} else if __tmp5 == 0x15 {
-		__tmp135 := _return_call_ref_1(_at_2(_var, _s))
-		__tmp4 = __tmp135
+		__tmp130 := _return_call_ref_1(_at_2(_var, _s))
+		__tmp4 = __tmp130
 	} else if __tmp5 == 0x16 || __tmp5 == 0x17 || __tmp5 == 0x18 || __tmp5 == 0x19 {
 		_b := __tmp5
-		__tmp140 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp140
+		__tmp135 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp135
 	} else if __tmp5 == 0x1a {
-		__tmp144 := _drop
-		__tmp4 = __tmp144
+		__tmp139 := _drop
+		__tmp4 = __tmp139
 	} else if __tmp5 == 0x1b {
-		__tmp145 := _select_1(_None)
-		__tmp4 = __tmp145
+		__tmp140 := _select_1(_None)
+		__tmp4 = __tmp140
 	} else if __tmp5 == 0x1c {
-		__tmp147 := _select_1(_Some_1(_vec_2(_val_type, _s)))
-		__tmp4 = __tmp147
+		__tmp142 := _select_1(_Some_1(_vec_2(_val_type, _s)))
+		__tmp4 = __tmp142
 	} else if __tmp5 == 0x1d || __tmp5 == 0x1e {
 		_b := __tmp5
-		__tmp153 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp153
+		__tmp148 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp148
 	} else if __tmp5 == 0x1f {
-		__tmp157 := _block_type_1(_s)
-		_bt := __tmp157
-		__tmp160 := _vec_2(_at_1(_catch), _s)
-		_cs := __tmp160
-		__tmp165 := _instr_block_1(_s)
-		_es := __tmp165
-		__tmp168 := _end__1(_s)
-		_ = __tmp168
-		__tmp170 := _try_table_3(_bt, _cs, _es)
+		__tmp152 := _block_type_1(_s)
+		_bt := __tmp152
+		__tmp155 := _vec_2(_at_1(_catch), _s)
+		_cs := __tmp155
+		__tmp160 := _instr_block_1(_s)
+		_es := __tmp160
+		_end__1(_s)
+		__tmp164 := _try_table_3(_bt, _cs, _es)
 
-		__tmp4 = __tmp170
+		__tmp4 = __tmp164
 	} else if __tmp5 == 0x20 {
-		__tmp174 := _local_get_1(_at_2(_var, _s))
-		__tmp4 = __tmp174
+		__tmp168 := _local_get_1(_at_2(_var, _s))
+		__tmp4 = __tmp168
 	} else if __tmp5 == 0x21 {
-		__tmp178 := _local_set_1(_at_2(_var, _s))
-		__tmp4 = __tmp178
+		__tmp172 := _local_set_1(_at_2(_var, _s))
+		__tmp4 = __tmp172
 	} else if __tmp5 == 0x22 {
-		__tmp182 := _local_tee_1(_at_2(_var, _s))
-		__tmp4 = __tmp182
+		__tmp176 := _local_tee_1(_at_2(_var, _s))
+		__tmp4 = __tmp176
 	} else if __tmp5 == 0x23 {
-		__tmp186 := _global_get_1(_at_2(_var, _s))
-		__tmp4 = __tmp186
+		__tmp180 := _global_get_1(_at_2(_var, _s))
+		__tmp4 = __tmp180
 	} else if __tmp5 == 0x24 {
-		__tmp190 := _global_set_1(_at_2(_var, _s))
-		__tmp4 = __tmp190
+		__tmp184 := _global_set_1(_at_2(_var, _s))
+		__tmp4 = __tmp184
 	} else if __tmp5 == 0x25 {
-		__tmp194 := _table_get_1(_at_2(_var, _s))
-		__tmp4 = __tmp194
+		__tmp188 := _table_get_1(_at_2(_var, _s))
+		__tmp4 = __tmp188
 	} else if __tmp5 == 0x26 {
-		__tmp198 := _table_set_1(_at_2(_var, _s))
-		__tmp4 = __tmp198
+		__tmp192 := _table_set_1(_at_2(_var, _s))
+		__tmp4 = __tmp192
 	} else if __tmp5 == 0x27 {
 		_b := __tmp5
-		__tmp203 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp203
+		__tmp197 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp197
 	} else if __tmp5 == 0x28 {
-		__tmp207, __tmp208, __tmp209 := _memop_1(_s)
-		_x, _a, _o := __tmp207, __tmp208, __tmp209
-		__tmp214 := _i32_load_3(_x, _a, _o)
-		__tmp4 = __tmp214
+		__tmp201, __tmp202, __tmp203 := _memop_1(_s)
+		_x, _a, _o := __tmp201, __tmp202, __tmp203
+		__tmp208 := _i32_load_3(_x, _a, _o)
+		__tmp4 = __tmp208
 	} else if __tmp5 == 0x29 {
-		__tmp218, __tmp219, __tmp220 := _memop_1(_s)
-		_x, _a, _o := __tmp218, __tmp219, __tmp220
-		__tmp225 := _i64_load_3(_x, _a, _o)
-		__tmp4 = __tmp225
+		__tmp212, __tmp213, __tmp214 := _memop_1(_s)
+		_x, _a, _o := __tmp212, __tmp213, __tmp214
+		__tmp219 := _i64_load_3(_x, _a, _o)
+		__tmp4 = __tmp219
 	} else if __tmp5 == 0x2a {
-		__tmp229, __tmp230, __tmp231 := _memop_1(_s)
-		_x, _a, _o := __tmp229, __tmp230, __tmp231
-		__tmp236 := _f32_load_3(_x, _a, _o)
-		__tmp4 = __tmp236
+		__tmp223, __tmp224, __tmp225 := _memop_1(_s)
+		_x, _a, _o := __tmp223, __tmp224, __tmp225
+		__tmp230 := _f32_load_3(_x, _a, _o)
+		__tmp4 = __tmp230
 	} else if __tmp5 == 0x2b {
-		__tmp240, __tmp241, __tmp242 := _memop_1(_s)
-		_x, _a, _o := __tmp240, __tmp241, __tmp242
-		__tmp247 := _f64_load_3(_x, _a, _o)
-		__tmp4 = __tmp247
+		__tmp234, __tmp235, __tmp236 := _memop_1(_s)
+		_x, _a, _o := __tmp234, __tmp235, __tmp236
+		__tmp241 := _f64_load_3(_x, _a, _o)
+		__tmp4 = __tmp241
 	} else if __tmp5 == 0x2c {
-		__tmp251, __tmp252, __tmp253 := _memop_1(_s)
-		_x, _a, _o := __tmp251, __tmp252, __tmp253
-		__tmp258 := _i32_load8_s_3(_x, _a, _o)
-		__tmp4 = __tmp258
+		__tmp245, __tmp246, __tmp247 := _memop_1(_s)
+		_x, _a, _o := __tmp245, __tmp246, __tmp247
+		__tmp252 := _i32_load8_s_3(_x, _a, _o)
+		__tmp4 = __tmp252
 	} else if __tmp5 == 0x2d {
-		__tmp262, __tmp263, __tmp264 := _memop_1(_s)
-		_x, _a, _o := __tmp262, __tmp263, __tmp264
-		__tmp269 := _i32_load8_u_3(_x, _a, _o)
-		__tmp4 = __tmp269
+		__tmp256, __tmp257, __tmp258 := _memop_1(_s)
+		_x, _a, _o := __tmp256, __tmp257, __tmp258
+		__tmp263 := _i32_load8_u_3(_x, _a, _o)
+		__tmp4 = __tmp263
 	} else if __tmp5 == 0x2e {
-		__tmp273, __tmp274, __tmp275 := _memop_1(_s)
-		_x, _a, _o := __tmp273, __tmp274, __tmp275
-		__tmp280 := _i32_load16_s_3(_x, _a, _o)
-		__tmp4 = __tmp280
+		__tmp267, __tmp268, __tmp269 := _memop_1(_s)
+		_x, _a, _o := __tmp267, __tmp268, __tmp269
+		__tmp274 := _i32_load16_s_3(_x, _a, _o)
+		__tmp4 = __tmp274
 	} else if __tmp5 == 0x2f {
-		__tmp284, __tmp285, __tmp286 := _memop_1(_s)
-		_x, _a, _o := __tmp284, __tmp285, __tmp286
-		__tmp291 := _i32_load16_u_3(_x, _a, _o)
-		__tmp4 = __tmp291
+		__tmp278, __tmp279, __tmp280 := _memop_1(_s)
+		_x, _a, _o := __tmp278, __tmp279, __tmp280
+		__tmp285 := _i32_load16_u_3(_x, _a, _o)
+		__tmp4 = __tmp285
 	} else if __tmp5 == 0x30 {
-		__tmp295, __tmp296, __tmp297 := _memop_1(_s)
-		_x, _a, _o := __tmp295, __tmp296, __tmp297
-		__tmp302 := _i64_load8_s_3(_x, _a, _o)
-		__tmp4 = __tmp302
+		__tmp289, __tmp290, __tmp291 := _memop_1(_s)
+		_x, _a, _o := __tmp289, __tmp290, __tmp291
+		__tmp296 := _i64_load8_s_3(_x, _a, _o)
+		__tmp4 = __tmp296
 	} else if __tmp5 == 0x31 {
-		__tmp306, __tmp307, __tmp308 := _memop_1(_s)
-		_x, _a, _o := __tmp306, __tmp307, __tmp308
-		__tmp313 := _i64_load8_u_3(_x, _a, _o)
-		__tmp4 = __tmp313
+		__tmp300, __tmp301, __tmp302 := _memop_1(_s)
+		_x, _a, _o := __tmp300, __tmp301, __tmp302
+		__tmp307 := _i64_load8_u_3(_x, _a, _o)
+		__tmp4 = __tmp307
 	} else if __tmp5 == 0x32 {
-		__tmp317, __tmp318, __tmp319 := _memop_1(_s)
-		_x, _a, _o := __tmp317, __tmp318, __tmp319
-		__tmp324 := _i64_load16_s_3(_x, _a, _o)
-		__tmp4 = __tmp324
+		__tmp311, __tmp312, __tmp313 := _memop_1(_s)
+		_x, _a, _o := __tmp311, __tmp312, __tmp313
+		__tmp318 := _i64_load16_s_3(_x, _a, _o)
+		__tmp4 = __tmp318
 	} else if __tmp5 == 0x33 {
-		__tmp328, __tmp329, __tmp330 := _memop_1(_s)
-		_x, _a, _o := __tmp328, __tmp329, __tmp330
-		__tmp335 := _i64_load16_u_3(_x, _a, _o)
-		__tmp4 = __tmp335
+		__tmp322, __tmp323, __tmp324 := _memop_1(_s)
+		_x, _a, _o := __tmp322, __tmp323, __tmp324
+		__tmp329 := _i64_load16_u_3(_x, _a, _o)
+		__tmp4 = __tmp329
 	} else if __tmp5 == 0x34 {
-		__tmp339, __tmp340, __tmp341 := _memop_1(_s)
-		_x, _a, _o := __tmp339, __tmp340, __tmp341
-		__tmp346 := _i64_load32_s_3(_x, _a, _o)
-		__tmp4 = __tmp346
+		__tmp333, __tmp334, __tmp335 := _memop_1(_s)
+		_x, _a, _o := __tmp333, __tmp334, __tmp335
+		__tmp340 := _i64_load32_s_3(_x, _a, _o)
+		__tmp4 = __tmp340
 	} else if __tmp5 == 0x35 {
-		__tmp350, __tmp351, __tmp352 := _memop_1(_s)
-		_x, _a, _o := __tmp350, __tmp351, __tmp352
-		__tmp357 := _i64_load32_u_3(_x, _a, _o)
-		__tmp4 = __tmp357
+		__tmp344, __tmp345, __tmp346 := _memop_1(_s)
+		_x, _a, _o := __tmp344, __tmp345, __tmp346
+		__tmp351 := _i64_load32_u_3(_x, _a, _o)
+		__tmp4 = __tmp351
 	} else if __tmp5 == 0x36 {
-		__tmp361, __tmp362, __tmp363 := _memop_1(_s)
-		_x, _a, _o := __tmp361, __tmp362, __tmp363
-		__tmp368 := _i32_store_3(_x, _a, _o)
-		__tmp4 = __tmp368
+		__tmp355, __tmp356, __tmp357 := _memop_1(_s)
+		_x, _a, _o := __tmp355, __tmp356, __tmp357
+		__tmp362 := _i32_store_3(_x, _a, _o)
+		__tmp4 = __tmp362
 	} else if __tmp5 == 0x37 {
-		__tmp372, __tmp373, __tmp374 := _memop_1(_s)
-		_x, _a, _o := __tmp372, __tmp373, __tmp374
-		__tmp379 := _i64_store_3(_x, _a, _o)
-		__tmp4 = __tmp379
+		__tmp366, __tmp367, __tmp368 := _memop_1(_s)
+		_x, _a, _o := __tmp366, __tmp367, __tmp368
+		__tmp373 := _i64_store_3(_x, _a, _o)
+		__tmp4 = __tmp373
 	} else if __tmp5 == 0x38 {
-		__tmp383, __tmp384, __tmp385 := _memop_1(_s)
-		_x, _a, _o := __tmp383, __tmp384, __tmp385
-		__tmp390 := _f32_store_3(_x, _a, _o)
-		__tmp4 = __tmp390
+		__tmp377, __tmp378, __tmp379 := _memop_1(_s)
+		_x, _a, _o := __tmp377, __tmp378, __tmp379
+		__tmp384 := _f32_store_3(_x, _a, _o)
+		__tmp4 = __tmp384
 	} else if __tmp5 == 0x39 {
-		__tmp394, __tmp395, __tmp396 := _memop_1(_s)
-		_x, _a, _o := __tmp394, __tmp395, __tmp396
-		__tmp401 := _f64_store_3(_x, _a, _o)
-		__tmp4 = __tmp401
+		__tmp388, __tmp389, __tmp390 := _memop_1(_s)
+		_x, _a, _o := __tmp388, __tmp389, __tmp390
+		__tmp395 := _f64_store_3(_x, _a, _o)
+		__tmp4 = __tmp395
 	} else if __tmp5 == 0x3a {
-		__tmp405, __tmp406, __tmp407 := _memop_1(_s)
-		_x, _a, _o := __tmp405, __tmp406, __tmp407
-		__tmp412 := _i32_store8_3(_x, _a, _o)
-		__tmp4 = __tmp412
+		__tmp399, __tmp400, __tmp401 := _memop_1(_s)
+		_x, _a, _o := __tmp399, __tmp400, __tmp401
+		__tmp406 := _i32_store8_3(_x, _a, _o)
+		__tmp4 = __tmp406
 	} else if __tmp5 == 0x3b {
-		__tmp416, __tmp417, __tmp418 := _memop_1(_s)
-		_x, _a, _o := __tmp416, __tmp417, __tmp418
-		__tmp423 := _i32_store16_3(_x, _a, _o)
-		__tmp4 = __tmp423
+		__tmp410, __tmp411, __tmp412 := _memop_1(_s)
+		_x, _a, _o := __tmp410, __tmp411, __tmp412
+		__tmp417 := _i32_store16_3(_x, _a, _o)
+		__tmp4 = __tmp417
 	} else if __tmp5 == 0x3c {
-		__tmp427, __tmp428, __tmp429 := _memop_1(_s)
-		_x, _a, _o := __tmp427, __tmp428, __tmp429
-		__tmp434 := _i64_store8_3(_x, _a, _o)
-		__tmp4 = __tmp434
+		__tmp421, __tmp422, __tmp423 := _memop_1(_s)
+		_x, _a, _o := __tmp421, __tmp422, __tmp423
+		__tmp428 := _i64_store8_3(_x, _a, _o)
+		__tmp4 = __tmp428
 	} else if __tmp5 == 0x3d {
-		__tmp438, __tmp439, __tmp440 := _memop_1(_s)
-		_x, _a, _o := __tmp438, __tmp439, __tmp440
-		__tmp445 := _i64_store16_3(_x, _a, _o)
-		__tmp4 = __tmp445
+		__tmp432, __tmp433, __tmp434 := _memop_1(_s)
+		_x, _a, _o := __tmp432, __tmp433, __tmp434
+		__tmp439 := _i64_store16_3(_x, _a, _o)
+		__tmp4 = __tmp439
 	} else if __tmp5 == 0x3e {
-		__tmp449, __tmp450, __tmp451 := _memop_1(_s)
-		_x, _a, _o := __tmp449, __tmp450, __tmp451
-		__tmp456 := _i64_store32_3(_x, _a, _o)
-		__tmp4 = __tmp456
+		__tmp443, __tmp444, __tmp445 := _memop_1(_s)
+		_x, _a, _o := __tmp443, __tmp444, __tmp445
+		__tmp450 := _i64_store32_3(_x, _a, _o)
+		__tmp4 = __tmp450
 	} else if __tmp5 == 0x3f {
-		__tmp460 := _memory_size_1(_at_2(_var, _s))
-		__tmp4 = __tmp460
+		__tmp454 := _memory_size_1(_at_2(_var, _s))
+		__tmp4 = __tmp454
 	} else if __tmp5 == 0x40 {
-		__tmp464 := _memory_grow_1(_at_2(_var, _s))
-		__tmp4 = __tmp464
+		__tmp458 := _memory_grow_1(_at_2(_var, _s))
+		__tmp4 = __tmp458
 	} else if __tmp5 == 0x41 {
-		__tmp468 := _i32_const_1(_at_2(_s32, _s))
-		__tmp4 = __tmp468
+		__tmp462 := _i32_const_1(_at_2(_s32, _s))
+		__tmp4 = __tmp462
 	} else if __tmp5 == 0x42 {
-		__tmp472 := _i64_const_1(_at_2(_s64, _s))
-		__tmp4 = __tmp472
+		__tmp466 := _i64_const_1(_at_2(_s64, _s))
+		__tmp4 = __tmp466
 	} else if __tmp5 == 0x43 {
-		__tmp476 := _f32_const_1(_at_2(_f32, _s))
-		__tmp4 = __tmp476
+		__tmp470 := _f32_const_1(_at_2(_f32, _s))
+		__tmp4 = __tmp470
 	} else if __tmp5 == 0x44 {
-		__tmp480 := _f64_const_1(_at_2(_f64, _s))
-		__tmp4 = __tmp480
+		__tmp474 := _f64_const_1(_at_2(_f64, _s))
+		__tmp4 = __tmp474
 	} else if __tmp5 == 0x45 {
-		__tmp484 := _i32_eqz
-		__tmp4 = __tmp484
+		__tmp478 := _i32_eqz
+		__tmp4 = __tmp478
 	} else if __tmp5 == 0x46 {
-		__tmp485 := _i32_eq
-		__tmp4 = __tmp485
+		__tmp479 := _i32_eq
+		__tmp4 = __tmp479
 	} else if __tmp5 == 0x47 {
-		__tmp486 := _i32_ne
-		__tmp4 = __tmp486
+		__tmp480 := _i32_ne
+		__tmp4 = __tmp480
 	} else if __tmp5 == 0x48 {
-		__tmp487 := _i32_lt_s
-		__tmp4 = __tmp487
+		__tmp481 := _i32_lt_s
+		__tmp4 = __tmp481
 	} else if __tmp5 == 0x49 {
-		__tmp488 := _i32_lt_u
-		__tmp4 = __tmp488
+		__tmp482 := _i32_lt_u
+		__tmp4 = __tmp482
 	} else if __tmp5 == 0x4a {
-		__tmp489 := _i32_gt_s
-		__tmp4 = __tmp489
+		__tmp483 := _i32_gt_s
+		__tmp4 = __tmp483
 	} else if __tmp5 == 0x4b {
-		__tmp490 := _i32_gt_u
-		__tmp4 = __tmp490
+		__tmp484 := _i32_gt_u
+		__tmp4 = __tmp484
 	} else if __tmp5 == 0x4c {
-		__tmp491 := _i32_le_s
-		__tmp4 = __tmp491
+		__tmp485 := _i32_le_s
+		__tmp4 = __tmp485
 	} else if __tmp5 == 0x4d {
-		__tmp492 := _i32_le_u
-		__tmp4 = __tmp492
+		__tmp486 := _i32_le_u
+		__tmp4 = __tmp486
 	} else if __tmp5 == 0x4e {
-		__tmp493 := _i32_ge_s
-		__tmp4 = __tmp493
+		__tmp487 := _i32_ge_s
+		__tmp4 = __tmp487
 	} else if __tmp5 == 0x4f {
-		__tmp494 := _i32_ge_u
-		__tmp4 = __tmp494
+		__tmp488 := _i32_ge_u
+		__tmp4 = __tmp488
 	} else if __tmp5 == 0x50 {
-		__tmp495 := _i64_eqz
-		__tmp4 = __tmp495
+		__tmp489 := _i64_eqz
+		__tmp4 = __tmp489
 	} else if __tmp5 == 0x51 {
-		__tmp496 := _i64_eq
-		__tmp4 = __tmp496
+		__tmp490 := _i64_eq
+		__tmp4 = __tmp490
 	} else if __tmp5 == 0x52 {
-		__tmp497 := _i64_ne
-		__tmp4 = __tmp497
+		__tmp491 := _i64_ne
+		__tmp4 = __tmp491
 	} else if __tmp5 == 0x53 {
-		__tmp498 := _i64_lt_s
-		__tmp4 = __tmp498
+		__tmp492 := _i64_lt_s
+		__tmp4 = __tmp492
 	} else if __tmp5 == 0x54 {
-		__tmp499 := _i64_lt_u
-		__tmp4 = __tmp499
+		__tmp493 := _i64_lt_u
+		__tmp4 = __tmp493
 	} else if __tmp5 == 0x55 {
-		__tmp500 := _i64_gt_s
-		__tmp4 = __tmp500
+		__tmp494 := _i64_gt_s
+		__tmp4 = __tmp494
 	} else if __tmp5 == 0x56 {
-		__tmp501 := _i64_gt_u
-		__tmp4 = __tmp501
+		__tmp495 := _i64_gt_u
+		__tmp4 = __tmp495
 	} else if __tmp5 == 0x57 {
-		__tmp502 := _i64_le_s
-		__tmp4 = __tmp502
+		__tmp496 := _i64_le_s
+		__tmp4 = __tmp496
 	} else if __tmp5 == 0x58 {
-		__tmp503 := _i64_le_u
-		__tmp4 = __tmp503
+		__tmp497 := _i64_le_u
+		__tmp4 = __tmp497
 	} else if __tmp5 == 0x59 {
-		__tmp504 := _i64_ge_s
-		__tmp4 = __tmp504
+		__tmp498 := _i64_ge_s
+		__tmp4 = __tmp498
 	} else if __tmp5 == 0x5a {
-		__tmp505 := _i64_ge_u
-		__tmp4 = __tmp505
+		__tmp499 := _i64_ge_u
+		__tmp4 = __tmp499
 	} else if __tmp5 == 0x5b {
-		__tmp506 := _f32_eq
-		__tmp4 = __tmp506
+		__tmp500 := _f32_eq
+		__tmp4 = __tmp500
 	} else if __tmp5 == 0x5c {
-		__tmp507 := _f32_ne
-		__tmp4 = __tmp507
+		__tmp501 := _f32_ne
+		__tmp4 = __tmp501
 	} else if __tmp5 == 0x5d {
-		__tmp508 := _f32_lt
-		__tmp4 = __tmp508
+		__tmp502 := _f32_lt
+		__tmp4 = __tmp502
 	} else if __tmp5 == 0x5e {
-		__tmp509 := _f32_gt
-		__tmp4 = __tmp509
+		__tmp503 := _f32_gt
+		__tmp4 = __tmp503
 	} else if __tmp5 == 0x5f {
-		__tmp510 := _f32_le
-		__tmp4 = __tmp510
+		__tmp504 := _f32_le
+		__tmp4 = __tmp504
 	} else if __tmp5 == 0x60 {
-		__tmp511 := _f32_ge
-		__tmp4 = __tmp511
+		__tmp505 := _f32_ge
+		__tmp4 = __tmp505
 	} else if __tmp5 == 0x61 {
-		__tmp512 := _f64_eq
-		__tmp4 = __tmp512
+		__tmp506 := _f64_eq
+		__tmp4 = __tmp506
 	} else if __tmp5 == 0x62 {
-		__tmp513 := _f64_ne
-		__tmp4 = __tmp513
+		__tmp507 := _f64_ne
+		__tmp4 = __tmp507
 	} else if __tmp5 == 0x63 {
-		__tmp514 := _f64_lt
-		__tmp4 = __tmp514
+		__tmp508 := _f64_lt
+		__tmp4 = __tmp508
 	} else if __tmp5 == 0x64 {
-		__tmp515 := _f64_gt
-		__tmp4 = __tmp515
+		__tmp509 := _f64_gt
+		__tmp4 = __tmp509
 	} else if __tmp5 == 0x65 {
-		__tmp516 := _f64_le
-		__tmp4 = __tmp516
+		__tmp510 := _f64_le
+		__tmp4 = __tmp510
 	} else if __tmp5 == 0x66 {
-		__tmp517 := _f64_ge
-		__tmp4 = __tmp517
+		__tmp511 := _f64_ge
+		__tmp4 = __tmp511
 	} else if __tmp5 == 0x67 {
-		__tmp518 := _i32_clz
-		__tmp4 = __tmp518
+		__tmp512 := _i32_clz
+		__tmp4 = __tmp512
 	} else if __tmp5 == 0x68 {
-		__tmp519 := _i32_ctz
-		__tmp4 = __tmp519
+		__tmp513 := _i32_ctz
+		__tmp4 = __tmp513
 	} else if __tmp5 == 0x69 {
-		__tmp520 := _i32_popcnt
-		__tmp4 = __tmp520
+		__tmp514 := _i32_popcnt
+		__tmp4 = __tmp514
 	} else if __tmp5 == 0x6a {
-		__tmp521 := _i32_add
-		__tmp4 = __tmp521
+		__tmp515 := _i32_add
+		__tmp4 = __tmp515
 	} else if __tmp5 == 0x6b {
-		__tmp522 := _i32_sub
-		__tmp4 = __tmp522
+		__tmp516 := _i32_sub
+		__tmp4 = __tmp516
 	} else if __tmp5 == 0x6c {
-		__tmp523 := _i32_mul
-		__tmp4 = __tmp523
+		__tmp517 := _i32_mul
+		__tmp4 = __tmp517
 	} else if __tmp5 == 0x6d {
-		__tmp524 := _i32_div_s
-		__tmp4 = __tmp524
+		__tmp518 := _i32_div_s
+		__tmp4 = __tmp518
 	} else if __tmp5 == 0x6e {
-		__tmp525 := _i32_div_u
-		__tmp4 = __tmp525
+		__tmp519 := _i32_div_u
+		__tmp4 = __tmp519
 	} else if __tmp5 == 0x6f {
-		__tmp526 := _i32_rem_s
-		__tmp4 = __tmp526
+		__tmp520 := _i32_rem_s
+		__tmp4 = __tmp520
 	} else if __tmp5 == 0x70 {
-		__tmp527 := _i32_rem_u
-		__tmp4 = __tmp527
+		__tmp521 := _i32_rem_u
+		__tmp4 = __tmp521
 	} else if __tmp5 == 0x71 {
-		__tmp528 := _i32_and
-		__tmp4 = __tmp528
+		__tmp522 := _i32_and
+		__tmp4 = __tmp522
 	} else if __tmp5 == 0x72 {
-		__tmp529 := _i32_or
-		__tmp4 = __tmp529
+		__tmp523 := _i32_or
+		__tmp4 = __tmp523
 	} else if __tmp5 == 0x73 {
-		__tmp530 := _i32_xor
-		__tmp4 = __tmp530
+		__tmp524 := _i32_xor
+		__tmp4 = __tmp524
 	} else if __tmp5 == 0x74 {
-		__tmp531 := _i32_shl
-		__tmp4 = __tmp531
+		__tmp525 := _i32_shl
+		__tmp4 = __tmp525
 	} else if __tmp5 == 0x75 {
-		__tmp532 := _i32_shr_s
-		__tmp4 = __tmp532
+		__tmp526 := _i32_shr_s
+		__tmp4 = __tmp526
 	} else if __tmp5 == 0x76 {
-		__tmp533 := _i32_shr_u
-		__tmp4 = __tmp533
+		__tmp527 := _i32_shr_u
+		__tmp4 = __tmp527
 	} else if __tmp5 == 0x77 {
-		__tmp534 := _i32_rotl
-		__tmp4 = __tmp534
+		__tmp528 := _i32_rotl
+		__tmp4 = __tmp528
 	} else if __tmp5 == 0x78 {
-		__tmp535 := _i32_rotr
-		__tmp4 = __tmp535
+		__tmp529 := _i32_rotr
+		__tmp4 = __tmp529
 	} else if __tmp5 == 0x79 {
-		__tmp536 := _i64_clz
-		__tmp4 = __tmp536
+		__tmp530 := _i64_clz
+		__tmp4 = __tmp530
 	} else if __tmp5 == 0x7a {
-		__tmp537 := _i64_ctz
-		__tmp4 = __tmp537
+		__tmp531 := _i64_ctz
+		__tmp4 = __tmp531
 	} else if __tmp5 == 0x7b {
-		__tmp538 := _i64_popcnt
-		__tmp4 = __tmp538
+		__tmp532 := _i64_popcnt
+		__tmp4 = __tmp532
 	} else if __tmp5 == 0x7c {
-		__tmp539 := _i64_add
-		__tmp4 = __tmp539
+		__tmp533 := _i64_add
+		__tmp4 = __tmp533
 	} else if __tmp5 == 0x7d {
-		__tmp540 := _i64_sub
-		__tmp4 = __tmp540
+		__tmp534 := _i64_sub
+		__tmp4 = __tmp534
 	} else if __tmp5 == 0x7e {
-		__tmp541 := _i64_mul
-		__tmp4 = __tmp541
+		__tmp535 := _i64_mul
+		__tmp4 = __tmp535
 	} else if __tmp5 == 0x7f {
-		__tmp542 := _i64_div_s
-		__tmp4 = __tmp542
+		__tmp536 := _i64_div_s
+		__tmp4 = __tmp536
 	} else if __tmp5 == 0x80 {
-		__tmp543 := _i64_div_u
-		__tmp4 = __tmp543
+		__tmp537 := _i64_div_u
+		__tmp4 = __tmp537
 	} else if __tmp5 == 0x81 {
-		__tmp544 := _i64_rem_s
-		__tmp4 = __tmp544
+		__tmp538 := _i64_rem_s
+		__tmp4 = __tmp538
 	} else if __tmp5 == 0x82 {
-		__tmp545 := _i64_rem_u
-		__tmp4 = __tmp545
+		__tmp539 := _i64_rem_u
+		__tmp4 = __tmp539
 	} else if __tmp5 == 0x83 {
-		__tmp546 := _i64_and
-		__tmp4 = __tmp546
+		__tmp540 := _i64_and
+		__tmp4 = __tmp540
 	} else if __tmp5 == 0x84 {
-		__tmp547 := _i64_or
-		__tmp4 = __tmp547
+		__tmp541 := _i64_or
+		__tmp4 = __tmp541
 	} else if __tmp5 == 0x85 {
-		__tmp548 := _i64_xor
-		__tmp4 = __tmp548
+		__tmp542 := _i64_xor
+		__tmp4 = __tmp542
 	} else if __tmp5 == 0x86 {
-		__tmp549 := _i64_shl
-		__tmp4 = __tmp549
+		__tmp543 := _i64_shl
+		__tmp4 = __tmp543
 	} else if __tmp5 == 0x87 {
-		__tmp550 := _i64_shr_s
-		__tmp4 = __tmp550
+		__tmp544 := _i64_shr_s
+		__tmp4 = __tmp544
 	} else if __tmp5 == 0x88 {
-		__tmp551 := _i64_shr_u
-		__tmp4 = __tmp551
+		__tmp545 := _i64_shr_u
+		__tmp4 = __tmp545
 	} else if __tmp5 == 0x89 {
-		__tmp552 := _i64_rotl
-		__tmp4 = __tmp552
+		__tmp546 := _i64_rotl
+		__tmp4 = __tmp546
 	} else if __tmp5 == 0x8a {
-		__tmp553 := _i64_rotr
-		__tmp4 = __tmp553
+		__tmp547 := _i64_rotr
+		__tmp4 = __tmp547
 	} else if __tmp5 == 0x8b {
-		__tmp554 := _f32_abs
-		__tmp4 = __tmp554
+		__tmp548 := _f32_abs
+		__tmp4 = __tmp548
 	} else if __tmp5 == 0x8c {
-		__tmp555 := _f32_neg
-		__tmp4 = __tmp555
+		__tmp549 := _f32_neg
+		__tmp4 = __tmp549
 	} else if __tmp5 == 0x8d {
-		__tmp556 := _f32_ceil
-		__tmp4 = __tmp556
+		__tmp550 := _f32_ceil
+		__tmp4 = __tmp550
 	} else if __tmp5 == 0x8e {
-		__tmp557 := _f32_floor
-		__tmp4 = __tmp557
+		__tmp551 := _f32_floor
+		__tmp4 = __tmp551
 	} else if __tmp5 == 0x8f {
-		__tmp558 := _f32_trunc
-		__tmp4 = __tmp558
+		__tmp552 := _f32_trunc
+		__tmp4 = __tmp552
 	} else if __tmp5 == 0x90 {
-		__tmp559 := _f32_nearest
-		__tmp4 = __tmp559
+		__tmp553 := _f32_nearest
+		__tmp4 = __tmp553
 	} else if __tmp5 == 0x91 {
-		__tmp560 := _f32_sqrt
-		__tmp4 = __tmp560
+		__tmp554 := _f32_sqrt
+		__tmp4 = __tmp554
 	} else if __tmp5 == 0x92 {
-		__tmp561 := _f32_add
-		__tmp4 = __tmp561
+		__tmp555 := _f32_add
+		__tmp4 = __tmp555
 	} else if __tmp5 == 0x93 {
-		__tmp562 := _f32_sub
-		__tmp4 = __tmp562
+		__tmp556 := _f32_sub
+		__tmp4 = __tmp556
 	} else if __tmp5 == 0x94 {
-		__tmp563 := _f32_mul
-		__tmp4 = __tmp563
+		__tmp557 := _f32_mul
+		__tmp4 = __tmp557
 	} else if __tmp5 == 0x95 {
-		__tmp564 := _f32_div
-		__tmp4 = __tmp564
+		__tmp558 := _f32_div
+		__tmp4 = __tmp558
 	} else if __tmp5 == 0x96 {
-		__tmp565 := _f32_min
-		__tmp4 = __tmp565
+		__tmp559 := _f32_min
+		__tmp4 = __tmp559
 	} else if __tmp5 == 0x97 {
-		__tmp566 := _f32_max
-		__tmp4 = __tmp566
+		__tmp560 := _f32_max
+		__tmp4 = __tmp560
 	} else if __tmp5 == 0x98 {
-		__tmp567 := _f32_copysign
-		__tmp4 = __tmp567
+		__tmp561 := _f32_copysign
+		__tmp4 = __tmp561
 	} else if __tmp5 == 0x99 {
-		__tmp568 := _f64_abs
-		__tmp4 = __tmp568
+		__tmp562 := _f64_abs
+		__tmp4 = __tmp562
 	} else if __tmp5 == 0x9a {
-		__tmp569 := _f64_neg
-		__tmp4 = __tmp569
+		__tmp563 := _f64_neg
+		__tmp4 = __tmp563
 	} else if __tmp5 == 0x9b {
-		__tmp570 := _f64_ceil
-		__tmp4 = __tmp570
+		__tmp564 := _f64_ceil
+		__tmp4 = __tmp564
 	} else if __tmp5 == 0x9c {
-		__tmp571 := _f64_floor
-		__tmp4 = __tmp571
+		__tmp565 := _f64_floor
+		__tmp4 = __tmp565
 	} else if __tmp5 == 0x9d {
-		__tmp572 := _f64_trunc
-		__tmp4 = __tmp572
+		__tmp566 := _f64_trunc
+		__tmp4 = __tmp566
 	} else if __tmp5 == 0x9e {
-		__tmp573 := _f64_nearest
-		__tmp4 = __tmp573
+		__tmp567 := _f64_nearest
+		__tmp4 = __tmp567
 	} else if __tmp5 == 0x9f {
-		__tmp574 := _f64_sqrt
-		__tmp4 = __tmp574
+		__tmp568 := _f64_sqrt
+		__tmp4 = __tmp568
 	} else if __tmp5 == 0xa0 {
-		__tmp575 := _f64_add
-		__tmp4 = __tmp575
+		__tmp569 := _f64_add
+		__tmp4 = __tmp569
 	} else if __tmp5 == 0xa1 {
-		__tmp576 := _f64_sub
-		__tmp4 = __tmp576
+		__tmp570 := _f64_sub
+		__tmp4 = __tmp570
 	} else if __tmp5 == 0xa2 {
-		__tmp577 := _f64_mul
-		__tmp4 = __tmp577
+		__tmp571 := _f64_mul
+		__tmp4 = __tmp571
 	} else if __tmp5 == 0xa3 {
-		__tmp578 := _f64_div
-		__tmp4 = __tmp578
+		__tmp572 := _f64_div
+		__tmp4 = __tmp572
 	} else if __tmp5 == 0xa4 {
-		__tmp579 := _f64_min
-		__tmp4 = __tmp579
+		__tmp573 := _f64_min
+		__tmp4 = __tmp573
 	} else if __tmp5 == 0xa5 {
-		__tmp580 := _f64_max
-		__tmp4 = __tmp580
+		__tmp574 := _f64_max
+		__tmp4 = __tmp574
 	} else if __tmp5 == 0xa6 {
-		__tmp581 := _f64_copysign
-		__tmp4 = __tmp581
+		__tmp575 := _f64_copysign
+		__tmp4 = __tmp575
 	} else if __tmp5 == 0xa7 {
-		__tmp582 := _i32_wrap_i64
-		__tmp4 = __tmp582
+		__tmp576 := _i32_wrap_i64
+		__tmp4 = __tmp576
 	} else if __tmp5 == 0xa8 {
-		__tmp583 := _i32_trunc_f32_s
-		__tmp4 = __tmp583
+		__tmp577 := _i32_trunc_f32_s
+		__tmp4 = __tmp577
 	} else if __tmp5 == 0xa9 {
-		__tmp584 := _i32_trunc_f32_u
-		__tmp4 = __tmp584
+		__tmp578 := _i32_trunc_f32_u
+		__tmp4 = __tmp578
 	} else if __tmp5 == 0xaa {
-		__tmp585 := _i32_trunc_f64_s
-		__tmp4 = __tmp585
+		__tmp579 := _i32_trunc_f64_s
+		__tmp4 = __tmp579
 	} else if __tmp5 == 0xab {
-		__tmp586 := _i32_trunc_f64_u
-		__tmp4 = __tmp586
+		__tmp580 := _i32_trunc_f64_u
+		__tmp4 = __tmp580
 	} else if __tmp5 == 0xac {
-		__tmp587 := _i64_extend_i32_s
-		__tmp4 = __tmp587
+		__tmp581 := _i64_extend_i32_s
+		__tmp4 = __tmp581
 	} else if __tmp5 == 0xad {
-		__tmp588 := _i64_extend_i32_u
-		__tmp4 = __tmp588
+		__tmp582 := _i64_extend_i32_u
+		__tmp4 = __tmp582
 	} else if __tmp5 == 0xae {
-		__tmp589 := _i64_trunc_f32_s
-		__tmp4 = __tmp589
+		__tmp583 := _i64_trunc_f32_s
+		__tmp4 = __tmp583
 	} else if __tmp5 == 0xaf {
-		__tmp590 := _i64_trunc_f32_u
-		__tmp4 = __tmp590
+		__tmp584 := _i64_trunc_f32_u
+		__tmp4 = __tmp584
 	} else if __tmp5 == 0xb0 {
-		__tmp591 := _i64_trunc_f64_s
-		__tmp4 = __tmp591
+		__tmp585 := _i64_trunc_f64_s
+		__tmp4 = __tmp585
 	} else if __tmp5 == 0xb1 {
-		__tmp592 := _i64_trunc_f64_u
-		__tmp4 = __tmp592
+		__tmp586 := _i64_trunc_f64_u
+		__tmp4 = __tmp586
 	} else if __tmp5 == 0xb2 {
-		__tmp593 := _f32_convert_i32_s
-		__tmp4 = __tmp593
+		__tmp587 := _f32_convert_i32_s
+		__tmp4 = __tmp587
 	} else if __tmp5 == 0xb3 {
-		__tmp594 := _f32_convert_i32_u
-		__tmp4 = __tmp594
+		__tmp588 := _f32_convert_i32_u
+		__tmp4 = __tmp588
 	} else if __tmp5 == 0xb4 {
-		__tmp595 := _f32_convert_i64_s
-		__tmp4 = __tmp595
+		__tmp589 := _f32_convert_i64_s
+		__tmp4 = __tmp589
 	} else if __tmp5 == 0xb5 {
-		__tmp596 := _f32_convert_i64_u
-		__tmp4 = __tmp596
+		__tmp590 := _f32_convert_i64_u
+		__tmp4 = __tmp590
 	} else if __tmp5 == 0xb6 {
-		__tmp597 := _f32_demote_f64
-		__tmp4 = __tmp597
+		__tmp591 := _f32_demote_f64
+		__tmp4 = __tmp591
 	} else if __tmp5 == 0xb7 {
-		__tmp598 := _f64_convert_i32_s
-		__tmp4 = __tmp598
+		__tmp592 := _f64_convert_i32_s
+		__tmp4 = __tmp592
 	} else if __tmp5 == 0xb8 {
-		__tmp599 := _f64_convert_i32_u
-		__tmp4 = __tmp599
+		__tmp593 := _f64_convert_i32_u
+		__tmp4 = __tmp593
 	} else if __tmp5 == 0xb9 {
-		__tmp600 := _f64_convert_i64_s
-		__tmp4 = __tmp600
+		__tmp594 := _f64_convert_i64_s
+		__tmp4 = __tmp594
 	} else if __tmp5 == 0xba {
-		__tmp601 := _f64_convert_i64_u
-		__tmp4 = __tmp601
+		__tmp595 := _f64_convert_i64_u
+		__tmp4 = __tmp595
 	} else if __tmp5 == 0xbb {
-		__tmp602 := _f64_promote_f32
-		__tmp4 = __tmp602
+		__tmp596 := _f64_promote_f32
+		__tmp4 = __tmp596
 	} else if __tmp5 == 0xbc {
-		__tmp603 := _i32_reinterpret_f32
-		__tmp4 = __tmp603
+		__tmp597 := _i32_reinterpret_f32
+		__tmp4 = __tmp597
 	} else if __tmp5 == 0xbd {
-		__tmp604 := _i64_reinterpret_f64
-		__tmp4 = __tmp604
+		__tmp598 := _i64_reinterpret_f64
+		__tmp4 = __tmp598
 	} else if __tmp5 == 0xbe {
-		__tmp605 := _f32_reinterpret_i32
-		__tmp4 = __tmp605
+		__tmp599 := _f32_reinterpret_i32
+		__tmp4 = __tmp599
 	} else if __tmp5 == 0xbf {
-		__tmp606 := _f64_reinterpret_i64
-		__tmp4 = __tmp606
+		__tmp600 := _f64_reinterpret_i64
+		__tmp4 = __tmp600
 	} else if __tmp5 == 0xc0 {
-		__tmp607 := _i32_extend8_s
-		__tmp4 = __tmp607
+		__tmp601 := _i32_extend8_s
+		__tmp4 = __tmp601
 	} else if __tmp5 == 0xc1 {
-		__tmp608 := _i32_extend16_s
-		__tmp4 = __tmp608
+		__tmp602 := _i32_extend16_s
+		__tmp4 = __tmp602
 	} else if __tmp5 == 0xc2 {
-		__tmp609 := _i64_extend8_s
-		__tmp4 = __tmp609
+		__tmp603 := _i64_extend8_s
+		__tmp4 = __tmp603
 	} else if __tmp5 == 0xc3 {
-		__tmp610 := _i64_extend16_s
-		__tmp4 = __tmp610
+		__tmp604 := _i64_extend16_s
+		__tmp4 = __tmp604
 	} else if __tmp5 == 0xc4 {
-		__tmp611 := _i64_extend32_s
-		__tmp4 = __tmp611
+		__tmp605 := _i64_extend32_s
+		__tmp4 = __tmp605
 	} else if __tmp5 == 0xc5 || __tmp5 == 0xc6 || __tmp5 == 0xc7 || __tmp5 == 0xc8 || __tmp5 == 0xc9 || __tmp5 == 0xca || __tmp5 == 0xcb || __tmp5 == 0xcc || __tmp5 == 0xcd || __tmp5 == 0xce || __tmp5 == 0xcf {
 		_b := __tmp5
-		__tmp613 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp613
+		__tmp607 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp607
 	} else if __tmp5 == 0xd0 {
-		__tmp617 := _ref_null_1(_heap_type_1(_s))
-		__tmp4 = __tmp617
+		__tmp611 := _ref_null_1(_heap_type_1(_s))
+		__tmp4 = __tmp611
 	} else if __tmp5 == 0xd1 {
-		__tmp620 := _ref_is_null
-		__tmp4 = __tmp620
+		__tmp614 := _ref_is_null
+		__tmp4 = __tmp614
 	} else if __tmp5 == 0xd2 {
-		__tmp621 := _ref_func_1(_at_2(_var, _s))
-		__tmp4 = __tmp621
+		__tmp615 := _ref_func_1(_at_2(_var, _s))
+		__tmp4 = __tmp615
 	} else if __tmp5 == 0xd3 {
-		__tmp625 := _ref_eq
-		__tmp4 = __tmp625
+		__tmp619 := _ref_eq
+		__tmp4 = __tmp619
 	} else if __tmp5 == 0xd4 {
-		__tmp626 := _ref_as_non_null
-		__tmp4 = __tmp626
+		__tmp620 := _ref_as_non_null
+		__tmp4 = __tmp620
 	} else if __tmp5 == 0xd5 {
-		__tmp627 := _br_on_null_1(_at_2(_var, _s))
-		__tmp4 = __tmp627
+		__tmp621 := _br_on_null_1(_at_2(_var, _s))
+		__tmp4 = __tmp621
 	} else if __tmp5 == 0xd6 {
-		__tmp631 := _br_on_non_null_1(_at_2(_var, _s))
-		__tmp4 = __tmp631
+		__tmp625 := _br_on_non_null_1(_at_2(_var, _s))
+		__tmp4 = __tmp625
 	} else if __tmp5 == 0xfb {
 		_b := __tmp5
-		var __tmp636 Instruction_
-		__tmp637 := _u32_1(_s)
-		if __tmp637 == 0x00 {
-			__tmp640 := _struct_new_1(_at_2(_var, _s))
-			__tmp636 = __tmp640
-		} else if __tmp637 == 0x01 {
-			__tmp644 := _struct_new_default_1(_at_2(_var, _s))
-			__tmp636 = __tmp644
-		} else if __tmp637 == 0x02 {
-			__tmp648 := _at_2(_var, _s)
-			_x := __tmp648
-			__tmp652 := _at_2(_var, _s)
-			_y := __tmp652
-			__tmp656 := _struct_get_2(_x, _y)
-			__tmp636 = __tmp656
-		} else if __tmp637 == 0x03 {
-			__tmp659 := _at_2(_var, _s)
-			_x := __tmp659
-			__tmp663 := _at_2(_var, _s)
-			_y := __tmp663
-			__tmp667 := _struct_get_s_2(_x, _y)
-			__tmp636 = __tmp667
-		} else if __tmp637 == 0x04 {
-			__tmp670 := _at_2(_var, _s)
-			_x := __tmp670
-			__tmp674 := _at_2(_var, _s)
-			_y := __tmp674
-			__tmp678 := _struct_get_u_2(_x, _y)
-			__tmp636 = __tmp678
-		} else if __tmp637 == 0x05 {
-			__tmp681 := _at_2(_var, _s)
-			_x := __tmp681
-			__tmp685 := _at_2(_var, _s)
-			_y := __tmp685
-			__tmp689 := _struct_set_2(_x, _y)
-			__tmp636 = __tmp689
-		} else if __tmp637 == 0x06 {
-			__tmp692 := _array_new_1(_at_2(_var, _s))
-			__tmp636 = __tmp692
-		} else if __tmp637 == 0x07 {
-			__tmp696 := _array_new_default_1(_at_2(_var, _s))
-			__tmp636 = __tmp696
-		} else if __tmp637 == 0x08 {
-			__tmp700 := _at_2(_var, _s)
-			_x := __tmp700
-			__tmp704 := _u32_1(_s)
-			_n := __tmp704
-			__tmp707 := _array_new_fixed_2(_x, _n)
-			__tmp636 = __tmp707
-		} else if __tmp637 == 0x09 {
-			__tmp710 := _at_2(_var, _s)
-			_x := __tmp710
-			__tmp714 := _at_2(_var, _s)
-			_y := __tmp714
-			__tmp718 := _array_new_data_2(_x, _y)
-			__tmp636 = __tmp718
-		} else if __tmp637 == 0x0a {
-			__tmp721 := _at_2(_var, _s)
-			_x := __tmp721
-			__tmp725 := _at_2(_var, _s)
-			_y := __tmp725
-			__tmp729 := _array_new_elem_2(_x, _y)
-			__tmp636 = __tmp729
-		} else if __tmp637 == 0x0b {
-			__tmp732 := _array_get_1(_at_2(_var, _s))
-			__tmp636 = __tmp732
-		} else if __tmp637 == 0x0c {
-			__tmp736 := _array_get_s_1(_at_2(_var, _s))
-			__tmp636 = __tmp736
-		} else if __tmp637 == 0x0d {
-			__tmp740 := _array_get_u_1(_at_2(_var, _s))
-			__tmp636 = __tmp740
-		} else if __tmp637 == 0x0e {
-			__tmp744 := _array_set_1(_at_2(_var, _s))
-			__tmp636 = __tmp744
-		} else if __tmp637 == 0x0f {
-			__tmp748 := _array_len
-			__tmp636 = __tmp748
-		} else if __tmp637 == 0x10 {
-			__tmp749 := _array_fill_1(_at_2(_var, _s))
-			__tmp636 = __tmp749
-		} else if __tmp637 == 0x11 {
-			__tmp753 := _at_2(_var, _s)
-			_x := __tmp753
-			__tmp757 := _at_2(_var, _s)
-			_y := __tmp757
-			__tmp761 := _array_copy_2(_x, _y)
-			__tmp636 = __tmp761
-		} else if __tmp637 == 0x12 {
-			__tmp764 := _at_2(_var, _s)
-			_x := __tmp764
-			__tmp768 := _at_2(_var, _s)
-			_y := __tmp768
-			__tmp772 := _array_init_data_2(_x, _y)
-			__tmp636 = __tmp772
-		} else if __tmp637 == 0x13 {
-			__tmp775 := _at_2(_var, _s)
-			_x := __tmp775
-			__tmp779 := _at_2(_var, _s)
-			_y := __tmp779
-			__tmp783 := _array_init_elem_2(_x, _y)
-			__tmp636 = __tmp783
-		} else if __tmp637 == 0x14 {
-			__tmp786 := _ref_test_1(_NoNull, _heap_type_1(_s))
-			__tmp636 = __tmp786
-		} else if __tmp637 == 0x15 {
-			__tmp792 := _ref_test_1(_Null, _heap_type_1(_s))
-			__tmp636 = __tmp792
-		} else if __tmp637 == 0x16 {
-			__tmp798 := _ref_cast_1(_NoNull, _heap_type_1(_s))
-			__tmp636 = __tmp798
-		} else if __tmp637 == 0x17 {
-			__tmp804 := _ref_cast_1(_Null, _heap_type_1(_s))
-			__tmp636 = __tmp804
-		} else if __tmp637 == 0x18 || __tmp637 == 0x19 {
-			_opcode := __tmp637
-			__tmp811 := _byte_1(_s)
-			_flags := __tmp811
-			__tmp814 := _require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfc), 0), _s, _int_operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
-			_ = __tmp814
-			__tmp821 := _at_2(_var, _s)
-			_x := __tmp821
-			__tmp825, __tmp826 := func() Null {
-				var __tmp827 Null
+		var __tmp630 Instruction_
+		__tmp631 := _u32_1(_s)
+		if __tmp631 == 0x00 {
+			__tmp634 := _struct_new_1(_at_2(_var, _s))
+			__tmp630 = __tmp634
+		} else if __tmp631 == 0x01 {
+			__tmp638 := _struct_new_default_1(_at_2(_var, _s))
+			__tmp630 = __tmp638
+		} else if __tmp631 == 0x02 {
+			__tmp642 := _at_2(_var, _s)
+			_x := __tmp642
+			__tmp646 := _at_2(_var, _s)
+			_y := __tmp646
+			__tmp650 := _struct_get_2(_x, _y)
+			__tmp630 = __tmp650
+		} else if __tmp631 == 0x03 {
+			__tmp653 := _at_2(_var, _s)
+			_x := __tmp653
+			__tmp657 := _at_2(_var, _s)
+			_y := __tmp657
+			__tmp661 := _struct_get_s_2(_x, _y)
+			__tmp630 = __tmp661
+		} else if __tmp631 == 0x04 {
+			__tmp664 := _at_2(_var, _s)
+			_x := __tmp664
+			__tmp668 := _at_2(_var, _s)
+			_y := __tmp668
+			__tmp672 := _struct_get_u_2(_x, _y)
+			__tmp630 = __tmp672
+		} else if __tmp631 == 0x05 {
+			__tmp675 := _at_2(_var, _s)
+			_x := __tmp675
+			__tmp679 := _at_2(_var, _s)
+			_y := __tmp679
+			__tmp683 := _struct_set_2(_x, _y)
+			__tmp630 = __tmp683
+		} else if __tmp631 == 0x06 {
+			__tmp686 := _array_new_1(_at_2(_var, _s))
+			__tmp630 = __tmp686
+		} else if __tmp631 == 0x07 {
+			__tmp690 := _array_new_default_1(_at_2(_var, _s))
+			__tmp630 = __tmp690
+		} else if __tmp631 == 0x08 {
+			__tmp694 := _at_2(_var, _s)
+			_x := __tmp694
+			__tmp698 := _u32_1(_s)
+			_n := __tmp698
+			__tmp701 := _array_new_fixed_2(_x, _n)
+			__tmp630 = __tmp701
+		} else if __tmp631 == 0x09 {
+			__tmp704 := _at_2(_var, _s)
+			_x := __tmp704
+			__tmp708 := _at_2(_var, _s)
+			_y := __tmp708
+			__tmp712 := _array_new_data_2(_x, _y)
+			__tmp630 = __tmp712
+		} else if __tmp631 == 0x0a {
+			__tmp715 := _at_2(_var, _s)
+			_x := __tmp715
+			__tmp719 := _at_2(_var, _s)
+			_y := __tmp719
+			__tmp723 := _array_new_elem_2(_x, _y)
+			__tmp630 = __tmp723
+		} else if __tmp631 == 0x0b {
+			__tmp726 := _array_get_1(_at_2(_var, _s))
+			__tmp630 = __tmp726
+		} else if __tmp631 == 0x0c {
+			__tmp730 := _array_get_s_1(_at_2(_var, _s))
+			__tmp630 = __tmp730
+		} else if __tmp631 == 0x0d {
+			__tmp734 := _array_get_u_1(_at_2(_var, _s))
+			__tmp630 = __tmp734
+		} else if __tmp631 == 0x0e {
+			__tmp738 := _array_set_1(_at_2(_var, _s))
+			__tmp630 = __tmp738
+		} else if __tmp631 == 0x0f {
+			__tmp742 := _array_len
+			__tmp630 = __tmp742
+		} else if __tmp631 == 0x10 {
+			__tmp743 := _array_fill_1(_at_2(_var, _s))
+			__tmp630 = __tmp743
+		} else if __tmp631 == 0x11 {
+			__tmp747 := _at_2(_var, _s)
+			_x := __tmp747
+			__tmp751 := _at_2(_var, _s)
+			_y := __tmp751
+			__tmp755 := _array_copy_2(_x, _y)
+			__tmp630 = __tmp755
+		} else if __tmp631 == 0x12 {
+			__tmp758 := _at_2(_var, _s)
+			_x := __tmp758
+			__tmp762 := _at_2(_var, _s)
+			_y := __tmp762
+			__tmp766 := _array_init_data_2(_x, _y)
+			__tmp630 = __tmp766
+		} else if __tmp631 == 0x13 {
+			__tmp769 := _at_2(_var, _s)
+			_x := __tmp769
+			__tmp773 := _at_2(_var, _s)
+			_y := __tmp773
+			__tmp777 := _array_init_elem_2(_x, _y)
+			__tmp630 = __tmp777
+		} else if __tmp631 == 0x14 {
+			__tmp780 := _ref_test_1(_NoNull, _heap_type_1(_s))
+			__tmp630 = __tmp780
+		} else if __tmp631 == 0x15 {
+			__tmp786 := _ref_test_1(_Null, _heap_type_1(_s))
+			__tmp630 = __tmp786
+		} else if __tmp631 == 0x16 {
+			__tmp792 := _ref_cast_1(_NoNull, _heap_type_1(_s))
+			__tmp630 = __tmp792
+		} else if __tmp631 == 0x17 {
+			__tmp798 := _ref_cast_1(_Null, _heap_type_1(_s))
+			__tmp630 = __tmp798
+		} else if __tmp631 == 0x18 || __tmp631 == 0x19 {
+			_opcode := __tmp631
+			__tmp805 := _byte_1(_s)
+			_flags := __tmp805
+			_require_4(_operatorEq_2(_int_operatorland_2(_flags, 0xfc), 0), _s, _int_operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
+			__tmp814 := _at_2(_var, _s)
+			_x := __tmp814
+			__tmp818, __tmp819 := func() Null {
+				var __tmp820 Null
 				if _bit_2(0, _flags) {
-					__tmp830 := _Null
-					__tmp827 = __tmp830
+					__tmp823 := _Null
+					__tmp820 = __tmp823
 				} else {
-					__tmp831 := _NoNull
-					__tmp827 = __tmp831
+					__tmp824 := _NoNull
+					__tmp820 = __tmp824
 				}
-				return __tmp827
+				return __tmp820
 			}(), _heap_type_1(_s)
-			_rt1 := __tmp825, __tmp826
-			__tmp835, __tmp836 := func() Null {
-				var __tmp837 Null
+			_rt1 := __tmp818, __tmp819
+			__tmp828, __tmp829 := func() Null {
+				var __tmp830 Null
 				if _bit_2(1, _flags) {
-					__tmp840 := _Null
-					__tmp837 = __tmp840
+					__tmp833 := _Null
+					__tmp830 = __tmp833
 				} else {
-					__tmp841 := _NoNull
-					__tmp837 = __tmp841
+					__tmp834 := _NoNull
+					__tmp830 = __tmp834
 				}
-				return __tmp837
+				return __tmp830
 			}(), _heap_type_1(_s)
-			_rt2 := __tmp835, __tmp836
-			__tmp845 := __if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
+			_rt2 := __tmp828, __tmp829
+			__tmp838 := __if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
 
-			__tmp636 = __tmp845
-		} else if __tmp637 == 0x1a {
-			__tmp849 := _any_convert_extern
-			__tmp636 = __tmp849
-		} else if __tmp637 == 0x1b {
-			__tmp850 := _extern_convert_any
-			__tmp636 = __tmp850
-		} else if __tmp637 == 0x1c {
-			__tmp851 := _ref_i31
-			__tmp636 = __tmp851
-		} else if __tmp637 == 0x1d {
-			__tmp852 := _i31_get_s
-			__tmp636 = __tmp852
-		} else if __tmp637 == 0x1e {
-			__tmp853 := _i31_get_u
-			__tmp636 = __tmp853
-		} else if _n := __tmp637; true {
+			__tmp630 = __tmp838
+		} else if __tmp631 == 0x1a {
+			__tmp842 := _any_convert_extern
+			__tmp630 = __tmp842
+		} else if __tmp631 == 0x1b {
+			__tmp843 := _extern_convert_any
+			__tmp630 = __tmp843
+		} else if __tmp631 == 0x1c {
+			__tmp844 := _ref_i31
+			__tmp630 = __tmp844
+		} else if __tmp631 == 0x1d {
+			__tmp845 := _i31_get_s
+			__tmp630 = __tmp845
+		} else if __tmp631 == 0x1e {
+			__tmp846 := _i31_get_u
+			__tmp630 = __tmp846
+		} else if _n := __tmp631; true {
 			_ = _n
-			__tmp856 := _illegal2_4(_s, _pos, _b, _n)
-			__tmp636 = __tmp856
+			__tmp849 := _illegal2_4(_s, _pos, _b, _n)
+			__tmp630 = __tmp849
 		}
-		__tmp4 = __tmp636
+		__tmp4 = __tmp630
 	} else if __tmp5 == 0xfc {
 		_b := __tmp5
-		var __tmp862 Instruction_
-		__tmp863 := _u32_1(_s)
-		if __tmp863 == 0x00 {
-			__tmp866 := _i32_trunc_sat_f32_s
-			__tmp862 = __tmp866
-		} else if __tmp863 == 0x01 {
-			__tmp867 := _i32_trunc_sat_f32_u
-			__tmp862 = __tmp867
-		} else if __tmp863 == 0x02 {
-			__tmp868 := _i32_trunc_sat_f64_s
-			__tmp862 = __tmp868
-		} else if __tmp863 == 0x03 {
-			__tmp869 := _i32_trunc_sat_f64_u
-			__tmp862 = __tmp869
-		} else if __tmp863 == 0x04 {
-			__tmp870 := _i64_trunc_sat_f32_s
-			__tmp862 = __tmp870
-		} else if __tmp863 == 0x05 {
-			__tmp871 := _i64_trunc_sat_f32_u
-			__tmp862 = __tmp871
-		} else if __tmp863 == 0x06 {
-			__tmp872 := _i64_trunc_sat_f64_s
-			__tmp862 = __tmp872
-		} else if __tmp863 == 0x07 {
-			__tmp873 := _i64_trunc_sat_f64_u
-			__tmp862 = __tmp873
-		} else if __tmp863 == 0x08 {
-			__tmp874 := _at_2(_var, _s)
-			_y := __tmp874
-			__tmp878 := _at_2(_var, _s)
-			_x := __tmp878
-			__tmp882 := _memory_init_2(_x, _y)
-			__tmp862 = __tmp882
-		} else if __tmp863 == 0x09 {
-			__tmp885 := _data_drop_1(_at_2(_var, _s))
-			__tmp862 = __tmp885
-		} else if __tmp863 == 0x0a {
-			__tmp889 := _at_2(_var, _s)
-			_x := __tmp889
-			__tmp893 := _at_2(_var, _s)
-			_y := __tmp893
-			__tmp897 := _memory_copy_2(_x, _y)
-			__tmp862 = __tmp897
-		} else if __tmp863 == 0x0b {
-			__tmp900 := _memory_fill_1(_at_2(_var, _s))
-			__tmp862 = __tmp900
-		} else if __tmp863 == 0x0c {
-			__tmp904 := _at_2(_var, _s)
-			_y := __tmp904
-			__tmp908 := _at_2(_var, _s)
-			_x := __tmp908
-			__tmp912 := _table_init_2(_x, _y)
-			__tmp862 = __tmp912
-		} else if __tmp863 == 0x0d {
-			__tmp915 := _elem_drop_1(_at_2(_var, _s))
-			__tmp862 = __tmp915
-		} else if __tmp863 == 0x0e {
-			__tmp919 := _at_2(_var, _s)
-			_x := __tmp919
-			__tmp923 := _at_2(_var, _s)
-			_y := __tmp923
-			__tmp927 := _table_copy_2(_x, _y)
-			__tmp862 = __tmp927
-		} else if __tmp863 == 0x0f {
-			__tmp930 := _table_grow_1(_at_2(_var, _s))
-			__tmp862 = __tmp930
-		} else if __tmp863 == 0x10 {
-			__tmp934 := _table_size_1(_at_2(_var, _s))
-			__tmp862 = __tmp934
-		} else if __tmp863 == 0x11 {
-			__tmp938 := _table_fill_1(_at_2(_var, _s))
-			__tmp862 = __tmp938
-		} else if _n := __tmp863; true {
+		var __tmp855 Instruction_
+		__tmp856 := _u32_1(_s)
+		if __tmp856 == 0x00 {
+			__tmp859 := _i32_trunc_sat_f32_s
+			__tmp855 = __tmp859
+		} else if __tmp856 == 0x01 {
+			__tmp860 := _i32_trunc_sat_f32_u
+			__tmp855 = __tmp860
+		} else if __tmp856 == 0x02 {
+			__tmp861 := _i32_trunc_sat_f64_s
+			__tmp855 = __tmp861
+		} else if __tmp856 == 0x03 {
+			__tmp862 := _i32_trunc_sat_f64_u
+			__tmp855 = __tmp862
+		} else if __tmp856 == 0x04 {
+			__tmp863 := _i64_trunc_sat_f32_s
+			__tmp855 = __tmp863
+		} else if __tmp856 == 0x05 {
+			__tmp864 := _i64_trunc_sat_f32_u
+			__tmp855 = __tmp864
+		} else if __tmp856 == 0x06 {
+			__tmp865 := _i64_trunc_sat_f64_s
+			__tmp855 = __tmp865
+		} else if __tmp856 == 0x07 {
+			__tmp866 := _i64_trunc_sat_f64_u
+			__tmp855 = __tmp866
+		} else if __tmp856 == 0x08 {
+			__tmp867 := _at_2(_var, _s)
+			_y := __tmp867
+			__tmp871 := _at_2(_var, _s)
+			_x := __tmp871
+			__tmp875 := _memory_init_2(_x, _y)
+			__tmp855 = __tmp875
+		} else if __tmp856 == 0x09 {
+			__tmp878 := _data_drop_1(_at_2(_var, _s))
+			__tmp855 = __tmp878
+		} else if __tmp856 == 0x0a {
+			__tmp882 := _at_2(_var, _s)
+			_x := __tmp882
+			__tmp886 := _at_2(_var, _s)
+			_y := __tmp886
+			__tmp890 := _memory_copy_2(_x, _y)
+			__tmp855 = __tmp890
+		} else if __tmp856 == 0x0b {
+			__tmp893 := _memory_fill_1(_at_2(_var, _s))
+			__tmp855 = __tmp893
+		} else if __tmp856 == 0x0c {
+			__tmp897 := _at_2(_var, _s)
+			_y := __tmp897
+			__tmp901 := _at_2(_var, _s)
+			_x := __tmp901
+			__tmp905 := _table_init_2(_x, _y)
+			__tmp855 = __tmp905
+		} else if __tmp856 == 0x0d {
+			__tmp908 := _elem_drop_1(_at_2(_var, _s))
+			__tmp855 = __tmp908
+		} else if __tmp856 == 0x0e {
+			__tmp912 := _at_2(_var, _s)
+			_x := __tmp912
+			__tmp916 := _at_2(_var, _s)
+			_y := __tmp916
+			__tmp920 := _table_copy_2(_x, _y)
+			__tmp855 = __tmp920
+		} else if __tmp856 == 0x0f {
+			__tmp923 := _table_grow_1(_at_2(_var, _s))
+			__tmp855 = __tmp923
+		} else if __tmp856 == 0x10 {
+			__tmp927 := _table_size_1(_at_2(_var, _s))
+			__tmp855 = __tmp927
+		} else if __tmp856 == 0x11 {
+			__tmp931 := _table_fill_1(_at_2(_var, _s))
+			__tmp855 = __tmp931
+		} else if _n := __tmp856; true {
 			_ = _n
-			__tmp944 := _illegal2_4(_s, _pos, _b, _n)
-			__tmp862 = __tmp944
+			__tmp937 := _illegal2_4(_s, _pos, _b, _n)
+			__tmp855 = __tmp937
 		}
-		__tmp4 = __tmp862
+		__tmp4 = __tmp855
 	} else if __tmp5 == 0xfd {
-		var __tmp949 Instruction_
-		__tmp950 := _u32_1(_s)
-		if __tmp950 == 0x00 {
-			__tmp953, __tmp954, __tmp955 := _memop_1(_s)
-			_x, _a, _o := __tmp953, __tmp954, __tmp955
-			__tmp960 := _v128_load_3(_x, _a, _o)
-			__tmp949 = __tmp960
-		} else if __tmp950 == 0x01 {
-			__tmp964, __tmp965, __tmp966 := _memop_1(_s)
-			_x, _a, _o := __tmp964, __tmp965, __tmp966
-			__tmp971 := _v128_load8x8_s_3(_x, _a, _o)
-			__tmp949 = __tmp971
-		} else if __tmp950 == 0x02 {
-			__tmp975, __tmp976, __tmp977 := _memop_1(_s)
-			_x, _a, _o := __tmp975, __tmp976, __tmp977
-			__tmp982 := _v128_load8x8_u_3(_x, _a, _o)
-			__tmp949 = __tmp982
-		} else if __tmp950 == 0x03 {
-			__tmp986, __tmp987, __tmp988 := _memop_1(_s)
-			_x, _a, _o := __tmp986, __tmp987, __tmp988
-			__tmp993 := _v128_load16x4_s_3(_x, _a, _o)
-			__tmp949 = __tmp993
-		} else if __tmp950 == 0x04 {
-			__tmp997, __tmp998, __tmp999 := _memop_1(_s)
-			_x, _a, _o := __tmp997, __tmp998, __tmp999
-			__tmp1004 := _v128_load16x4_u_3(_x, _a, _o)
-			__tmp949 = __tmp1004
-		} else if __tmp950 == 0x05 {
-			__tmp1008, __tmp1009, __tmp1010 := _memop_1(_s)
-			_x, _a, _o := __tmp1008, __tmp1009, __tmp1010
-			__tmp1015 := _v128_load32x2_s_3(_x, _a, _o)
-			__tmp949 = __tmp1015
-		} else if __tmp950 == 0x06 {
-			__tmp1019, __tmp1020, __tmp1021 := _memop_1(_s)
-			_x, _a, _o := __tmp1019, __tmp1020, __tmp1021
-			__tmp1026 := _v128_load32x2_u_3(_x, _a, _o)
-			__tmp949 = __tmp1026
-		} else if __tmp950 == 0x07 {
-			__tmp1030, __tmp1031, __tmp1032 := _memop_1(_s)
-			_x, _a, _o := __tmp1030, __tmp1031, __tmp1032
-			__tmp1037 := _v128_load8_splat_3(_x, _a, _o)
-			__tmp949 = __tmp1037
-		} else if __tmp950 == 0x08 {
-			__tmp1041, __tmp1042, __tmp1043 := _memop_1(_s)
-			_x, _a, _o := __tmp1041, __tmp1042, __tmp1043
-			__tmp1048 := _v128_load16_splat_3(_x, _a, _o)
-			__tmp949 = __tmp1048
-		} else if __tmp950 == 0x09 {
-			__tmp1052, __tmp1053, __tmp1054 := _memop_1(_s)
-			_x, _a, _o := __tmp1052, __tmp1053, __tmp1054
-			__tmp1059 := _v128_load32_splat_3(_x, _a, _o)
-			__tmp949 = __tmp1059
-		} else if __tmp950 == 0x0a {
-			__tmp1063, __tmp1064, __tmp1065 := _memop_1(_s)
-			_x, _a, _o := __tmp1063, __tmp1064, __tmp1065
-			__tmp1070 := _v128_load64_splat_3(_x, _a, _o)
-			__tmp949 = __tmp1070
-		} else if __tmp950 == 0x0b {
-			__tmp1074, __tmp1075, __tmp1076 := _memop_1(_s)
-			_x, _a, _o := __tmp1074, __tmp1075, __tmp1076
-			__tmp1081 := _v128_store_3(_x, _a, _o)
-			__tmp949 = __tmp1081
-		} else if __tmp950 == 0x0c {
-			__tmp1085 := _v128_const_1(_at_2(_v128, _s))
-			__tmp949 = __tmp1085
-		} else if __tmp950 == 0x0d {
-			__tmp1089 := _i8x16_shuffle_1(_List_init_2(16, func(__ OInt) OInt {
-				__tmp1091 := _byte_1(_s)
-				return __tmp1091
+		var __tmp942 Instruction_
+		__tmp943 := _u32_1(_s)
+		if __tmp943 == 0x00 {
+			__tmp946, __tmp947, __tmp948 := _memop_1(_s)
+			_x, _a, _o := __tmp946, __tmp947, __tmp948
+			__tmp953 := _v128_load_3(_x, _a, _o)
+			__tmp942 = __tmp953
+		} else if __tmp943 == 0x01 {
+			__tmp957, __tmp958, __tmp959 := _memop_1(_s)
+			_x, _a, _o := __tmp957, __tmp958, __tmp959
+			__tmp964 := _v128_load8x8_s_3(_x, _a, _o)
+			__tmp942 = __tmp964
+		} else if __tmp943 == 0x02 {
+			__tmp968, __tmp969, __tmp970 := _memop_1(_s)
+			_x, _a, _o := __tmp968, __tmp969, __tmp970
+			__tmp975 := _v128_load8x8_u_3(_x, _a, _o)
+			__tmp942 = __tmp975
+		} else if __tmp943 == 0x03 {
+			__tmp979, __tmp980, __tmp981 := _memop_1(_s)
+			_x, _a, _o := __tmp979, __tmp980, __tmp981
+			__tmp986 := _v128_load16x4_s_3(_x, _a, _o)
+			__tmp942 = __tmp986
+		} else if __tmp943 == 0x04 {
+			__tmp990, __tmp991, __tmp992 := _memop_1(_s)
+			_x, _a, _o := __tmp990, __tmp991, __tmp992
+			__tmp997 := _v128_load16x4_u_3(_x, _a, _o)
+			__tmp942 = __tmp997
+		} else if __tmp943 == 0x05 {
+			__tmp1001, __tmp1002, __tmp1003 := _memop_1(_s)
+			_x, _a, _o := __tmp1001, __tmp1002, __tmp1003
+			__tmp1008 := _v128_load32x2_s_3(_x, _a, _o)
+			__tmp942 = __tmp1008
+		} else if __tmp943 == 0x06 {
+			__tmp1012, __tmp1013, __tmp1014 := _memop_1(_s)
+			_x, _a, _o := __tmp1012, __tmp1013, __tmp1014
+			__tmp1019 := _v128_load32x2_u_3(_x, _a, _o)
+			__tmp942 = __tmp1019
+		} else if __tmp943 == 0x07 {
+			__tmp1023, __tmp1024, __tmp1025 := _memop_1(_s)
+			_x, _a, _o := __tmp1023, __tmp1024, __tmp1025
+			__tmp1030 := _v128_load8_splat_3(_x, _a, _o)
+			__tmp942 = __tmp1030
+		} else if __tmp943 == 0x08 {
+			__tmp1034, __tmp1035, __tmp1036 := _memop_1(_s)
+			_x, _a, _o := __tmp1034, __tmp1035, __tmp1036
+			__tmp1041 := _v128_load16_splat_3(_x, _a, _o)
+			__tmp942 = __tmp1041
+		} else if __tmp943 == 0x09 {
+			__tmp1045, __tmp1046, __tmp1047 := _memop_1(_s)
+			_x, _a, _o := __tmp1045, __tmp1046, __tmp1047
+			__tmp1052 := _v128_load32_splat_3(_x, _a, _o)
+			__tmp942 = __tmp1052
+		} else if __tmp943 == 0x0a {
+			__tmp1056, __tmp1057, __tmp1058 := _memop_1(_s)
+			_x, _a, _o := __tmp1056, __tmp1057, __tmp1058
+			__tmp1063 := _v128_load64_splat_3(_x, _a, _o)
+			__tmp942 = __tmp1063
+		} else if __tmp943 == 0x0b {
+			__tmp1067, __tmp1068, __tmp1069 := _memop_1(_s)
+			_x, _a, _o := __tmp1067, __tmp1068, __tmp1069
+			__tmp1074 := _v128_store_3(_x, _a, _o)
+			__tmp942 = __tmp1074
+		} else if __tmp943 == 0x0c {
+			__tmp1078 := _v128_const_1(_at_2(_v128, _s))
+			__tmp942 = __tmp1078
+		} else if __tmp943 == 0x0d {
+			__tmp1082 := _i8x16_shuffle_1(_List_init_2(16, func(__ OInt) OInt {
+				__tmp1084 := _byte_1(_s)
+				return __tmp1084
 			}))
-			__tmp949 = __tmp1089
-		} else if __tmp950 == 0x0e {
-			__tmp1093 := _i8x16_swizzle
-			__tmp949 = __tmp1093
-		} else if __tmp950 == 0x0f {
-			__tmp1094 := _i8x16_splat
-			__tmp949 = __tmp1094
-		} else if __tmp950 == 0x10 {
-			__tmp1095 := _i16x8_splat
-			__tmp949 = __tmp1095
-		} else if __tmp950 == 0x11 {
-			__tmp1096 := _i32x4_splat
-			__tmp949 = __tmp1096
-		} else if __tmp950 == 0x12 {
-			__tmp1097 := _i64x2_splat
-			__tmp949 = __tmp1097
-		} else if __tmp950 == 0x13 {
-			__tmp1098 := _f32x4_splat
-			__tmp949 = __tmp1098
-		} else if __tmp950 == 0x14 {
-			__tmp1099 := _f64x2_splat
-			__tmp949 = __tmp1099
-		} else if __tmp950 == 0x15 {
-			__tmp1100 := _byte_1(_s)
-			_i := __tmp1100
-			__tmp1103 := _i8x16_extract_lane_s_1(_i)
-			__tmp949 = __tmp1103
-		} else if __tmp950 == 0x16 {
-			__tmp1105 := _byte_1(_s)
-			_i := __tmp1105
-			__tmp1108 := _i8x16_extract_lane_u_1(_i)
-			__tmp949 = __tmp1108
-		} else if __tmp950 == 0x17 {
-			__tmp1110 := _byte_1(_s)
-			_i := __tmp1110
-			__tmp1113 := _i8x16_replace_lane_1(_i)
-			__tmp949 = __tmp1113
-		} else if __tmp950 == 0x18 {
-			__tmp1115 := _byte_1(_s)
-			_i := __tmp1115
-			__tmp1118 := _i16x8_extract_lane_s_1(_i)
-			__tmp949 = __tmp1118
-		} else if __tmp950 == 0x19 {
-			__tmp1120 := _byte_1(_s)
-			_i := __tmp1120
-			__tmp1123 := _i16x8_extract_lane_u_1(_i)
-			__tmp949 = __tmp1123
-		} else if __tmp950 == 0x1a {
-			__tmp1125 := _byte_1(_s)
-			_i := __tmp1125
-			__tmp1128 := _i16x8_replace_lane_1(_i)
-			__tmp949 = __tmp1128
-		} else if __tmp950 == 0x1b {
-			__tmp1130 := _byte_1(_s)
-			_i := __tmp1130
-			__tmp1133 := _i32x4_extract_lane_1(_i)
-			__tmp949 = __tmp1133
-		} else if __tmp950 == 0x1c {
-			__tmp1135 := _byte_1(_s)
-			_i := __tmp1135
-			__tmp1138 := _i32x4_replace_lane_1(_i)
-			__tmp949 = __tmp1138
-		} else if __tmp950 == 0x1d {
-			__tmp1140 := _byte_1(_s)
-			_i := __tmp1140
-			__tmp1143 := _i64x2_extract_lane_1(_i)
-			__tmp949 = __tmp1143
-		} else if __tmp950 == 0x1e {
-			__tmp1145 := _byte_1(_s)
-			_i := __tmp1145
-			__tmp1148 := _i64x2_replace_lane_1(_i)
-			__tmp949 = __tmp1148
-		} else if __tmp950 == 0x1f {
-			__tmp1150 := _byte_1(_s)
-			_i := __tmp1150
-			__tmp1153 := _f32x4_extract_lane_1(_i)
-			__tmp949 = __tmp1153
-		} else if __tmp950 == 0x20 {
-			__tmp1155 := _byte_1(_s)
-			_i := __tmp1155
-			__tmp1158 := _f32x4_replace_lane_1(_i)
-			__tmp949 = __tmp1158
-		} else if __tmp950 == 0x21 {
-			__tmp1160 := _byte_1(_s)
-			_i := __tmp1160
-			__tmp1163 := _f64x2_extract_lane_1(_i)
-			__tmp949 = __tmp1163
-		} else if __tmp950 == 0x22 {
-			__tmp1165 := _byte_1(_s)
-			_i := __tmp1165
-			__tmp1168 := _f64x2_replace_lane_1(_i)
-			__tmp949 = __tmp1168
-		} else if __tmp950 == 0x23 {
-			__tmp1170 := _i8x16_eq
-			__tmp949 = __tmp1170
-		} else if __tmp950 == 0x24 {
-			__tmp1171 := _i8x16_ne
-			__tmp949 = __tmp1171
-		} else if __tmp950 == 0x25 {
-			__tmp1172 := _i8x16_lt_s
-			__tmp949 = __tmp1172
-		} else if __tmp950 == 0x26 {
-			__tmp1173 := _i8x16_lt_u
-			__tmp949 = __tmp1173
-		} else if __tmp950 == 0x27 {
-			__tmp1174 := _i8x16_gt_s
-			__tmp949 = __tmp1174
-		} else if __tmp950 == 0x28 {
-			__tmp1175 := _i8x16_gt_u
-			__tmp949 = __tmp1175
-		} else if __tmp950 == 0x29 {
-			__tmp1176 := _i8x16_le_s
-			__tmp949 = __tmp1176
-		} else if __tmp950 == 0x2a {
-			__tmp1177 := _i8x16_le_u
-			__tmp949 = __tmp1177
-		} else if __tmp950 == 0x2b {
-			__tmp1178 := _i8x16_ge_s
-			__tmp949 = __tmp1178
-		} else if __tmp950 == 0x2c {
-			__tmp1179 := _i8x16_ge_u
-			__tmp949 = __tmp1179
-		} else if __tmp950 == 0x2d {
-			__tmp1180 := _i16x8_eq
-			__tmp949 = __tmp1180
-		} else if __tmp950 == 0x2e {
-			__tmp1181 := _i16x8_ne
-			__tmp949 = __tmp1181
-		} else if __tmp950 == 0x2f {
-			__tmp1182 := _i16x8_lt_s
-			__tmp949 = __tmp1182
-		} else if __tmp950 == 0x30 {
-			__tmp1183 := _i16x8_lt_u
-			__tmp949 = __tmp1183
-		} else if __tmp950 == 0x31 {
-			__tmp1184 := _i16x8_gt_s
-			__tmp949 = __tmp1184
-		} else if __tmp950 == 0x32 {
-			__tmp1185 := _i16x8_gt_u
-			__tmp949 = __tmp1185
-		} else if __tmp950 == 0x33 {
-			__tmp1186 := _i16x8_le_s
-			__tmp949 = __tmp1186
-		} else if __tmp950 == 0x34 {
-			__tmp1187 := _i16x8_le_u
-			__tmp949 = __tmp1187
-		} else if __tmp950 == 0x35 {
-			__tmp1188 := _i16x8_ge_s
-			__tmp949 = __tmp1188
-		} else if __tmp950 == 0x36 {
-			__tmp1189 := _i16x8_ge_u
-			__tmp949 = __tmp1189
-		} else if __tmp950 == 0x37 {
-			__tmp1190 := _i32x4_eq
-			__tmp949 = __tmp1190
-		} else if __tmp950 == 0x38 {
-			__tmp1191 := _i32x4_ne
-			__tmp949 = __tmp1191
-		} else if __tmp950 == 0x39 {
-			__tmp1192 := _i32x4_lt_s
-			__tmp949 = __tmp1192
-		} else if __tmp950 == 0x3a {
-			__tmp1193 := _i32x4_lt_u
-			__tmp949 = __tmp1193
-		} else if __tmp950 == 0x3b {
-			__tmp1194 := _i32x4_gt_s
-			__tmp949 = __tmp1194
-		} else if __tmp950 == 0x3c {
-			__tmp1195 := _i32x4_gt_u
-			__tmp949 = __tmp1195
-		} else if __tmp950 == 0x3d {
-			__tmp1196 := _i32x4_le_s
-			__tmp949 = __tmp1196
-		} else if __tmp950 == 0x3e {
-			__tmp1197 := _i32x4_le_u
-			__tmp949 = __tmp1197
-		} else if __tmp950 == 0x3f {
-			__tmp1198 := _i32x4_ge_s
-			__tmp949 = __tmp1198
-		} else if __tmp950 == 0x40 {
-			__tmp1199 := _i32x4_ge_u
-			__tmp949 = __tmp1199
-		} else if __tmp950 == 0x41 {
-			__tmp1200 := _f32x4_eq
-			__tmp949 = __tmp1200
-		} else if __tmp950 == 0x42 {
-			__tmp1201 := _f32x4_ne
-			__tmp949 = __tmp1201
-		} else if __tmp950 == 0x43 {
-			__tmp1202 := _f32x4_lt
-			__tmp949 = __tmp1202
-		} else if __tmp950 == 0x44 {
-			__tmp1203 := _f32x4_gt
-			__tmp949 = __tmp1203
-		} else if __tmp950 == 0x45 {
-			__tmp1204 := _f32x4_le
-			__tmp949 = __tmp1204
-		} else if __tmp950 == 0x46 {
-			__tmp1205 := _f32x4_ge
-			__tmp949 = __tmp1205
-		} else if __tmp950 == 0x47 {
-			__tmp1206 := _f64x2_eq
-			__tmp949 = __tmp1206
-		} else if __tmp950 == 0x48 {
-			__tmp1207 := _f64x2_ne
-			__tmp949 = __tmp1207
-		} else if __tmp950 == 0x49 {
-			__tmp1208 := _f64x2_lt
-			__tmp949 = __tmp1208
-		} else if __tmp950 == 0x4a {
-			__tmp1209 := _f64x2_gt
-			__tmp949 = __tmp1209
-		} else if __tmp950 == 0x4b {
-			__tmp1210 := _f64x2_le
-			__tmp949 = __tmp1210
-		} else if __tmp950 == 0x4c {
-			__tmp1211 := _f64x2_ge
-			__tmp949 = __tmp1211
-		} else if __tmp950 == 0x4d {
-			__tmp1212 := _v128_not
-			__tmp949 = __tmp1212
-		} else if __tmp950 == 0x4e {
-			__tmp1213 := _v128_and
-			__tmp949 = __tmp1213
-		} else if __tmp950 == 0x4f {
-			__tmp1214 := _v128_andnot
-			__tmp949 = __tmp1214
-		} else if __tmp950 == 0x50 {
-			__tmp1215 := _v128_or
-			__tmp949 = __tmp1215
-		} else if __tmp950 == 0x51 {
-			__tmp1216 := _v128_xor
-			__tmp949 = __tmp1216
-		} else if __tmp950 == 0x52 {
-			__tmp1217 := _v128_bitselect
-			__tmp949 = __tmp1217
-		} else if __tmp950 == 0x53 {
-			__tmp1218 := _v128_any_true
-			__tmp949 = __tmp1218
-		} else if __tmp950 == 0x54 {
-			__tmp1219, __tmp1220, __tmp1221 := _memop_1(_s)
-			_x, _a, _o := __tmp1219, __tmp1220, __tmp1221
-			__tmp1226 := _byte_1(_s)
-			_lane := __tmp1226
-			__tmp1229 := _v128_load8_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1229
-		} else if __tmp950 == 0x55 {
-			__tmp1234, __tmp1235, __tmp1236 := _memop_1(_s)
-			_x, _a, _o := __tmp1234, __tmp1235, __tmp1236
-			__tmp1241 := _byte_1(_s)
-			_lane := __tmp1241
-			__tmp1244 := _v128_load16_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1244
-		} else if __tmp950 == 0x56 {
-			__tmp1249, __tmp1250, __tmp1251 := _memop_1(_s)
-			_x, _a, _o := __tmp1249, __tmp1250, __tmp1251
-			__tmp1256 := _byte_1(_s)
-			_lane := __tmp1256
-			__tmp1259 := _v128_load32_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1259
-		} else if __tmp950 == 0x57 {
-			__tmp1264, __tmp1265, __tmp1266 := _memop_1(_s)
-			_x, _a, _o := __tmp1264, __tmp1265, __tmp1266
-			__tmp1271 := _byte_1(_s)
-			_lane := __tmp1271
-			__tmp1274 := _v128_load64_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1274
-		} else if __tmp950 == 0x58 {
-			__tmp1279, __tmp1280, __tmp1281 := _memop_1(_s)
-			_x, _a, _o := __tmp1279, __tmp1280, __tmp1281
-			__tmp1286 := _byte_1(_s)
-			_lane := __tmp1286
-			__tmp1289 := _v128_store8_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1289
-		} else if __tmp950 == 0x59 {
-			__tmp1294, __tmp1295, __tmp1296 := _memop_1(_s)
-			_x, _a, _o := __tmp1294, __tmp1295, __tmp1296
-			__tmp1301 := _byte_1(_s)
-			_lane := __tmp1301
-			__tmp1304 := _v128_store16_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1304
-		} else if __tmp950 == 0x5a {
-			__tmp1309, __tmp1310, __tmp1311 := _memop_1(_s)
-			_x, _a, _o := __tmp1309, __tmp1310, __tmp1311
-			__tmp1316 := _byte_1(_s)
-			_lane := __tmp1316
-			__tmp1319 := _v128_store32_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1319
-		} else if __tmp950 == 0x5b {
-			__tmp1324, __tmp1325, __tmp1326 := _memop_1(_s)
-			_x, _a, _o := __tmp1324, __tmp1325, __tmp1326
-			__tmp1331 := _byte_1(_s)
-			_lane := __tmp1331
-			__tmp1334 := _v128_store64_lane_4(_x, _a, _o, _lane)
-			__tmp949 = __tmp1334
-		} else if __tmp950 == 0x5c {
-			__tmp1339, __tmp1340, __tmp1341 := _memop_1(_s)
-			_x, _a, _o := __tmp1339, __tmp1340, __tmp1341
-			__tmp1346 := _v128_load32_zero_3(_x, _a, _o)
-			__tmp949 = __tmp1346
-		} else if __tmp950 == 0x5d {
-			__tmp1350, __tmp1351, __tmp1352 := _memop_1(_s)
-			_x, _a, _o := __tmp1350, __tmp1351, __tmp1352
-			__tmp1357 := _v128_load64_zero_3(_x, _a, _o)
-			__tmp949 = __tmp1357
-		} else if __tmp950 == 0x5e {
-			__tmp1361 := _f32x4_demote_f64x2_zero
-			__tmp949 = __tmp1361
-		} else if __tmp950 == 0x5f {
-			__tmp1362 := _f64x2_promote_low_f32x4
-			__tmp949 = __tmp1362
-		} else if __tmp950 == 0x60 {
-			__tmp1363 := _i8x16_abs
-			__tmp949 = __tmp1363
-		} else if __tmp950 == 0x61 {
-			__tmp1364 := _i8x16_neg
-			__tmp949 = __tmp1364
-		} else if __tmp950 == 0x62 {
-			__tmp1365 := _i8x16_popcnt
-			__tmp949 = __tmp1365
-		} else if __tmp950 == 0x63 {
-			__tmp1366 := _i8x16_all_true
-			__tmp949 = __tmp1366
-		} else if __tmp950 == 0x64 {
-			__tmp1367 := _i8x16_bitmask
-			__tmp949 = __tmp1367
-		} else if __tmp950 == 0x65 {
-			__tmp1368 := _i8x16_narrow_i16x8_s
-			__tmp949 = __tmp1368
-		} else if __tmp950 == 0x66 {
-			__tmp1369 := _i8x16_narrow_i16x8_u
-			__tmp949 = __tmp1369
-		} else if __tmp950 == 0x67 {
-			__tmp1370 := _f32x4_ceil
-			__tmp949 = __tmp1370
-		} else if __tmp950 == 0x68 {
-			__tmp1371 := _f32x4_floor
-			__tmp949 = __tmp1371
-		} else if __tmp950 == 0x69 {
-			__tmp1372 := _f32x4_trunc
-			__tmp949 = __tmp1372
-		} else if __tmp950 == 0x6a {
-			__tmp1373 := _f32x4_nearest
-			__tmp949 = __tmp1373
-		} else if __tmp950 == 0x6b {
-			__tmp1374 := _i8x16_shl
-			__tmp949 = __tmp1374
-		} else if __tmp950 == 0x6c {
-			__tmp1375 := _i8x16_shr_s
-			__tmp949 = __tmp1375
-		} else if __tmp950 == 0x6d {
-			__tmp1376 := _i8x16_shr_u
-			__tmp949 = __tmp1376
-		} else if __tmp950 == 0x6e {
-			__tmp1377 := _i8x16_add
-			__tmp949 = __tmp1377
-		} else if __tmp950 == 0x6f {
-			__tmp1378 := _i8x16_add_sat_s
-			__tmp949 = __tmp1378
-		} else if __tmp950 == 0x70 {
-			__tmp1379 := _i8x16_add_sat_u
-			__tmp949 = __tmp1379
-		} else if __tmp950 == 0x71 {
-			__tmp1380 := _i8x16_sub
-			__tmp949 = __tmp1380
-		} else if __tmp950 == 0x72 {
-			__tmp1381 := _i8x16_sub_sat_s
-			__tmp949 = __tmp1381
-		} else if __tmp950 == 0x73 {
-			__tmp1382 := _i8x16_sub_sat_u
-			__tmp949 = __tmp1382
-		} else if __tmp950 == 0x74 {
-			__tmp1383 := _f64x2_ceil
-			__tmp949 = __tmp1383
-		} else if __tmp950 == 0x75 {
-			__tmp1384 := _f64x2_floor
-			__tmp949 = __tmp1384
-		} else if __tmp950 == 0x76 {
-			__tmp1385 := _i8x16_min_s
-			__tmp949 = __tmp1385
-		} else if __tmp950 == 0x77 {
-			__tmp1386 := _i8x16_min_u
-			__tmp949 = __tmp1386
-		} else if __tmp950 == 0x78 {
-			__tmp1387 := _i8x16_max_s
-			__tmp949 = __tmp1387
-		} else if __tmp950 == 0x79 {
-			__tmp1388 := _i8x16_max_u
-			__tmp949 = __tmp1388
-		} else if __tmp950 == 0x7a {
-			__tmp1389 := _f64x2_trunc
-			__tmp949 = __tmp1389
-		} else if __tmp950 == 0x7b {
-			__tmp1390 := _i8x16_avgr_u
-			__tmp949 = __tmp1390
-		} else if __tmp950 == 0x7c {
-			__tmp1391 := _i16x8_extadd_pairwise_i8x16_s
-			__tmp949 = __tmp1391
-		} else if __tmp950 == 0x7d {
-			__tmp1392 := _i16x8_extadd_pairwise_i8x16_u
-			__tmp949 = __tmp1392
-		} else if __tmp950 == 0x7e {
-			__tmp1393 := _i32x4_extadd_pairwise_i16x8_s
-			__tmp949 = __tmp1393
-		} else if __tmp950 == 0x7f {
-			__tmp1394 := _i32x4_extadd_pairwise_i16x8_u
-			__tmp949 = __tmp1394
-		} else if __tmp950 == 0x80 {
-			__tmp1395 := _i16x8_abs
-			__tmp949 = __tmp1395
-		} else if __tmp950 == 0x81 {
-			__tmp1396 := _i16x8_neg
-			__tmp949 = __tmp1396
-		} else if __tmp950 == 0x82 {
-			__tmp1397 := _i16x8_q15mulr_sat_s
-			__tmp949 = __tmp1397
-		} else if __tmp950 == 0x83 {
-			__tmp1398 := _i16x8_all_true
-			__tmp949 = __tmp1398
-		} else if __tmp950 == 0x84 {
-			__tmp1399 := _i16x8_bitmask
-			__tmp949 = __tmp1399
-		} else if __tmp950 == 0x85 {
-			__tmp1400 := _i16x8_narrow_i32x4_s
-			__tmp949 = __tmp1400
-		} else if __tmp950 == 0x86 {
-			__tmp1401 := _i16x8_narrow_i32x4_u
-			__tmp949 = __tmp1401
-		} else if __tmp950 == 0x87 {
-			__tmp1402 := _i16x8_extend_low_i8x16_s
-			__tmp949 = __tmp1402
-		} else if __tmp950 == 0x88 {
-			__tmp1403 := _i16x8_extend_high_i8x16_s
-			__tmp949 = __tmp1403
-		} else if __tmp950 == 0x89 {
-			__tmp1404 := _i16x8_extend_low_i8x16_u
-			__tmp949 = __tmp1404
-		} else if __tmp950 == 0x8a {
-			__tmp1405 := _i16x8_extend_high_i8x16_u
-			__tmp949 = __tmp1405
-		} else if __tmp950 == 0x8b {
-			__tmp1406 := _i16x8_shl
-			__tmp949 = __tmp1406
-		} else if __tmp950 == 0x8c {
-			__tmp1407 := _i16x8_shr_s
-			__tmp949 = __tmp1407
-		} else if __tmp950 == 0x8d {
-			__tmp1408 := _i16x8_shr_u
-			__tmp949 = __tmp1408
-		} else if __tmp950 == 0x8e {
-			__tmp1409 := _i16x8_add
-			__tmp949 = __tmp1409
-		} else if __tmp950 == 0x8f {
-			__tmp1410 := _i16x8_add_sat_s
-			__tmp949 = __tmp1410
-		} else if __tmp950 == 0x90 {
-			__tmp1411 := _i16x8_add_sat_u
-			__tmp949 = __tmp1411
-		} else if __tmp950 == 0x91 {
-			__tmp1412 := _i16x8_sub
-			__tmp949 = __tmp1412
-		} else if __tmp950 == 0x92 {
-			__tmp1413 := _i16x8_sub_sat_s
-			__tmp949 = __tmp1413
-		} else if __tmp950 == 0x93 {
-			__tmp1414 := _i16x8_sub_sat_u
-			__tmp949 = __tmp1414
-		} else if __tmp950 == 0x94 {
-			__tmp1415 := _f64x2_nearest
-			__tmp949 = __tmp1415
-		} else if __tmp950 == 0x95 {
-			__tmp1416 := _i16x8_mul
-			__tmp949 = __tmp1416
-		} else if __tmp950 == 0x96 {
-			__tmp1417 := _i16x8_min_s
-			__tmp949 = __tmp1417
-		} else if __tmp950 == 0x97 {
-			__tmp1418 := _i16x8_min_u
-			__tmp949 = __tmp1418
-		} else if __tmp950 == 0x98 {
-			__tmp1419 := _i16x8_max_s
-			__tmp949 = __tmp1419
-		} else if __tmp950 == 0x99 {
-			__tmp1420 := _i16x8_max_u
-			__tmp949 = __tmp1420
-		} else if __tmp950 == 0x9a {
-			_n := __tmp950
-			__tmp1422 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1422
-		} else if __tmp950 == 0x9b {
-			__tmp1427 := _i16x8_avgr_u
-			__tmp949 = __tmp1427
-		} else if __tmp950 == 0x9c {
-			__tmp1428 := _i16x8_extmul_low_i8x16_s
-			__tmp949 = __tmp1428
-		} else if __tmp950 == 0x9d {
-			__tmp1429 := _i16x8_extmul_high_i8x16_s
-			__tmp949 = __tmp1429
-		} else if __tmp950 == 0x9e {
-			__tmp1430 := _i16x8_extmul_low_i8x16_u
-			__tmp949 = __tmp1430
-		} else if __tmp950 == 0x9f {
-			__tmp1431 := _i16x8_extmul_high_i8x16_u
-			__tmp949 = __tmp1431
-		} else if __tmp950 == 0xa0 {
-			__tmp1432 := _i32x4_abs
-			__tmp949 = __tmp1432
-		} else if __tmp950 == 0xa1 {
-			__tmp1433 := _i32x4_neg
-			__tmp949 = __tmp1433
-		} else if __tmp950 == 0xa2 {
-			_n := __tmp950
-			__tmp1435 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1435
-		} else if __tmp950 == 0xa3 {
-			__tmp1440 := _i32x4_all_true
-			__tmp949 = __tmp1440
-		} else if __tmp950 == 0xa4 {
-			__tmp1441 := _i32x4_bitmask
-			__tmp949 = __tmp1441
-		} else if __tmp950 == 0xa5 || __tmp950 == 0xa6 {
-			_n := __tmp950
-			__tmp1443 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1443
-		} else if __tmp950 == 0xa7 {
-			__tmp1448 := _i32x4_extend_low_i16x8_s
-			__tmp949 = __tmp1448
-		} else if __tmp950 == 0xa8 {
-			__tmp1449 := _i32x4_extend_high_i16x8_s
-			__tmp949 = __tmp1449
-		} else if __tmp950 == 0xa9 {
-			__tmp1450 := _i32x4_extend_low_i16x8_u
-			__tmp949 = __tmp1450
-		} else if __tmp950 == 0xaa {
-			__tmp1451 := _i32x4_extend_high_i16x8_u
-			__tmp949 = __tmp1451
-		} else if __tmp950 == 0xab {
-			__tmp1452 := _i32x4_shl
-			__tmp949 = __tmp1452
-		} else if __tmp950 == 0xac {
-			__tmp1453 := _i32x4_shr_s
-			__tmp949 = __tmp1453
-		} else if __tmp950 == 0xad {
-			__tmp1454 := _i32x4_shr_u
-			__tmp949 = __tmp1454
-		} else if __tmp950 == 0xae {
-			__tmp1455 := _i32x4_add
-			__tmp949 = __tmp1455
-		} else if __tmp950 == 0xaf || __tmp950 == 0xb0 {
-			_n := __tmp950
+			__tmp942 = __tmp1082
+		} else if __tmp943 == 0x0e {
+			__tmp1086 := _i8x16_swizzle
+			__tmp942 = __tmp1086
+		} else if __tmp943 == 0x0f {
+			__tmp1087 := _i8x16_splat
+			__tmp942 = __tmp1087
+		} else if __tmp943 == 0x10 {
+			__tmp1088 := _i16x8_splat
+			__tmp942 = __tmp1088
+		} else if __tmp943 == 0x11 {
+			__tmp1089 := _i32x4_splat
+			__tmp942 = __tmp1089
+		} else if __tmp943 == 0x12 {
+			__tmp1090 := _i64x2_splat
+			__tmp942 = __tmp1090
+		} else if __tmp943 == 0x13 {
+			__tmp1091 := _f32x4_splat
+			__tmp942 = __tmp1091
+		} else if __tmp943 == 0x14 {
+			__tmp1092 := _f64x2_splat
+			__tmp942 = __tmp1092
+		} else if __tmp943 == 0x15 {
+			__tmp1093 := _byte_1(_s)
+			_i := __tmp1093
+			__tmp1096 := _i8x16_extract_lane_s_1(_i)
+			__tmp942 = __tmp1096
+		} else if __tmp943 == 0x16 {
+			__tmp1098 := _byte_1(_s)
+			_i := __tmp1098
+			__tmp1101 := _i8x16_extract_lane_u_1(_i)
+			__tmp942 = __tmp1101
+		} else if __tmp943 == 0x17 {
+			__tmp1103 := _byte_1(_s)
+			_i := __tmp1103
+			__tmp1106 := _i8x16_replace_lane_1(_i)
+			__tmp942 = __tmp1106
+		} else if __tmp943 == 0x18 {
+			__tmp1108 := _byte_1(_s)
+			_i := __tmp1108
+			__tmp1111 := _i16x8_extract_lane_s_1(_i)
+			__tmp942 = __tmp1111
+		} else if __tmp943 == 0x19 {
+			__tmp1113 := _byte_1(_s)
+			_i := __tmp1113
+			__tmp1116 := _i16x8_extract_lane_u_1(_i)
+			__tmp942 = __tmp1116
+		} else if __tmp943 == 0x1a {
+			__tmp1118 := _byte_1(_s)
+			_i := __tmp1118
+			__tmp1121 := _i16x8_replace_lane_1(_i)
+			__tmp942 = __tmp1121
+		} else if __tmp943 == 0x1b {
+			__tmp1123 := _byte_1(_s)
+			_i := __tmp1123
+			__tmp1126 := _i32x4_extract_lane_1(_i)
+			__tmp942 = __tmp1126
+		} else if __tmp943 == 0x1c {
+			__tmp1128 := _byte_1(_s)
+			_i := __tmp1128
+			__tmp1131 := _i32x4_replace_lane_1(_i)
+			__tmp942 = __tmp1131
+		} else if __tmp943 == 0x1d {
+			__tmp1133 := _byte_1(_s)
+			_i := __tmp1133
+			__tmp1136 := _i64x2_extract_lane_1(_i)
+			__tmp942 = __tmp1136
+		} else if __tmp943 == 0x1e {
+			__tmp1138 := _byte_1(_s)
+			_i := __tmp1138
+			__tmp1141 := _i64x2_replace_lane_1(_i)
+			__tmp942 = __tmp1141
+		} else if __tmp943 == 0x1f {
+			__tmp1143 := _byte_1(_s)
+			_i := __tmp1143
+			__tmp1146 := _f32x4_extract_lane_1(_i)
+			__tmp942 = __tmp1146
+		} else if __tmp943 == 0x20 {
+			__tmp1148 := _byte_1(_s)
+			_i := __tmp1148
+			__tmp1151 := _f32x4_replace_lane_1(_i)
+			__tmp942 = __tmp1151
+		} else if __tmp943 == 0x21 {
+			__tmp1153 := _byte_1(_s)
+			_i := __tmp1153
+			__tmp1156 := _f64x2_extract_lane_1(_i)
+			__tmp942 = __tmp1156
+		} else if __tmp943 == 0x22 {
+			__tmp1158 := _byte_1(_s)
+			_i := __tmp1158
+			__tmp1161 := _f64x2_replace_lane_1(_i)
+			__tmp942 = __tmp1161
+		} else if __tmp943 == 0x23 {
+			__tmp1163 := _i8x16_eq
+			__tmp942 = __tmp1163
+		} else if __tmp943 == 0x24 {
+			__tmp1164 := _i8x16_ne
+			__tmp942 = __tmp1164
+		} else if __tmp943 == 0x25 {
+			__tmp1165 := _i8x16_lt_s
+			__tmp942 = __tmp1165
+		} else if __tmp943 == 0x26 {
+			__tmp1166 := _i8x16_lt_u
+			__tmp942 = __tmp1166
+		} else if __tmp943 == 0x27 {
+			__tmp1167 := _i8x16_gt_s
+			__tmp942 = __tmp1167
+		} else if __tmp943 == 0x28 {
+			__tmp1168 := _i8x16_gt_u
+			__tmp942 = __tmp1168
+		} else if __tmp943 == 0x29 {
+			__tmp1169 := _i8x16_le_s
+			__tmp942 = __tmp1169
+		} else if __tmp943 == 0x2a {
+			__tmp1170 := _i8x16_le_u
+			__tmp942 = __tmp1170
+		} else if __tmp943 == 0x2b {
+			__tmp1171 := _i8x16_ge_s
+			__tmp942 = __tmp1171
+		} else if __tmp943 == 0x2c {
+			__tmp1172 := _i8x16_ge_u
+			__tmp942 = __tmp1172
+		} else if __tmp943 == 0x2d {
+			__tmp1173 := _i16x8_eq
+			__tmp942 = __tmp1173
+		} else if __tmp943 == 0x2e {
+			__tmp1174 := _i16x8_ne
+			__tmp942 = __tmp1174
+		} else if __tmp943 == 0x2f {
+			__tmp1175 := _i16x8_lt_s
+			__tmp942 = __tmp1175
+		} else if __tmp943 == 0x30 {
+			__tmp1176 := _i16x8_lt_u
+			__tmp942 = __tmp1176
+		} else if __tmp943 == 0x31 {
+			__tmp1177 := _i16x8_gt_s
+			__tmp942 = __tmp1177
+		} else if __tmp943 == 0x32 {
+			__tmp1178 := _i16x8_gt_u
+			__tmp942 = __tmp1178
+		} else if __tmp943 == 0x33 {
+			__tmp1179 := _i16x8_le_s
+			__tmp942 = __tmp1179
+		} else if __tmp943 == 0x34 {
+			__tmp1180 := _i16x8_le_u
+			__tmp942 = __tmp1180
+		} else if __tmp943 == 0x35 {
+			__tmp1181 := _i16x8_ge_s
+			__tmp942 = __tmp1181
+		} else if __tmp943 == 0x36 {
+			__tmp1182 := _i16x8_ge_u
+			__tmp942 = __tmp1182
+		} else if __tmp943 == 0x37 {
+			__tmp1183 := _i32x4_eq
+			__tmp942 = __tmp1183
+		} else if __tmp943 == 0x38 {
+			__tmp1184 := _i32x4_ne
+			__tmp942 = __tmp1184
+		} else if __tmp943 == 0x39 {
+			__tmp1185 := _i32x4_lt_s
+			__tmp942 = __tmp1185
+		} else if __tmp943 == 0x3a {
+			__tmp1186 := _i32x4_lt_u
+			__tmp942 = __tmp1186
+		} else if __tmp943 == 0x3b {
+			__tmp1187 := _i32x4_gt_s
+			__tmp942 = __tmp1187
+		} else if __tmp943 == 0x3c {
+			__tmp1188 := _i32x4_gt_u
+			__tmp942 = __tmp1188
+		} else if __tmp943 == 0x3d {
+			__tmp1189 := _i32x4_le_s
+			__tmp942 = __tmp1189
+		} else if __tmp943 == 0x3e {
+			__tmp1190 := _i32x4_le_u
+			__tmp942 = __tmp1190
+		} else if __tmp943 == 0x3f {
+			__tmp1191 := _i32x4_ge_s
+			__tmp942 = __tmp1191
+		} else if __tmp943 == 0x40 {
+			__tmp1192 := _i32x4_ge_u
+			__tmp942 = __tmp1192
+		} else if __tmp943 == 0x41 {
+			__tmp1193 := _f32x4_eq
+			__tmp942 = __tmp1193
+		} else if __tmp943 == 0x42 {
+			__tmp1194 := _f32x4_ne
+			__tmp942 = __tmp1194
+		} else if __tmp943 == 0x43 {
+			__tmp1195 := _f32x4_lt
+			__tmp942 = __tmp1195
+		} else if __tmp943 == 0x44 {
+			__tmp1196 := _f32x4_gt
+			__tmp942 = __tmp1196
+		} else if __tmp943 == 0x45 {
+			__tmp1197 := _f32x4_le
+			__tmp942 = __tmp1197
+		} else if __tmp943 == 0x46 {
+			__tmp1198 := _f32x4_ge
+			__tmp942 = __tmp1198
+		} else if __tmp943 == 0x47 {
+			__tmp1199 := _f64x2_eq
+			__tmp942 = __tmp1199
+		} else if __tmp943 == 0x48 {
+			__tmp1200 := _f64x2_ne
+			__tmp942 = __tmp1200
+		} else if __tmp943 == 0x49 {
+			__tmp1201 := _f64x2_lt
+			__tmp942 = __tmp1201
+		} else if __tmp943 == 0x4a {
+			__tmp1202 := _f64x2_gt
+			__tmp942 = __tmp1202
+		} else if __tmp943 == 0x4b {
+			__tmp1203 := _f64x2_le
+			__tmp942 = __tmp1203
+		} else if __tmp943 == 0x4c {
+			__tmp1204 := _f64x2_ge
+			__tmp942 = __tmp1204
+		} else if __tmp943 == 0x4d {
+			__tmp1205 := _v128_not
+			__tmp942 = __tmp1205
+		} else if __tmp943 == 0x4e {
+			__tmp1206 := _v128_and
+			__tmp942 = __tmp1206
+		} else if __tmp943 == 0x4f {
+			__tmp1207 := _v128_andnot
+			__tmp942 = __tmp1207
+		} else if __tmp943 == 0x50 {
+			__tmp1208 := _v128_or
+			__tmp942 = __tmp1208
+		} else if __tmp943 == 0x51 {
+			__tmp1209 := _v128_xor
+			__tmp942 = __tmp1209
+		} else if __tmp943 == 0x52 {
+			__tmp1210 := _v128_bitselect
+			__tmp942 = __tmp1210
+		} else if __tmp943 == 0x53 {
+			__tmp1211 := _v128_any_true
+			__tmp942 = __tmp1211
+		} else if __tmp943 == 0x54 {
+			__tmp1212, __tmp1213, __tmp1214 := _memop_1(_s)
+			_x, _a, _o := __tmp1212, __tmp1213, __tmp1214
+			__tmp1219 := _byte_1(_s)
+			_lane := __tmp1219
+			__tmp1222 := _v128_load8_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1222
+		} else if __tmp943 == 0x55 {
+			__tmp1227, __tmp1228, __tmp1229 := _memop_1(_s)
+			_x, _a, _o := __tmp1227, __tmp1228, __tmp1229
+			__tmp1234 := _byte_1(_s)
+			_lane := __tmp1234
+			__tmp1237 := _v128_load16_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1237
+		} else if __tmp943 == 0x56 {
+			__tmp1242, __tmp1243, __tmp1244 := _memop_1(_s)
+			_x, _a, _o := __tmp1242, __tmp1243, __tmp1244
+			__tmp1249 := _byte_1(_s)
+			_lane := __tmp1249
+			__tmp1252 := _v128_load32_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1252
+		} else if __tmp943 == 0x57 {
+			__tmp1257, __tmp1258, __tmp1259 := _memop_1(_s)
+			_x, _a, _o := __tmp1257, __tmp1258, __tmp1259
+			__tmp1264 := _byte_1(_s)
+			_lane := __tmp1264
+			__tmp1267 := _v128_load64_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1267
+		} else if __tmp943 == 0x58 {
+			__tmp1272, __tmp1273, __tmp1274 := _memop_1(_s)
+			_x, _a, _o := __tmp1272, __tmp1273, __tmp1274
+			__tmp1279 := _byte_1(_s)
+			_lane := __tmp1279
+			__tmp1282 := _v128_store8_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1282
+		} else if __tmp943 == 0x59 {
+			__tmp1287, __tmp1288, __tmp1289 := _memop_1(_s)
+			_x, _a, _o := __tmp1287, __tmp1288, __tmp1289
+			__tmp1294 := _byte_1(_s)
+			_lane := __tmp1294
+			__tmp1297 := _v128_store16_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1297
+		} else if __tmp943 == 0x5a {
+			__tmp1302, __tmp1303, __tmp1304 := _memop_1(_s)
+			_x, _a, _o := __tmp1302, __tmp1303, __tmp1304
+			__tmp1309 := _byte_1(_s)
+			_lane := __tmp1309
+			__tmp1312 := _v128_store32_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1312
+		} else if __tmp943 == 0x5b {
+			__tmp1317, __tmp1318, __tmp1319 := _memop_1(_s)
+			_x, _a, _o := __tmp1317, __tmp1318, __tmp1319
+			__tmp1324 := _byte_1(_s)
+			_lane := __tmp1324
+			__tmp1327 := _v128_store64_lane_4(_x, _a, _o, _lane)
+			__tmp942 = __tmp1327
+		} else if __tmp943 == 0x5c {
+			__tmp1332, __tmp1333, __tmp1334 := _memop_1(_s)
+			_x, _a, _o := __tmp1332, __tmp1333, __tmp1334
+			__tmp1339 := _v128_load32_zero_3(_x, _a, _o)
+			__tmp942 = __tmp1339
+		} else if __tmp943 == 0x5d {
+			__tmp1343, __tmp1344, __tmp1345 := _memop_1(_s)
+			_x, _a, _o := __tmp1343, __tmp1344, __tmp1345
+			__tmp1350 := _v128_load64_zero_3(_x, _a, _o)
+			__tmp942 = __tmp1350
+		} else if __tmp943 == 0x5e {
+			__tmp1354 := _f32x4_demote_f64x2_zero
+			__tmp942 = __tmp1354
+		} else if __tmp943 == 0x5f {
+			__tmp1355 := _f64x2_promote_low_f32x4
+			__tmp942 = __tmp1355
+		} else if __tmp943 == 0x60 {
+			__tmp1356 := _i8x16_abs
+			__tmp942 = __tmp1356
+		} else if __tmp943 == 0x61 {
+			__tmp1357 := _i8x16_neg
+			__tmp942 = __tmp1357
+		} else if __tmp943 == 0x62 {
+			__tmp1358 := _i8x16_popcnt
+			__tmp942 = __tmp1358
+		} else if __tmp943 == 0x63 {
+			__tmp1359 := _i8x16_all_true
+			__tmp942 = __tmp1359
+		} else if __tmp943 == 0x64 {
+			__tmp1360 := _i8x16_bitmask
+			__tmp942 = __tmp1360
+		} else if __tmp943 == 0x65 {
+			__tmp1361 := _i8x16_narrow_i16x8_s
+			__tmp942 = __tmp1361
+		} else if __tmp943 == 0x66 {
+			__tmp1362 := _i8x16_narrow_i16x8_u
+			__tmp942 = __tmp1362
+		} else if __tmp943 == 0x67 {
+			__tmp1363 := _f32x4_ceil
+			__tmp942 = __tmp1363
+		} else if __tmp943 == 0x68 {
+			__tmp1364 := _f32x4_floor
+			__tmp942 = __tmp1364
+		} else if __tmp943 == 0x69 {
+			__tmp1365 := _f32x4_trunc
+			__tmp942 = __tmp1365
+		} else if __tmp943 == 0x6a {
+			__tmp1366 := _f32x4_nearest
+			__tmp942 = __tmp1366
+		} else if __tmp943 == 0x6b {
+			__tmp1367 := _i8x16_shl
+			__tmp942 = __tmp1367
+		} else if __tmp943 == 0x6c {
+			__tmp1368 := _i8x16_shr_s
+			__tmp942 = __tmp1368
+		} else if __tmp943 == 0x6d {
+			__tmp1369 := _i8x16_shr_u
+			__tmp942 = __tmp1369
+		} else if __tmp943 == 0x6e {
+			__tmp1370 := _i8x16_add
+			__tmp942 = __tmp1370
+		} else if __tmp943 == 0x6f {
+			__tmp1371 := _i8x16_add_sat_s
+			__tmp942 = __tmp1371
+		} else if __tmp943 == 0x70 {
+			__tmp1372 := _i8x16_add_sat_u
+			__tmp942 = __tmp1372
+		} else if __tmp943 == 0x71 {
+			__tmp1373 := _i8x16_sub
+			__tmp942 = __tmp1373
+		} else if __tmp943 == 0x72 {
+			__tmp1374 := _i8x16_sub_sat_s
+			__tmp942 = __tmp1374
+		} else if __tmp943 == 0x73 {
+			__tmp1375 := _i8x16_sub_sat_u
+			__tmp942 = __tmp1375
+		} else if __tmp943 == 0x74 {
+			__tmp1376 := _f64x2_ceil
+			__tmp942 = __tmp1376
+		} else if __tmp943 == 0x75 {
+			__tmp1377 := _f64x2_floor
+			__tmp942 = __tmp1377
+		} else if __tmp943 == 0x76 {
+			__tmp1378 := _i8x16_min_s
+			__tmp942 = __tmp1378
+		} else if __tmp943 == 0x77 {
+			__tmp1379 := _i8x16_min_u
+			__tmp942 = __tmp1379
+		} else if __tmp943 == 0x78 {
+			__tmp1380 := _i8x16_max_s
+			__tmp942 = __tmp1380
+		} else if __tmp943 == 0x79 {
+			__tmp1381 := _i8x16_max_u
+			__tmp942 = __tmp1381
+		} else if __tmp943 == 0x7a {
+			__tmp1382 := _f64x2_trunc
+			__tmp942 = __tmp1382
+		} else if __tmp943 == 0x7b {
+			__tmp1383 := _i8x16_avgr_u
+			__tmp942 = __tmp1383
+		} else if __tmp943 == 0x7c {
+			__tmp1384 := _i16x8_extadd_pairwise_i8x16_s
+			__tmp942 = __tmp1384
+		} else if __tmp943 == 0x7d {
+			__tmp1385 := _i16x8_extadd_pairwise_i8x16_u
+			__tmp942 = __tmp1385
+		} else if __tmp943 == 0x7e {
+			__tmp1386 := _i32x4_extadd_pairwise_i16x8_s
+			__tmp942 = __tmp1386
+		} else if __tmp943 == 0x7f {
+			__tmp1387 := _i32x4_extadd_pairwise_i16x8_u
+			__tmp942 = __tmp1387
+		} else if __tmp943 == 0x80 {
+			__tmp1388 := _i16x8_abs
+			__tmp942 = __tmp1388
+		} else if __tmp943 == 0x81 {
+			__tmp1389 := _i16x8_neg
+			__tmp942 = __tmp1389
+		} else if __tmp943 == 0x82 {
+			__tmp1390 := _i16x8_q15mulr_sat_s
+			__tmp942 = __tmp1390
+		} else if __tmp943 == 0x83 {
+			__tmp1391 := _i16x8_all_true
+			__tmp942 = __tmp1391
+		} else if __tmp943 == 0x84 {
+			__tmp1392 := _i16x8_bitmask
+			__tmp942 = __tmp1392
+		} else if __tmp943 == 0x85 {
+			__tmp1393 := _i16x8_narrow_i32x4_s
+			__tmp942 = __tmp1393
+		} else if __tmp943 == 0x86 {
+			__tmp1394 := _i16x8_narrow_i32x4_u
+			__tmp942 = __tmp1394
+		} else if __tmp943 == 0x87 {
+			__tmp1395 := _i16x8_extend_low_i8x16_s
+			__tmp942 = __tmp1395
+		} else if __tmp943 == 0x88 {
+			__tmp1396 := _i16x8_extend_high_i8x16_s
+			__tmp942 = __tmp1396
+		} else if __tmp943 == 0x89 {
+			__tmp1397 := _i16x8_extend_low_i8x16_u
+			__tmp942 = __tmp1397
+		} else if __tmp943 == 0x8a {
+			__tmp1398 := _i16x8_extend_high_i8x16_u
+			__tmp942 = __tmp1398
+		} else if __tmp943 == 0x8b {
+			__tmp1399 := _i16x8_shl
+			__tmp942 = __tmp1399
+		} else if __tmp943 == 0x8c {
+			__tmp1400 := _i16x8_shr_s
+			__tmp942 = __tmp1400
+		} else if __tmp943 == 0x8d {
+			__tmp1401 := _i16x8_shr_u
+			__tmp942 = __tmp1401
+		} else if __tmp943 == 0x8e {
+			__tmp1402 := _i16x8_add
+			__tmp942 = __tmp1402
+		} else if __tmp943 == 0x8f {
+			__tmp1403 := _i16x8_add_sat_s
+			__tmp942 = __tmp1403
+		} else if __tmp943 == 0x90 {
+			__tmp1404 := _i16x8_add_sat_u
+			__tmp942 = __tmp1404
+		} else if __tmp943 == 0x91 {
+			__tmp1405 := _i16x8_sub
+			__tmp942 = __tmp1405
+		} else if __tmp943 == 0x92 {
+			__tmp1406 := _i16x8_sub_sat_s
+			__tmp942 = __tmp1406
+		} else if __tmp943 == 0x93 {
+			__tmp1407 := _i16x8_sub_sat_u
+			__tmp942 = __tmp1407
+		} else if __tmp943 == 0x94 {
+			__tmp1408 := _f64x2_nearest
+			__tmp942 = __tmp1408
+		} else if __tmp943 == 0x95 {
+			__tmp1409 := _i16x8_mul
+			__tmp942 = __tmp1409
+		} else if __tmp943 == 0x96 {
+			__tmp1410 := _i16x8_min_s
+			__tmp942 = __tmp1410
+		} else if __tmp943 == 0x97 {
+			__tmp1411 := _i16x8_min_u
+			__tmp942 = __tmp1411
+		} else if __tmp943 == 0x98 {
+			__tmp1412 := _i16x8_max_s
+			__tmp942 = __tmp1412
+		} else if __tmp943 == 0x99 {
+			__tmp1413 := _i16x8_max_u
+			__tmp942 = __tmp1413
+		} else if __tmp943 == 0x9a {
+			_n := __tmp943
+			__tmp1415 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1415
+		} else if __tmp943 == 0x9b {
+			__tmp1420 := _i16x8_avgr_u
+			__tmp942 = __tmp1420
+		} else if __tmp943 == 0x9c {
+			__tmp1421 := _i16x8_extmul_low_i8x16_s
+			__tmp942 = __tmp1421
+		} else if __tmp943 == 0x9d {
+			__tmp1422 := _i16x8_extmul_high_i8x16_s
+			__tmp942 = __tmp1422
+		} else if __tmp943 == 0x9e {
+			__tmp1423 := _i16x8_extmul_low_i8x16_u
+			__tmp942 = __tmp1423
+		} else if __tmp943 == 0x9f {
+			__tmp1424 := _i16x8_extmul_high_i8x16_u
+			__tmp942 = __tmp1424
+		} else if __tmp943 == 0xa0 {
+			__tmp1425 := _i32x4_abs
+			__tmp942 = __tmp1425
+		} else if __tmp943 == 0xa1 {
+			__tmp1426 := _i32x4_neg
+			__tmp942 = __tmp1426
+		} else if __tmp943 == 0xa2 {
+			_n := __tmp943
+			__tmp1428 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1428
+		} else if __tmp943 == 0xa3 {
+			__tmp1433 := _i32x4_all_true
+			__tmp942 = __tmp1433
+		} else if __tmp943 == 0xa4 {
+			__tmp1434 := _i32x4_bitmask
+			__tmp942 = __tmp1434
+		} else if __tmp943 == 0xa5 || __tmp943 == 0xa6 {
+			_n := __tmp943
+			__tmp1436 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1436
+		} else if __tmp943 == 0xa7 {
+			__tmp1441 := _i32x4_extend_low_i16x8_s
+			__tmp942 = __tmp1441
+		} else if __tmp943 == 0xa8 {
+			__tmp1442 := _i32x4_extend_high_i16x8_s
+			__tmp942 = __tmp1442
+		} else if __tmp943 == 0xa9 {
+			__tmp1443 := _i32x4_extend_low_i16x8_u
+			__tmp942 = __tmp1443
+		} else if __tmp943 == 0xaa {
+			__tmp1444 := _i32x4_extend_high_i16x8_u
+			__tmp942 = __tmp1444
+		} else if __tmp943 == 0xab {
+			__tmp1445 := _i32x4_shl
+			__tmp942 = __tmp1445
+		} else if __tmp943 == 0xac {
+			__tmp1446 := _i32x4_shr_s
+			__tmp942 = __tmp1446
+		} else if __tmp943 == 0xad {
+			__tmp1447 := _i32x4_shr_u
+			__tmp942 = __tmp1447
+		} else if __tmp943 == 0xae {
+			__tmp1448 := _i32x4_add
+			__tmp942 = __tmp1448
+		} else if __tmp943 == 0xaf || __tmp943 == 0xb0 {
+			_n := __tmp943
+			__tmp1450 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1450
+		} else if __tmp943 == 0xb1 {
+			__tmp1455 := _i32x4_sub
+			__tmp942 = __tmp1455
+		} else if __tmp943 == 0xb2 || __tmp943 == 0xb3 || __tmp943 == 0xb4 {
+			_n := __tmp943
 			__tmp1457 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1457
-		} else if __tmp950 == 0xb1 {
-			__tmp1462 := _i32x4_sub
-			__tmp949 = __tmp1462
-		} else if __tmp950 == 0xb2 || __tmp950 == 0xb3 || __tmp950 == 0xb4 {
-			_n := __tmp950
-			__tmp1464 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1464
-		} else if __tmp950 == 0xb5 {
-			__tmp1469 := _i32x4_mul
-			__tmp949 = __tmp1469
-		} else if __tmp950 == 0xb6 {
-			__tmp1470 := _i32x4_min_s
-			__tmp949 = __tmp1470
-		} else if __tmp950 == 0xb7 {
-			__tmp1471 := _i32x4_min_u
-			__tmp949 = __tmp1471
-		} else if __tmp950 == 0xb8 {
-			__tmp1472 := _i32x4_max_s
-			__tmp949 = __tmp1472
-		} else if __tmp950 == 0xb9 {
-			__tmp1473 := _i32x4_max_u
-			__tmp949 = __tmp1473
-		} else if __tmp950 == 0xba {
-			__tmp1474 := _i32x4_dot_i16x8_s
-			__tmp949 = __tmp1474
-		} else if __tmp950 == 0xbc {
-			__tmp1475 := _i32x4_extmul_low_i16x8_s
-			__tmp949 = __tmp1475
-		} else if __tmp950 == 0xbd {
-			__tmp1476 := _i32x4_extmul_high_i16x8_s
-			__tmp949 = __tmp1476
-		} else if __tmp950 == 0xbe {
-			__tmp1477 := _i32x4_extmul_low_i16x8_u
-			__tmp949 = __tmp1477
-		} else if __tmp950 == 0xbf {
-			__tmp1478 := _i32x4_extmul_high_i16x8_u
-			__tmp949 = __tmp1478
-		} else if __tmp950 == 0xc0 {
-			__tmp1479 := _i64x2_abs
-			__tmp949 = __tmp1479
-		} else if __tmp950 == 0xc1 {
-			__tmp1480 := _i64x2_neg
-			__tmp949 = __tmp1480
-		} else if __tmp950 == 0xc2 {
-			_n := __tmp950
-			__tmp1482 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1482
-		} else if __tmp950 == 0xc3 {
-			__tmp1487 := _i64x2_all_true
-			__tmp949 = __tmp1487
-		} else if __tmp950 == 0xc4 {
-			__tmp1488 := _i64x2_bitmask
-			__tmp949 = __tmp1488
-		} else if __tmp950 == 0xc5 || __tmp950 == 0xc6 {
-			_n := __tmp950
-			__tmp1490 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1490
-		} else if __tmp950 == 0xc7 {
-			__tmp1495 := _i64x2_extend_low_i32x4_s
-			__tmp949 = __tmp1495
-		} else if __tmp950 == 0xc8 {
-			__tmp1496 := _i64x2_extend_high_i32x4_s
-			__tmp949 = __tmp1496
-		} else if __tmp950 == 0xc9 {
-			__tmp1497 := _i64x2_extend_low_i32x4_u
-			__tmp949 = __tmp1497
-		} else if __tmp950 == 0xca {
-			__tmp1498 := _i64x2_extend_high_i32x4_u
-			__tmp949 = __tmp1498
-		} else if __tmp950 == 0xcb {
-			__tmp1499 := _i64x2_shl
-			__tmp949 = __tmp1499
-		} else if __tmp950 == 0xcc {
-			__tmp1500 := _i64x2_shr_s
-			__tmp949 = __tmp1500
-		} else if __tmp950 == 0xcd {
-			__tmp1501 := _i64x2_shr_u
-			__tmp949 = __tmp1501
-		} else if __tmp950 == 0xce {
-			__tmp1502 := _i64x2_add
-			__tmp949 = __tmp1502
-		} else if __tmp950 == 0xcf || __tmp950 == 0xd0 {
-			_n := __tmp950
+			__tmp942 = __tmp1457
+		} else if __tmp943 == 0xb5 {
+			__tmp1462 := _i32x4_mul
+			__tmp942 = __tmp1462
+		} else if __tmp943 == 0xb6 {
+			__tmp1463 := _i32x4_min_s
+			__tmp942 = __tmp1463
+		} else if __tmp943 == 0xb7 {
+			__tmp1464 := _i32x4_min_u
+			__tmp942 = __tmp1464
+		} else if __tmp943 == 0xb8 {
+			__tmp1465 := _i32x4_max_s
+			__tmp942 = __tmp1465
+		} else if __tmp943 == 0xb9 {
+			__tmp1466 := _i32x4_max_u
+			__tmp942 = __tmp1466
+		} else if __tmp943 == 0xba {
+			__tmp1467 := _i32x4_dot_i16x8_s
+			__tmp942 = __tmp1467
+		} else if __tmp943 == 0xbc {
+			__tmp1468 := _i32x4_extmul_low_i16x8_s
+			__tmp942 = __tmp1468
+		} else if __tmp943 == 0xbd {
+			__tmp1469 := _i32x4_extmul_high_i16x8_s
+			__tmp942 = __tmp1469
+		} else if __tmp943 == 0xbe {
+			__tmp1470 := _i32x4_extmul_low_i16x8_u
+			__tmp942 = __tmp1470
+		} else if __tmp943 == 0xbf {
+			__tmp1471 := _i32x4_extmul_high_i16x8_u
+			__tmp942 = __tmp1471
+		} else if __tmp943 == 0xc0 {
+			__tmp1472 := _i64x2_abs
+			__tmp942 = __tmp1472
+		} else if __tmp943 == 0xc1 {
+			__tmp1473 := _i64x2_neg
+			__tmp942 = __tmp1473
+		} else if __tmp943 == 0xc2 {
+			_n := __tmp943
+			__tmp1475 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1475
+		} else if __tmp943 == 0xc3 {
+			__tmp1480 := _i64x2_all_true
+			__tmp942 = __tmp1480
+		} else if __tmp943 == 0xc4 {
+			__tmp1481 := _i64x2_bitmask
+			__tmp942 = __tmp1481
+		} else if __tmp943 == 0xc5 || __tmp943 == 0xc6 {
+			_n := __tmp943
+			__tmp1483 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1483
+		} else if __tmp943 == 0xc7 {
+			__tmp1488 := _i64x2_extend_low_i32x4_s
+			__tmp942 = __tmp1488
+		} else if __tmp943 == 0xc8 {
+			__tmp1489 := _i64x2_extend_high_i32x4_s
+			__tmp942 = __tmp1489
+		} else if __tmp943 == 0xc9 {
+			__tmp1490 := _i64x2_extend_low_i32x4_u
+			__tmp942 = __tmp1490
+		} else if __tmp943 == 0xca {
+			__tmp1491 := _i64x2_extend_high_i32x4_u
+			__tmp942 = __tmp1491
+		} else if __tmp943 == 0xcb {
+			__tmp1492 := _i64x2_shl
+			__tmp942 = __tmp1492
+		} else if __tmp943 == 0xcc {
+			__tmp1493 := _i64x2_shr_s
+			__tmp942 = __tmp1493
+		} else if __tmp943 == 0xcd {
+			__tmp1494 := _i64x2_shr_u
+			__tmp942 = __tmp1494
+		} else if __tmp943 == 0xce {
+			__tmp1495 := _i64x2_add
+			__tmp942 = __tmp1495
+		} else if __tmp943 == 0xcf || __tmp943 == 0xd0 {
+			_n := __tmp943
+			__tmp1497 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1497
+		} else if __tmp943 == 0xd1 {
+			__tmp1502 := _i64x2_sub
+			__tmp942 = __tmp1502
+		} else if __tmp943 == 0xd2 || __tmp943 == 0xd3 || __tmp943 == 0xd4 {
+			_n := __tmp943
 			__tmp1504 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1504
-		} else if __tmp950 == 0xd1 {
-			__tmp1509 := _i64x2_sub
-			__tmp949 = __tmp1509
-		} else if __tmp950 == 0xd2 || __tmp950 == 0xd3 || __tmp950 == 0xd4 {
-			_n := __tmp950
-			__tmp1511 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1511
-		} else if __tmp950 == 0xd5 {
-			__tmp1516 := _i64x2_mul
-			__tmp949 = __tmp1516
-		} else if __tmp950 == 0xd6 {
-			__tmp1517 := _i64x2_eq
-			__tmp949 = __tmp1517
-		} else if __tmp950 == 0xd7 {
-			__tmp1518 := _i64x2_ne
-			__tmp949 = __tmp1518
-		} else if __tmp950 == 0xd8 {
-			__tmp1519 := _i64x2_lt_s
-			__tmp949 = __tmp1519
-		} else if __tmp950 == 0xd9 {
-			__tmp1520 := _i64x2_gt_s
-			__tmp949 = __tmp1520
-		} else if __tmp950 == 0xda {
-			__tmp1521 := _i64x2_le_s
-			__tmp949 = __tmp1521
-		} else if __tmp950 == 0xdb {
-			__tmp1522 := _i64x2_ge_s
-			__tmp949 = __tmp1522
-		} else if __tmp950 == 0xdc {
-			__tmp1523 := _i64x2_extmul_low_i32x4_s
-			__tmp949 = __tmp1523
-		} else if __tmp950 == 0xdd {
-			__tmp1524 := _i64x2_extmul_high_i32x4_s
-			__tmp949 = __tmp1524
-		} else if __tmp950 == 0xde {
-			__tmp1525 := _i64x2_extmul_low_i32x4_u
-			__tmp949 = __tmp1525
-		} else if __tmp950 == 0xdf {
-			__tmp1526 := _i64x2_extmul_high_i32x4_u
-			__tmp949 = __tmp1526
-		} else if __tmp950 == 0xe0 {
-			__tmp1527 := _f32x4_abs
-			__tmp949 = __tmp1527
-		} else if __tmp950 == 0xe1 {
-			__tmp1528 := _f32x4_neg
-			__tmp949 = __tmp1528
-		} else if __tmp950 == 0xe2 {
-			_n := __tmp950
-			__tmp1530 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1530
-		} else if __tmp950 == 0xe3 {
-			__tmp1535 := _f32x4_sqrt
-			__tmp949 = __tmp1535
-		} else if __tmp950 == 0xe4 {
-			__tmp1536 := _f32x4_add
-			__tmp949 = __tmp1536
-		} else if __tmp950 == 0xe5 {
-			__tmp1537 := _f32x4_sub
-			__tmp949 = __tmp1537
-		} else if __tmp950 == 0xe6 {
-			__tmp1538 := _f32x4_mul
-			__tmp949 = __tmp1538
-		} else if __tmp950 == 0xe7 {
-			__tmp1539 := _f32x4_div
-			__tmp949 = __tmp1539
-		} else if __tmp950 == 0xe8 {
-			__tmp1540 := _f32x4_min
-			__tmp949 = __tmp1540
-		} else if __tmp950 == 0xe9 {
-			__tmp1541 := _f32x4_max
-			__tmp949 = __tmp1541
-		} else if __tmp950 == 0xea {
-			__tmp1542 := _f32x4_pmin
-			__tmp949 = __tmp1542
-		} else if __tmp950 == 0xeb {
-			__tmp1543 := _f32x4_pmax
-			__tmp949 = __tmp1543
-		} else if __tmp950 == 0xec {
-			__tmp1544 := _f64x2_abs
-			__tmp949 = __tmp1544
-		} else if __tmp950 == 0xed {
-			__tmp1545 := _f64x2_neg
-			__tmp949 = __tmp1545
-		} else if __tmp950 == 0xef {
-			__tmp1546 := _f64x2_sqrt
-			__tmp949 = __tmp1546
-		} else if __tmp950 == 0xf0 {
-			__tmp1547 := _f64x2_add
-			__tmp949 = __tmp1547
-		} else if __tmp950 == 0xf1 {
-			__tmp1548 := _f64x2_sub
-			__tmp949 = __tmp1548
-		} else if __tmp950 == 0xf2 {
-			__tmp1549 := _f64x2_mul
-			__tmp949 = __tmp1549
-		} else if __tmp950 == 0xf3 {
-			__tmp1550 := _f64x2_div
-			__tmp949 = __tmp1550
-		} else if __tmp950 == 0xf4 {
-			__tmp1551 := _f64x2_min
-			__tmp949 = __tmp1551
-		} else if __tmp950 == 0xf5 {
-			__tmp1552 := _f64x2_max
-			__tmp949 = __tmp1552
-		} else if __tmp950 == 0xf6 {
-			__tmp1553 := _f64x2_pmin
-			__tmp949 = __tmp1553
-		} else if __tmp950 == 0xf7 {
-			__tmp1554 := _f64x2_pmax
-			__tmp949 = __tmp1554
-		} else if __tmp950 == 0xf8 {
-			__tmp1555 := _i32x4_trunc_sat_f32x4_s
-			__tmp949 = __tmp1555
-		} else if __tmp950 == 0xf9 {
-			__tmp1556 := _i32x4_trunc_sat_f32x4_u
-			__tmp949 = __tmp1556
-		} else if __tmp950 == 0xfa {
-			__tmp1557 := _f32x4_convert_i32x4_s
-			__tmp949 = __tmp1557
-		} else if __tmp950 == 0xfb {
-			__tmp1558 := _f32x4_convert_i32x4_u
-			__tmp949 = __tmp1558
-		} else if __tmp950 == 0xfc {
-			__tmp1559 := _i32x4_trunc_sat_f64x2_s_zero
-			__tmp949 = __tmp1559
-		} else if __tmp950 == 0xfd {
-			__tmp1560 := _i32x4_trunc_sat_f64x2_u_zero
-			__tmp949 = __tmp1560
-		} else if __tmp950 == 0xfe {
-			__tmp1561 := _f64x2_convert_low_i32x4_s
-			__tmp949 = __tmp1561
-		} else if __tmp950 == 0xff {
-			__tmp1562 := _f64x2_convert_low_i32x4_u
-			__tmp949 = __tmp1562
-		} else if __tmp950 == 0x100 {
-			__tmp1563 := _i8x16_relaxed_swizzle
-			__tmp949 = __tmp1563
-		} else if __tmp950 == 0x101 {
-			__tmp1564 := _i32x4_relaxed_trunc_f32x4_s
-			__tmp949 = __tmp1564
-		} else if __tmp950 == 0x102 {
-			__tmp1565 := _i32x4_relaxed_trunc_f32x4_u
-			__tmp949 = __tmp1565
-		} else if __tmp950 == 0x103 {
-			__tmp1566 := _i32x4_relaxed_trunc_f64x2_s_zero
-			__tmp949 = __tmp1566
-		} else if __tmp950 == 0x104 {
-			__tmp1567 := _i32x4_relaxed_trunc_f64x2_u_zero
-			__tmp949 = __tmp1567
-		} else if __tmp950 == 0x105 {
-			__tmp1568 := _f32x4_relaxed_madd
-			__tmp949 = __tmp1568
-		} else if __tmp950 == 0x106 {
-			__tmp1569 := _f32x4_relaxed_nmadd
-			__tmp949 = __tmp1569
-		} else if __tmp950 == 0x107 {
-			__tmp1570 := _f64x2_relaxed_madd
-			__tmp949 = __tmp1570
-		} else if __tmp950 == 0x108 {
-			__tmp1571 := _f64x2_relaxed_nmadd
-			__tmp949 = __tmp1571
-		} else if __tmp950 == 0x109 {
-			__tmp1572 := _i8x16_relaxed_laneselect
-			__tmp949 = __tmp1572
-		} else if __tmp950 == 0x10a {
-			__tmp1573 := _i16x8_relaxed_laneselect
-			__tmp949 = __tmp1573
-		} else if __tmp950 == 0x10b {
-			__tmp1574 := _i32x4_relaxed_laneselect
-			__tmp949 = __tmp1574
-		} else if __tmp950 == 0x10c {
-			__tmp1575 := _i64x2_relaxed_laneselect
-			__tmp949 = __tmp1575
-		} else if __tmp950 == 0x10d {
-			__tmp1576 := _f32x4_relaxed_min
-			__tmp949 = __tmp1576
-		} else if __tmp950 == 0x10e {
-			__tmp1577 := _f32x4_relaxed_max
-			__tmp949 = __tmp1577
-		} else if __tmp950 == 0x10f {
-			__tmp1578 := _f64x2_relaxed_min
-			__tmp949 = __tmp1578
-		} else if __tmp950 == 0x110 {
-			__tmp1579 := _f64x2_relaxed_max
-			__tmp949 = __tmp1579
-		} else if __tmp950 == 0x111 {
-			__tmp1580 := _i16x8_relaxed_q15mulr_s
-			__tmp949 = __tmp1580
-		} else if __tmp950 == 0x112 {
-			__tmp1581 := _i16x8_relaxed_dot_i8x16_i7x16_s
-			__tmp949 = __tmp1581
-		} else if __tmp950 == 0x113 {
-			__tmp1582 := _i32x4_relaxed_dot_i8x16_i7x16_add_s
-			__tmp949 = __tmp1582
-		} else if _n := __tmp950; true {
+			__tmp942 = __tmp1504
+		} else if __tmp943 == 0xd5 {
+			__tmp1509 := _i64x2_mul
+			__tmp942 = __tmp1509
+		} else if __tmp943 == 0xd6 {
+			__tmp1510 := _i64x2_eq
+			__tmp942 = __tmp1510
+		} else if __tmp943 == 0xd7 {
+			__tmp1511 := _i64x2_ne
+			__tmp942 = __tmp1511
+		} else if __tmp943 == 0xd8 {
+			__tmp1512 := _i64x2_lt_s
+			__tmp942 = __tmp1512
+		} else if __tmp943 == 0xd9 {
+			__tmp1513 := _i64x2_gt_s
+			__tmp942 = __tmp1513
+		} else if __tmp943 == 0xda {
+			__tmp1514 := _i64x2_le_s
+			__tmp942 = __tmp1514
+		} else if __tmp943 == 0xdb {
+			__tmp1515 := _i64x2_ge_s
+			__tmp942 = __tmp1515
+		} else if __tmp943 == 0xdc {
+			__tmp1516 := _i64x2_extmul_low_i32x4_s
+			__tmp942 = __tmp1516
+		} else if __tmp943 == 0xdd {
+			__tmp1517 := _i64x2_extmul_high_i32x4_s
+			__tmp942 = __tmp1517
+		} else if __tmp943 == 0xde {
+			__tmp1518 := _i64x2_extmul_low_i32x4_u
+			__tmp942 = __tmp1518
+		} else if __tmp943 == 0xdf {
+			__tmp1519 := _i64x2_extmul_high_i32x4_u
+			__tmp942 = __tmp1519
+		} else if __tmp943 == 0xe0 {
+			__tmp1520 := _f32x4_abs
+			__tmp942 = __tmp1520
+		} else if __tmp943 == 0xe1 {
+			__tmp1521 := _f32x4_neg
+			__tmp942 = __tmp1521
+		} else if __tmp943 == 0xe2 {
+			_n := __tmp943
+			__tmp1523 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1523
+		} else if __tmp943 == 0xe3 {
+			__tmp1528 := _f32x4_sqrt
+			__tmp942 = __tmp1528
+		} else if __tmp943 == 0xe4 {
+			__tmp1529 := _f32x4_add
+			__tmp942 = __tmp1529
+		} else if __tmp943 == 0xe5 {
+			__tmp1530 := _f32x4_sub
+			__tmp942 = __tmp1530
+		} else if __tmp943 == 0xe6 {
+			__tmp1531 := _f32x4_mul
+			__tmp942 = __tmp1531
+		} else if __tmp943 == 0xe7 {
+			__tmp1532 := _f32x4_div
+			__tmp942 = __tmp1532
+		} else if __tmp943 == 0xe8 {
+			__tmp1533 := _f32x4_min
+			__tmp942 = __tmp1533
+		} else if __tmp943 == 0xe9 {
+			__tmp1534 := _f32x4_max
+			__tmp942 = __tmp1534
+		} else if __tmp943 == 0xea {
+			__tmp1535 := _f32x4_pmin
+			__tmp942 = __tmp1535
+		} else if __tmp943 == 0xeb {
+			__tmp1536 := _f32x4_pmax
+			__tmp942 = __tmp1536
+		} else if __tmp943 == 0xec {
+			__tmp1537 := _f64x2_abs
+			__tmp942 = __tmp1537
+		} else if __tmp943 == 0xed {
+			__tmp1538 := _f64x2_neg
+			__tmp942 = __tmp1538
+		} else if __tmp943 == 0xef {
+			__tmp1539 := _f64x2_sqrt
+			__tmp942 = __tmp1539
+		} else if __tmp943 == 0xf0 {
+			__tmp1540 := _f64x2_add
+			__tmp942 = __tmp1540
+		} else if __tmp943 == 0xf1 {
+			__tmp1541 := _f64x2_sub
+			__tmp942 = __tmp1541
+		} else if __tmp943 == 0xf2 {
+			__tmp1542 := _f64x2_mul
+			__tmp942 = __tmp1542
+		} else if __tmp943 == 0xf3 {
+			__tmp1543 := _f64x2_div
+			__tmp942 = __tmp1543
+		} else if __tmp943 == 0xf4 {
+			__tmp1544 := _f64x2_min
+			__tmp942 = __tmp1544
+		} else if __tmp943 == 0xf5 {
+			__tmp1545 := _f64x2_max
+			__tmp942 = __tmp1545
+		} else if __tmp943 == 0xf6 {
+			__tmp1546 := _f64x2_pmin
+			__tmp942 = __tmp1546
+		} else if __tmp943 == 0xf7 {
+			__tmp1547 := _f64x2_pmax
+			__tmp942 = __tmp1547
+		} else if __tmp943 == 0xf8 {
+			__tmp1548 := _i32x4_trunc_sat_f32x4_s
+			__tmp942 = __tmp1548
+		} else if __tmp943 == 0xf9 {
+			__tmp1549 := _i32x4_trunc_sat_f32x4_u
+			__tmp942 = __tmp1549
+		} else if __tmp943 == 0xfa {
+			__tmp1550 := _f32x4_convert_i32x4_s
+			__tmp942 = __tmp1550
+		} else if __tmp943 == 0xfb {
+			__tmp1551 := _f32x4_convert_i32x4_u
+			__tmp942 = __tmp1551
+		} else if __tmp943 == 0xfc {
+			__tmp1552 := _i32x4_trunc_sat_f64x2_s_zero
+			__tmp942 = __tmp1552
+		} else if __tmp943 == 0xfd {
+			__tmp1553 := _i32x4_trunc_sat_f64x2_u_zero
+			__tmp942 = __tmp1553
+		} else if __tmp943 == 0xfe {
+			__tmp1554 := _f64x2_convert_low_i32x4_s
+			__tmp942 = __tmp1554
+		} else if __tmp943 == 0xff {
+			__tmp1555 := _f64x2_convert_low_i32x4_u
+			__tmp942 = __tmp1555
+		} else if __tmp943 == 0x100 {
+			__tmp1556 := _i8x16_relaxed_swizzle
+			__tmp942 = __tmp1556
+		} else if __tmp943 == 0x101 {
+			__tmp1557 := _i32x4_relaxed_trunc_f32x4_s
+			__tmp942 = __tmp1557
+		} else if __tmp943 == 0x102 {
+			__tmp1558 := _i32x4_relaxed_trunc_f32x4_u
+			__tmp942 = __tmp1558
+		} else if __tmp943 == 0x103 {
+			__tmp1559 := _i32x4_relaxed_trunc_f64x2_s_zero
+			__tmp942 = __tmp1559
+		} else if __tmp943 == 0x104 {
+			__tmp1560 := _i32x4_relaxed_trunc_f64x2_u_zero
+			__tmp942 = __tmp1560
+		} else if __tmp943 == 0x105 {
+			__tmp1561 := _f32x4_relaxed_madd
+			__tmp942 = __tmp1561
+		} else if __tmp943 == 0x106 {
+			__tmp1562 := _f32x4_relaxed_nmadd
+			__tmp942 = __tmp1562
+		} else if __tmp943 == 0x107 {
+			__tmp1563 := _f64x2_relaxed_madd
+			__tmp942 = __tmp1563
+		} else if __tmp943 == 0x108 {
+			__tmp1564 := _f64x2_relaxed_nmadd
+			__tmp942 = __tmp1564
+		} else if __tmp943 == 0x109 {
+			__tmp1565 := _i8x16_relaxed_laneselect
+			__tmp942 = __tmp1565
+		} else if __tmp943 == 0x10a {
+			__tmp1566 := _i16x8_relaxed_laneselect
+			__tmp942 = __tmp1566
+		} else if __tmp943 == 0x10b {
+			__tmp1567 := _i32x4_relaxed_laneselect
+			__tmp942 = __tmp1567
+		} else if __tmp943 == 0x10c {
+			__tmp1568 := _i64x2_relaxed_laneselect
+			__tmp942 = __tmp1568
+		} else if __tmp943 == 0x10d {
+			__tmp1569 := _f32x4_relaxed_min
+			__tmp942 = __tmp1569
+		} else if __tmp943 == 0x10e {
+			__tmp1570 := _f32x4_relaxed_max
+			__tmp942 = __tmp1570
+		} else if __tmp943 == 0x10f {
+			__tmp1571 := _f64x2_relaxed_min
+			__tmp942 = __tmp1571
+		} else if __tmp943 == 0x110 {
+			__tmp1572 := _f64x2_relaxed_max
+			__tmp942 = __tmp1572
+		} else if __tmp943 == 0x111 {
+			__tmp1573 := _i16x8_relaxed_q15mulr_s
+			__tmp942 = __tmp1573
+		} else if __tmp943 == 0x112 {
+			__tmp1574 := _i16x8_relaxed_dot_i8x16_i7x16_s
+			__tmp942 = __tmp1574
+		} else if __tmp943 == 0x113 {
+			__tmp1575 := _i32x4_relaxed_dot_i8x16_i7x16_add_s
+			__tmp942 = __tmp1575
+		} else if _n := __tmp943; true {
 			_ = _n
-			__tmp1585 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
-			__tmp949 = __tmp1585
+			__tmp1578 := _illegal_3(_s, _pos, _I32_to_int_u_1(_n))
+			__tmp942 = __tmp1578
 		}
-		__tmp4 = __tmp949
+		__tmp4 = __tmp942
 	} else if _b := __tmp5; true {
 		_ = _b
-		__tmp1592 := _illegal_3(_s, _pos, _b)
-		__tmp4 = __tmp1592
+		__tmp1585 := _illegal_3(_s, _pos, _b)
+		__tmp4 = __tmp1585
 	}
 	return __tmp4
 }
