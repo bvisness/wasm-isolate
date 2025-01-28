@@ -154,7 +154,7 @@ func main() {
 				}
 			}
 
-			{
+			if false {
 				operatorsParse := newOcamlParse(filepath.Join(specpath, "interpreter", "syntax", "operators.ml"))
 
 				root := operatorsParse.tree.RootNode()
@@ -433,7 +433,7 @@ func (p *ocamlParse) parseExpr(
 			}
 			return []string{res}
 		}
-	case "number":
+	case "number", "signed_number":
 		n := p.s(expr)
 		n = strings.TrimRight(n, "lL")
 		w("%s", n)
@@ -673,45 +673,41 @@ func (p *ocamlParse) parseExpr(
 		mod := p.s(expr.NamedChild(0))
 		return p.parseExpr(expr.NamedChild(1), expectedType, mod, statement, returnIfTerminal)
 	case "match_expression":
-		switchResults := resultVars(expectedType.Cardinality())
+		matchResults := resultVars(expectedType.Cardinality())
 		for i := range expectedType.Cardinality() {
-			w("var %s %s\n", switchResults[i], ocaml2go(expectedType.Get(i)))
+			w("var %s %s\n", matchResults[i], ocaml2go(expectedType.Get(i)))
 		}
 
-		switchVar := tmpVar()
-		w("switch %s := ", switchVar)
+		matchVar := tmpVar()
+		w("%s := ", matchVar)
 		p.parseExpr(expr.NamedChild(0), nil, currentModule, false, false)
-		w("; %s {\n", switchVar)
+		w("\n")
 
-		for _, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
+		for i, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
 			if matchCase.GrammarName() != "match_case" {
 				continue
 			}
 
 			pattern := Lookup{&matchCase}.Field("pattern", "").Node
 			body := Lookup{&matchCase}.Field("body", "").Node
-
-			switch pattern.GrammarName() {
-			case "number":
-				w("case ")
-				p.parseExpr(pattern, nil, currentModule, false, false)
-				w(":\n")
-			case "alias_pattern":
-				w("case ")
-				p.parseExpr(pattern.NamedChild(0), nil, currentModule, false, false)
-				w(":\n")
-
-				p.parseExpr(pattern.NamedChild(1), nil, currentModule, false, false)
-				w(" := %s\n", switchVar)
-			case "_lowercase_identifier":
-				w("default:\n")
-				w("%s := %s\n", safeName(p.s(pattern)), switchVar)
-			default:
-				exitWithError("unknown type of match case: %s", pattern.GrammarName())
+			var guard *tree_sitter.Node
+			for _, child := range matchCase.NamedChildren(matchCase.Walk()) {
+				if child.GrammarName() == "guard" {
+					guard = child.NamedChild(0)
+				}
 			}
 
+			if i == 0 {
+				w("if ")
+			} else {
+				w("} else if ")
+			}
+
+			// Will open the body of the if
+			p.parseMatchPattern(pattern, matchVar, guard)
+
 			res := p.parseExpr(body, expectedType, currentModule, true, false)
-			w("%s = %s", strings.Join(switchResults, ", "), strings.Join(res, ", "))
+			w("%s = %s", strings.Join(matchResults, ", "), strings.Join(res, ", "))
 
 			w("\n")
 		}
@@ -719,10 +715,10 @@ func (p *ocamlParse) parseExpr(
 		w("}\n")
 
 		if returnIfTerminal {
-			w("return %s\n", strings.Join(switchResults, ", "))
+			w("return %s\n", strings.Join(matchResults, ", "))
 			return nil
 		} else {
-			return switchResults
+			return matchResults
 		}
 	case "parenthesized_expression":
 		return p.parseExpr(expr.NamedChild(0), expectedType, currentModule, statement, returnIfTerminal)
@@ -791,6 +787,84 @@ func (p *ocamlParse) parseExpr(
 	}
 
 	return nil
+}
+
+// You are expected to write the start of the if case before calling this,
+// e.g. "if " or "} else if ".
+func (p *ocamlParse) parseMatchPattern(
+	pattern *tree_sitter.Node,
+	matchVar string,
+	guard *tree_sitter.Node,
+) {
+	switch pattern.GrammarName() {
+	case "_lowercase_identifier":
+		p.parseExpr(pattern, nil, "", false, false)
+		w(" := %s; ", matchVar)
+		if guard == nil {
+			w("true")
+		} else {
+			p.parseExpr(guard, ocaml.SimpleType("bool"), "", false, false)
+		}
+		w(" {\n")
+
+		// Ignore in case it is unused
+		w("_ = ")
+		p.parseExpr(pattern, nil, "", false, false)
+		w("\n")
+	case "number", "signed_number":
+		w("%s == ", matchVar)
+		p.parseExpr(pattern, nil, "", false, false)
+		utils.Assert(guard == nil, "expected no guard")
+		w(" {\n")
+	case "alias_pattern":
+		p.parseMatchPattern(pattern.NamedChild(0), matchVar, nil)
+		p.parseExpr(pattern.NamedChild(1), nil, "", false, false)
+		w(" := %s\n", matchVar)
+		utils.Assert(guard == nil, "expected no guard")
+	case "constructor_pattern":
+		// We only handle Some and None.
+		switch p.s(pattern.NamedChild(0)) {
+		case "Some":
+			p.parseExpr(pattern.NamedChild(1), nil, "", false, false)
+			w(" := __derefIfNotNil(%s); %s != nil ", matchVar, matchVar)
+			if guard != nil {
+				w("&& (")
+				p.parseExpr(guard, ocaml.SimpleType("bool"), "", false, false)
+				w(") ")
+			}
+			w("{\n")
+		case "None":
+			w("%s == nil {\n", matchVar)
+		default:
+			exitWithError("unknown constructor in match case: %s", pattern.GrammarName())
+		}
+	case "or_pattern":
+		for i, orValue := range flattenOrPattern(pattern) {
+			if i > 0 {
+				w("||")
+			}
+			w("%s == ", matchVar)
+			p.parseExpr(orValue, nil, "", false, false)
+		}
+		w(" {\n")
+		utils.Assert(guard == nil, "expected no guard")
+	default:
+		exitWithError("unknown type of match case: %s", pattern.GrammarName())
+	}
+}
+
+func flattenOrPattern(p *tree_sitter.Node) []*tree_sitter.Node {
+	switch p.GrammarName() {
+	case "or_pattern":
+		var res []*tree_sitter.Node
+		res = append(res, flattenOrPattern(p.NamedChild(0))...)
+		res = append(res, flattenOrPattern(p.NamedChild(1))...)
+		return res
+	case "parenthesized_pattern":
+		return flattenOrPattern(p.NamedChild(0))
+	default:
+		return []*tree_sitter.Node{p}
+	}
 }
 
 func w(msg string, args ...any) {

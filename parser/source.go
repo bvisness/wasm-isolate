@@ -20,13 +20,6 @@ type Phrase[T any] struct {
 	it T
 }
 
-func _operatorAtAt_2[T any](x T, region *Region) *Phrase[T] {
-	return &Phrase[T]{
-		it: x,
-		at: region,
-	}
-}
-
 var _no_pos = &Pos{
 	file:   "",
 	line:   0,

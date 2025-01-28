@@ -33,6 +33,13 @@ func _operatorGte_2[T constraints.Ordered](a, b T) bool {
 	return a >= b
 }
 
+func _operatorAtAt_2[T any](x T, region *Region) *Phrase[T] {
+	return &Phrase[T]{
+		it: x,
+		at: region,
+	}
+}
+
 func _bool_operatorOr_2(a, b bool) bool {
 	return a || b
 }
@@ -133,8 +140,6 @@ func _operatorLSL_int_2(a, b OInt) OInt {
 }
 
 // Manual translation of the "Types" section
-
-type Void any
 
 func _var_1(s *Stream) OInt32 {
 	return _u32_1(s)
