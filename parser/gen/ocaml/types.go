@@ -18,10 +18,20 @@ func init() {
 
 type TypeDefs map[string]Type
 
+type TypeKind int
+
+const (
+	TFunc TypeKind = iota + 1
+	TTuple
+	TCons
+	TVariants
+	TAlias
+	TSimple
+)
+
 type Type interface {
 	fmt.Stringer
-	Cardinality() int
-	Get(i int) Type
+	Kind() TypeKind
 }
 
 type Func struct {
@@ -33,15 +43,8 @@ func (f Func) String() string {
 	return fmt.Sprintf("%s -> %s", f.In, f.Out)
 }
 
-func (f Func) Cardinality() int {
-	return 1
-}
-
-func (f Func) Get(i int) Type {
-	if i > 0 {
-		panic(fmt.Sprintf("index out of range for type %v", f))
-	}
-	return f
+func (f Func) Kind() TypeKind {
+	return TFunc
 }
 
 func (f Func) GetArgType(i int) Type {
@@ -70,12 +73,8 @@ func (t Tuple) String() string {
 	return strings.Join(strs, " * ")
 }
 
-func (t Tuple) Cardinality() int {
-	return len(t)
-}
-
-func (t Tuple) Get(i int) Type {
-	return t[i]
+func (t Tuple) Kind() TypeKind {
+	return TTuple
 }
 
 type Cons []Type
@@ -88,15 +87,8 @@ func (t Cons) String() string {
 	return strings.Join(strs, " ")
 }
 
-func (t Cons) Cardinality() int {
-	return 1
-}
-
-func (t Cons) Get(i int) Type {
-	if i > 0 {
-		panic(fmt.Sprintf("index out of range for type %v", t))
-	}
-	return t
+func (t Cons) Kind() TypeKind {
+	return TCons
 }
 
 type Variant struct {
@@ -118,15 +110,8 @@ func (t Variants) String() string {
 	return strings.Join(strs, " | ")
 }
 
-func (t Variants) Cardinality() int {
-	return 1
-}
-
-func (t Variants) Get(i int) Type {
-	if i > 0 {
-		panic(fmt.Sprintf("index out of range for type %v", t))
-	}
-	return t
+func (t Variants) Kind() TypeKind {
+	return TVariants
 }
 
 type Alias struct {
@@ -138,12 +123,8 @@ func (t Alias) String() string {
 	return t.Name
 }
 
-func (t Alias) Cardinality() int {
-	return t.Type.Cardinality()
-}
-
-func (t Alias) Get(i int) Type {
-	return t.Type.Get(i)
+func (t Alias) Kind() TypeKind {
+	return TAlias
 }
 
 type SimpleType string
@@ -152,18 +133,8 @@ func (t SimpleType) String() string {
 	return string(t)
 }
 
-func (t SimpleType) Cardinality() int {
-	if string(t) == "unit" {
-		return 0
-	}
-	return 1
-}
-
-func (t SimpleType) Get(i int) Type {
-	if i > 0 {
-		panic(fmt.Sprintf("index out of range for type %v", t))
-	}
-	return t
+func (t SimpleType) Kind() TypeKind {
+	return TSimple
 }
 
 func ParseType(t string, typeDefs TypeDefs) Type {

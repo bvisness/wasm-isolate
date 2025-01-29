@@ -85,6 +85,13 @@ func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
 		}
 	} else if asFunc, ok := t.(ocaml.Func); ok {
 		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In, typeDefs), ocaml2go(asFunc.Out, typeDefs))
+	} else if asTuple, ok := t.(ocaml.Tuple); ok {
+		res := "struct{"
+		for i, t := range asTuple {
+			res += fmt.Sprintf("F%d %s; ", i, ocaml2go(t, typeDefs))
+		}
+		res += "}"
+		return res
 	}
 
 	return fmt.Sprintf("TODO /* %s */", t)
@@ -320,7 +327,7 @@ func (p *ocamlParse) writeTypeDef(def ocaml.Alias, typeDefs map[string]ocaml.Typ
 	case ocaml.SimpleType, ocaml.Cons, ocaml.Func:
 		w("type %s = %s\n", typeName(def.Name), ocaml2go(t, typeDefs))
 	case ocaml.Tuple:
-		w("type %s struct {\n", typeName(def.Name))
+		w("type %s = struct {\n", typeName(def.Name))
 		for i, f := range t {
 			w("  F%d %s\n", i, ocaml2go(f, typeDefs))
 		}
@@ -444,11 +451,7 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 		paramType := p.getTypeEnd(param, typeDefs)
 		w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
 	}
-	w(") (")
-	for i := range funcResultType.Cardinality() {
-		w("%s, ", ocaml2go(funcResultType.Get(i), typeDefs))
-	}
-	w(") {\n")
+	w(") %s {\n", ocaml2go(funcResultType, typeDefs))
 
 	p.parseExpr(body, funcResultType, "", true, true)
 
@@ -502,7 +505,7 @@ func (p *ocamlParse) parseExpr(
 	currentModule string,
 	statement bool,
 	returnIfTerminal bool,
-) []string {
+) string {
 	fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, in module: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, currentModule, statement, returnIfTerminal)
 	fmt.Fprintf(os.Stderr, "  %s\n", p.s(expr))
 	fmt.Fprintf(os.Stderr, "  %s\n", expr.ToSexp())
@@ -523,9 +526,9 @@ func (p *ocamlParse) parseExpr(
 			w("\n")
 			if returnIfTerminal {
 				w("return %s\n", res)
-				return nil
+				return ""
 			}
-			return []string{res}
+			return res
 		}
 	case "number", "signed_number":
 		n := p.s(expr)
@@ -563,9 +566,9 @@ func (p *ocamlParse) parseExpr(
 			funcType = p.getTypeEnd(function, typeDefs).(ocaml.Func)
 		}
 
-		results := resultVars(funcType.GetTypeAfterApplyingArgs(len(args)).Cardinality())
-		if len(results) > 0 && statement {
-			w("%s := ", strings.Join(results, ", "))
+		res := tmpVar()
+		if statement {
+			w("%s := ", res)
 		}
 
 		funcModule := currentModule
@@ -586,12 +589,12 @@ func (p *ocamlParse) parseExpr(
 			w("\n")
 		}
 		if returnIfTerminal {
-			w("return %s\n", strings.Join(results, ", "))
-			return nil
+			w("return %s\n", res)
+			return ""
 		} else if statement {
-			return results
+			return res
 		} else {
-			return nil
+			return ""
 		}
 	case "field_get_expression":
 		w("nil /* TODO: field_get_expression */")
@@ -614,11 +617,7 @@ func (p *ocamlParse) parseExpr(
 			paramType := p.getTypeEnd(param, typeDefs)
 			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
 		}
-		w(") (")
-		for i := range funcType.Out.Cardinality() {
-			w("%s, ", ocaml2go(funcType.Out.Get(i), typeDefs))
-		}
-		w(") {\n")
+		w(") %s {\n", ocaml2go(funcType.Out, typeDefs))
 
 		p.parseExpr(body, funcType.Out, currentModule, true, true)
 
@@ -626,20 +625,15 @@ func (p *ocamlParse) parseExpr(
 	case "if_expression":
 		condition := expr.ChildByFieldName("condition")
 
-		results := resultVars(expectedType.Cardinality())
+		res := tmpVar()
 
 		if !statement {
 			// Emit an inline, immediately-invoked function
-			w("func() (")
-			for i := range expectedType.Cardinality() {
-				w("%s, ", ocaml2go(expectedType.Get(i), typeDefs))
-			}
-			w(") {\n")
+			w("func() %s {\n", ocaml2go(expectedType, typeDefs))
 		}
 
-		for i := range expectedType.Cardinality() {
-			w("var %s %s\n", results[i], ocaml2go(expectedType.Get(i), typeDefs))
-		}
+		w("var %s %s\n", res, ocaml2go(expectedType, typeDefs))
+
 		w("if ")
 		p.parseExpr(condition, ocaml.SimpleType("bool"), currentModule, false, false)
 		for _, child := range expr.NamedChildren(expr.Walk()) {
@@ -651,15 +645,15 @@ func (p *ocamlParse) parseExpr(
 			case "then_clause":
 				w(" {\n")
 				thenRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
-				if len(results) > 0 {
-					w("%s = %s\n", strings.Join(results, ", "), strings.Join(thenRes, ", "))
+				if len(res) > 0 {
+					w("%s = %s\n", res, thenRes)
 				}
 				w("} ")
 			case "else_clause":
 				w(" else {\n")
 				elseRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
-				if len(results) > 0 {
-					w("%s = %s\n", strings.Join(results, ", "), strings.Join(elseRes, ", "))
+				if len(res) > 0 {
+					w("%s = %s\n", res, elseRes)
 				}
 				w("} ")
 			default:
@@ -669,23 +663,23 @@ func (p *ocamlParse) parseExpr(
 		w("\n")
 
 		if !statement {
-			w("return %s\n", strings.Join(results, ", "))
+			w("return %s\n", res)
 			w("}()")
-			return nil
+			return ""
 		} else if returnIfTerminal {
-			w("return %s\n", strings.Join(results, ", "))
-			return nil
+			w("return %s\n", res)
+			return ""
 		} else {
-			return results
+			return res
 		}
 	case "infix_expression":
 		left := expr.ChildByFieldName("left")
 		operator := expr.ChildByFieldName("operator")
 		right := expr.ChildByFieldName("right")
 
-		results := resultVars(expectedType.Cardinality())
-		if len(results) > 0 && statement {
-			w("%s := ", strings.Join(results, ", "))
+		res := tmpVar()
+		if statement {
+			w("%s := ", res)
 		}
 
 		opType := p.getTypeEnd(operator, typeDefs).(ocaml.Func)
@@ -710,12 +704,12 @@ func (p *ocamlParse) parseExpr(
 		}
 
 		if returnIfTerminal {
-			w("return %s\n", strings.Join(results, ", "))
-			return nil
+			w("return %s\n", res)
+			return ""
 		} else if statement {
-			return results
+			return res
 		} else {
-			return nil
+			return ""
 		}
 	case "let_expression":
 		if !statement {
@@ -742,7 +736,9 @@ func (p *ocamlParse) parseExpr(
 		bindingRes := p.parseExpr(body, bindingType, currentModule, true, false)
 
 		p.parseExpr(pattern, nil, currentModule, false, false)
-		w(" := %s\n", strings.Join(bindingRes, ", "))
+		w(" := %s\n", bindingRes)
+
+		// TODO: UNPACK!
 
 		return p.parseExpr(expr.NamedChild(1), expectedType, currentModule, true, returnIfTerminal)
 	case "list_expression":
@@ -771,10 +767,8 @@ func (p *ocamlParse) parseExpr(
 		mod := p.s(expr.NamedChild(0))
 		return p.parseExpr(expr.NamedChild(1), expectedType, mod, statement, returnIfTerminal)
 	case "match_expression":
-		matchResults := resultVars(expectedType.Cardinality())
-		for i := range expectedType.Cardinality() {
-			w("var %s %s\n", matchResults[i], ocaml2go(expectedType.Get(i), typeDefs))
-		}
+		matchResult := tmpVar()
+		w("var %s %s\n", matchResult, ocaml2go(expectedType, typeDefs))
 
 		matchVar := tmpVar()
 		w("%s := ", matchVar)
@@ -805,8 +799,8 @@ func (p *ocamlParse) parseExpr(
 			p.parseMatchPattern(pattern, matchVar, guard)
 
 			res := p.parseExpr(body, expectedType, currentModule, true, false)
-			if len(matchResults) > 0 {
-				w("%s = %s", strings.Join(matchResults, ", "), strings.Join(res, ", "))
+			if len(matchResult) > 0 {
+				w("%s = %s", matchResult, res)
 			}
 
 			w("\n")
@@ -815,23 +809,21 @@ func (p *ocamlParse) parseExpr(
 		w("}\n")
 
 		if returnIfTerminal {
-			w("return %s\n", strings.Join(matchResults, ", "))
-			return nil
+			w("return %s\n", matchResult)
+			return ""
 		} else {
-			return matchResults
+			return matchResult
 		}
 	case "parenthesized_expression":
 		return p.parseExpr(expr.NamedChild(0), expectedType, currentModule, statement, returnIfTerminal)
 	case "product_expression":
-		left := expr.ChildByFieldName("left")
-		right := expr.ChildByFieldName("right")
+		nodes := flattenProductExpression(expr)
 
-		utils.Assert(expectedType.Cardinality() > 0, "surely we can't have a product type with zero elements?")
-		results := resultVars(expectedType.Cardinality())
+		res := tmpVar()
 		if returnIfTerminal {
 			w("return ")
 		} else if statement {
-			w("%s := ", strings.Join(results, ", "))
+			w("%s := ", res)
 		}
 
 		var tup ocaml.Tuple
@@ -844,16 +836,21 @@ func (p *ocamlParse) parseExpr(
 			exitWithError("unexpected type in product_expression: %s", expectedType)
 		}
 
-		p.parseExpr(left, tup[:len(tup)-1], currentModule, false, false)
-		w(", ")
-		p.parseExpr(right, tup[len(tup)-1], currentModule, false, false)
+		utils.Assert(len(nodes) == len(tup), "mismatch between product values and expected tuple type")
+
+		w("%s{", ocaml2go(tup, typeDefs))
+		for i, n := range nodes {
+			p.parseExpr(n, tup[i], currentModule, false, false)
+			w(", ")
+		}
+		w("}")
 
 		if statement {
 			w("\n")
 			if returnIfTerminal {
-				return nil
+				return ""
 			} else {
-				return results
+				return res
 			}
 		}
 	case "record_expression":
@@ -867,12 +864,8 @@ func (p *ocamlParse) parseExpr(
 		right := expr.ChildByFieldName("right")
 
 		leftRes := p.parseExpr(left, nil, currentModule, true, false)
-		ignores := make([]string, len(leftRes))
-		for i := range len(leftRes) {
-			ignores[i] = "_"
-		}
-		if len(ignores) > 0 {
-			w("%s = %s\n", strings.Join(ignores, ", "), strings.Join(leftRes, ", "))
+		if leftRes != "" {
+			w("_ = %s\n", leftRes)
 		}
 
 		rightRes := p.parseExpr(right, expectedType, currentModule, true, returnIfTerminal)
@@ -889,7 +882,7 @@ func (p *ocamlParse) parseExpr(
 		exitWithError("unknown expression type %s", expr.GrammarName())
 	}
 
-	return nil
+	return ""
 }
 
 // You are expected to write the start of the if case before calling this,
@@ -970,6 +963,18 @@ func flattenOrPattern(p *tree_sitter.Node) []*tree_sitter.Node {
 	}
 }
 
+func flattenProductExpression(p *tree_sitter.Node) []*tree_sitter.Node {
+	switch p.GrammarName() {
+	case "product_expression":
+		var res []*tree_sitter.Node
+		res = append(res, flattenProductExpression(p.NamedChild(0))...)
+		res = append(res, flattenProductExpression(p.NamedChild(1))...)
+		return res
+	default:
+		return []*tree_sitter.Node{p}
+	}
+}
+
 func w(msg string, args ...any) {
 	fmt.Fprintf(outFile, msg, args...)
 }
@@ -977,14 +982,6 @@ func w(msg string, args ...any) {
 func tmpVar() string {
 	tmpCount += 1
 	return fmt.Sprintf("__tmp%d", tmpCount)
-}
-
-func resultVars(n int) []string {
-	vars := make([]string, n)
-	for i := range n {
-		vars[i] = tmpVar()
-	}
-	return vars
 }
 
 func parseHoverResponse(hover ocaml.M) ocaml.Type {
