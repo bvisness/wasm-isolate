@@ -36,10 +36,11 @@ var funcsToTranslate = []string{
 	"instr",
 }
 
-func ocaml2go(t ocaml.Type) string {
-	m := map[string]string{
-		"bool":   "bool",
-		"string": "string",
+func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
+	base := map[string]string{
+		"bool":         "bool",
+		"string":       "string",
+		"Utf8.unicode": "string",
 
 		"int":    "OInt",
 		"int32":  "OInt32",
@@ -48,14 +49,14 @@ func ocaml2go(t ocaml.Type) string {
 		"F64.t":  "float64",
 		"V128.t": "V128",
 
-		"address":   "OInt64",
-		"type_idx":  "OInt32",
-		"local_idx": "OInt32",
+		"address": "OInt64",
+		// "type_idx":  "OInt32",
+		// "local_idx": "OInt32",
 
-		"block_type": "BlockType",
-		"heap_type":  "HeapType",
-		"ref_type":   "RefType",
-		"null":       "Null",
+		// "block_type": "BlockType",
+		// "heap_type":  "HeapType",
+		// "ref_type":   "RefType",
+		// "null":       "Null",
 
 		"idx":    "*Phrase[OInt32]",
 		"instr'": "Instruction_",
@@ -66,20 +67,24 @@ func ocaml2go(t ocaml.Type) string {
 		"stream": "*Stream",
 	}
 
-	if goType, ok := m[t.String()]; ok {
+	if goType, ok := base[t.String()]; ok {
 		return goType
+	} else if existing, ok := typeDefs[t.String()]; ok {
+		return typeName(existing.(ocaml.Alias).Name)
+	} else if asSimple, ok := t.(ocaml.SimpleType); ok {
+		return typeName(asSimple.String())
 	} else if asCons, ok := t.(ocaml.Cons); ok {
 		last := asCons[len(asCons)-1]
 		switch last {
 		case ocaml.SimpleType("list"):
-			return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1]))
+			return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1], typeDefs))
 		case ocaml.SimpleType("phrase"):
-			return fmt.Sprintf("*Phrase[%s]", ocaml2go(asCons[:len(asCons)-1]))
+			return fmt.Sprintf("*Phrase[%s]", ocaml2go(asCons[:len(asCons)-1], typeDefs))
 		case ocaml.SimpleType("option"):
-			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1]))
+			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1], typeDefs))
 		}
 	} else if asFunc, ok := t.(ocaml.Func); ok {
-		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In), ocaml2go(asFunc.Out))
+		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In, typeDefs), ocaml2go(asFunc.Out, typeDefs))
 	}
 
 	return fmt.Sprintf("TODO /* %s */", t)
@@ -154,7 +159,7 @@ func main() {
 				}
 			}
 
-			if false {
+			{
 				operatorsParse := newOcamlParse(filepath.Join(specpath, "interpreter", "syntax", "operators.ml"))
 
 				root := operatorsParse.tree.RootNode()
@@ -228,29 +233,33 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, typeDefs map[string]ocaml
 			continue
 		}
 
-		name := binding.ChildByFieldName("name")
-		body := binding.NamedChild(1)
+		nName := binding.ChildByFieldName("name")
+		nBody := binding.NamedChild(1)
 
-		// fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", p.s(name), body.ToSexp())
-		if existingType, ok := typeDefs[p.s(name)]; ok {
-			exitWithError("duplicate definition of type %s: already had %s but got %s as well", p.s(name), existingType, p.s(body))
+		name := p.s(nName)
+
+		fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, nBody.ToSexp())
+		if existingType, ok := typeDefs[name]; ok {
+			exitWithError("duplicate definition of type %s: already had %s but got %s as well", p.s(nName), existingType, p.s(nBody))
 		}
 
-		if body.GrammarName() == "record_declaration" {
+		if nBody.GrammarName() == "record_declaration" {
 			fmt.Fprintf(os.Stderr, "HACK: skipping record_declaration types\n")
 			continue
 		}
 
-		typeDefs[p.s(name)] = ocaml.Alias{
-			Name: p.s(name),
-			Type: p.parseTypeDecl(body, typeDefs),
+		def := ocaml.Alias{
+			Name: name,
+			Type: p.parseTypeDecl(nBody, typeDefs),
 		}
+		typeDefs[name] = def
+		p.writeTypeDef(def, typeDefs)
 	}
 }
 
 func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocaml.Type) ocaml.Type {
 	switch n.GrammarName() {
-	case "type_constructor_path", "constructor_declaration":
+	case "type_constructor_path":
 		name := p.s(n)
 		if existingType, ok := typeDefs[name]; ok {
 			return existingType
@@ -277,7 +286,16 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 	case "variant_declaration":
 		variants := make(ocaml.Variants, n.NamedChildCount())
 		for i := range n.NamedChildCount() {
-			variants[i] = p.parseTypeDecl(n.NamedChild(i), typeDefs)
+			constructor := Lookup{n}.Child(i, "constructor_declaration").Node
+			constructorName := constructor.NamedChild(0)
+			variant := ocaml.Variant{
+				Name: p.s(constructorName),
+			}
+			if constructor.NamedChildCount() > 1 {
+				backingType := p.parseTypeDecl(constructor.NamedChild(1), typeDefs)
+				variant.Type = &backingType
+			}
+			variants[i] = variant
 		}
 		return variants
 	case "tuple_type":
@@ -294,6 +312,66 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 	default:
 		exitWithError("unexpected type declaration node %s", n.GrammarName())
 		return nil
+	}
+}
+
+func (p *ocamlParse) writeTypeDef(def ocaml.Alias, typeDefs map[string]ocaml.Type) {
+	switch t := def.Type.(type) {
+	case ocaml.SimpleType, ocaml.Cons, ocaml.Func:
+		w("type %s = %s\n", typeName(def.Name), ocaml2go(t, typeDefs))
+	case ocaml.Tuple:
+		w("type %s struct {\n", typeName(def.Name))
+		for i, f := range t {
+			w("  F%d %s\n", i, ocaml2go(f, typeDefs))
+		}
+		w("}\n")
+	case ocaml.Variants:
+		tn := typeName(def.Name)
+		kindName := typeName(def.Name + "_kind")
+		w("\ntype %s int\n\n", kindName)
+
+		w("const(\n")
+		for i, variant := range t {
+			w("%s", variantKindName(variant.Name))
+			if i == 0 {
+				w(" %s = iota + 1", kindName)
+			}
+			w("\n")
+		}
+		w(")\n\n")
+
+		w("type %s interface {\n", tn)
+		w("  Kind() %s\n", kindName)
+		w("}\n\n")
+
+		w("type Simple%s struct {\n", tn)
+		w("  kind %s\n", kindName)
+		w("}\n\n")
+
+		w("func (t Simple%s) Kind() %s {\n", tn, kindName)
+		w("  return t.kind\n")
+		w("}\n\n")
+
+		for _, variant := range t {
+			if variant.Type == nil {
+				w("var %s %s = Simple%s{%s}\n", safeName(variant.Name), tn, tn, variantKindName(variant.Name))
+			} else {
+				variantTypeName := tn + "_" + variant.Name
+				w("type %s struct {\n", variantTypeName)
+				w("  V %s\n", ocaml2go(*variant.Type, typeDefs))
+				w("}\n")
+
+				w("func (t %s) Kind() %s {\n", variantTypeName, kindName)
+				w("  return %s\n", variantKindName(variant.Name))
+				w("}\n")
+
+				w("func %s(v %s) %s {\n", funcName("", variant.Name, 1), ocaml2go(*variant.Type, typeDefs), tn)
+				w("  return %s{v}\n", variantTypeName)
+				w("}\n")
+			}
+		}
+	default:
+		exitWithError("don't know how to write type %s = %s", def.Name, def.Type)
 	}
 }
 
@@ -316,7 +394,7 @@ func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
 		w("\n")
 		for _, param := range params {
 			paramType := p.getTypeStart(param, typeDefs)
-			w("%s %s\n", paramName(p.s(param)), ocaml2go(paramType))
+			w("%s %s\n", paramName(p.s(param)), ocaml2go(paramType, typeDefs))
 		}
 	}
 	w("}\n")
@@ -325,7 +403,7 @@ func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
 	w("func %s(", constructorName)
 	for _, param := range params {
 		paramType := p.getTypeStart(param, typeDefs)
-		w("%s %s, ", safeName(p.s(param)), ocaml2go(paramType))
+		w("%s %s, ", safeName(p.s(param)), ocaml2go(paramType, typeDefs))
 	}
 	w(") %s {\n", structName)
 	w("return %s{", structName)
@@ -364,11 +442,11 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	for _, param := range params {
 		paramName := safeName(p.s(param))
 		paramType := p.getTypeEnd(param, typeDefs)
-		w("%s %s, ", paramName, ocaml2go(paramType))
+		w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
 	}
 	w(") (")
 	for i := range funcResultType.Cardinality() {
-		w("%s, ", ocaml2go(funcResultType.Get(i)))
+		w("%s, ", ocaml2go(funcResultType.Get(i), typeDefs))
 	}
 	w(") {\n")
 
@@ -400,6 +478,22 @@ func funcName(mod, name string, numArgs int) string {
 func paramName(name string) string {
 	safe := reUnsafeChar.ReplaceAllString(name, "_")
 	return strings.ToUpper(safe[:1]) + safe[1:]
+}
+
+func typeName(name string) string {
+	parts := strings.Split(name, "_")
+	for i := range parts {
+		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+	}
+	return "O" + strings.Join(parts, "")
+}
+
+func variantKindName(name string) string {
+	parts := strings.Split(name, "_")
+	for i := range parts {
+		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+	}
+	return "K" + strings.Join(parts, "")
 }
 
 func (p *ocamlParse) parseExpr(
@@ -518,11 +612,11 @@ func (p *ocamlParse) parseExpr(
 		for _, param := range params {
 			paramName := safeName(p.s(param))
 			paramType := p.getTypeEnd(param, typeDefs)
-			w("%s %s, ", paramName, ocaml2go(paramType))
+			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
 		}
 		w(") (")
 		for i := range funcType.Out.Cardinality() {
-			w("%s, ", ocaml2go(funcType.Out.Get(i)))
+			w("%s, ", ocaml2go(funcType.Out.Get(i), typeDefs))
 		}
 		w(") {\n")
 
@@ -538,13 +632,13 @@ func (p *ocamlParse) parseExpr(
 			// Emit an inline, immediately-invoked function
 			w("func() (")
 			for i := range expectedType.Cardinality() {
-				w("%s, ", ocaml2go(expectedType.Get(i)))
+				w("%s, ", ocaml2go(expectedType.Get(i), typeDefs))
 			}
 			w(") {\n")
 		}
 
 		for i := range expectedType.Cardinality() {
-			w("var %s %s\n", results[i], ocaml2go(expectedType.Get(i)))
+			w("var %s %s\n", results[i], ocaml2go(expectedType.Get(i), typeDefs))
 		}
 		w("if ")
 		p.parseExpr(condition, ocaml.SimpleType("bool"), currentModule, false, false)
@@ -666,7 +760,7 @@ func (p *ocamlParse) parseExpr(
 
 		// TODO: Statement mode
 
-		w("[]%s{", ocaml2go(elemType))
+		w("[]%s{", ocaml2go(elemType, typeDefs))
 		for _, child := range expr.NamedChildren(expr.Walk()) {
 			p.parseExpr(&child, elemType, currentModule, false, false)
 			w(", ")
@@ -679,7 +773,7 @@ func (p *ocamlParse) parseExpr(
 	case "match_expression":
 		matchResults := resultVars(expectedType.Cardinality())
 		for i := range expectedType.Cardinality() {
-			w("var %s %s\n", matchResults[i], ocaml2go(expectedType.Get(i)))
+			w("var %s %s\n", matchResults[i], ocaml2go(expectedType.Get(i), typeDefs))
 		}
 
 		matchVar := tmpVar()

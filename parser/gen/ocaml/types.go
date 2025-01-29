@@ -99,7 +99,16 @@ func (t Cons) Get(i int) Type {
 	return t
 }
 
-type Variants []Type
+type Variant struct {
+	Name string
+	Type *Type
+}
+
+func (v Variant) String() string {
+	return v.Name
+}
+
+type Variants []Variant
 
 func (t Variants) String() string {
 	strs := make([]string, len(t))
