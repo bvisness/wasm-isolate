@@ -93,6 +93,11 @@ func (t SimpleOFinal) Kind() OFinalKind {
 var _NoFinal OFinal = SimpleOFinal{KNoFinal}
 var _Final OFinal = SimpleOFinal{KFinal}
 
+type OLimits struct {
+	Min OInt64
+	Max *OInt64
+}
+
 type OVarKind int
 
 const (
@@ -1077,33 +1082,45 @@ func _ExtLane_1(v OPackShape) OVecExtension {
 var _ExtSplat OVecExtension = SimpleOVecExtension{KExtSplat}
 var _ExtZero OVecExtension = SimpleOVecExtension{KExtZero}
 
+func _packed_size_0() func(OPackSize) OInt {
+	TODO /* unknown expression type function_expression */
+}
+
+var _packed_size = _packed_size_0
+
+func _packed_shape_size_0() func(OPackShape) OInt {
+	TODO /* unknown expression type function_expression */
+}
+
+var _packed_shape_size = _packed_shape_size_0
+
 type OVoid = OVoid
-type OTestop = TODO       /* I32Op.testop I64Op.testop */
-type OUnop = TODO         /* I32Op.unop I64Op.unop */
-type OBinop = TODO        /* I32Op.binop I64Op.binop */
-type ORelop = TODO        /* I32Op.relop I64Op.relop */
-type OCvtop = TODO        /* I32Op.cvtop I64Op.cvtop */
-type OVecTestop = TODO    /* V128Op.testop Value.vecop */
-type OVecRelop = TODO     /* V128Op.relop Value.vecop */
-type OVecUnop = TODO      /* V128Op.unop Value.vecop */
-type OVecBinop = TODO     /* V128Op.binop Value.vecop */
-type OVecTernop = TODO    /* V128Op.ternop Value.vecop */
-type OVecCvtop = TODO     /* V128Op.cvtop Value.vecop */
-type OVecShiftop = TODO   /* V128Op.shiftop Value.vecop */
-type OVecBitmaskop = TODO /* V128Op.bitmaskop Value.vecop */
-type OVecVtestop = TODO   /* V128Op.vtestop Value.vecop */
-type OVecVunop = TODO     /* V128Op.vunop Value.vecop */
-type OVecVbinop = TODO    /* V128Op.vbinop Value.vecop */
-type OVecVternop = TODO   /* V128Op.vternop Value.vecop */
-type OVecSplatop = TODO   /* V128Op.splatop Value.vecop */
-type OVecExtractop = TODO /* V128Op.extractop Value.vecop */
-type OVecReplaceop = TODO /* V128Op.replaceop Value.vecop */
+type OTestop = TODO       /* I32Op.testop I64Op.testop (kind 3) */
+type OUnop = TODO         /* I32Op.unop I64Op.unop (kind 3) */
+type OBinop = TODO        /* I32Op.binop I64Op.binop (kind 3) */
+type ORelop = TODO        /* I32Op.relop I64Op.relop (kind 3) */
+type OCvtop = TODO        /* I32Op.cvtop I64Op.cvtop (kind 3) */
+type OVecTestop = TODO    /* V128Op.testop Value.vecop (kind 3) */
+type OVecRelop = TODO     /* V128Op.relop Value.vecop (kind 3) */
+type OVecUnop = TODO      /* V128Op.unop Value.vecop (kind 3) */
+type OVecBinop = TODO     /* V128Op.binop Value.vecop (kind 3) */
+type OVecTernop = TODO    /* V128Op.ternop Value.vecop (kind 3) */
+type OVecCvtop = TODO     /* V128Op.cvtop Value.vecop (kind 3) */
+type OVecShiftop = TODO   /* V128Op.shiftop Value.vecop (kind 3) */
+type OVecBitmaskop = TODO /* V128Op.bitmaskop Value.vecop (kind 3) */
+type OVecVtestop = TODO   /* V128Op.vtestop Value.vecop (kind 3) */
+type OVecVunop = TODO     /* V128Op.vunop Value.vecop (kind 3) */
+type OVecVbinop = TODO    /* V128Op.vbinop Value.vecop (kind 3) */
+type OVecVternop = TODO   /* V128Op.vternop Value.vecop (kind 3) */
+type OVecSplatop = TODO   /* V128Op.splatop Value.vecop (kind 3) */
+type OVecExtractop = TODO /* V128Op.extractop Value.vecop (kind 3) */
+type OVecReplaceop = TODO /* V128Op.replaceop Value.vecop (kind 3) */
 type OMemop = OUnknownTypeVariableP
-type OLoadop = TODO     /* num_type pack_size * extension option */
-type OStoreop = TODO    /* num_type pack_size option */
-type OVecLoadop = TODO  /* vec_type pack_size * vec_extension option */
-type OVecStoreop = TODO /* vec_type unit */
-type OVecLaneop = TODO  /* vec_type pack_size */
+type OLoadop = TODO     /* num_type pack_size * extension option (kind 3) */
+type OStoreop = TODO    /* num_type pack_size option (kind 3) */
+type OVecLoadop = TODO  /* vec_type pack_size * vec_extension option (kind 3) */
+type OVecStoreop = TODO /* vec_type unit (kind 3) */
+type OVecLaneop = TODO  /* vec_type pack_size (kind 3) */
 
 type OInitopKind int
 
@@ -1149,9 +1166,9 @@ func (t SimpleOExternop) Kind() OExternopKind {
 var _Internalize OExternop = SimpleOExternop{KInternalize}
 var _Externalize OExternop = SimpleOExternop{KExternalize}
 
-type OIdx = TODO /* int32 Source.phrase */
-type ONum = TODO /* Value.num Source.phrase */
-type OVec = TODO /* Value.vec Source.phrase */
+type OIdx = *Phrase[OInt32]
+type ONum = *Phrase[ONum]
+type OVec = *Phrase[OVec]
 type OName = string
 
 type OBlockTypeKind int
@@ -1174,13 +1191,13 @@ func (t SimpleOBlockType) Kind() OBlockTypeKind {
 }
 
 type OBlockType_VarBlockType struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OBlockType_VarBlockType) Kind() OBlockTypeKind {
 	return KVarBlockType
 }
-func _VarBlockType_1(v *Phrase[OInt32]) OBlockType {
+func _VarBlockType_1(v OIdx) OBlockType {
 	return OBlockType_VarBlockType{v}
 }
 
@@ -1195,7 +1212,7 @@ func _ValBlockType_1(v *OValType) OBlockType {
 	return OBlockType_ValBlockType{v}
 }
 
-type OInstr = TODO /* instr' Source.phrase */
+type OInstr = *Phrase[OInstr_]
 
 type OInstr_Kind int
 
@@ -1358,158 +1375,158 @@ func _If_1(v OBlockType) OInstr_ {
 }
 
 type OInstr__Br struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__Br) Kind() OInstr_Kind {
 	return KBr
 }
-func _Br_1(v *Phrase[OInt32]) OInstr_ {
+func _Br_1(v OIdx) OInstr_ {
 	return OInstr__Br{v}
 }
 
 type OInstr__BrIf struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__BrIf) Kind() OInstr_Kind {
 	return KBrIf
 }
-func _BrIf_1(v *Phrase[OInt32]) OInstr_ {
+func _BrIf_1(v OIdx) OInstr_ {
 	return OInstr__BrIf{v}
 }
 
 type OInstr__BrTable struct {
-	V []*Phrase[OInt32]
+	V []OIdx
 }
 
 func (t OInstr__BrTable) Kind() OInstr_Kind {
 	return KBrTable
 }
-func _BrTable_1(v []*Phrase[OInt32]) OInstr_ {
+func _BrTable_1(v []OIdx) OInstr_ {
 	return OInstr__BrTable{v}
 }
 
 type OInstr__BrOnNull struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__BrOnNull) Kind() OInstr_Kind {
 	return KBrOnNull
 }
-func _BrOnNull_1(v *Phrase[OInt32]) OInstr_ {
+func _BrOnNull_1(v OIdx) OInstr_ {
 	return OInstr__BrOnNull{v}
 }
 
 type OInstr__BrOnNonNull struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__BrOnNonNull) Kind() OInstr_Kind {
 	return KBrOnNonNull
 }
-func _BrOnNonNull_1(v *Phrase[OInt32]) OInstr_ {
+func _BrOnNonNull_1(v OIdx) OInstr_ {
 	return OInstr__BrOnNonNull{v}
 }
 
 type OInstr__BrOnCast struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__BrOnCast) Kind() OInstr_Kind {
 	return KBrOnCast
 }
-func _BrOnCast_1(v *Phrase[OInt32]) OInstr_ {
+func _BrOnCast_1(v OIdx) OInstr_ {
 	return OInstr__BrOnCast{v}
 }
 
 type OInstr__BrOnCastFail struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__BrOnCastFail) Kind() OInstr_Kind {
 	return KBrOnCastFail
 }
-func _BrOnCastFail_1(v *Phrase[OInt32]) OInstr_ {
+func _BrOnCastFail_1(v OIdx) OInstr_ {
 	return OInstr__BrOnCastFail{v}
 }
 
 var _Return OInstr_ = SimpleOInstr_{KReturn}
 
 type OInstr__Call struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__Call) Kind() OInstr_Kind {
 	return KCall
 }
-func _Call_1(v *Phrase[OInt32]) OInstr_ {
+func _Call_1(v OIdx) OInstr_ {
 	return OInstr__Call{v}
 }
 
 type OInstr__CallRef struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__CallRef) Kind() OInstr_Kind {
 	return KCallRef
 }
-func _CallRef_1(v *Phrase[OInt32]) OInstr_ {
+func _CallRef_1(v OIdx) OInstr_ {
 	return OInstr__CallRef{v}
 }
 
 type OInstr__CallIndirect struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__CallIndirect) Kind() OInstr_Kind {
 	return KCallIndirect
 }
-func _CallIndirect_1(v *Phrase[OInt32]) OInstr_ {
+func _CallIndirect_1(v OIdx) OInstr_ {
 	return OInstr__CallIndirect{v}
 }
 
 type OInstr__ReturnCall struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ReturnCall) Kind() OInstr_Kind {
 	return KReturnCall
 }
-func _ReturnCall_1(v *Phrase[OInt32]) OInstr_ {
+func _ReturnCall_1(v OIdx) OInstr_ {
 	return OInstr__ReturnCall{v}
 }
 
 type OInstr__ReturnCallRef struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ReturnCallRef) Kind() OInstr_Kind {
 	return KReturnCallRef
 }
-func _ReturnCallRef_1(v *Phrase[OInt32]) OInstr_ {
+func _ReturnCallRef_1(v OIdx) OInstr_ {
 	return OInstr__ReturnCallRef{v}
 }
 
 type OInstr__ReturnCallIndirect struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ReturnCallIndirect) Kind() OInstr_Kind {
 	return KReturnCallIndirect
 }
-func _ReturnCallIndirect_1(v *Phrase[OInt32]) OInstr_ {
+func _ReturnCallIndirect_1(v OIdx) OInstr_ {
 	return OInstr__ReturnCallIndirect{v}
 }
 
 type OInstr__Throw struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__Throw) Kind() OInstr_Kind {
 	return KThrow
 }
-func _Throw_1(v *Phrase[OInt32]) OInstr_ {
+func _Throw_1(v OIdx) OInstr_ {
 	return OInstr__Throw{v}
 }
 
@@ -1527,277 +1544,277 @@ func _TryTable_1(v OBlockType) OInstr_ {
 }
 
 type OInstr__LocalGet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__LocalGet) Kind() OInstr_Kind {
 	return KLocalGet
 }
-func _LocalGet_1(v *Phrase[OInt32]) OInstr_ {
+func _LocalGet_1(v OIdx) OInstr_ {
 	return OInstr__LocalGet{v}
 }
 
 type OInstr__LocalSet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__LocalSet) Kind() OInstr_Kind {
 	return KLocalSet
 }
-func _LocalSet_1(v *Phrase[OInt32]) OInstr_ {
+func _LocalSet_1(v OIdx) OInstr_ {
 	return OInstr__LocalSet{v}
 }
 
 type OInstr__LocalTee struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__LocalTee) Kind() OInstr_Kind {
 	return KLocalTee
 }
-func _LocalTee_1(v *Phrase[OInt32]) OInstr_ {
+func _LocalTee_1(v OIdx) OInstr_ {
 	return OInstr__LocalTee{v}
 }
 
 type OInstr__GlobalGet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__GlobalGet) Kind() OInstr_Kind {
 	return KGlobalGet
 }
-func _GlobalGet_1(v *Phrase[OInt32]) OInstr_ {
+func _GlobalGet_1(v OIdx) OInstr_ {
 	return OInstr__GlobalGet{v}
 }
 
 type OInstr__GlobalSet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__GlobalSet) Kind() OInstr_Kind {
 	return KGlobalSet
 }
-func _GlobalSet_1(v *Phrase[OInt32]) OInstr_ {
+func _GlobalSet_1(v OIdx) OInstr_ {
 	return OInstr__GlobalSet{v}
 }
 
 type OInstr__TableGet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableGet) Kind() OInstr_Kind {
 	return KTableGet
 }
-func _TableGet_1(v *Phrase[OInt32]) OInstr_ {
+func _TableGet_1(v OIdx) OInstr_ {
 	return OInstr__TableGet{v}
 }
 
 type OInstr__TableSet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableSet) Kind() OInstr_Kind {
 	return KTableSet
 }
-func _TableSet_1(v *Phrase[OInt32]) OInstr_ {
+func _TableSet_1(v OIdx) OInstr_ {
 	return OInstr__TableSet{v}
 }
 
 type OInstr__TableSize struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableSize) Kind() OInstr_Kind {
 	return KTableSize
 }
-func _TableSize_1(v *Phrase[OInt32]) OInstr_ {
+func _TableSize_1(v OIdx) OInstr_ {
 	return OInstr__TableSize{v}
 }
 
 type OInstr__TableGrow struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableGrow) Kind() OInstr_Kind {
 	return KTableGrow
 }
-func _TableGrow_1(v *Phrase[OInt32]) OInstr_ {
+func _TableGrow_1(v OIdx) OInstr_ {
 	return OInstr__TableGrow{v}
 }
 
 type OInstr__TableFill struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableFill) Kind() OInstr_Kind {
 	return KTableFill
 }
-func _TableFill_1(v *Phrase[OInt32]) OInstr_ {
+func _TableFill_1(v OIdx) OInstr_ {
 	return OInstr__TableFill{v}
 }
 
 type OInstr__TableCopy struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableCopy) Kind() OInstr_Kind {
 	return KTableCopy
 }
-func _TableCopy_1(v *Phrase[OInt32]) OInstr_ {
+func _TableCopy_1(v OIdx) OInstr_ {
 	return OInstr__TableCopy{v}
 }
 
 type OInstr__TableInit struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__TableInit) Kind() OInstr_Kind {
 	return KTableInit
 }
-func _TableInit_1(v *Phrase[OInt32]) OInstr_ {
+func _TableInit_1(v OIdx) OInstr_ {
 	return OInstr__TableInit{v}
 }
 
 type OInstr__ElemDrop struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ElemDrop) Kind() OInstr_Kind {
 	return KElemDrop
 }
-func _ElemDrop_1(v *Phrase[OInt32]) OInstr_ {
+func _ElemDrop_1(v OIdx) OInstr_ {
 	return OInstr__ElemDrop{v}
 }
 
 type OInstr__Load struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__Load) Kind() OInstr_Kind {
 	return KLoad
 }
-func _Load_1(v *Phrase[OInt32]) OInstr_ {
+func _Load_1(v OIdx) OInstr_ {
 	return OInstr__Load{v}
 }
 
 type OInstr__Store struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__Store) Kind() OInstr_Kind {
 	return KStore
 }
-func _Store_1(v *Phrase[OInt32]) OInstr_ {
+func _Store_1(v OIdx) OInstr_ {
 	return OInstr__Store{v}
 }
 
 type OInstr__VecLoad struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__VecLoad) Kind() OInstr_Kind {
 	return KVecLoad
 }
-func _VecLoad_1(v *Phrase[OInt32]) OInstr_ {
+func _VecLoad_1(v OIdx) OInstr_ {
 	return OInstr__VecLoad{v}
 }
 
 type OInstr__VecStore struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__VecStore) Kind() OInstr_Kind {
 	return KVecStore
 }
-func _VecStore_1(v *Phrase[OInt32]) OInstr_ {
+func _VecStore_1(v OIdx) OInstr_ {
 	return OInstr__VecStore{v}
 }
 
 type OInstr__VecLoadLane struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__VecLoadLane) Kind() OInstr_Kind {
 	return KVecLoadLane
 }
-func _VecLoadLane_1(v *Phrase[OInt32]) OInstr_ {
+func _VecLoadLane_1(v OIdx) OInstr_ {
 	return OInstr__VecLoadLane{v}
 }
 
 type OInstr__VecStoreLane struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__VecStoreLane) Kind() OInstr_Kind {
 	return KVecStoreLane
 }
-func _VecStoreLane_1(v *Phrase[OInt32]) OInstr_ {
+func _VecStoreLane_1(v OIdx) OInstr_ {
 	return OInstr__VecStoreLane{v}
 }
 
 type OInstr__MemorySize struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__MemorySize) Kind() OInstr_Kind {
 	return KMemorySize
 }
-func _MemorySize_1(v *Phrase[OInt32]) OInstr_ {
+func _MemorySize_1(v OIdx) OInstr_ {
 	return OInstr__MemorySize{v}
 }
 
 type OInstr__MemoryGrow struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__MemoryGrow) Kind() OInstr_Kind {
 	return KMemoryGrow
 }
-func _MemoryGrow_1(v *Phrase[OInt32]) OInstr_ {
+func _MemoryGrow_1(v OIdx) OInstr_ {
 	return OInstr__MemoryGrow{v}
 }
 
 type OInstr__MemoryFill struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__MemoryFill) Kind() OInstr_Kind {
 	return KMemoryFill
 }
-func _MemoryFill_1(v *Phrase[OInt32]) OInstr_ {
+func _MemoryFill_1(v OIdx) OInstr_ {
 	return OInstr__MemoryFill{v}
 }
 
 type OInstr__MemoryCopy struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__MemoryCopy) Kind() OInstr_Kind {
 	return KMemoryCopy
 }
-func _MemoryCopy_1(v *Phrase[OInt32]) OInstr_ {
+func _MemoryCopy_1(v OIdx) OInstr_ {
 	return OInstr__MemoryCopy{v}
 }
 
 type OInstr__MemoryInit struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__MemoryInit) Kind() OInstr_Kind {
 	return KMemoryInit
 }
-func _MemoryInit_1(v *Phrase[OInt32]) OInstr_ {
+func _MemoryInit_1(v OIdx) OInstr_ {
 	return OInstr__MemoryInit{v}
 }
 
 type OInstr__DataDrop struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__DataDrop) Kind() OInstr_Kind {
 	return KDataDrop
 }
-func _DataDrop_1(v *Phrase[OInt32]) OInstr_ {
+func _DataDrop_1(v OIdx) OInstr_ {
 	return OInstr__DataDrop{v}
 }
 
@@ -1879,13 +1896,13 @@ func _RefNull_1(v OHeapType) OInstr_ {
 }
 
 type OInstr__RefFunc struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__RefFunc) Kind() OInstr_Kind {
 	return KRefFunc
 }
-func _RefFunc_1(v *Phrase[OInt32]) OInstr_ {
+func _RefFunc_1(v OIdx) OInstr_ {
 	return OInstr__RefFunc{v}
 }
 
@@ -1929,147 +1946,147 @@ func _I31Get_1(v OExtension) OInstr_ {
 }
 
 type OInstr__StructNew struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__StructNew) Kind() OInstr_Kind {
 	return KStructNew
 }
-func _StructNew_1(v *Phrase[OInt32]) OInstr_ {
+func _StructNew_1(v OIdx) OInstr_ {
 	return OInstr__StructNew{v}
 }
 
 type OInstr__StructGet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__StructGet) Kind() OInstr_Kind {
 	return KStructGet
 }
-func _StructGet_1(v *Phrase[OInt32]) OInstr_ {
+func _StructGet_1(v OIdx) OInstr_ {
 	return OInstr__StructGet{v}
 }
 
 type OInstr__StructSet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__StructSet) Kind() OInstr_Kind {
 	return KStructSet
 }
-func _StructSet_1(v *Phrase[OInt32]) OInstr_ {
+func _StructSet_1(v OIdx) OInstr_ {
 	return OInstr__StructSet{v}
 }
 
 type OInstr__ArrayNew struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayNew) Kind() OInstr_Kind {
 	return KArrayNew
 }
-func _ArrayNew_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayNew_1(v OIdx) OInstr_ {
 	return OInstr__ArrayNew{v}
 }
 
 type OInstr__ArrayNewFixed struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayNewFixed) Kind() OInstr_Kind {
 	return KArrayNewFixed
 }
-func _ArrayNewFixed_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayNewFixed_1(v OIdx) OInstr_ {
 	return OInstr__ArrayNewFixed{v}
 }
 
 type OInstr__ArrayNewElem struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayNewElem) Kind() OInstr_Kind {
 	return KArrayNewElem
 }
-func _ArrayNewElem_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayNewElem_1(v OIdx) OInstr_ {
 	return OInstr__ArrayNewElem{v}
 }
 
 type OInstr__ArrayNewData struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayNewData) Kind() OInstr_Kind {
 	return KArrayNewData
 }
-func _ArrayNewData_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayNewData_1(v OIdx) OInstr_ {
 	return OInstr__ArrayNewData{v}
 }
 
 type OInstr__ArrayGet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayGet) Kind() OInstr_Kind {
 	return KArrayGet
 }
-func _ArrayGet_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayGet_1(v OIdx) OInstr_ {
 	return OInstr__ArrayGet{v}
 }
 
 type OInstr__ArraySet struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArraySet) Kind() OInstr_Kind {
 	return KArraySet
 }
-func _ArraySet_1(v *Phrase[OInt32]) OInstr_ {
+func _ArraySet_1(v OIdx) OInstr_ {
 	return OInstr__ArraySet{v}
 }
 
 var _ArrayLen OInstr_ = SimpleOInstr_{KArrayLen}
 
 type OInstr__ArrayCopy struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayCopy) Kind() OInstr_Kind {
 	return KArrayCopy
 }
-func _ArrayCopy_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayCopy_1(v OIdx) OInstr_ {
 	return OInstr__ArrayCopy{v}
 }
 
 type OInstr__ArrayFill struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayFill) Kind() OInstr_Kind {
 	return KArrayFill
 }
-func _ArrayFill_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayFill_1(v OIdx) OInstr_ {
 	return OInstr__ArrayFill{v}
 }
 
 type OInstr__ArrayInitData struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayInitData) Kind() OInstr_Kind {
 	return KArrayInitData
 }
-func _ArrayInitData_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayInitData_1(v OIdx) OInstr_ {
 	return OInstr__ArrayInitData{v}
 }
 
 type OInstr__ArrayInitElem struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OInstr__ArrayInitElem) Kind() OInstr_Kind {
 	return KArrayInitElem
 }
-func _ArrayInitElem_1(v *Phrase[OInt32]) OInstr_ {
+func _ArrayInitElem_1(v OIdx) OInstr_ {
 	return OInstr__ArrayInitElem{v}
 }
 
@@ -2260,7 +2277,7 @@ func _VecReplace_1(v OVecReplaceop) OInstr_ {
 	return OInstr__VecReplace{v}
 }
 
-type OCatch = TODO /* catch' Source.phrase */
+type OCatch = *Phrase[OCatch_]
 
 type OCatch_Kind int
 
@@ -2284,57 +2301,79 @@ func (t SimpleOCatch_) Kind() OCatch_Kind {
 }
 
 type OCatch__Catch struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OCatch__Catch) Kind() OCatch_Kind {
 	return KCatch
 }
-func _Catch_1(v *Phrase[OInt32]) OCatch_ {
+func _Catch_1(v OIdx) OCatch_ {
 	return OCatch__Catch{v}
 }
 
 type OCatch__CatchRef struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OCatch__CatchRef) Kind() OCatch_Kind {
 	return KCatchRef
 }
-func _CatchRef_1(v *Phrase[OInt32]) OCatch_ {
+func _CatchRef_1(v OIdx) OCatch_ {
 	return OCatch__CatchRef{v}
 }
 
 type OCatch__CatchAll struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OCatch__CatchAll) Kind() OCatch_Kind {
 	return KCatchAll
 }
-func _CatchAll_1(v *Phrase[OInt32]) OCatch_ {
+func _CatchAll_1(v OIdx) OCatch_ {
 	return OCatch__CatchAll{v}
 }
 
 type OCatch__CatchAllRef struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OCatch__CatchAllRef) Kind() OCatch_Kind {
 	return KCatchAllRef
 }
-func _CatchAllRef_1(v *Phrase[OInt32]) OCatch_ {
+func _CatchAllRef_1(v OIdx) OCatch_ {
 	return OCatch__CatchAllRef{v}
 }
 
-type OConst = TODO       /* instr list Source.phrase */
-type OLocal = TODO       /* local' Source.phrase */
-type OGlobal = TODO      /* global' Source.phrase */
-type OFunc = TODO        /* func' Source.phrase */
-type OTable = TODO       /* table' Source.phrase */
-type OMemory = TODO      /* memory' Source.phrase */
-type OTag = TODO         /* tag' Source.phrase */
-type OSegmentMode = TODO /* segment_mode' Source.phrase */
+type OConst = *Phrase[[]OInstr]
+type OLocal = *Phrase[OLocal_]
+type OLocal_ struct {
+	Ltype OValType
+}
+type OGlobal = *Phrase[OGlobal_]
+type OGlobal_ struct {
+	Gtype OGlobalType
+	Ginit OConst
+}
+type OFunc = *Phrase[OFunc_]
+type OFunc_ struct {
+	Ftype  OIdx
+	Locals []OLocal
+	Body   []OInstr
+}
+type OTable = *Phrase[OTable_]
+type OTable_ struct {
+	Ttype OTableType
+	Tinit OConst
+}
+type OMemory = *Phrase[OMemory_]
+type OMemory_ struct {
+	Mtype OMemoryType
+}
+type OTag = *Phrase[OTag_]
+type OTag_ struct {
+	Tgtype OIdx
+}
+type OSegmentMode = *Phrase[OSegmentMode_]
 
 type OSegmentMode_Kind int
 
@@ -2360,7 +2399,7 @@ var _Passive OSegmentMode_ = SimpleOSegmentMode_{KPassive}
 
 type OSegmentMode__Active struct {
 	V struct {
-		Index  *Phrase[OInt32]
+		Index  OIdx
 		Offset OConst
 	}
 }
@@ -2369,7 +2408,7 @@ func (t OSegmentMode__Active) Kind() OSegmentMode_Kind {
 	return KActive
 }
 func _Active_1(v struct {
-	Index  *Phrase[OInt32]
+	Index  OIdx
 	Offset OConst
 }) OSegmentMode_ {
 	return OSegmentMode__Active{v}
@@ -2377,10 +2416,19 @@ func _Active_1(v struct {
 
 var _Declarative OSegmentMode_ = SimpleOSegmentMode_{KDeclarative}
 
-type OElemSegment = TODO /* elem_segment' Source.phrase */
-type ODataSegment = TODO /* data_segment' Source.phrase */
-type OType = TODO        /* rec_type Source.phrase */
-type OExportDesc = TODO  /* export_desc' Source.phrase */
+type OElemSegment = *Phrase[OElemSegment_]
+type OElemSegment_ struct {
+	Etype ORefType
+	Einit []OConst
+	Emode OSegmentMode
+}
+type ODataSegment = *Phrase[ODataSegment_]
+type ODataSegment_ struct {
+	Dinit string
+	Dmode OSegmentMode
+}
+type OType = *Phrase[ORecType]
+type OExportDesc = *Phrase[OExportDesc_]
 
 type OExportDesc_Kind int
 
@@ -2405,62 +2453,66 @@ func (t SimpleOExportDesc_) Kind() OExportDesc_Kind {
 }
 
 type OExportDesc__FuncExport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OExportDesc__FuncExport) Kind() OExportDesc_Kind {
 	return KFuncExport
 }
-func _FuncExport_1(v *Phrase[OInt32]) OExportDesc_ {
+func _FuncExport_1(v OIdx) OExportDesc_ {
 	return OExportDesc__FuncExport{v}
 }
 
 type OExportDesc__TableExport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OExportDesc__TableExport) Kind() OExportDesc_Kind {
 	return KTableExport
 }
-func _TableExport_1(v *Phrase[OInt32]) OExportDesc_ {
+func _TableExport_1(v OIdx) OExportDesc_ {
 	return OExportDesc__TableExport{v}
 }
 
 type OExportDesc__MemoryExport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OExportDesc__MemoryExport) Kind() OExportDesc_Kind {
 	return KMemoryExport
 }
-func _MemoryExport_1(v *Phrase[OInt32]) OExportDesc_ {
+func _MemoryExport_1(v OIdx) OExportDesc_ {
 	return OExportDesc__MemoryExport{v}
 }
 
 type OExportDesc__GlobalExport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OExportDesc__GlobalExport) Kind() OExportDesc_Kind {
 	return KGlobalExport
 }
-func _GlobalExport_1(v *Phrase[OInt32]) OExportDesc_ {
+func _GlobalExport_1(v OIdx) OExportDesc_ {
 	return OExportDesc__GlobalExport{v}
 }
 
 type OExportDesc__TagExport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OExportDesc__TagExport) Kind() OExportDesc_Kind {
 	return KTagExport
 }
-func _TagExport_1(v *Phrase[OInt32]) OExportDesc_ {
+func _TagExport_1(v OIdx) OExportDesc_ {
 	return OExportDesc__TagExport{v}
 }
 
-type OExport = TODO     /* export' Source.phrase */
-type OImportDesc = TODO /* import_desc' Source.phrase */
+type OExport = *Phrase[OExport_]
+type OExport_ struct {
+	Name  OName
+	Edesc OExportDesc
+}
+type OImportDesc = *Phrase[OImportDesc_]
 
 type OImportDesc_Kind int
 
@@ -2485,13 +2537,13 @@ func (t SimpleOImportDesc_) Kind() OImportDesc_Kind {
 }
 
 type OImportDesc__FuncImport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OImportDesc__FuncImport) Kind() OImportDesc_Kind {
 	return KFuncImport
 }
-func _FuncImport_1(v *Phrase[OInt32]) OImportDesc_ {
+func _FuncImport_1(v OIdx) OImportDesc_ {
 	return OImportDesc__FuncImport{v}
 }
 
@@ -2529,4732 +2581,45 @@ func _GlobalImport_1(v OGlobalType) OImportDesc_ {
 }
 
 type OImportDesc__TagImport struct {
-	V *Phrase[OInt32]
+	V OIdx
 }
 
 func (t OImportDesc__TagImport) Kind() OImportDesc_Kind {
 	return KTagImport
 }
-func _TagImport_1(v *Phrase[OInt32]) OImportDesc_ {
+func _TagImport_1(v OIdx) OImportDesc_ {
 	return OImportDesc__TagImport{v}
 }
 
-type OImport = TODO /* import' Source.phrase */
-type OStart = TODO  /* start' Source.phrase */
-type OModule = TODO /* module_' Source.phrase */
-type Instr_i32_const struct {
-	N *Phrase[OTypeIdx]
+type OImport = *Phrase[OImport_]
+type OImport_ struct {
+	ModuleName OName
+	ItemName   OName
+	Idesc      OImportDesc
+}
+type OStart = *Phrase[OStart_]
+type OStart_ struct {
+	Sfunc OIdx
+}
+type OModule = *Phrase[OModule_]
+type OModule_ struct {
+	Types    []OType
+	Globals  []OGlobal
+	Tables   []OTable
+	Memories []OMemory
+	Tags     []OTag
+	Funcs    []OFunc
+	Start    *OStart
+	Elems    []OElemSegment
+	Datas    []ODataSegment
+	Imports  []OImport
+	Exports  []OExport
+}
+type OStream struct {
+	Name  string
+	Bytes string
+	Pos   TODO /* int ref (kind 3) */
 }
-
-func _i32_const_1(_n *Phrase[OTypeIdx]) Instr_i32_const {
-	return Instr_i32_const{
-		N: _n,
-	}
-}
-
-var _i32_const = _i32_const_1
-
-type Instr_i64_const struct {
-	N *Phrase[OInt64]
-}
-
-func _i64_const_1(_n *Phrase[OInt64]) Instr_i64_const {
-	return Instr_i64_const{
-		N: _n,
-	}
-}
-
-var _i64_const = _i64_const_1
-
-type Instr_f32_const struct {
-	N *Phrase[float32]
-}
-
-func _f32_const_1(_n *Phrase[float32]) Instr_f32_const {
-	return Instr_f32_const{
-		N: _n,
-	}
-}
-
-var _f32_const = _f32_const_1
-
-type Instr_f64_const struct {
-	N *Phrase[float64]
-}
-
-func _f64_const_1(_n *Phrase[float64]) Instr_f64_const {
-	return Instr_f64_const{
-		N: _n,
-	}
-}
-
-var _f64_const = _f64_const_1
-
-type Instr_v128_const struct {
-	N *Phrase[V128]
-}
-
-func _v128_const_1(_n *Phrase[V128]) Instr_v128_const {
-	return Instr_v128_const{
-		N: _n,
-	}
-}
-
-var _v128_const = _v128_const_1
-
-type Instr_ref_null struct {
-	T OHeapType
-}
-
-func _ref_null_1(_t OHeapType) Instr_ref_null {
-	return Instr_ref_null{
-		T: _t,
-	}
-}
-
-var _ref_null = _ref_null_1
-
-type Instr_ref_func struct {
-	X *Phrase[OInt32]
-}
-
-func _ref_func_1(_x *Phrase[OInt32]) Instr_ref_func {
-	return Instr_ref_func{
-		X: _x,
-	}
-}
-
-var _ref_func = _ref_func_1
-
-type Instr_at_const struct{}
-
-func _at_const_0() Instr_at_const {
-	return Instr_at_const{}
-}
-
-var _at_const = _at_const_0
-
-type Instr_unreachable struct{}
-
-func _unreachable_0() Instr_unreachable {
-	return Instr_unreachable{}
-}
-
-var _unreachable = _unreachable_0
-
-type Instr_nop struct{}
-
-func _nop_0() Instr_nop {
-	return Instr_nop{}
-}
-
-var _nop = _nop_0
-
-type Instr_drop struct{}
-
-func _drop_0() Instr_drop {
-	return Instr_drop{}
-}
-
-var _drop = _drop_0
-
-type Instr_select struct {
-	T *[]OValType
-}
-
-func _select_1(_t *[]OValType) Instr_select {
-	return Instr_select{
-		T: _t,
-	}
-}
-
-var _select = _select_1
-
-type Instr_block struct {
-	Bt OBlockType
-	Es []*Phrase[Instruction_]
-}
-
-func _block_2(_bt OBlockType, _es []*Phrase[Instruction_]) Instr_block {
-	return Instr_block{
-		Bt: _bt,
-		Es: _es,
-	}
-}
-
-var _block = _block_2
-
-type Instr_loop struct {
-	Bt OBlockType
-	Es []*Phrase[Instruction_]
-}
-
-func _loop_2(_bt OBlockType, _es []*Phrase[Instruction_]) Instr_loop {
-	return Instr_loop{
-		Bt: _bt,
-		Es: _es,
-	}
-}
-
-var _loop = _loop_2
-
-type Instr_if_ struct {
-	Bt  OBlockType
-	Es1 []*Phrase[Instruction_]
-	Es2 []*Phrase[Instruction_]
-}
-
-func _if__3(_bt OBlockType, _es1 []*Phrase[Instruction_], _es2 []*Phrase[Instruction_]) Instr_if_ {
-	return Instr_if_{
-		Bt:  _bt,
-		Es1: _es1,
-		Es2: _es2,
-	}
-}
-
-var _if_ = _if__3
-
-type Instr_br struct {
-	X *Phrase[OInt32]
-}
-
-func _br_1(_x *Phrase[OInt32]) Instr_br {
-	return Instr_br{
-		X: _x,
-	}
-}
-
-var _br = _br_1
-
-type Instr_br_if struct {
-	X *Phrase[OInt32]
-}
-
-func _br_if_1(_x *Phrase[OInt32]) Instr_br_if {
-	return Instr_br_if{
-		X: _x,
-	}
-}
-
-var _br_if = _br_if_1
-
-type Instr_br_table struct {
-	Xs []*Phrase[OInt32]
-	X  *Phrase[OInt32]
-}
-
-func _br_table_2(_xs []*Phrase[OInt32], _x *Phrase[OInt32]) Instr_br_table {
-	return Instr_br_table{
-		Xs: _xs,
-		X:  _x,
-	}
-}
-
-var _br_table = _br_table_2
-
-type Instr_br_on_null struct {
-	X *Phrase[OInt32]
-}
-
-func _br_on_null_1(_x *Phrase[OInt32]) Instr_br_on_null {
-	return Instr_br_on_null{
-		X: _x,
-	}
-}
-
-var _br_on_null = _br_on_null_1
-
-type Instr_br_on_non_null struct {
-	X *Phrase[OInt32]
-}
-
-func _br_on_non_null_1(_x *Phrase[OInt32]) Instr_br_on_non_null {
-	return Instr_br_on_non_null{
-		X: _x,
-	}
-}
-
-var _br_on_non_null = _br_on_non_null_1
-
-type Instr_br_on_cast struct {
-	X  *Phrase[OInt32]
-	T1 ORefType
-	T2 ORefType
-}
-
-func _br_on_cast_3(_x *Phrase[OInt32], _t1 ORefType, _t2 ORefType) Instr_br_on_cast {
-	return Instr_br_on_cast{
-		X:  _x,
-		T1: _t1,
-		T2: _t2,
-	}
-}
-
-var _br_on_cast = _br_on_cast_3
-
-type Instr_br_on_cast_fail struct {
-	X  *Phrase[OInt32]
-	T1 ORefType
-	T2 ORefType
-}
-
-func _br_on_cast_fail_3(_x *Phrase[OInt32], _t1 ORefType, _t2 ORefType) Instr_br_on_cast_fail {
-	return Instr_br_on_cast_fail{
-		X:  _x,
-		T1: _t1,
-		T2: _t2,
-	}
-}
-
-var _br_on_cast_fail = _br_on_cast_fail_3
-
-type Instr_return struct{}
-
-func _return_0() Instr_return {
-	return Instr_return{}
-}
-
-var _return = _return_0
-
-type Instr_call struct {
-	X *Phrase[OInt32]
-}
-
-func _call_1(_x *Phrase[OInt32]) Instr_call {
-	return Instr_call{
-		X: _x,
-	}
-}
-
-var _call = _call_1
-
-type Instr_call_ref struct {
-	X *Phrase[OInt32]
-}
-
-func _call_ref_1(_x *Phrase[OInt32]) Instr_call_ref {
-	return Instr_call_ref{
-		X: _x,
-	}
-}
-
-var _call_ref = _call_ref_1
-
-type Instr_call_indirect struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_call_indirect {
-	return Instr_call_indirect{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _call_indirect = _call_indirect_2
-
-type Instr_return_call struct {
-	X *Phrase[OInt32]
-}
-
-func _return_call_1(_x *Phrase[OInt32]) Instr_return_call {
-	return Instr_return_call{
-		X: _x,
-	}
-}
-
-var _return_call = _return_call_1
-
-type Instr_return_call_ref struct {
-	X *Phrase[OInt32]
-}
-
-func _return_call_ref_1(_x *Phrase[OInt32]) Instr_return_call_ref {
-	return Instr_return_call_ref{
-		X: _x,
-	}
-}
-
-var _return_call_ref = _return_call_ref_1
-
-type Instr_return_call_indirect struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _return_call_indirect_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_return_call_indirect {
-	return Instr_return_call_indirect{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _return_call_indirect = _return_call_indirect_2
-
-type Instr_throw struct {
-	X *Phrase[OInt32]
-}
-
-func _throw_1(_x *Phrase[OInt32]) Instr_throw {
-	return Instr_throw{
-		X: _x,
-	}
-}
-
-var _throw = _throw_1
-
-type Instr_throw_ref struct{}
-
-func _throw_ref_0() Instr_throw_ref {
-	return Instr_throw_ref{}
-}
-
-var _throw_ref = _throw_ref_0
-
-type Instr_try_table struct {
-	Bt OBlockType
-	Cs []OCatch
-	Es []*Phrase[Instruction_]
-}
-
-func _try_table_3(_bt OBlockType, _cs []OCatch, _es []*Phrase[Instruction_]) Instr_try_table {
-	return Instr_try_table{
-		Bt: _bt,
-		Cs: _cs,
-		Es: _es,
-	}
-}
-
-var _try_table = _try_table_3
-
-type Instr_local_get struct {
-	X *Phrase[OInt32]
-}
-
-func _local_get_1(_x *Phrase[OInt32]) Instr_local_get {
-	return Instr_local_get{
-		X: _x,
-	}
-}
-
-var _local_get = _local_get_1
-
-type Instr_local_set struct {
-	X *Phrase[OInt32]
-}
-
-func _local_set_1(_x *Phrase[OInt32]) Instr_local_set {
-	return Instr_local_set{
-		X: _x,
-	}
-}
-
-var _local_set = _local_set_1
-
-type Instr_local_tee struct {
-	X *Phrase[OInt32]
-}
-
-func _local_tee_1(_x *Phrase[OInt32]) Instr_local_tee {
-	return Instr_local_tee{
-		X: _x,
-	}
-}
-
-var _local_tee = _local_tee_1
-
-type Instr_global_get struct {
-	X *Phrase[OInt32]
-}
-
-func _global_get_1(_x *Phrase[OInt32]) Instr_global_get {
-	return Instr_global_get{
-		X: _x,
-	}
-}
-
-var _global_get = _global_get_1
-
-type Instr_global_set struct {
-	X *Phrase[OInt32]
-}
-
-func _global_set_1(_x *Phrase[OInt32]) Instr_global_set {
-	return Instr_global_set{
-		X: _x,
-	}
-}
-
-var _global_set = _global_set_1
-
-type Instr_table_get struct {
-	X *Phrase[OInt32]
-}
-
-func _table_get_1(_x *Phrase[OInt32]) Instr_table_get {
-	return Instr_table_get{
-		X: _x,
-	}
-}
-
-var _table_get = _table_get_1
-
-type Instr_table_set struct {
-	X *Phrase[OInt32]
-}
-
-func _table_set_1(_x *Phrase[OInt32]) Instr_table_set {
-	return Instr_table_set{
-		X: _x,
-	}
-}
-
-var _table_set = _table_set_1
-
-type Instr_table_size struct {
-	X *Phrase[OInt32]
-}
-
-func _table_size_1(_x *Phrase[OInt32]) Instr_table_size {
-	return Instr_table_size{
-		X: _x,
-	}
-}
-
-var _table_size = _table_size_1
-
-type Instr_table_grow struct {
-	X *Phrase[OInt32]
-}
-
-func _table_grow_1(_x *Phrase[OInt32]) Instr_table_grow {
-	return Instr_table_grow{
-		X: _x,
-	}
-}
-
-var _table_grow = _table_grow_1
-
-type Instr_table_fill struct {
-	X *Phrase[OInt32]
-}
-
-func _table_fill_1(_x *Phrase[OInt32]) Instr_table_fill {
-	return Instr_table_fill{
-		X: _x,
-	}
-}
-
-var _table_fill = _table_fill_1
-
-type Instr_table_copy struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _table_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_copy {
-	return Instr_table_copy{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _table_copy = _table_copy_2
-
-type Instr_table_init struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _table_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_table_init {
-	return Instr_table_init{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _table_init = _table_init_2
-
-type Instr_elem_drop struct {
-	X *Phrase[OInt32]
-}
-
-func _elem_drop_1(_x *Phrase[OInt32]) Instr_elem_drop {
-	return Instr_elem_drop{
-		X: _x,
-	}
-}
-
-var _elem_drop = _elem_drop_1
-
-type Instr_i32_load struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load {
-	return Instr_i32_load{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_load = _i32_load_3
-
-type Instr_i64_load struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load {
-	return Instr_i64_load{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load = _i64_load_3
-
-type Instr_f32_load struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _f32_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f32_load {
-	return Instr_f32_load{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _f32_load = _f32_load_3
-
-type Instr_f64_load struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _f64_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f64_load {
-	return Instr_f64_load{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _f64_load = _f64_load_3
-
-type Instr_i32_load8_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load8_s {
-	return Instr_i32_load8_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_load8_s = _i32_load8_s_3
-
-type Instr_i32_load8_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load8_u {
-	return Instr_i32_load8_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_load8_u = _i32_load8_u_3
-
-type Instr_i32_load16_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load16_s {
-	return Instr_i32_load16_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_load16_s = _i32_load16_s_3
-
-type Instr_i32_load16_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_load16_u {
-	return Instr_i32_load16_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_load16_u = _i32_load16_u_3
-
-type Instr_i64_load8_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load8_s {
-	return Instr_i64_load8_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load8_s = _i64_load8_s_3
-
-type Instr_i64_load8_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load8_u {
-	return Instr_i64_load8_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load8_u = _i64_load8_u_3
-
-type Instr_i64_load16_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load16_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load16_s {
-	return Instr_i64_load16_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load16_s = _i64_load16_s_3
-
-type Instr_i64_load16_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load16_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load16_u {
-	return Instr_i64_load16_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load16_u = _i64_load16_u_3
-
-type Instr_i64_load32_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load32_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load32_s {
-	return Instr_i64_load32_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load32_s = _i64_load32_s_3
-
-type Instr_i64_load32_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_load32_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_load32_u {
-	return Instr_i64_load32_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_load32_u = _i64_load32_u_3
-
-type Instr_i32_store struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_store {
-	return Instr_i32_store{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_store = _i32_store_3
-
-type Instr_i64_store struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_store {
-	return Instr_i64_store{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_store = _i64_store_3
-
-type Instr_f32_store struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _f32_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f32_store {
-	return Instr_f32_store{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _f32_store = _f32_store_3
-
-type Instr_f64_store struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _f64_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_f64_store {
-	return Instr_f64_store{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _f64_store = _f64_store_3
-
-type Instr_i32_store8 struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_store8_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_store8 {
-	return Instr_i32_store8{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_store8 = _i32_store8_3
-
-type Instr_i32_store16 struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i32_store16_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i32_store16 {
-	return Instr_i32_store16{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i32_store16 = _i32_store16_3
-
-type Instr_i64_store8 struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_store8_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_store8 {
-	return Instr_i64_store8{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_store8 = _i64_store8_3
-
-type Instr_i64_store16 struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_store16_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_store16 {
-	return Instr_i64_store16{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_store16 = _i64_store16_3
-
-type Instr_i64_store32 struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _i64_store32_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_i64_store32 {
-	return Instr_i64_store32{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _i64_store32 = _i64_store32_3
-
-type Instr_v128_load struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load {
-	return Instr_v128_load{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load = _v128_load_3
-
-type Instr_v128_load8x8_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load8x8_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load8x8_s {
-	return Instr_v128_load8x8_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load8x8_s = _v128_load8x8_s_3
-
-type Instr_v128_load8x8_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load8x8_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load8x8_u {
-	return Instr_v128_load8x8_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load8x8_u = _v128_load8x8_u_3
-
-type Instr_v128_load16x4_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load16x4_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load16x4_s {
-	return Instr_v128_load16x4_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load16x4_s = _v128_load16x4_s_3
-
-type Instr_v128_load16x4_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load16x4_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load16x4_u {
-	return Instr_v128_load16x4_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load16x4_u = _v128_load16x4_u_3
-
-type Instr_v128_load32x2_s struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load32x2_s_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load32x2_s {
-	return Instr_v128_load32x2_s{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load32x2_s = _v128_load32x2_s_3
-
-type Instr_v128_load32x2_u struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load32x2_u_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load32x2_u {
-	return Instr_v128_load32x2_u{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load32x2_u = _v128_load32x2_u_3
-
-type Instr_v128_load8_splat struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load8_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load8_splat {
-	return Instr_v128_load8_splat{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load8_splat = _v128_load8_splat_3
-
-type Instr_v128_load16_splat struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load16_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load16_splat {
-	return Instr_v128_load16_splat{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load16_splat = _v128_load16_splat_3
-
-type Instr_v128_load32_splat struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load32_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load32_splat {
-	return Instr_v128_load32_splat{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load32_splat = _v128_load32_splat_3
-
-type Instr_v128_load64_splat struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load64_splat_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load64_splat {
-	return Instr_v128_load64_splat{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load64_splat = _v128_load64_splat_3
-
-type Instr_v128_load32_zero struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load32_zero_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load32_zero {
-	return Instr_v128_load32_zero{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load32_zero = _v128_load32_zero_3
-
-type Instr_v128_load64_zero struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_load64_zero_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_load64_zero {
-	return Instr_v128_load64_zero{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_load64_zero = _v128_load64_zero_3
-
-type Instr_v128_load8_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_load8_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_load8_lane {
-	return Instr_v128_load8_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_load8_lane = _v128_load8_lane_4
-
-type Instr_v128_load16_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_load16_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_load16_lane {
-	return Instr_v128_load16_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_load16_lane = _v128_load16_lane_4
-
-type Instr_v128_load32_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_load32_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_load32_lane {
-	return Instr_v128_load32_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_load32_lane = _v128_load32_lane_4
-
-type Instr_v128_load64_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_load64_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_load64_lane {
-	return Instr_v128_load64_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_load64_lane = _v128_load64_lane_4
-
-type Instr_v128_store struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-}
-
-func _v128_store_3(_x *Phrase[OInt32], _align OInt, _offset OInt64) Instr_v128_store {
-	return Instr_v128_store{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-	}
-}
-
-var _v128_store = _v128_store_3
-
-type Instr_v128_store8_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_store8_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_store8_lane {
-	return Instr_v128_store8_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_store8_lane = _v128_store8_lane_4
-
-type Instr_v128_store16_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_store16_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_store16_lane {
-	return Instr_v128_store16_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_store16_lane = _v128_store16_lane_4
-
-type Instr_v128_store32_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_store32_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_store32_lane {
-	return Instr_v128_store32_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_store32_lane = _v128_store32_lane_4
-
-type Instr_v128_store64_lane struct {
-	X      *Phrase[OInt32]
-	Align  OInt
-	Offset OInt64
-	I      OInt
-}
-
-func _v128_store64_lane_4(_x *Phrase[OInt32], _align OInt, _offset OInt64, _i OInt) Instr_v128_store64_lane {
-	return Instr_v128_store64_lane{
-		X:      _x,
-		Align:  _align,
-		Offset: _offset,
-		I:      _i,
-	}
-}
-
-var _v128_store64_lane = _v128_store64_lane_4
-
-type Instr_memory_size struct {
-	X *Phrase[OInt32]
-}
-
-func _memory_size_1(_x *Phrase[OInt32]) Instr_memory_size {
-	return Instr_memory_size{
-		X: _x,
-	}
-}
-
-var _memory_size = _memory_size_1
-
-type Instr_memory_grow struct {
-	X *Phrase[OInt32]
-}
-
-func _memory_grow_1(_x *Phrase[OInt32]) Instr_memory_grow {
-	return Instr_memory_grow{
-		X: _x,
-	}
-}
-
-var _memory_grow = _memory_grow_1
-
-type Instr_memory_fill struct {
-	X *Phrase[OInt32]
-}
-
-func _memory_fill_1(_x *Phrase[OInt32]) Instr_memory_fill {
-	return Instr_memory_fill{
-		X: _x,
-	}
-}
-
-var _memory_fill = _memory_fill_1
-
-type Instr_memory_copy struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _memory_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_copy {
-	return Instr_memory_copy{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _memory_copy = _memory_copy_2
-
-type Instr_memory_init struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _memory_init_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_memory_init {
-	return Instr_memory_init{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _memory_init = _memory_init_2
-
-type Instr_data_drop struct {
-	X *Phrase[OInt32]
-}
-
-func _data_drop_1(_x *Phrase[OInt32]) Instr_data_drop {
-	return Instr_data_drop{
-		X: _x,
-	}
-}
-
-var _data_drop = _data_drop_1
-
-type Instr_ref_is_null struct{}
-
-func _ref_is_null_0() Instr_ref_is_null {
-	return Instr_ref_is_null{}
-}
-
-var _ref_is_null = _ref_is_null_0
-
-type Instr_ref_as_non_null struct{}
-
-func _ref_as_non_null_0() Instr_ref_as_non_null {
-	return Instr_ref_as_non_null{}
-}
-
-var _ref_as_non_null = _ref_as_non_null_0
-
-type Instr_ref_test struct {
-	T ORefType
-}
-
-func _ref_test_1(_t ORefType) Instr_ref_test {
-	return Instr_ref_test{
-		T: _t,
-	}
-}
-
-var _ref_test = _ref_test_1
-
-type Instr_ref_cast struct {
-	T ORefType
-}
-
-func _ref_cast_1(_t ORefType) Instr_ref_cast {
-	return Instr_ref_cast{
-		T: _t,
-	}
-}
-
-var _ref_cast = _ref_cast_1
-
-type Instr_ref_eq struct{}
-
-func _ref_eq_0() Instr_ref_eq {
-	return Instr_ref_eq{}
-}
-
-var _ref_eq = _ref_eq_0
-
-type Instr_ref_i31 struct{}
-
-func _ref_i31_0() Instr_ref_i31 {
-	return Instr_ref_i31{}
-}
-
-var _ref_i31 = _ref_i31_0
-
-type Instr_i31_get_u struct{}
-
-func _i31_get_u_0() Instr_i31_get_u {
-	return Instr_i31_get_u{}
-}
-
-var _i31_get_u = _i31_get_u_0
-
-type Instr_i31_get_s struct{}
-
-func _i31_get_s_0() Instr_i31_get_s {
-	return Instr_i31_get_s{}
-}
-
-var _i31_get_s = _i31_get_s_0
-
-type Instr_struct_new struct {
-	X *Phrase[OInt32]
-}
-
-func _struct_new_1(_x *Phrase[OInt32]) Instr_struct_new {
-	return Instr_struct_new{
-		X: _x,
-	}
-}
-
-var _struct_new = _struct_new_1
-
-type Instr_struct_new_default struct {
-	X *Phrase[OInt32]
-}
-
-func _struct_new_default_1(_x *Phrase[OInt32]) Instr_struct_new_default {
-	return Instr_struct_new_default{
-		X: _x,
-	}
-}
-
-var _struct_new_default = _struct_new_default_1
-
-type Instr_struct_get struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _struct_get_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get {
-	return Instr_struct_get{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _struct_get = _struct_get_2
-
-type Instr_struct_get_u struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _struct_get_u_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_u {
-	return Instr_struct_get_u{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _struct_get_u = _struct_get_u_2
-
-type Instr_struct_get_s struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _struct_get_s_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_get_s {
-	return Instr_struct_get_s{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _struct_get_s = _struct_get_s_2
-
-type Instr_struct_set struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _struct_set_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_struct_set {
-	return Instr_struct_set{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _struct_set = _struct_set_2
-
-type Instr_array_new struct {
-	X *Phrase[OInt32]
-}
-
-func _array_new_1(_x *Phrase[OInt32]) Instr_array_new {
-	return Instr_array_new{
-		X: _x,
-	}
-}
-
-var _array_new = _array_new_1
-
-type Instr_array_new_default struct {
-	X *Phrase[OInt32]
-}
-
-func _array_new_default_1(_x *Phrase[OInt32]) Instr_array_new_default {
-	return Instr_array_new_default{
-		X: _x,
-	}
-}
-
-var _array_new_default = _array_new_default_1
-
-type Instr_array_new_fixed struct {
-	X *Phrase[OInt32]
-	N OTypeIdx
-}
-
-func _array_new_fixed_2(_x *Phrase[OInt32], _n OTypeIdx) Instr_array_new_fixed {
-	return Instr_array_new_fixed{
-		X: _x,
-		N: _n,
-	}
-}
-
-var _array_new_fixed = _array_new_fixed_2
-
-type Instr_array_new_elem struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _array_new_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_elem {
-	return Instr_array_new_elem{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _array_new_elem = _array_new_elem_2
-
-type Instr_array_new_data struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _array_new_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_new_data {
-	return Instr_array_new_data{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _array_new_data = _array_new_data_2
-
-type Instr_array_get struct {
-	X *Phrase[OInt32]
-}
-
-func _array_get_1(_x *Phrase[OInt32]) Instr_array_get {
-	return Instr_array_get{
-		X: _x,
-	}
-}
-
-var _array_get = _array_get_1
-
-type Instr_array_get_u struct {
-	X *Phrase[OInt32]
-}
-
-func _array_get_u_1(_x *Phrase[OInt32]) Instr_array_get_u {
-	return Instr_array_get_u{
-		X: _x,
-	}
-}
-
-var _array_get_u = _array_get_u_1
-
-type Instr_array_get_s struct {
-	X *Phrase[OInt32]
-}
-
-func _array_get_s_1(_x *Phrase[OInt32]) Instr_array_get_s {
-	return Instr_array_get_s{
-		X: _x,
-	}
-}
-
-var _array_get_s = _array_get_s_1
-
-type Instr_array_set struct {
-	X *Phrase[OInt32]
-}
-
-func _array_set_1(_x *Phrase[OInt32]) Instr_array_set {
-	return Instr_array_set{
-		X: _x,
-	}
-}
-
-var _array_set = _array_set_1
-
-type Instr_array_len struct{}
-
-func _array_len_0() Instr_array_len {
-	return Instr_array_len{}
-}
-
-var _array_len = _array_len_0
-
-type Instr_array_copy struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _array_copy_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_copy {
-	return Instr_array_copy{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _array_copy = _array_copy_2
-
-type Instr_array_fill struct {
-	X *Phrase[OInt32]
-}
-
-func _array_fill_1(_x *Phrase[OInt32]) Instr_array_fill {
-	return Instr_array_fill{
-		X: _x,
-	}
-}
-
-var _array_fill = _array_fill_1
-
-type Instr_array_init_data struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _array_init_data_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init_data {
-	return Instr_array_init_data{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _array_init_data = _array_init_data_2
-
-type Instr_array_init_elem struct {
-	X *Phrase[OInt32]
-	Y *Phrase[OInt32]
-}
-
-func _array_init_elem_2(_x *Phrase[OInt32], _y *Phrase[OInt32]) Instr_array_init_elem {
-	return Instr_array_init_elem{
-		X: _x,
-		Y: _y,
-	}
-}
-
-var _array_init_elem = _array_init_elem_2
-
-type Instr_any_convert_extern struct{}
-
-func _any_convert_extern_0() Instr_any_convert_extern {
-	return Instr_any_convert_extern{}
-}
-
-var _any_convert_extern = _any_convert_extern_0
-
-type Instr_extern_convert_any struct{}
-
-func _extern_convert_any_0() Instr_extern_convert_any {
-	return Instr_extern_convert_any{}
-}
-
-var _extern_convert_any = _extern_convert_any_0
-
-type Instr_i32_clz struct{}
-
-func _i32_clz_0() Instr_i32_clz {
-	return Instr_i32_clz{}
-}
-
-var _i32_clz = _i32_clz_0
-
-type Instr_i32_ctz struct{}
-
-func _i32_ctz_0() Instr_i32_ctz {
-	return Instr_i32_ctz{}
-}
-
-var _i32_ctz = _i32_ctz_0
-
-type Instr_i32_popcnt struct{}
-
-func _i32_popcnt_0() Instr_i32_popcnt {
-	return Instr_i32_popcnt{}
-}
-
-var _i32_popcnt = _i32_popcnt_0
-
-type Instr_i64_clz struct{}
-
-func _i64_clz_0() Instr_i64_clz {
-	return Instr_i64_clz{}
-}
-
-var _i64_clz = _i64_clz_0
-
-type Instr_i64_ctz struct{}
-
-func _i64_ctz_0() Instr_i64_ctz {
-	return Instr_i64_ctz{}
-}
-
-var _i64_ctz = _i64_ctz_0
-
-type Instr_i64_popcnt struct{}
-
-func _i64_popcnt_0() Instr_i64_popcnt {
-	return Instr_i64_popcnt{}
-}
-
-var _i64_popcnt = _i64_popcnt_0
-
-type Instr_f32_neg struct{}
-
-func _f32_neg_0() Instr_f32_neg {
-	return Instr_f32_neg{}
-}
-
-var _f32_neg = _f32_neg_0
-
-type Instr_f32_abs struct{}
-
-func _f32_abs_0() Instr_f32_abs {
-	return Instr_f32_abs{}
-}
-
-var _f32_abs = _f32_abs_0
-
-type Instr_f32_sqrt struct{}
-
-func _f32_sqrt_0() Instr_f32_sqrt {
-	return Instr_f32_sqrt{}
-}
-
-var _f32_sqrt = _f32_sqrt_0
-
-type Instr_f32_ceil struct{}
-
-func _f32_ceil_0() Instr_f32_ceil {
-	return Instr_f32_ceil{}
-}
-
-var _f32_ceil = _f32_ceil_0
-
-type Instr_f32_floor struct{}
-
-func _f32_floor_0() Instr_f32_floor {
-	return Instr_f32_floor{}
-}
-
-var _f32_floor = _f32_floor_0
-
-type Instr_f32_trunc struct{}
-
-func _f32_trunc_0() Instr_f32_trunc {
-	return Instr_f32_trunc{}
-}
-
-var _f32_trunc = _f32_trunc_0
-
-type Instr_f32_nearest struct{}
-
-func _f32_nearest_0() Instr_f32_nearest {
-	return Instr_f32_nearest{}
-}
-
-var _f32_nearest = _f32_nearest_0
-
-type Instr_f64_neg struct{}
-
-func _f64_neg_0() Instr_f64_neg {
-	return Instr_f64_neg{}
-}
-
-var _f64_neg = _f64_neg_0
-
-type Instr_f64_abs struct{}
-
-func _f64_abs_0() Instr_f64_abs {
-	return Instr_f64_abs{}
-}
-
-var _f64_abs = _f64_abs_0
-
-type Instr_f64_sqrt struct{}
-
-func _f64_sqrt_0() Instr_f64_sqrt {
-	return Instr_f64_sqrt{}
-}
-
-var _f64_sqrt = _f64_sqrt_0
-
-type Instr_f64_ceil struct{}
-
-func _f64_ceil_0() Instr_f64_ceil {
-	return Instr_f64_ceil{}
-}
-
-var _f64_ceil = _f64_ceil_0
-
-type Instr_f64_floor struct{}
-
-func _f64_floor_0() Instr_f64_floor {
-	return Instr_f64_floor{}
-}
-
-var _f64_floor = _f64_floor_0
-
-type Instr_f64_trunc struct{}
-
-func _f64_trunc_0() Instr_f64_trunc {
-	return Instr_f64_trunc{}
-}
-
-var _f64_trunc = _f64_trunc_0
-
-type Instr_f64_nearest struct{}
-
-func _f64_nearest_0() Instr_f64_nearest {
-	return Instr_f64_nearest{}
-}
-
-var _f64_nearest = _f64_nearest_0
-
-type Instr_i32_add struct{}
-
-func _i32_add_0() Instr_i32_add {
-	return Instr_i32_add{}
-}
-
-var _i32_add = _i32_add_0
-
-type Instr_i32_sub struct{}
-
-func _i32_sub_0() Instr_i32_sub {
-	return Instr_i32_sub{}
-}
-
-var _i32_sub = _i32_sub_0
-
-type Instr_i32_mul struct{}
-
-func _i32_mul_0() Instr_i32_mul {
-	return Instr_i32_mul{}
-}
-
-var _i32_mul = _i32_mul_0
-
-type Instr_i32_div_s struct{}
-
-func _i32_div_s_0() Instr_i32_div_s {
-	return Instr_i32_div_s{}
-}
-
-var _i32_div_s = _i32_div_s_0
-
-type Instr_i32_div_u struct{}
-
-func _i32_div_u_0() Instr_i32_div_u {
-	return Instr_i32_div_u{}
-}
-
-var _i32_div_u = _i32_div_u_0
-
-type Instr_i32_rem_s struct{}
-
-func _i32_rem_s_0() Instr_i32_rem_s {
-	return Instr_i32_rem_s{}
-}
-
-var _i32_rem_s = _i32_rem_s_0
-
-type Instr_i32_rem_u struct{}
-
-func _i32_rem_u_0() Instr_i32_rem_u {
-	return Instr_i32_rem_u{}
-}
-
-var _i32_rem_u = _i32_rem_u_0
-
-type Instr_i32_and struct{}
-
-func _i32_and_0() Instr_i32_and {
-	return Instr_i32_and{}
-}
-
-var _i32_and = _i32_and_0
-
-type Instr_i32_or struct{}
-
-func _i32_or_0() Instr_i32_or {
-	return Instr_i32_or{}
-}
-
-var _i32_or = _i32_or_0
-
-type Instr_i32_xor struct{}
-
-func _i32_xor_0() Instr_i32_xor {
-	return Instr_i32_xor{}
-}
-
-var _i32_xor = _i32_xor_0
-
-type Instr_i32_shl struct{}
-
-func _i32_shl_0() Instr_i32_shl {
-	return Instr_i32_shl{}
-}
-
-var _i32_shl = _i32_shl_0
-
-type Instr_i32_shr_s struct{}
-
-func _i32_shr_s_0() Instr_i32_shr_s {
-	return Instr_i32_shr_s{}
-}
-
-var _i32_shr_s = _i32_shr_s_0
-
-type Instr_i32_shr_u struct{}
-
-func _i32_shr_u_0() Instr_i32_shr_u {
-	return Instr_i32_shr_u{}
-}
-
-var _i32_shr_u = _i32_shr_u_0
-
-type Instr_i32_rotl struct{}
-
-func _i32_rotl_0() Instr_i32_rotl {
-	return Instr_i32_rotl{}
-}
-
-var _i32_rotl = _i32_rotl_0
-
-type Instr_i32_rotr struct{}
-
-func _i32_rotr_0() Instr_i32_rotr {
-	return Instr_i32_rotr{}
-}
-
-var _i32_rotr = _i32_rotr_0
-
-type Instr_i64_add struct{}
-
-func _i64_add_0() Instr_i64_add {
-	return Instr_i64_add{}
-}
-
-var _i64_add = _i64_add_0
-
-type Instr_i64_sub struct{}
-
-func _i64_sub_0() Instr_i64_sub {
-	return Instr_i64_sub{}
-}
-
-var _i64_sub = _i64_sub_0
-
-type Instr_i64_mul struct{}
-
-func _i64_mul_0() Instr_i64_mul {
-	return Instr_i64_mul{}
-}
-
-var _i64_mul = _i64_mul_0
-
-type Instr_i64_div_s struct{}
-
-func _i64_div_s_0() Instr_i64_div_s {
-	return Instr_i64_div_s{}
-}
-
-var _i64_div_s = _i64_div_s_0
-
-type Instr_i64_div_u struct{}
-
-func _i64_div_u_0() Instr_i64_div_u {
-	return Instr_i64_div_u{}
-}
-
-var _i64_div_u = _i64_div_u_0
-
-type Instr_i64_rem_s struct{}
-
-func _i64_rem_s_0() Instr_i64_rem_s {
-	return Instr_i64_rem_s{}
-}
-
-var _i64_rem_s = _i64_rem_s_0
-
-type Instr_i64_rem_u struct{}
-
-func _i64_rem_u_0() Instr_i64_rem_u {
-	return Instr_i64_rem_u{}
-}
-
-var _i64_rem_u = _i64_rem_u_0
-
-type Instr_i64_and struct{}
-
-func _i64_and_0() Instr_i64_and {
-	return Instr_i64_and{}
-}
-
-var _i64_and = _i64_and_0
-
-type Instr_i64_or struct{}
-
-func _i64_or_0() Instr_i64_or {
-	return Instr_i64_or{}
-}
-
-var _i64_or = _i64_or_0
-
-type Instr_i64_xor struct{}
-
-func _i64_xor_0() Instr_i64_xor {
-	return Instr_i64_xor{}
-}
-
-var _i64_xor = _i64_xor_0
-
-type Instr_i64_shl struct{}
-
-func _i64_shl_0() Instr_i64_shl {
-	return Instr_i64_shl{}
-}
-
-var _i64_shl = _i64_shl_0
-
-type Instr_i64_shr_s struct{}
-
-func _i64_shr_s_0() Instr_i64_shr_s {
-	return Instr_i64_shr_s{}
-}
-
-var _i64_shr_s = _i64_shr_s_0
-
-type Instr_i64_shr_u struct{}
-
-func _i64_shr_u_0() Instr_i64_shr_u {
-	return Instr_i64_shr_u{}
-}
-
-var _i64_shr_u = _i64_shr_u_0
-
-type Instr_i64_rotl struct{}
-
-func _i64_rotl_0() Instr_i64_rotl {
-	return Instr_i64_rotl{}
-}
-
-var _i64_rotl = _i64_rotl_0
-
-type Instr_i64_rotr struct{}
-
-func _i64_rotr_0() Instr_i64_rotr {
-	return Instr_i64_rotr{}
-}
-
-var _i64_rotr = _i64_rotr_0
-
-type Instr_f32_add struct{}
-
-func _f32_add_0() Instr_f32_add {
-	return Instr_f32_add{}
-}
-
-var _f32_add = _f32_add_0
-
-type Instr_f32_sub struct{}
-
-func _f32_sub_0() Instr_f32_sub {
-	return Instr_f32_sub{}
-}
-
-var _f32_sub = _f32_sub_0
-
-type Instr_f32_mul struct{}
-
-func _f32_mul_0() Instr_f32_mul {
-	return Instr_f32_mul{}
-}
-
-var _f32_mul = _f32_mul_0
-
-type Instr_f32_div struct{}
-
-func _f32_div_0() Instr_f32_div {
-	return Instr_f32_div{}
-}
-
-var _f32_div = _f32_div_0
-
-type Instr_f32_min struct{}
-
-func _f32_min_0() Instr_f32_min {
-	return Instr_f32_min{}
-}
-
-var _f32_min = _f32_min_0
-
-type Instr_f32_max struct{}
-
-func _f32_max_0() Instr_f32_max {
-	return Instr_f32_max{}
-}
-
-var _f32_max = _f32_max_0
-
-type Instr_f32_copysign struct{}
-
-func _f32_copysign_0() Instr_f32_copysign {
-	return Instr_f32_copysign{}
-}
-
-var _f32_copysign = _f32_copysign_0
-
-type Instr_f64_add struct{}
-
-func _f64_add_0() Instr_f64_add {
-	return Instr_f64_add{}
-}
-
-var _f64_add = _f64_add_0
-
-type Instr_f64_sub struct{}
-
-func _f64_sub_0() Instr_f64_sub {
-	return Instr_f64_sub{}
-}
-
-var _f64_sub = _f64_sub_0
-
-type Instr_f64_mul struct{}
-
-func _f64_mul_0() Instr_f64_mul {
-	return Instr_f64_mul{}
-}
-
-var _f64_mul = _f64_mul_0
-
-type Instr_f64_div struct{}
-
-func _f64_div_0() Instr_f64_div {
-	return Instr_f64_div{}
-}
-
-var _f64_div = _f64_div_0
-
-type Instr_f64_min struct{}
-
-func _f64_min_0() Instr_f64_min {
-	return Instr_f64_min{}
-}
-
-var _f64_min = _f64_min_0
-
-type Instr_f64_max struct{}
-
-func _f64_max_0() Instr_f64_max {
-	return Instr_f64_max{}
-}
-
-var _f64_max = _f64_max_0
-
-type Instr_f64_copysign struct{}
-
-func _f64_copysign_0() Instr_f64_copysign {
-	return Instr_f64_copysign{}
-}
-
-var _f64_copysign = _f64_copysign_0
-
-type Instr_i32_eqz struct{}
-
-func _i32_eqz_0() Instr_i32_eqz {
-	return Instr_i32_eqz{}
-}
-
-var _i32_eqz = _i32_eqz_0
-
-type Instr_i64_eqz struct{}
-
-func _i64_eqz_0() Instr_i64_eqz {
-	return Instr_i64_eqz{}
-}
-
-var _i64_eqz = _i64_eqz_0
-
-type Instr_i32_eq struct{}
-
-func _i32_eq_0() Instr_i32_eq {
-	return Instr_i32_eq{}
-}
-
-var _i32_eq = _i32_eq_0
-
-type Instr_i32_ne struct{}
-
-func _i32_ne_0() Instr_i32_ne {
-	return Instr_i32_ne{}
-}
-
-var _i32_ne = _i32_ne_0
-
-type Instr_i32_lt_s struct{}
-
-func _i32_lt_s_0() Instr_i32_lt_s {
-	return Instr_i32_lt_s{}
-}
-
-var _i32_lt_s = _i32_lt_s_0
-
-type Instr_i32_lt_u struct{}
-
-func _i32_lt_u_0() Instr_i32_lt_u {
-	return Instr_i32_lt_u{}
-}
-
-var _i32_lt_u = _i32_lt_u_0
-
-type Instr_i32_le_s struct{}
-
-func _i32_le_s_0() Instr_i32_le_s {
-	return Instr_i32_le_s{}
-}
-
-var _i32_le_s = _i32_le_s_0
-
-type Instr_i32_le_u struct{}
-
-func _i32_le_u_0() Instr_i32_le_u {
-	return Instr_i32_le_u{}
-}
-
-var _i32_le_u = _i32_le_u_0
-
-type Instr_i32_gt_s struct{}
-
-func _i32_gt_s_0() Instr_i32_gt_s {
-	return Instr_i32_gt_s{}
-}
-
-var _i32_gt_s = _i32_gt_s_0
-
-type Instr_i32_gt_u struct{}
-
-func _i32_gt_u_0() Instr_i32_gt_u {
-	return Instr_i32_gt_u{}
-}
-
-var _i32_gt_u = _i32_gt_u_0
-
-type Instr_i32_ge_s struct{}
-
-func _i32_ge_s_0() Instr_i32_ge_s {
-	return Instr_i32_ge_s{}
-}
-
-var _i32_ge_s = _i32_ge_s_0
-
-type Instr_i32_ge_u struct{}
-
-func _i32_ge_u_0() Instr_i32_ge_u {
-	return Instr_i32_ge_u{}
-}
-
-var _i32_ge_u = _i32_ge_u_0
-
-type Instr_i64_eq struct{}
-
-func _i64_eq_0() Instr_i64_eq {
-	return Instr_i64_eq{}
-}
-
-var _i64_eq = _i64_eq_0
-
-type Instr_i64_ne struct{}
-
-func _i64_ne_0() Instr_i64_ne {
-	return Instr_i64_ne{}
-}
-
-var _i64_ne = _i64_ne_0
-
-type Instr_i64_lt_s struct{}
-
-func _i64_lt_s_0() Instr_i64_lt_s {
-	return Instr_i64_lt_s{}
-}
-
-var _i64_lt_s = _i64_lt_s_0
-
-type Instr_i64_lt_u struct{}
-
-func _i64_lt_u_0() Instr_i64_lt_u {
-	return Instr_i64_lt_u{}
-}
-
-var _i64_lt_u = _i64_lt_u_0
-
-type Instr_i64_le_s struct{}
-
-func _i64_le_s_0() Instr_i64_le_s {
-	return Instr_i64_le_s{}
-}
-
-var _i64_le_s = _i64_le_s_0
-
-type Instr_i64_le_u struct{}
-
-func _i64_le_u_0() Instr_i64_le_u {
-	return Instr_i64_le_u{}
-}
-
-var _i64_le_u = _i64_le_u_0
-
-type Instr_i64_gt_s struct{}
-
-func _i64_gt_s_0() Instr_i64_gt_s {
-	return Instr_i64_gt_s{}
-}
-
-var _i64_gt_s = _i64_gt_s_0
-
-type Instr_i64_gt_u struct{}
-
-func _i64_gt_u_0() Instr_i64_gt_u {
-	return Instr_i64_gt_u{}
-}
-
-var _i64_gt_u = _i64_gt_u_0
-
-type Instr_i64_ge_s struct{}
-
-func _i64_ge_s_0() Instr_i64_ge_s {
-	return Instr_i64_ge_s{}
-}
-
-var _i64_ge_s = _i64_ge_s_0
-
-type Instr_i64_ge_u struct{}
-
-func _i64_ge_u_0() Instr_i64_ge_u {
-	return Instr_i64_ge_u{}
-}
-
-var _i64_ge_u = _i64_ge_u_0
-
-type Instr_f32_eq struct{}
-
-func _f32_eq_0() Instr_f32_eq {
-	return Instr_f32_eq{}
-}
-
-var _f32_eq = _f32_eq_0
-
-type Instr_f32_ne struct{}
-
-func _f32_ne_0() Instr_f32_ne {
-	return Instr_f32_ne{}
-}
-
-var _f32_ne = _f32_ne_0
-
-type Instr_f32_lt struct{}
-
-func _f32_lt_0() Instr_f32_lt {
-	return Instr_f32_lt{}
-}
-
-var _f32_lt = _f32_lt_0
-
-type Instr_f32_le struct{}
-
-func _f32_le_0() Instr_f32_le {
-	return Instr_f32_le{}
-}
-
-var _f32_le = _f32_le_0
-
-type Instr_f32_gt struct{}
-
-func _f32_gt_0() Instr_f32_gt {
-	return Instr_f32_gt{}
-}
-
-var _f32_gt = _f32_gt_0
-
-type Instr_f32_ge struct{}
-
-func _f32_ge_0() Instr_f32_ge {
-	return Instr_f32_ge{}
-}
-
-var _f32_ge = _f32_ge_0
-
-type Instr_f64_eq struct{}
-
-func _f64_eq_0() Instr_f64_eq {
-	return Instr_f64_eq{}
-}
-
-var _f64_eq = _f64_eq_0
-
-type Instr_f64_ne struct{}
-
-func _f64_ne_0() Instr_f64_ne {
-	return Instr_f64_ne{}
-}
-
-var _f64_ne = _f64_ne_0
-
-type Instr_f64_lt struct{}
-
-func _f64_lt_0() Instr_f64_lt {
-	return Instr_f64_lt{}
-}
-
-var _f64_lt = _f64_lt_0
-
-type Instr_f64_le struct{}
-
-func _f64_le_0() Instr_f64_le {
-	return Instr_f64_le{}
-}
-
-var _f64_le = _f64_le_0
-
-type Instr_f64_gt struct{}
-
-func _f64_gt_0() Instr_f64_gt {
-	return Instr_f64_gt{}
-}
-
-var _f64_gt = _f64_gt_0
-
-type Instr_f64_ge struct{}
-
-func _f64_ge_0() Instr_f64_ge {
-	return Instr_f64_ge{}
-}
-
-var _f64_ge = _f64_ge_0
-
-type Instr_i32_extend8_s struct{}
-
-func _i32_extend8_s_0() Instr_i32_extend8_s {
-	return Instr_i32_extend8_s{}
-}
-
-var _i32_extend8_s = _i32_extend8_s_0
-
-type Instr_i32_extend16_s struct{}
-
-func _i32_extend16_s_0() Instr_i32_extend16_s {
-	return Instr_i32_extend16_s{}
-}
-
-var _i32_extend16_s = _i32_extend16_s_0
-
-type Instr_i64_extend8_s struct{}
-
-func _i64_extend8_s_0() Instr_i64_extend8_s {
-	return Instr_i64_extend8_s{}
-}
-
-var _i64_extend8_s = _i64_extend8_s_0
-
-type Instr_i64_extend16_s struct{}
-
-func _i64_extend16_s_0() Instr_i64_extend16_s {
-	return Instr_i64_extend16_s{}
-}
-
-var _i64_extend16_s = _i64_extend16_s_0
-
-type Instr_i64_extend32_s struct{}
-
-func _i64_extend32_s_0() Instr_i64_extend32_s {
-	return Instr_i64_extend32_s{}
-}
-
-var _i64_extend32_s = _i64_extend32_s_0
-
-type Instr_i32_wrap_i64 struct{}
-
-func _i32_wrap_i64_0() Instr_i32_wrap_i64 {
-	return Instr_i32_wrap_i64{}
-}
-
-var _i32_wrap_i64 = _i32_wrap_i64_0
-
-type Instr_i32_trunc_f32_s struct{}
-
-func _i32_trunc_f32_s_0() Instr_i32_trunc_f32_s {
-	return Instr_i32_trunc_f32_s{}
-}
-
-var _i32_trunc_f32_s = _i32_trunc_f32_s_0
-
-type Instr_i32_trunc_f32_u struct{}
-
-func _i32_trunc_f32_u_0() Instr_i32_trunc_f32_u {
-	return Instr_i32_trunc_f32_u{}
-}
-
-var _i32_trunc_f32_u = _i32_trunc_f32_u_0
-
-type Instr_i32_trunc_f64_s struct{}
-
-func _i32_trunc_f64_s_0() Instr_i32_trunc_f64_s {
-	return Instr_i32_trunc_f64_s{}
-}
-
-var _i32_trunc_f64_s = _i32_trunc_f64_s_0
-
-type Instr_i32_trunc_f64_u struct{}
-
-func _i32_trunc_f64_u_0() Instr_i32_trunc_f64_u {
-	return Instr_i32_trunc_f64_u{}
-}
-
-var _i32_trunc_f64_u = _i32_trunc_f64_u_0
-
-type Instr_i32_trunc_sat_f32_s struct{}
-
-func _i32_trunc_sat_f32_s_0() Instr_i32_trunc_sat_f32_s {
-	return Instr_i32_trunc_sat_f32_s{}
-}
-
-var _i32_trunc_sat_f32_s = _i32_trunc_sat_f32_s_0
-
-type Instr_i32_trunc_sat_f32_u struct{}
-
-func _i32_trunc_sat_f32_u_0() Instr_i32_trunc_sat_f32_u {
-	return Instr_i32_trunc_sat_f32_u{}
-}
-
-var _i32_trunc_sat_f32_u = _i32_trunc_sat_f32_u_0
-
-type Instr_i32_trunc_sat_f64_s struct{}
-
-func _i32_trunc_sat_f64_s_0() Instr_i32_trunc_sat_f64_s {
-	return Instr_i32_trunc_sat_f64_s{}
-}
-
-var _i32_trunc_sat_f64_s = _i32_trunc_sat_f64_s_0
-
-type Instr_i32_trunc_sat_f64_u struct{}
-
-func _i32_trunc_sat_f64_u_0() Instr_i32_trunc_sat_f64_u {
-	return Instr_i32_trunc_sat_f64_u{}
-}
-
-var _i32_trunc_sat_f64_u = _i32_trunc_sat_f64_u_0
-
-type Instr_i64_extend_i32_s struct{}
-
-func _i64_extend_i32_s_0() Instr_i64_extend_i32_s {
-	return Instr_i64_extend_i32_s{}
-}
-
-var _i64_extend_i32_s = _i64_extend_i32_s_0
-
-type Instr_i64_extend_i32_u struct{}
-
-func _i64_extend_i32_u_0() Instr_i64_extend_i32_u {
-	return Instr_i64_extend_i32_u{}
-}
-
-var _i64_extend_i32_u = _i64_extend_i32_u_0
-
-type Instr_i64_trunc_f32_s struct{}
-
-func _i64_trunc_f32_s_0() Instr_i64_trunc_f32_s {
-	return Instr_i64_trunc_f32_s{}
-}
-
-var _i64_trunc_f32_s = _i64_trunc_f32_s_0
-
-type Instr_i64_trunc_f32_u struct{}
-
-func _i64_trunc_f32_u_0() Instr_i64_trunc_f32_u {
-	return Instr_i64_trunc_f32_u{}
-}
-
-var _i64_trunc_f32_u = _i64_trunc_f32_u_0
-
-type Instr_i64_trunc_f64_s struct{}
-
-func _i64_trunc_f64_s_0() Instr_i64_trunc_f64_s {
-	return Instr_i64_trunc_f64_s{}
-}
-
-var _i64_trunc_f64_s = _i64_trunc_f64_s_0
-
-type Instr_i64_trunc_f64_u struct{}
-
-func _i64_trunc_f64_u_0() Instr_i64_trunc_f64_u {
-	return Instr_i64_trunc_f64_u{}
-}
-
-var _i64_trunc_f64_u = _i64_trunc_f64_u_0
-
-type Instr_f32_convert_i32_s struct{}
-
-func _f32_convert_i32_s_0() Instr_f32_convert_i32_s {
-	return Instr_f32_convert_i32_s{}
-}
-
-var _f32_convert_i32_s = _f32_convert_i32_s_0
-
-type Instr_f32_convert_i32_u struct{}
-
-func _f32_convert_i32_u_0() Instr_f32_convert_i32_u {
-	return Instr_f32_convert_i32_u{}
-}
-
-var _f32_convert_i32_u = _f32_convert_i32_u_0
-
-type Instr_f32_convert_i64_s struct{}
-
-func _f32_convert_i64_s_0() Instr_f32_convert_i64_s {
-	return Instr_f32_convert_i64_s{}
-}
-
-var _f32_convert_i64_s = _f32_convert_i64_s_0
-
-type Instr_f32_convert_i64_u struct{}
-
-func _f32_convert_i64_u_0() Instr_f32_convert_i64_u {
-	return Instr_f32_convert_i64_u{}
-}
-
-var _f32_convert_i64_u = _f32_convert_i64_u_0
-
-type Instr_i64_trunc_sat_f32_s struct{}
-
-func _i64_trunc_sat_f32_s_0() Instr_i64_trunc_sat_f32_s {
-	return Instr_i64_trunc_sat_f32_s{}
-}
-
-var _i64_trunc_sat_f32_s = _i64_trunc_sat_f32_s_0
-
-type Instr_i64_trunc_sat_f32_u struct{}
-
-func _i64_trunc_sat_f32_u_0() Instr_i64_trunc_sat_f32_u {
-	return Instr_i64_trunc_sat_f32_u{}
-}
-
-var _i64_trunc_sat_f32_u = _i64_trunc_sat_f32_u_0
-
-type Instr_i64_trunc_sat_f64_s struct{}
-
-func _i64_trunc_sat_f64_s_0() Instr_i64_trunc_sat_f64_s {
-	return Instr_i64_trunc_sat_f64_s{}
-}
-
-var _i64_trunc_sat_f64_s = _i64_trunc_sat_f64_s_0
-
-type Instr_i64_trunc_sat_f64_u struct{}
-
-func _i64_trunc_sat_f64_u_0() Instr_i64_trunc_sat_f64_u {
-	return Instr_i64_trunc_sat_f64_u{}
-}
-
-var _i64_trunc_sat_f64_u = _i64_trunc_sat_f64_u_0
-
-type Instr_f32_demote_f64 struct{}
-
-func _f32_demote_f64_0() Instr_f32_demote_f64 {
-	return Instr_f32_demote_f64{}
-}
-
-var _f32_demote_f64 = _f32_demote_f64_0
-
-type Instr_f64_convert_i32_s struct{}
-
-func _f64_convert_i32_s_0() Instr_f64_convert_i32_s {
-	return Instr_f64_convert_i32_s{}
-}
-
-var _f64_convert_i32_s = _f64_convert_i32_s_0
-
-type Instr_f64_convert_i32_u struct{}
-
-func _f64_convert_i32_u_0() Instr_f64_convert_i32_u {
-	return Instr_f64_convert_i32_u{}
-}
-
-var _f64_convert_i32_u = _f64_convert_i32_u_0
-
-type Instr_f64_convert_i64_s struct{}
-
-func _f64_convert_i64_s_0() Instr_f64_convert_i64_s {
-	return Instr_f64_convert_i64_s{}
-}
-
-var _f64_convert_i64_s = _f64_convert_i64_s_0
-
-type Instr_f64_convert_i64_u struct{}
-
-func _f64_convert_i64_u_0() Instr_f64_convert_i64_u {
-	return Instr_f64_convert_i64_u{}
-}
-
-var _f64_convert_i64_u = _f64_convert_i64_u_0
-
-type Instr_f64_promote_f32 struct{}
-
-func _f64_promote_f32_0() Instr_f64_promote_f32 {
-	return Instr_f64_promote_f32{}
-}
-
-var _f64_promote_f32 = _f64_promote_f32_0
-
-type Instr_i32_reinterpret_f32 struct{}
-
-func _i32_reinterpret_f32_0() Instr_i32_reinterpret_f32 {
-	return Instr_i32_reinterpret_f32{}
-}
-
-var _i32_reinterpret_f32 = _i32_reinterpret_f32_0
-
-type Instr_i64_reinterpret_f64 struct{}
-
-func _i64_reinterpret_f64_0() Instr_i64_reinterpret_f64 {
-	return Instr_i64_reinterpret_f64{}
-}
-
-var _i64_reinterpret_f64 = _i64_reinterpret_f64_0
-
-type Instr_f32_reinterpret_i32 struct{}
-
-func _f32_reinterpret_i32_0() Instr_f32_reinterpret_i32 {
-	return Instr_f32_reinterpret_i32{}
-}
-
-var _f32_reinterpret_i32 = _f32_reinterpret_i32_0
-
-type Instr_f64_reinterpret_i64 struct{}
-
-func _f64_reinterpret_i64_0() Instr_f64_reinterpret_i64 {
-	return Instr_f64_reinterpret_i64{}
-}
-
-var _f64_reinterpret_i64 = _f64_reinterpret_i64_0
-
-type Instr_v128_not struct{}
-
-func _v128_not_0() Instr_v128_not {
-	return Instr_v128_not{}
-}
-
-var _v128_not = _v128_not_0
-
-type Instr_v128_and struct{}
-
-func _v128_and_0() Instr_v128_and {
-	return Instr_v128_and{}
-}
-
-var _v128_and = _v128_and_0
-
-type Instr_v128_andnot struct{}
-
-func _v128_andnot_0() Instr_v128_andnot {
-	return Instr_v128_andnot{}
-}
-
-var _v128_andnot = _v128_andnot_0
-
-type Instr_v128_or struct{}
-
-func _v128_or_0() Instr_v128_or {
-	return Instr_v128_or{}
-}
-
-var _v128_or = _v128_or_0
-
-type Instr_v128_xor struct{}
-
-func _v128_xor_0() Instr_v128_xor {
-	return Instr_v128_xor{}
-}
-
-var _v128_xor = _v128_xor_0
-
-type Instr_v128_bitselect struct{}
-
-func _v128_bitselect_0() Instr_v128_bitselect {
-	return Instr_v128_bitselect{}
-}
-
-var _v128_bitselect = _v128_bitselect_0
-
-type Instr_v128_any_true struct{}
-
-func _v128_any_true_0() Instr_v128_any_true {
-	return Instr_v128_any_true{}
-}
-
-var _v128_any_true = _v128_any_true_0
-
-type Instr_i8x16_swizzle struct{}
-
-func _i8x16_swizzle_0() Instr_i8x16_swizzle {
-	return Instr_i8x16_swizzle{}
-}
-
-var _i8x16_swizzle = _i8x16_swizzle_0
-
-type Instr_i8x16_shuffle struct {
-	Is []OInt
-}
-
-func _i8x16_shuffle_1(_is []OInt) Instr_i8x16_shuffle {
-	return Instr_i8x16_shuffle{
-		Is: _is,
-	}
-}
-
-var _i8x16_shuffle = _i8x16_shuffle_1
-
-type Instr_i8x16_splat struct{}
-
-func _i8x16_splat_0() Instr_i8x16_splat {
-	return Instr_i8x16_splat{}
-}
-
-var _i8x16_splat = _i8x16_splat_0
-
-type Instr_i8x16_extract_lane_s struct {
-	I OInt
-}
-
-func _i8x16_extract_lane_s_1(_i OInt) Instr_i8x16_extract_lane_s {
-	return Instr_i8x16_extract_lane_s{
-		I: _i,
-	}
-}
-
-var _i8x16_extract_lane_s = _i8x16_extract_lane_s_1
-
-type Instr_i8x16_extract_lane_u struct {
-	I OInt
-}
-
-func _i8x16_extract_lane_u_1(_i OInt) Instr_i8x16_extract_lane_u {
-	return Instr_i8x16_extract_lane_u{
-		I: _i,
-	}
-}
-
-var _i8x16_extract_lane_u = _i8x16_extract_lane_u_1
-
-type Instr_i8x16_replace_lane struct {
-	I OInt
-}
-
-func _i8x16_replace_lane_1(_i OInt) Instr_i8x16_replace_lane {
-	return Instr_i8x16_replace_lane{
-		I: _i,
-	}
-}
-
-var _i8x16_replace_lane = _i8x16_replace_lane_1
-
-type Instr_i8x16_eq struct{}
-
-func _i8x16_eq_0() Instr_i8x16_eq {
-	return Instr_i8x16_eq{}
-}
-
-var _i8x16_eq = _i8x16_eq_0
-
-type Instr_i8x16_ne struct{}
-
-func _i8x16_ne_0() Instr_i8x16_ne {
-	return Instr_i8x16_ne{}
-}
-
-var _i8x16_ne = _i8x16_ne_0
-
-type Instr_i8x16_lt_s struct{}
-
-func _i8x16_lt_s_0() Instr_i8x16_lt_s {
-	return Instr_i8x16_lt_s{}
-}
-
-var _i8x16_lt_s = _i8x16_lt_s_0
-
-type Instr_i8x16_lt_u struct{}
-
-func _i8x16_lt_u_0() Instr_i8x16_lt_u {
-	return Instr_i8x16_lt_u{}
-}
-
-var _i8x16_lt_u = _i8x16_lt_u_0
-
-type Instr_i8x16_le_s struct{}
-
-func _i8x16_le_s_0() Instr_i8x16_le_s {
-	return Instr_i8x16_le_s{}
-}
-
-var _i8x16_le_s = _i8x16_le_s_0
-
-type Instr_i8x16_le_u struct{}
-
-func _i8x16_le_u_0() Instr_i8x16_le_u {
-	return Instr_i8x16_le_u{}
-}
-
-var _i8x16_le_u = _i8x16_le_u_0
-
-type Instr_i8x16_gt_s struct{}
-
-func _i8x16_gt_s_0() Instr_i8x16_gt_s {
-	return Instr_i8x16_gt_s{}
-}
-
-var _i8x16_gt_s = _i8x16_gt_s_0
-
-type Instr_i8x16_gt_u struct{}
-
-func _i8x16_gt_u_0() Instr_i8x16_gt_u {
-	return Instr_i8x16_gt_u{}
-}
-
-var _i8x16_gt_u = _i8x16_gt_u_0
-
-type Instr_i8x16_ge_s struct{}
-
-func _i8x16_ge_s_0() Instr_i8x16_ge_s {
-	return Instr_i8x16_ge_s{}
-}
-
-var _i8x16_ge_s = _i8x16_ge_s_0
-
-type Instr_i8x16_ge_u struct{}
-
-func _i8x16_ge_u_0() Instr_i8x16_ge_u {
-	return Instr_i8x16_ge_u{}
-}
-
-var _i8x16_ge_u = _i8x16_ge_u_0
-
-type Instr_i8x16_neg struct{}
-
-func _i8x16_neg_0() Instr_i8x16_neg {
-	return Instr_i8x16_neg{}
-}
-
-var _i8x16_neg = _i8x16_neg_0
-
-type Instr_i8x16_bitmask struct{}
-
-func _i8x16_bitmask_0() Instr_i8x16_bitmask {
-	return Instr_i8x16_bitmask{}
-}
-
-var _i8x16_bitmask = _i8x16_bitmask_0
-
-type Instr_i8x16_all_true struct{}
-
-func _i8x16_all_true_0() Instr_i8x16_all_true {
-	return Instr_i8x16_all_true{}
-}
-
-var _i8x16_all_true = _i8x16_all_true_0
-
-type Instr_i8x16_narrow_i16x8_s struct{}
-
-func _i8x16_narrow_i16x8_s_0() Instr_i8x16_narrow_i16x8_s {
-	return Instr_i8x16_narrow_i16x8_s{}
-}
-
-var _i8x16_narrow_i16x8_s = _i8x16_narrow_i16x8_s_0
-
-type Instr_i8x16_narrow_i16x8_u struct{}
-
-func _i8x16_narrow_i16x8_u_0() Instr_i8x16_narrow_i16x8_u {
-	return Instr_i8x16_narrow_i16x8_u{}
-}
-
-var _i8x16_narrow_i16x8_u = _i8x16_narrow_i16x8_u_0
-
-type Instr_i16x8_extend_low_i8x16_s struct{}
-
-func _i16x8_extend_low_i8x16_s_0() Instr_i16x8_extend_low_i8x16_s {
-	return Instr_i16x8_extend_low_i8x16_s{}
-}
-
-var _i16x8_extend_low_i8x16_s = _i16x8_extend_low_i8x16_s_0
-
-type Instr_i16x8_extend_high_i8x16_s struct{}
-
-func _i16x8_extend_high_i8x16_s_0() Instr_i16x8_extend_high_i8x16_s {
-	return Instr_i16x8_extend_high_i8x16_s{}
-}
-
-var _i16x8_extend_high_i8x16_s = _i16x8_extend_high_i8x16_s_0
-
-type Instr_i16x8_extend_low_i8x16_u struct{}
-
-func _i16x8_extend_low_i8x16_u_0() Instr_i16x8_extend_low_i8x16_u {
-	return Instr_i16x8_extend_low_i8x16_u{}
-}
-
-var _i16x8_extend_low_i8x16_u = _i16x8_extend_low_i8x16_u_0
-
-type Instr_i16x8_extend_high_i8x16_u struct{}
-
-func _i16x8_extend_high_i8x16_u_0() Instr_i16x8_extend_high_i8x16_u {
-	return Instr_i16x8_extend_high_i8x16_u{}
-}
-
-var _i16x8_extend_high_i8x16_u = _i16x8_extend_high_i8x16_u_0
-
-type Instr_i8x16_shl struct{}
-
-func _i8x16_shl_0() Instr_i8x16_shl {
-	return Instr_i8x16_shl{}
-}
-
-var _i8x16_shl = _i8x16_shl_0
-
-type Instr_i8x16_shr_s struct{}
-
-func _i8x16_shr_s_0() Instr_i8x16_shr_s {
-	return Instr_i8x16_shr_s{}
-}
-
-var _i8x16_shr_s = _i8x16_shr_s_0
-
-type Instr_i8x16_shr_u struct{}
-
-func _i8x16_shr_u_0() Instr_i8x16_shr_u {
-	return Instr_i8x16_shr_u{}
-}
-
-var _i8x16_shr_u = _i8x16_shr_u_0
-
-type Instr_i8x16_add struct{}
-
-func _i8x16_add_0() Instr_i8x16_add {
-	return Instr_i8x16_add{}
-}
-
-var _i8x16_add = _i8x16_add_0
-
-type Instr_i8x16_add_sat_s struct{}
-
-func _i8x16_add_sat_s_0() Instr_i8x16_add_sat_s {
-	return Instr_i8x16_add_sat_s{}
-}
-
-var _i8x16_add_sat_s = _i8x16_add_sat_s_0
-
-type Instr_i8x16_add_sat_u struct{}
-
-func _i8x16_add_sat_u_0() Instr_i8x16_add_sat_u {
-	return Instr_i8x16_add_sat_u{}
-}
-
-var _i8x16_add_sat_u = _i8x16_add_sat_u_0
-
-type Instr_i8x16_sub struct{}
-
-func _i8x16_sub_0() Instr_i8x16_sub {
-	return Instr_i8x16_sub{}
-}
-
-var _i8x16_sub = _i8x16_sub_0
-
-type Instr_i8x16_sub_sat_s struct{}
-
-func _i8x16_sub_sat_s_0() Instr_i8x16_sub_sat_s {
-	return Instr_i8x16_sub_sat_s{}
-}
-
-var _i8x16_sub_sat_s = _i8x16_sub_sat_s_0
-
-type Instr_i8x16_sub_sat_u struct{}
-
-func _i8x16_sub_sat_u_0() Instr_i8x16_sub_sat_u {
-	return Instr_i8x16_sub_sat_u{}
-}
-
-var _i8x16_sub_sat_u = _i8x16_sub_sat_u_0
-
-type Instr_i8x16_abs struct{}
-
-func _i8x16_abs_0() Instr_i8x16_abs {
-	return Instr_i8x16_abs{}
-}
-
-var _i8x16_abs = _i8x16_abs_0
-
-type Instr_i8x16_popcnt struct{}
-
-func _i8x16_popcnt_0() Instr_i8x16_popcnt {
-	return Instr_i8x16_popcnt{}
-}
-
-var _i8x16_popcnt = _i8x16_popcnt_0
-
-type Instr_i8x16_min_s struct{}
-
-func _i8x16_min_s_0() Instr_i8x16_min_s {
-	return Instr_i8x16_min_s{}
-}
-
-var _i8x16_min_s = _i8x16_min_s_0
-
-type Instr_i8x16_min_u struct{}
-
-func _i8x16_min_u_0() Instr_i8x16_min_u {
-	return Instr_i8x16_min_u{}
-}
-
-var _i8x16_min_u = _i8x16_min_u_0
-
-type Instr_i8x16_max_s struct{}
-
-func _i8x16_max_s_0() Instr_i8x16_max_s {
-	return Instr_i8x16_max_s{}
-}
-
-var _i8x16_max_s = _i8x16_max_s_0
-
-type Instr_i8x16_max_u struct{}
-
-func _i8x16_max_u_0() Instr_i8x16_max_u {
-	return Instr_i8x16_max_u{}
-}
-
-var _i8x16_max_u = _i8x16_max_u_0
-
-type Instr_i8x16_avgr_u struct{}
-
-func _i8x16_avgr_u_0() Instr_i8x16_avgr_u {
-	return Instr_i8x16_avgr_u{}
-}
-
-var _i8x16_avgr_u = _i8x16_avgr_u_0
-
-type Instr_i16x8_splat struct{}
-
-func _i16x8_splat_0() Instr_i16x8_splat {
-	return Instr_i16x8_splat{}
-}
-
-var _i16x8_splat = _i16x8_splat_0
-
-type Instr_i16x8_extract_lane_s struct {
-	I OInt
-}
-
-func _i16x8_extract_lane_s_1(_i OInt) Instr_i16x8_extract_lane_s {
-	return Instr_i16x8_extract_lane_s{
-		I: _i,
-	}
-}
-
-var _i16x8_extract_lane_s = _i16x8_extract_lane_s_1
-
-type Instr_i16x8_extract_lane_u struct {
-	I OInt
-}
-
-func _i16x8_extract_lane_u_1(_i OInt) Instr_i16x8_extract_lane_u {
-	return Instr_i16x8_extract_lane_u{
-		I: _i,
-	}
-}
-
-var _i16x8_extract_lane_u = _i16x8_extract_lane_u_1
-
-type Instr_i16x8_replace_lane struct {
-	I OInt
-}
-
-func _i16x8_replace_lane_1(_i OInt) Instr_i16x8_replace_lane {
-	return Instr_i16x8_replace_lane{
-		I: _i,
-	}
-}
-
-var _i16x8_replace_lane = _i16x8_replace_lane_1
-
-type Instr_i16x8_eq struct{}
-
-func _i16x8_eq_0() Instr_i16x8_eq {
-	return Instr_i16x8_eq{}
-}
-
-var _i16x8_eq = _i16x8_eq_0
-
-type Instr_i16x8_ne struct{}
-
-func _i16x8_ne_0() Instr_i16x8_ne {
-	return Instr_i16x8_ne{}
-}
-
-var _i16x8_ne = _i16x8_ne_0
-
-type Instr_i16x8_lt_s struct{}
-
-func _i16x8_lt_s_0() Instr_i16x8_lt_s {
-	return Instr_i16x8_lt_s{}
-}
-
-var _i16x8_lt_s = _i16x8_lt_s_0
-
-type Instr_i16x8_lt_u struct{}
-
-func _i16x8_lt_u_0() Instr_i16x8_lt_u {
-	return Instr_i16x8_lt_u{}
-}
-
-var _i16x8_lt_u = _i16x8_lt_u_0
-
-type Instr_i16x8_le_s struct{}
-
-func _i16x8_le_s_0() Instr_i16x8_le_s {
-	return Instr_i16x8_le_s{}
-}
-
-var _i16x8_le_s = _i16x8_le_s_0
-
-type Instr_i16x8_le_u struct{}
-
-func _i16x8_le_u_0() Instr_i16x8_le_u {
-	return Instr_i16x8_le_u{}
-}
-
-var _i16x8_le_u = _i16x8_le_u_0
-
-type Instr_i16x8_gt_s struct{}
-
-func _i16x8_gt_s_0() Instr_i16x8_gt_s {
-	return Instr_i16x8_gt_s{}
-}
-
-var _i16x8_gt_s = _i16x8_gt_s_0
-
-type Instr_i16x8_gt_u struct{}
-
-func _i16x8_gt_u_0() Instr_i16x8_gt_u {
-	return Instr_i16x8_gt_u{}
-}
-
-var _i16x8_gt_u = _i16x8_gt_u_0
-
-type Instr_i16x8_ge_s struct{}
-
-func _i16x8_ge_s_0() Instr_i16x8_ge_s {
-	return Instr_i16x8_ge_s{}
-}
-
-var _i16x8_ge_s = _i16x8_ge_s_0
-
-type Instr_i16x8_ge_u struct{}
-
-func _i16x8_ge_u_0() Instr_i16x8_ge_u {
-	return Instr_i16x8_ge_u{}
-}
-
-var _i16x8_ge_u = _i16x8_ge_u_0
-
-type Instr_i16x8_neg struct{}
-
-func _i16x8_neg_0() Instr_i16x8_neg {
-	return Instr_i16x8_neg{}
-}
-
-var _i16x8_neg = _i16x8_neg_0
-
-type Instr_i16x8_bitmask struct{}
-
-func _i16x8_bitmask_0() Instr_i16x8_bitmask {
-	return Instr_i16x8_bitmask{}
-}
-
-var _i16x8_bitmask = _i16x8_bitmask_0
-
-type Instr_i16x8_all_true struct{}
-
-func _i16x8_all_true_0() Instr_i16x8_all_true {
-	return Instr_i16x8_all_true{}
-}
-
-var _i16x8_all_true = _i16x8_all_true_0
-
-type Instr_i16x8_narrow_i32x4_s struct{}
-
-func _i16x8_narrow_i32x4_s_0() Instr_i16x8_narrow_i32x4_s {
-	return Instr_i16x8_narrow_i32x4_s{}
-}
-
-var _i16x8_narrow_i32x4_s = _i16x8_narrow_i32x4_s_0
-
-type Instr_i16x8_narrow_i32x4_u struct{}
-
-func _i16x8_narrow_i32x4_u_0() Instr_i16x8_narrow_i32x4_u {
-	return Instr_i16x8_narrow_i32x4_u{}
-}
-
-var _i16x8_narrow_i32x4_u = _i16x8_narrow_i32x4_u_0
-
-type Instr_i16x8_shl struct{}
-
-func _i16x8_shl_0() Instr_i16x8_shl {
-	return Instr_i16x8_shl{}
-}
-
-var _i16x8_shl = _i16x8_shl_0
-
-type Instr_i16x8_shr_s struct{}
-
-func _i16x8_shr_s_0() Instr_i16x8_shr_s {
-	return Instr_i16x8_shr_s{}
-}
-
-var _i16x8_shr_s = _i16x8_shr_s_0
-
-type Instr_i16x8_shr_u struct{}
-
-func _i16x8_shr_u_0() Instr_i16x8_shr_u {
-	return Instr_i16x8_shr_u{}
-}
-
-var _i16x8_shr_u = _i16x8_shr_u_0
-
-type Instr_i16x8_add struct{}
-
-func _i16x8_add_0() Instr_i16x8_add {
-	return Instr_i16x8_add{}
-}
-
-var _i16x8_add = _i16x8_add_0
-
-type Instr_i16x8_add_sat_s struct{}
-
-func _i16x8_add_sat_s_0() Instr_i16x8_add_sat_s {
-	return Instr_i16x8_add_sat_s{}
-}
-
-var _i16x8_add_sat_s = _i16x8_add_sat_s_0
-
-type Instr_i16x8_add_sat_u struct{}
-
-func _i16x8_add_sat_u_0() Instr_i16x8_add_sat_u {
-	return Instr_i16x8_add_sat_u{}
-}
-
-var _i16x8_add_sat_u = _i16x8_add_sat_u_0
-
-type Instr_i16x8_sub struct{}
-
-func _i16x8_sub_0() Instr_i16x8_sub {
-	return Instr_i16x8_sub{}
-}
-
-var _i16x8_sub = _i16x8_sub_0
-
-type Instr_i16x8_sub_sat_s struct{}
-
-func _i16x8_sub_sat_s_0() Instr_i16x8_sub_sat_s {
-	return Instr_i16x8_sub_sat_s{}
-}
-
-var _i16x8_sub_sat_s = _i16x8_sub_sat_s_0
-
-type Instr_i16x8_sub_sat_u struct{}
-
-func _i16x8_sub_sat_u_0() Instr_i16x8_sub_sat_u {
-	return Instr_i16x8_sub_sat_u{}
-}
-
-var _i16x8_sub_sat_u = _i16x8_sub_sat_u_0
-
-type Instr_i16x8_mul struct{}
-
-func _i16x8_mul_0() Instr_i16x8_mul {
-	return Instr_i16x8_mul{}
-}
-
-var _i16x8_mul = _i16x8_mul_0
-
-type Instr_i16x8_abs struct{}
-
-func _i16x8_abs_0() Instr_i16x8_abs {
-	return Instr_i16x8_abs{}
-}
-
-var _i16x8_abs = _i16x8_abs_0
-
-type Instr_i16x8_min_s struct{}
-
-func _i16x8_min_s_0() Instr_i16x8_min_s {
-	return Instr_i16x8_min_s{}
-}
-
-var _i16x8_min_s = _i16x8_min_s_0
-
-type Instr_i16x8_min_u struct{}
-
-func _i16x8_min_u_0() Instr_i16x8_min_u {
-	return Instr_i16x8_min_u{}
-}
-
-var _i16x8_min_u = _i16x8_min_u_0
-
-type Instr_i16x8_max_s struct{}
-
-func _i16x8_max_s_0() Instr_i16x8_max_s {
-	return Instr_i16x8_max_s{}
-}
-
-var _i16x8_max_s = _i16x8_max_s_0
-
-type Instr_i16x8_max_u struct{}
-
-func _i16x8_max_u_0() Instr_i16x8_max_u {
-	return Instr_i16x8_max_u{}
-}
-
-var _i16x8_max_u = _i16x8_max_u_0
-
-type Instr_i16x8_avgr_u struct{}
-
-func _i16x8_avgr_u_0() Instr_i16x8_avgr_u {
-	return Instr_i16x8_avgr_u{}
-}
-
-var _i16x8_avgr_u = _i16x8_avgr_u_0
-
-type Instr_i16x8_extmul_low_i8x16_s struct{}
-
-func _i16x8_extmul_low_i8x16_s_0() Instr_i16x8_extmul_low_i8x16_s {
-	return Instr_i16x8_extmul_low_i8x16_s{}
-}
-
-var _i16x8_extmul_low_i8x16_s = _i16x8_extmul_low_i8x16_s_0
-
-type Instr_i16x8_extmul_high_i8x16_s struct{}
-
-func _i16x8_extmul_high_i8x16_s_0() Instr_i16x8_extmul_high_i8x16_s {
-	return Instr_i16x8_extmul_high_i8x16_s{}
-}
-
-var _i16x8_extmul_high_i8x16_s = _i16x8_extmul_high_i8x16_s_0
-
-type Instr_i16x8_extmul_low_i8x16_u struct{}
-
-func _i16x8_extmul_low_i8x16_u_0() Instr_i16x8_extmul_low_i8x16_u {
-	return Instr_i16x8_extmul_low_i8x16_u{}
-}
-
-var _i16x8_extmul_low_i8x16_u = _i16x8_extmul_low_i8x16_u_0
-
-type Instr_i16x8_extmul_high_i8x16_u struct{}
-
-func _i16x8_extmul_high_i8x16_u_0() Instr_i16x8_extmul_high_i8x16_u {
-	return Instr_i16x8_extmul_high_i8x16_u{}
-}
-
-var _i16x8_extmul_high_i8x16_u = _i16x8_extmul_high_i8x16_u_0
-
-type Instr_i16x8_q15mulr_sat_s struct{}
-
-func _i16x8_q15mulr_sat_s_0() Instr_i16x8_q15mulr_sat_s {
-	return Instr_i16x8_q15mulr_sat_s{}
-}
-
-var _i16x8_q15mulr_sat_s = _i16x8_q15mulr_sat_s_0
-
-type Instr_i16x8_extadd_pairwise_i8x16_s struct{}
-
-func _i16x8_extadd_pairwise_i8x16_s_0() Instr_i16x8_extadd_pairwise_i8x16_s {
-	return Instr_i16x8_extadd_pairwise_i8x16_s{}
-}
-
-var _i16x8_extadd_pairwise_i8x16_s = _i16x8_extadd_pairwise_i8x16_s_0
-
-type Instr_i16x8_extadd_pairwise_i8x16_u struct{}
-
-func _i16x8_extadd_pairwise_i8x16_u_0() Instr_i16x8_extadd_pairwise_i8x16_u {
-	return Instr_i16x8_extadd_pairwise_i8x16_u{}
-}
-
-var _i16x8_extadd_pairwise_i8x16_u = _i16x8_extadd_pairwise_i8x16_u_0
-
-type Instr_i32x4_splat struct{}
-
-func _i32x4_splat_0() Instr_i32x4_splat {
-	return Instr_i32x4_splat{}
-}
-
-var _i32x4_splat = _i32x4_splat_0
-
-type Instr_i32x4_extract_lane struct {
-	I OInt
-}
-
-func _i32x4_extract_lane_1(_i OInt) Instr_i32x4_extract_lane {
-	return Instr_i32x4_extract_lane{
-		I: _i,
-	}
-}
-
-var _i32x4_extract_lane = _i32x4_extract_lane_1
-
-type Instr_i32x4_replace_lane struct {
-	I OInt
-}
-
-func _i32x4_replace_lane_1(_i OInt) Instr_i32x4_replace_lane {
-	return Instr_i32x4_replace_lane{
-		I: _i,
-	}
-}
-
-var _i32x4_replace_lane = _i32x4_replace_lane_1
-
-type Instr_i32x4_eq struct{}
-
-func _i32x4_eq_0() Instr_i32x4_eq {
-	return Instr_i32x4_eq{}
-}
-
-var _i32x4_eq = _i32x4_eq_0
-
-type Instr_i32x4_ne struct{}
-
-func _i32x4_ne_0() Instr_i32x4_ne {
-	return Instr_i32x4_ne{}
-}
-
-var _i32x4_ne = _i32x4_ne_0
-
-type Instr_i32x4_lt_s struct{}
-
-func _i32x4_lt_s_0() Instr_i32x4_lt_s {
-	return Instr_i32x4_lt_s{}
-}
-
-var _i32x4_lt_s = _i32x4_lt_s_0
-
-type Instr_i32x4_lt_u struct{}
-
-func _i32x4_lt_u_0() Instr_i32x4_lt_u {
-	return Instr_i32x4_lt_u{}
-}
-
-var _i32x4_lt_u = _i32x4_lt_u_0
-
-type Instr_i32x4_le_s struct{}
-
-func _i32x4_le_s_0() Instr_i32x4_le_s {
-	return Instr_i32x4_le_s{}
-}
-
-var _i32x4_le_s = _i32x4_le_s_0
-
-type Instr_i32x4_le_u struct{}
-
-func _i32x4_le_u_0() Instr_i32x4_le_u {
-	return Instr_i32x4_le_u{}
-}
-
-var _i32x4_le_u = _i32x4_le_u_0
-
-type Instr_i32x4_gt_s struct{}
-
-func _i32x4_gt_s_0() Instr_i32x4_gt_s {
-	return Instr_i32x4_gt_s{}
-}
-
-var _i32x4_gt_s = _i32x4_gt_s_0
-
-type Instr_i32x4_gt_u struct{}
-
-func _i32x4_gt_u_0() Instr_i32x4_gt_u {
-	return Instr_i32x4_gt_u{}
-}
-
-var _i32x4_gt_u = _i32x4_gt_u_0
-
-type Instr_i32x4_ge_s struct{}
-
-func _i32x4_ge_s_0() Instr_i32x4_ge_s {
-	return Instr_i32x4_ge_s{}
-}
-
-var _i32x4_ge_s = _i32x4_ge_s_0
-
-type Instr_i32x4_ge_u struct{}
-
-func _i32x4_ge_u_0() Instr_i32x4_ge_u {
-	return Instr_i32x4_ge_u{}
-}
-
-var _i32x4_ge_u = _i32x4_ge_u_0
-
-type Instr_i32x4_abs struct{}
-
-func _i32x4_abs_0() Instr_i32x4_abs {
-	return Instr_i32x4_abs{}
-}
-
-var _i32x4_abs = _i32x4_abs_0
-
-type Instr_i32x4_neg struct{}
-
-func _i32x4_neg_0() Instr_i32x4_neg {
-	return Instr_i32x4_neg{}
-}
-
-var _i32x4_neg = _i32x4_neg_0
-
-type Instr_i32x4_bitmask struct{}
-
-func _i32x4_bitmask_0() Instr_i32x4_bitmask {
-	return Instr_i32x4_bitmask{}
-}
-
-var _i32x4_bitmask = _i32x4_bitmask_0
-
-type Instr_i32x4_all_true struct{}
-
-func _i32x4_all_true_0() Instr_i32x4_all_true {
-	return Instr_i32x4_all_true{}
-}
-
-var _i32x4_all_true = _i32x4_all_true_0
-
-type Instr_i32x4_extend_low_i16x8_s struct{}
-
-func _i32x4_extend_low_i16x8_s_0() Instr_i32x4_extend_low_i16x8_s {
-	return Instr_i32x4_extend_low_i16x8_s{}
-}
-
-var _i32x4_extend_low_i16x8_s = _i32x4_extend_low_i16x8_s_0
-
-type Instr_i32x4_extend_high_i16x8_s struct{}
-
-func _i32x4_extend_high_i16x8_s_0() Instr_i32x4_extend_high_i16x8_s {
-	return Instr_i32x4_extend_high_i16x8_s{}
-}
-
-var _i32x4_extend_high_i16x8_s = _i32x4_extend_high_i16x8_s_0
-
-type Instr_i32x4_extend_low_i16x8_u struct{}
-
-func _i32x4_extend_low_i16x8_u_0() Instr_i32x4_extend_low_i16x8_u {
-	return Instr_i32x4_extend_low_i16x8_u{}
-}
-
-var _i32x4_extend_low_i16x8_u = _i32x4_extend_low_i16x8_u_0
-
-type Instr_i32x4_extend_high_i16x8_u struct{}
-
-func _i32x4_extend_high_i16x8_u_0() Instr_i32x4_extend_high_i16x8_u {
-	return Instr_i32x4_extend_high_i16x8_u{}
-}
-
-var _i32x4_extend_high_i16x8_u = _i32x4_extend_high_i16x8_u_0
-
-type Instr_i32x4_shl struct{}
-
-func _i32x4_shl_0() Instr_i32x4_shl {
-	return Instr_i32x4_shl{}
-}
-
-var _i32x4_shl = _i32x4_shl_0
-
-type Instr_i32x4_shr_s struct{}
-
-func _i32x4_shr_s_0() Instr_i32x4_shr_s {
-	return Instr_i32x4_shr_s{}
-}
-
-var _i32x4_shr_s = _i32x4_shr_s_0
-
-type Instr_i32x4_shr_u struct{}
-
-func _i32x4_shr_u_0() Instr_i32x4_shr_u {
-	return Instr_i32x4_shr_u{}
-}
-
-var _i32x4_shr_u = _i32x4_shr_u_0
-
-type Instr_i32x4_add struct{}
-
-func _i32x4_add_0() Instr_i32x4_add {
-	return Instr_i32x4_add{}
-}
-
-var _i32x4_add = _i32x4_add_0
-
-type Instr_i32x4_sub struct{}
-
-func _i32x4_sub_0() Instr_i32x4_sub {
-	return Instr_i32x4_sub{}
-}
-
-var _i32x4_sub = _i32x4_sub_0
-
-type Instr_i32x4_min_s struct{}
-
-func _i32x4_min_s_0() Instr_i32x4_min_s {
-	return Instr_i32x4_min_s{}
-}
-
-var _i32x4_min_s = _i32x4_min_s_0
-
-type Instr_i32x4_min_u struct{}
-
-func _i32x4_min_u_0() Instr_i32x4_min_u {
-	return Instr_i32x4_min_u{}
-}
-
-var _i32x4_min_u = _i32x4_min_u_0
-
-type Instr_i32x4_max_s struct{}
-
-func _i32x4_max_s_0() Instr_i32x4_max_s {
-	return Instr_i32x4_max_s{}
-}
-
-var _i32x4_max_s = _i32x4_max_s_0
-
-type Instr_i32x4_max_u struct{}
-
-func _i32x4_max_u_0() Instr_i32x4_max_u {
-	return Instr_i32x4_max_u{}
-}
-
-var _i32x4_max_u = _i32x4_max_u_0
-
-type Instr_i32x4_mul struct{}
-
-func _i32x4_mul_0() Instr_i32x4_mul {
-	return Instr_i32x4_mul{}
-}
-
-var _i32x4_mul = _i32x4_mul_0
-
-type Instr_i32x4_dot_i16x8_s struct{}
-
-func _i32x4_dot_i16x8_s_0() Instr_i32x4_dot_i16x8_s {
-	return Instr_i32x4_dot_i16x8_s{}
-}
-
-var _i32x4_dot_i16x8_s = _i32x4_dot_i16x8_s_0
-
-type Instr_i32x4_trunc_sat_f32x4_s struct{}
-
-func _i32x4_trunc_sat_f32x4_s_0() Instr_i32x4_trunc_sat_f32x4_s {
-	return Instr_i32x4_trunc_sat_f32x4_s{}
-}
-
-var _i32x4_trunc_sat_f32x4_s = _i32x4_trunc_sat_f32x4_s_0
-
-type Instr_i32x4_trunc_sat_f32x4_u struct{}
-
-func _i32x4_trunc_sat_f32x4_u_0() Instr_i32x4_trunc_sat_f32x4_u {
-	return Instr_i32x4_trunc_sat_f32x4_u{}
-}
-
-var _i32x4_trunc_sat_f32x4_u = _i32x4_trunc_sat_f32x4_u_0
-
-type Instr_i32x4_trunc_sat_f64x2_s_zero struct{}
-
-func _i32x4_trunc_sat_f64x2_s_zero_0() Instr_i32x4_trunc_sat_f64x2_s_zero {
-	return Instr_i32x4_trunc_sat_f64x2_s_zero{}
-}
-
-var _i32x4_trunc_sat_f64x2_s_zero = _i32x4_trunc_sat_f64x2_s_zero_0
-
-type Instr_i32x4_trunc_sat_f64x2_u_zero struct{}
-
-func _i32x4_trunc_sat_f64x2_u_zero_0() Instr_i32x4_trunc_sat_f64x2_u_zero {
-	return Instr_i32x4_trunc_sat_f64x2_u_zero{}
-}
-
-var _i32x4_trunc_sat_f64x2_u_zero = _i32x4_trunc_sat_f64x2_u_zero_0
-
-type Instr_i32x4_extmul_low_i16x8_s struct{}
-
-func _i32x4_extmul_low_i16x8_s_0() Instr_i32x4_extmul_low_i16x8_s {
-	return Instr_i32x4_extmul_low_i16x8_s{}
-}
-
-var _i32x4_extmul_low_i16x8_s = _i32x4_extmul_low_i16x8_s_0
-
-type Instr_i32x4_extmul_high_i16x8_s struct{}
-
-func _i32x4_extmul_high_i16x8_s_0() Instr_i32x4_extmul_high_i16x8_s {
-	return Instr_i32x4_extmul_high_i16x8_s{}
-}
-
-var _i32x4_extmul_high_i16x8_s = _i32x4_extmul_high_i16x8_s_0
-
-type Instr_i32x4_extmul_low_i16x8_u struct{}
-
-func _i32x4_extmul_low_i16x8_u_0() Instr_i32x4_extmul_low_i16x8_u {
-	return Instr_i32x4_extmul_low_i16x8_u{}
-}
-
-var _i32x4_extmul_low_i16x8_u = _i32x4_extmul_low_i16x8_u_0
-
-type Instr_i32x4_extmul_high_i16x8_u struct{}
-
-func _i32x4_extmul_high_i16x8_u_0() Instr_i32x4_extmul_high_i16x8_u {
-	return Instr_i32x4_extmul_high_i16x8_u{}
-}
-
-var _i32x4_extmul_high_i16x8_u = _i32x4_extmul_high_i16x8_u_0
-
-type Instr_i32x4_extadd_pairwise_i16x8_s struct{}
-
-func _i32x4_extadd_pairwise_i16x8_s_0() Instr_i32x4_extadd_pairwise_i16x8_s {
-	return Instr_i32x4_extadd_pairwise_i16x8_s{}
-}
-
-var _i32x4_extadd_pairwise_i16x8_s = _i32x4_extadd_pairwise_i16x8_s_0
-
-type Instr_i32x4_extadd_pairwise_i16x8_u struct{}
-
-func _i32x4_extadd_pairwise_i16x8_u_0() Instr_i32x4_extadd_pairwise_i16x8_u {
-	return Instr_i32x4_extadd_pairwise_i16x8_u{}
-}
-
-var _i32x4_extadd_pairwise_i16x8_u = _i32x4_extadd_pairwise_i16x8_u_0
-
-type Instr_i64x2_splat struct{}
-
-func _i64x2_splat_0() Instr_i64x2_splat {
-	return Instr_i64x2_splat{}
-}
-
-var _i64x2_splat = _i64x2_splat_0
-
-type Instr_i64x2_extract_lane struct {
-	I OInt
-}
-
-func _i64x2_extract_lane_1(_i OInt) Instr_i64x2_extract_lane {
-	return Instr_i64x2_extract_lane{
-		I: _i,
-	}
-}
-
-var _i64x2_extract_lane = _i64x2_extract_lane_1
-
-type Instr_i64x2_replace_lane struct {
-	I OInt
-}
-
-func _i64x2_replace_lane_1(_i OInt) Instr_i64x2_replace_lane {
-	return Instr_i64x2_replace_lane{
-		I: _i,
-	}
-}
-
-var _i64x2_replace_lane = _i64x2_replace_lane_1
-
-type Instr_i64x2_extend_low_i32x4_s struct{}
-
-func _i64x2_extend_low_i32x4_s_0() Instr_i64x2_extend_low_i32x4_s {
-	return Instr_i64x2_extend_low_i32x4_s{}
-}
-
-var _i64x2_extend_low_i32x4_s = _i64x2_extend_low_i32x4_s_0
-
-type Instr_i64x2_extend_high_i32x4_s struct{}
-
-func _i64x2_extend_high_i32x4_s_0() Instr_i64x2_extend_high_i32x4_s {
-	return Instr_i64x2_extend_high_i32x4_s{}
-}
-
-var _i64x2_extend_high_i32x4_s = _i64x2_extend_high_i32x4_s_0
-
-type Instr_i64x2_extend_low_i32x4_u struct{}
-
-func _i64x2_extend_low_i32x4_u_0() Instr_i64x2_extend_low_i32x4_u {
-	return Instr_i64x2_extend_low_i32x4_u{}
-}
-
-var _i64x2_extend_low_i32x4_u = _i64x2_extend_low_i32x4_u_0
-
-type Instr_i64x2_extend_high_i32x4_u struct{}
-
-func _i64x2_extend_high_i32x4_u_0() Instr_i64x2_extend_high_i32x4_u {
-	return Instr_i64x2_extend_high_i32x4_u{}
-}
-
-var _i64x2_extend_high_i32x4_u = _i64x2_extend_high_i32x4_u_0
-
-type Instr_i64x2_eq struct{}
-
-func _i64x2_eq_0() Instr_i64x2_eq {
-	return Instr_i64x2_eq{}
-}
-
-var _i64x2_eq = _i64x2_eq_0
-
-type Instr_i64x2_ne struct{}
-
-func _i64x2_ne_0() Instr_i64x2_ne {
-	return Instr_i64x2_ne{}
-}
-
-var _i64x2_ne = _i64x2_ne_0
-
-type Instr_i64x2_lt_s struct{}
-
-func _i64x2_lt_s_0() Instr_i64x2_lt_s {
-	return Instr_i64x2_lt_s{}
-}
-
-var _i64x2_lt_s = _i64x2_lt_s_0
-
-type Instr_i64x2_le_s struct{}
-
-func _i64x2_le_s_0() Instr_i64x2_le_s {
-	return Instr_i64x2_le_s{}
-}
-
-var _i64x2_le_s = _i64x2_le_s_0
-
-type Instr_i64x2_gt_s struct{}
-
-func _i64x2_gt_s_0() Instr_i64x2_gt_s {
-	return Instr_i64x2_gt_s{}
-}
-
-var _i64x2_gt_s = _i64x2_gt_s_0
-
-type Instr_i64x2_ge_s struct{}
-
-func _i64x2_ge_s_0() Instr_i64x2_ge_s {
-	return Instr_i64x2_ge_s{}
-}
-
-var _i64x2_ge_s = _i64x2_ge_s_0
-
-type Instr_i64x2_abs struct{}
-
-func _i64x2_abs_0() Instr_i64x2_abs {
-	return Instr_i64x2_abs{}
-}
-
-var _i64x2_abs = _i64x2_abs_0
-
-type Instr_i64x2_neg struct{}
-
-func _i64x2_neg_0() Instr_i64x2_neg {
-	return Instr_i64x2_neg{}
-}
-
-var _i64x2_neg = _i64x2_neg_0
-
-type Instr_i64x2_bitmask struct{}
-
-func _i64x2_bitmask_0() Instr_i64x2_bitmask {
-	return Instr_i64x2_bitmask{}
-}
-
-var _i64x2_bitmask = _i64x2_bitmask_0
-
-type Instr_i64x2_all_true struct{}
-
-func _i64x2_all_true_0() Instr_i64x2_all_true {
-	return Instr_i64x2_all_true{}
-}
-
-var _i64x2_all_true = _i64x2_all_true_0
-
-type Instr_i64x2_add struct{}
-
-func _i64x2_add_0() Instr_i64x2_add {
-	return Instr_i64x2_add{}
-}
-
-var _i64x2_add = _i64x2_add_0
-
-type Instr_i64x2_sub struct{}
-
-func _i64x2_sub_0() Instr_i64x2_sub {
-	return Instr_i64x2_sub{}
-}
-
-var _i64x2_sub = _i64x2_sub_0
-
-type Instr_i64x2_mul struct{}
-
-func _i64x2_mul_0() Instr_i64x2_mul {
-	return Instr_i64x2_mul{}
-}
-
-var _i64x2_mul = _i64x2_mul_0
-
-type Instr_i64x2_shl struct{}
-
-func _i64x2_shl_0() Instr_i64x2_shl {
-	return Instr_i64x2_shl{}
-}
-
-var _i64x2_shl = _i64x2_shl_0
-
-type Instr_i64x2_shr_s struct{}
-
-func _i64x2_shr_s_0() Instr_i64x2_shr_s {
-	return Instr_i64x2_shr_s{}
-}
-
-var _i64x2_shr_s = _i64x2_shr_s_0
-
-type Instr_i64x2_shr_u struct{}
-
-func _i64x2_shr_u_0() Instr_i64x2_shr_u {
-	return Instr_i64x2_shr_u{}
-}
-
-var _i64x2_shr_u = _i64x2_shr_u_0
-
-type Instr_i64x2_extmul_low_i32x4_s struct{}
-
-func _i64x2_extmul_low_i32x4_s_0() Instr_i64x2_extmul_low_i32x4_s {
-	return Instr_i64x2_extmul_low_i32x4_s{}
-}
-
-var _i64x2_extmul_low_i32x4_s = _i64x2_extmul_low_i32x4_s_0
-
-type Instr_i64x2_extmul_high_i32x4_s struct{}
-
-func _i64x2_extmul_high_i32x4_s_0() Instr_i64x2_extmul_high_i32x4_s {
-	return Instr_i64x2_extmul_high_i32x4_s{}
-}
-
-var _i64x2_extmul_high_i32x4_s = _i64x2_extmul_high_i32x4_s_0
-
-type Instr_i64x2_extmul_low_i32x4_u struct{}
-
-func _i64x2_extmul_low_i32x4_u_0() Instr_i64x2_extmul_low_i32x4_u {
-	return Instr_i64x2_extmul_low_i32x4_u{}
-}
-
-var _i64x2_extmul_low_i32x4_u = _i64x2_extmul_low_i32x4_u_0
-
-type Instr_i64x2_extmul_high_i32x4_u struct{}
-
-func _i64x2_extmul_high_i32x4_u_0() Instr_i64x2_extmul_high_i32x4_u {
-	return Instr_i64x2_extmul_high_i32x4_u{}
-}
-
-var _i64x2_extmul_high_i32x4_u = _i64x2_extmul_high_i32x4_u_0
-
-type Instr_f32x4_splat struct{}
-
-func _f32x4_splat_0() Instr_f32x4_splat {
-	return Instr_f32x4_splat{}
-}
-
-var _f32x4_splat = _f32x4_splat_0
-
-type Instr_f32x4_extract_lane struct {
-	I OInt
-}
-
-func _f32x4_extract_lane_1(_i OInt) Instr_f32x4_extract_lane {
-	return Instr_f32x4_extract_lane{
-		I: _i,
-	}
-}
-
-var _f32x4_extract_lane = _f32x4_extract_lane_1
-
-type Instr_f32x4_replace_lane struct {
-	I OInt
-}
-
-func _f32x4_replace_lane_1(_i OInt) Instr_f32x4_replace_lane {
-	return Instr_f32x4_replace_lane{
-		I: _i,
-	}
-}
-
-var _f32x4_replace_lane = _f32x4_replace_lane_1
-
-type Instr_f32x4_eq struct{}
-
-func _f32x4_eq_0() Instr_f32x4_eq {
-	return Instr_f32x4_eq{}
-}
-
-var _f32x4_eq = _f32x4_eq_0
-
-type Instr_f32x4_ne struct{}
-
-func _f32x4_ne_0() Instr_f32x4_ne {
-	return Instr_f32x4_ne{}
-}
-
-var _f32x4_ne = _f32x4_ne_0
-
-type Instr_f32x4_lt struct{}
-
-func _f32x4_lt_0() Instr_f32x4_lt {
-	return Instr_f32x4_lt{}
-}
-
-var _f32x4_lt = _f32x4_lt_0
-
-type Instr_f32x4_le struct{}
-
-func _f32x4_le_0() Instr_f32x4_le {
-	return Instr_f32x4_le{}
-}
-
-var _f32x4_le = _f32x4_le_0
-
-type Instr_f32x4_gt struct{}
-
-func _f32x4_gt_0() Instr_f32x4_gt {
-	return Instr_f32x4_gt{}
-}
-
-var _f32x4_gt = _f32x4_gt_0
-
-type Instr_f32x4_ge struct{}
-
-func _f32x4_ge_0() Instr_f32x4_ge {
-	return Instr_f32x4_ge{}
-}
-
-var _f32x4_ge = _f32x4_ge_0
-
-type Instr_f32x4_abs struct{}
-
-func _f32x4_abs_0() Instr_f32x4_abs {
-	return Instr_f32x4_abs{}
-}
-
-var _f32x4_abs = _f32x4_abs_0
-
-type Instr_f32x4_neg struct{}
-
-func _f32x4_neg_0() Instr_f32x4_neg {
-	return Instr_f32x4_neg{}
-}
-
-var _f32x4_neg = _f32x4_neg_0
-
-type Instr_f32x4_sqrt struct{}
-
-func _f32x4_sqrt_0() Instr_f32x4_sqrt {
-	return Instr_f32x4_sqrt{}
-}
-
-var _f32x4_sqrt = _f32x4_sqrt_0
-
-type Instr_f32x4_ceil struct{}
-
-func _f32x4_ceil_0() Instr_f32x4_ceil {
-	return Instr_f32x4_ceil{}
-}
-
-var _f32x4_ceil = _f32x4_ceil_0
-
-type Instr_f32x4_floor struct{}
-
-func _f32x4_floor_0() Instr_f32x4_floor {
-	return Instr_f32x4_floor{}
-}
-
-var _f32x4_floor = _f32x4_floor_0
-
-type Instr_f32x4_trunc struct{}
-
-func _f32x4_trunc_0() Instr_f32x4_trunc {
-	return Instr_f32x4_trunc{}
-}
-
-var _f32x4_trunc = _f32x4_trunc_0
-
-type Instr_f32x4_nearest struct{}
-
-func _f32x4_nearest_0() Instr_f32x4_nearest {
-	return Instr_f32x4_nearest{}
-}
-
-var _f32x4_nearest = _f32x4_nearest_0
-
-type Instr_f32x4_add struct{}
-
-func _f32x4_add_0() Instr_f32x4_add {
-	return Instr_f32x4_add{}
-}
-
-var _f32x4_add = _f32x4_add_0
-
-type Instr_f32x4_sub struct{}
-
-func _f32x4_sub_0() Instr_f32x4_sub {
-	return Instr_f32x4_sub{}
-}
-
-var _f32x4_sub = _f32x4_sub_0
-
-type Instr_f32x4_mul struct{}
-
-func _f32x4_mul_0() Instr_f32x4_mul {
-	return Instr_f32x4_mul{}
-}
-
-var _f32x4_mul = _f32x4_mul_0
-
-type Instr_f32x4_div struct{}
-
-func _f32x4_div_0() Instr_f32x4_div {
-	return Instr_f32x4_div{}
-}
-
-var _f32x4_div = _f32x4_div_0
-
-type Instr_f32x4_min struct{}
-
-func _f32x4_min_0() Instr_f32x4_min {
-	return Instr_f32x4_min{}
-}
-
-var _f32x4_min = _f32x4_min_0
-
-type Instr_f32x4_max struct{}
-
-func _f32x4_max_0() Instr_f32x4_max {
-	return Instr_f32x4_max{}
-}
-
-var _f32x4_max = _f32x4_max_0
-
-type Instr_f32x4_pmin struct{}
-
-func _f32x4_pmin_0() Instr_f32x4_pmin {
-	return Instr_f32x4_pmin{}
-}
-
-var _f32x4_pmin = _f32x4_pmin_0
-
-type Instr_f32x4_pmax struct{}
-
-func _f32x4_pmax_0() Instr_f32x4_pmax {
-	return Instr_f32x4_pmax{}
-}
-
-var _f32x4_pmax = _f32x4_pmax_0
-
-type Instr_f32x4_demote_f64x2_zero struct{}
-
-func _f32x4_demote_f64x2_zero_0() Instr_f32x4_demote_f64x2_zero {
-	return Instr_f32x4_demote_f64x2_zero{}
-}
-
-var _f32x4_demote_f64x2_zero = _f32x4_demote_f64x2_zero_0
-
-type Instr_f32x4_convert_i32x4_s struct{}
-
-func _f32x4_convert_i32x4_s_0() Instr_f32x4_convert_i32x4_s {
-	return Instr_f32x4_convert_i32x4_s{}
-}
-
-var _f32x4_convert_i32x4_s = _f32x4_convert_i32x4_s_0
-
-type Instr_f32x4_convert_i32x4_u struct{}
-
-func _f32x4_convert_i32x4_u_0() Instr_f32x4_convert_i32x4_u {
-	return Instr_f32x4_convert_i32x4_u{}
-}
-
-var _f32x4_convert_i32x4_u = _f32x4_convert_i32x4_u_0
-
-type Instr_f64x2_splat struct{}
-
-func _f64x2_splat_0() Instr_f64x2_splat {
-	return Instr_f64x2_splat{}
-}
-
-var _f64x2_splat = _f64x2_splat_0
-
-type Instr_f64x2_extract_lane struct {
-	I OInt
-}
-
-func _f64x2_extract_lane_1(_i OInt) Instr_f64x2_extract_lane {
-	return Instr_f64x2_extract_lane{
-		I: _i,
-	}
-}
-
-var _f64x2_extract_lane = _f64x2_extract_lane_1
-
-type Instr_f64x2_replace_lane struct {
-	I OInt
-}
-
-func _f64x2_replace_lane_1(_i OInt) Instr_f64x2_replace_lane {
-	return Instr_f64x2_replace_lane{
-		I: _i,
-	}
-}
-
-var _f64x2_replace_lane = _f64x2_replace_lane_1
-
-type Instr_f64x2_eq struct{}
-
-func _f64x2_eq_0() Instr_f64x2_eq {
-	return Instr_f64x2_eq{}
-}
-
-var _f64x2_eq = _f64x2_eq_0
-
-type Instr_f64x2_ne struct{}
-
-func _f64x2_ne_0() Instr_f64x2_ne {
-	return Instr_f64x2_ne{}
-}
-
-var _f64x2_ne = _f64x2_ne_0
-
-type Instr_f64x2_lt struct{}
-
-func _f64x2_lt_0() Instr_f64x2_lt {
-	return Instr_f64x2_lt{}
-}
-
-var _f64x2_lt = _f64x2_lt_0
-
-type Instr_f64x2_le struct{}
-
-func _f64x2_le_0() Instr_f64x2_le {
-	return Instr_f64x2_le{}
-}
-
-var _f64x2_le = _f64x2_le_0
-
-type Instr_f64x2_gt struct{}
-
-func _f64x2_gt_0() Instr_f64x2_gt {
-	return Instr_f64x2_gt{}
-}
-
-var _f64x2_gt = _f64x2_gt_0
-
-type Instr_f64x2_ge struct{}
-
-func _f64x2_ge_0() Instr_f64x2_ge {
-	return Instr_f64x2_ge{}
-}
-
-var _f64x2_ge = _f64x2_ge_0
-
-type Instr_f64x2_neg struct{}
-
-func _f64x2_neg_0() Instr_f64x2_neg {
-	return Instr_f64x2_neg{}
-}
-
-var _f64x2_neg = _f64x2_neg_0
-
-type Instr_f64x2_sqrt struct{}
-
-func _f64x2_sqrt_0() Instr_f64x2_sqrt {
-	return Instr_f64x2_sqrt{}
-}
-
-var _f64x2_sqrt = _f64x2_sqrt_0
-
-type Instr_f64x2_ceil struct{}
-
-func _f64x2_ceil_0() Instr_f64x2_ceil {
-	return Instr_f64x2_ceil{}
-}
-
-var _f64x2_ceil = _f64x2_ceil_0
-
-type Instr_f64x2_floor struct{}
-
-func _f64x2_floor_0() Instr_f64x2_floor {
-	return Instr_f64x2_floor{}
-}
-
-var _f64x2_floor = _f64x2_floor_0
-
-type Instr_f64x2_trunc struct{}
-
-func _f64x2_trunc_0() Instr_f64x2_trunc {
-	return Instr_f64x2_trunc{}
-}
-
-var _f64x2_trunc = _f64x2_trunc_0
-
-type Instr_f64x2_nearest struct{}
-
-func _f64x2_nearest_0() Instr_f64x2_nearest {
-	return Instr_f64x2_nearest{}
-}
-
-var _f64x2_nearest = _f64x2_nearest_0
-
-type Instr_f64x2_add struct{}
-
-func _f64x2_add_0() Instr_f64x2_add {
-	return Instr_f64x2_add{}
-}
-
-var _f64x2_add = _f64x2_add_0
-
-type Instr_f64x2_sub struct{}
-
-func _f64x2_sub_0() Instr_f64x2_sub {
-	return Instr_f64x2_sub{}
-}
-
-var _f64x2_sub = _f64x2_sub_0
-
-type Instr_f64x2_mul struct{}
-
-func _f64x2_mul_0() Instr_f64x2_mul {
-	return Instr_f64x2_mul{}
-}
-
-var _f64x2_mul = _f64x2_mul_0
-
-type Instr_f64x2_div struct{}
-
-func _f64x2_div_0() Instr_f64x2_div {
-	return Instr_f64x2_div{}
-}
-
-var _f64x2_div = _f64x2_div_0
-
-type Instr_f64x2_min struct{}
-
-func _f64x2_min_0() Instr_f64x2_min {
-	return Instr_f64x2_min{}
-}
-
-var _f64x2_min = _f64x2_min_0
-
-type Instr_f64x2_max struct{}
-
-func _f64x2_max_0() Instr_f64x2_max {
-	return Instr_f64x2_max{}
-}
-
-var _f64x2_max = _f64x2_max_0
-
-type Instr_f64x2_abs struct{}
-
-func _f64x2_abs_0() Instr_f64x2_abs {
-	return Instr_f64x2_abs{}
-}
-
-var _f64x2_abs = _f64x2_abs_0
-
-type Instr_f64x2_pmin struct{}
-
-func _f64x2_pmin_0() Instr_f64x2_pmin {
-	return Instr_f64x2_pmin{}
-}
-
-var _f64x2_pmin = _f64x2_pmin_0
-
-type Instr_f64x2_pmax struct{}
-
-func _f64x2_pmax_0() Instr_f64x2_pmax {
-	return Instr_f64x2_pmax{}
-}
-
-var _f64x2_pmax = _f64x2_pmax_0
-
-type Instr_f64x2_promote_low_f32x4 struct{}
-
-func _f64x2_promote_low_f32x4_0() Instr_f64x2_promote_low_f32x4 {
-	return Instr_f64x2_promote_low_f32x4{}
-}
-
-var _f64x2_promote_low_f32x4 = _f64x2_promote_low_f32x4_0
-
-type Instr_f64x2_convert_low_i32x4_s struct{}
-
-func _f64x2_convert_low_i32x4_s_0() Instr_f64x2_convert_low_i32x4_s {
-	return Instr_f64x2_convert_low_i32x4_s{}
-}
-
-var _f64x2_convert_low_i32x4_s = _f64x2_convert_low_i32x4_s_0
-
-type Instr_f64x2_convert_low_i32x4_u struct{}
-
-func _f64x2_convert_low_i32x4_u_0() Instr_f64x2_convert_low_i32x4_u {
-	return Instr_f64x2_convert_low_i32x4_u{}
-}
-
-var _f64x2_convert_low_i32x4_u = _f64x2_convert_low_i32x4_u_0
-
-type Instr_i8x16_relaxed_swizzle struct{}
-
-func _i8x16_relaxed_swizzle_0() Instr_i8x16_relaxed_swizzle {
-	return Instr_i8x16_relaxed_swizzle{}
-}
-
-var _i8x16_relaxed_swizzle = _i8x16_relaxed_swizzle_0
-
-type Instr_i8x16_relaxed_laneselect struct{}
-
-func _i8x16_relaxed_laneselect_0() Instr_i8x16_relaxed_laneselect {
-	return Instr_i8x16_relaxed_laneselect{}
-}
-
-var _i8x16_relaxed_laneselect = _i8x16_relaxed_laneselect_0
-
-type Instr_i16x8_relaxed_q15mulr_s struct{}
-
-func _i16x8_relaxed_q15mulr_s_0() Instr_i16x8_relaxed_q15mulr_s {
-	return Instr_i16x8_relaxed_q15mulr_s{}
-}
-
-var _i16x8_relaxed_q15mulr_s = _i16x8_relaxed_q15mulr_s_0
-
-type Instr_i16x8_relaxed_laneselect struct{}
-
-func _i16x8_relaxed_laneselect_0() Instr_i16x8_relaxed_laneselect {
-	return Instr_i16x8_relaxed_laneselect{}
-}
-
-var _i16x8_relaxed_laneselect = _i16x8_relaxed_laneselect_0
-
-type Instr_i32x4_relaxed_trunc_f32x4_s struct{}
-
-func _i32x4_relaxed_trunc_f32x4_s_0() Instr_i32x4_relaxed_trunc_f32x4_s {
-	return Instr_i32x4_relaxed_trunc_f32x4_s{}
-}
-
-var _i32x4_relaxed_trunc_f32x4_s = _i32x4_relaxed_trunc_f32x4_s_0
-
-type Instr_i32x4_relaxed_trunc_f32x4_u struct{}
-
-func _i32x4_relaxed_trunc_f32x4_u_0() Instr_i32x4_relaxed_trunc_f32x4_u {
-	return Instr_i32x4_relaxed_trunc_f32x4_u{}
-}
-
-var _i32x4_relaxed_trunc_f32x4_u = _i32x4_relaxed_trunc_f32x4_u_0
-
-type Instr_i32x4_relaxed_trunc_f64x2_s_zero struct{}
-
-func _i32x4_relaxed_trunc_f64x2_s_zero_0() Instr_i32x4_relaxed_trunc_f64x2_s_zero {
-	return Instr_i32x4_relaxed_trunc_f64x2_s_zero{}
-}
-
-var _i32x4_relaxed_trunc_f64x2_s_zero = _i32x4_relaxed_trunc_f64x2_s_zero_0
-
-type Instr_i32x4_relaxed_trunc_f64x2_u_zero struct{}
-
-func _i32x4_relaxed_trunc_f64x2_u_zero_0() Instr_i32x4_relaxed_trunc_f64x2_u_zero {
-	return Instr_i32x4_relaxed_trunc_f64x2_u_zero{}
-}
-
-var _i32x4_relaxed_trunc_f64x2_u_zero = _i32x4_relaxed_trunc_f64x2_u_zero_0
-
-type Instr_i32x4_relaxed_laneselect struct{}
-
-func _i32x4_relaxed_laneselect_0() Instr_i32x4_relaxed_laneselect {
-	return Instr_i32x4_relaxed_laneselect{}
-}
-
-var _i32x4_relaxed_laneselect = _i32x4_relaxed_laneselect_0
-
-type Instr_i64x2_relaxed_laneselect struct{}
-
-func _i64x2_relaxed_laneselect_0() Instr_i64x2_relaxed_laneselect {
-	return Instr_i64x2_relaxed_laneselect{}
-}
-
-var _i64x2_relaxed_laneselect = _i64x2_relaxed_laneselect_0
-
-type Instr_f32x4_relaxed_madd struct{}
-
-func _f32x4_relaxed_madd_0() Instr_f32x4_relaxed_madd {
-	return Instr_f32x4_relaxed_madd{}
-}
-
-var _f32x4_relaxed_madd = _f32x4_relaxed_madd_0
-
-type Instr_f32x4_relaxed_nmadd struct{}
-
-func _f32x4_relaxed_nmadd_0() Instr_f32x4_relaxed_nmadd {
-	return Instr_f32x4_relaxed_nmadd{}
-}
-
-var _f32x4_relaxed_nmadd = _f32x4_relaxed_nmadd_0
-
-type Instr_f32x4_relaxed_min struct{}
-
-func _f32x4_relaxed_min_0() Instr_f32x4_relaxed_min {
-	return Instr_f32x4_relaxed_min{}
-}
-
-var _f32x4_relaxed_min = _f32x4_relaxed_min_0
-
-type Instr_f32x4_relaxed_max struct{}
-
-func _f32x4_relaxed_max_0() Instr_f32x4_relaxed_max {
-	return Instr_f32x4_relaxed_max{}
-}
-
-var _f32x4_relaxed_max = _f32x4_relaxed_max_0
-
-type Instr_f64x2_relaxed_madd struct{}
-
-func _f64x2_relaxed_madd_0() Instr_f64x2_relaxed_madd {
-	return Instr_f64x2_relaxed_madd{}
-}
-
-var _f64x2_relaxed_madd = _f64x2_relaxed_madd_0
-
-type Instr_f64x2_relaxed_nmadd struct{}
-
-func _f64x2_relaxed_nmadd_0() Instr_f64x2_relaxed_nmadd {
-	return Instr_f64x2_relaxed_nmadd{}
-}
-
-var _f64x2_relaxed_nmadd = _f64x2_relaxed_nmadd_0
-
-type Instr_f64x2_relaxed_min struct{}
-
-func _f64x2_relaxed_min_0() Instr_f64x2_relaxed_min {
-	return Instr_f64x2_relaxed_min{}
-}
-
-var _f64x2_relaxed_min = _f64x2_relaxed_min_0
-
-type Instr_f64x2_relaxed_max struct{}
-
-func _f64x2_relaxed_max_0() Instr_f64x2_relaxed_max {
-	return Instr_f64x2_relaxed_max{}
-}
-
-var _f64x2_relaxed_max = _f64x2_relaxed_max_0
-
-type Instr_i16x8_relaxed_dot_i8x16_i7x16_s struct{}
-
-func _i16x8_relaxed_dot_i8x16_i7x16_s_0() Instr_i16x8_relaxed_dot_i8x16_i7x16_s {
-	return Instr_i16x8_relaxed_dot_i8x16_i7x16_s{}
-}
-
-var _i16x8_relaxed_dot_i8x16_i7x16_s = _i16x8_relaxed_dot_i8x16_i7x16_s_0
-
-type Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s struct{}
-
-func _i32x4_relaxed_dot_i8x16_i7x16_add_s_0() Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s {
-	return Instr_i32x4_relaxed_dot_i8x16_i7x16_add_s{}
-}
-
-var _i32x4_relaxed_dot_i8x16_i7x16_add_s = _i32x4_relaxed_dot_i8x16_i7x16_add_s_0
 
 func _bit_2(_i OInt, _n OInt) bool {
 	__tmp1 := _operatorNotEq_2(_int_operatorland_2(_n, _int_operatorlsl_2(1, _i)), 0)
@@ -8035,7 +3400,7 @@ var _block_type = _block_type_1
 
 func _local_1(_s *Stream) struct {
 	F0 OLocalIdx
-	F1 *Phrase[Local_]
+	F1 *Phrase[OLocal_]
 } {
 	__tmp1 := _u32_1(_s)
 	_n := __tmp1
@@ -8043,16 +3408,16 @@ func _local_1(_s *Stream) struct {
 	_t := __tmp4
 	return struct {
 		F0 OLocalIdx
-		F1 *Phrase[Local_]
+		F1 *Phrase[OLocal_]
 	}{_n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)}
 }
 
 var _local = _local_1
 
-func _instr_1(_s *Stream) Instruction_ {
+func _instr_1(_s *Stream) OInstr_ {
 	__tmp1 := _pos_1(_s)
 	_pos := __tmp1
-	var __tmp4 Instruction_
+	var __tmp4 OInstr_
 	__tmp5 := _op_1(_s)
 	if __tmp5 == 0x00 {
 		__tmp8 := _unreachable
@@ -8085,7 +3450,7 @@ func _instr_1(_s *Stream) Instruction_ {
 		_bt := __tmp32
 		__tmp35 := _instr_block_1(_s)
 		_es1 := __tmp35
-		var __tmp38 Instruction_
+		var __tmp38 OInstr_
 		if _operatorEq_2(_peek_1(_s), _Some_1(0x05)) {
 			__tmp43 := _expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
@@ -8099,7 +3464,7 @@ func _instr_1(_s *Stream) Instruction_ {
 		} else {
 			__tmp54 := _end__1(_s)
 			_ = __tmp54
-			__tmp56 := _if__3(_bt, _es1, []*Phrase[Instruction_]{})
+			__tmp56 := _if__3(_bt, _es1, []OInstr{})
 
 			__tmp38 = __tmp56
 		}
@@ -8764,7 +4129,7 @@ func _instr_1(_s *Stream) Instruction_ {
 		__tmp4 = __tmp586
 	} else if __tmp5 == 0xfb {
 		_b := __tmp5
-		var __tmp591 Instruction_
+		var __tmp591 OInstr_
 		__tmp592 := _u32_1(_s)
 		if __tmp592 == 0x00 {
 			__tmp595 := _struct_new_1(_at_2(_var, _s))
@@ -8954,7 +4319,7 @@ func _instr_1(_s *Stream) Instruction_ {
 		__tmp4 = __tmp591
 	} else if __tmp5 == 0xfc {
 		_b := __tmp5
-		var __tmp819 Instruction_
+		var __tmp819 OInstr_
 		__tmp820 := _u32_1(_s)
 		if __tmp820 == 0x00 {
 			__tmp823 := _i32_trunc_sat_f32_s
@@ -9033,7 +4398,7 @@ func _instr_1(_s *Stream) Instruction_ {
 		}
 		__tmp4 = __tmp819
 	} else if __tmp5 == 0xfd {
-		var __tmp906 Instruction_
+		var __tmp906 OInstr_
 		__tmp907 := _u32_1(_s)
 		if __tmp907 == 0x00 {
 			__tmp910 := _memop_1(_s)

@@ -141,8 +141,6 @@ func _operatorLSL_int_2(a, b OInt) OInt {
 
 // Manual translation of the "Types" section
 
-type Instruction_ interface{}
-
 type V128 [16]byte
 
 func _V128_of_bits_1(bits string) V128 {
