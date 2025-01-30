@@ -34,14 +34,14 @@ var files = []File{
 		Path:      []string{"interpreter", "syntax", "ast.ml"},
 		SkipFuncs: true,
 	},
-	// {
-	// 	Path:     []string{"interpreter", "syntax", "operators.ml"},
-	// 	AllFuncs: true,
-	// },
+	{
+		Path:     []string{"interpreter", "syntax", "operators.ml"},
+		AllFuncs: true,
+	},
 	{Path: []string{"interpreter", "binary", "decode.ml"}},
 }
 
-var funcsToTranslate = []string{
+var toTranslate = []string{
 	// Generic values
 	"bit", "byte", "word16", "word32", "word64",
 	"uN", "sN", "u32", "u64", "s7", "s32", "s33", "s64", "f32", "f64", "v128",
@@ -197,10 +197,19 @@ func main() {
 							switch def.GrammarName() {
 							case "let_binding":
 								pattern := def.ChildByFieldName("pattern")
-								if f.AllFuncs || slices.Contains(funcsToTranslate, p.s(pattern)) {
-									if !f.SkipFuncs {
-										p.parseFunc(&def)
+								t := p.getTypeStart(pattern)
+
+								switch t.(type) {
+								case ocaml.Func:
+									if f.AllFuncs || slices.Contains(toTranslate, p.s(pattern)) {
+										if !f.SkipFuncs {
+											p.parseFunc(&def)
+										}
 									}
+								case ocaml.Alias:
+									p.parseValueDef(&def)
+								default:
+									w("// TODO: Unknown type for definition of %s: %s\n\n", p.s(pattern), t)
 								}
 							}
 						}
@@ -480,6 +489,17 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	w("var %s = %s\n\n", funcName("", p.s(pattern), -1), fullFuncName)
 }
 
+func (p *ocamlParse) parseValueDef(def *tree_sitter.Node) {
+	pattern := def.ChildByFieldName("pattern")
+	body := def.ChildByFieldName("body")
+
+	expectedType := p.getTypeStart(pattern)
+
+	w("var %s = ", safeName(p.s(pattern)))
+	p.parseExpr(body, expectedType, "", false, false)
+	w("\n")
+}
+
 var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
 
 func safeName(name string) string {
@@ -613,7 +633,7 @@ func (p *ocamlParse) parseExpr(
 		}
 
 		funcModule := currentModule
-		if slices.Contains(funcsToTranslate, p.s(function)) {
+		if slices.Contains(toTranslate, p.s(function)) {
 			// HACK: Don't apply a module to any function we are translating;
 			// they have been defined and are already in scope.
 			funcModule = ""

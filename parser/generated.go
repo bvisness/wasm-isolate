@@ -2895,6 +2895,2338 @@ type OModule_ struct {
 	Imports  []OImport
 	Exports  []OExport
 }
+
+var _empty_module = nil /* TODO: record_expression */
+func _i32_const_1(_n *Phrase[OTypeIdx]) OInstr_ {
+	__tmp1 := _Const_1(_operatorAtAt_2(_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	return __tmp1
+}
+
+var _i32_const = _i32_const_1
+
+func _i64_const_1(_n *Phrase[OInt64]) OInstr_ {
+	__tmp1 := _Const_1(_operatorAtAt_2(_I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	return __tmp1
+}
+
+var _i64_const = _i64_const_1
+
+func _f32_const_1(_n *Phrase[float32]) OInstr_ {
+	__tmp1 := _Const_1(_operatorAtAt_2(_F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	return __tmp1
+}
+
+var _f32_const = _f32_const_1
+
+func _f64_const_1(_n *Phrase[float64]) OInstr_ {
+	__tmp1 := _Const_1(_operatorAtAt_2(_F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	return __tmp1
+}
+
+var _f64_const = _f64_const_1
+
+func _v128_const_1(_n *Phrase[V128]) OInstr_ {
+	__tmp1 := _VecConst_1(_operatorAtAt_2(_V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	return __tmp1
+}
+
+var _v128_const = _v128_const_1
+
+func _ref_null_1(_t OHeapType) OInstr_ {
+	__tmp1 := _RefNull_1(_t)
+	return __tmp1
+}
+
+var _ref_null = _ref_null_1
+
+func _ref_func_1(_x OIdx) OInstr_ {
+	__tmp1 := _RefFunc_1(_x)
+	return __tmp1
+}
+
+var _ref_func = _ref_func_1
+
+func _at_const_0() func(OAddrType) func(*Phrase[OInt64]) OInstr_ {
+	TODO /* unknown expression type function_expression */
+}
+
+var _at_const = _at_const_0
+
+var _unreachable = _Unreachable
+var _nop = _Nop
+var _drop = _Drop
+
+func _select_1(_t *[]OValType) OInstr_ {
+	__tmp1 := _Select_1(_t)
+	return __tmp1
+}
+
+var _select = _select_1
+
+func _block_2(_bt OBlockType, _es []OInstr) OInstr_ {
+	__tmp1 := _Block_1(struct {
+		F0 OBlockType
+		F1 []OInstr
+	}{_bt, _es})
+	return __tmp1
+}
+
+func _block_1(_bt OBlockType) func(_es []OInstr) OInstr_ {
+	return func(_es []OInstr) OInstr_ {
+		return _block_2(_bt, _es)
+	}
+}
+
+var _block = _block_2
+
+func _loop_2(_bt OBlockType, _es []OInstr) OInstr_ {
+	__tmp1 := _Loop_1(struct {
+		F0 OBlockType
+		F1 []OInstr
+	}{_bt, _es})
+	return __tmp1
+}
+
+func _loop_1(_bt OBlockType) func(_es []OInstr) OInstr_ {
+	return func(_es []OInstr) OInstr_ {
+		return _loop_2(_bt, _es)
+	}
+}
+
+var _loop = _loop_2
+
+func _if__3(_bt OBlockType, _es1 []OInstr, _es2 []OInstr) OInstr_ {
+	__tmp1 := _If_1(struct {
+		F0 OBlockType
+		F1 []OInstr
+		F2 []OInstr
+	}{_bt, _es1, _es2})
+	return __tmp1
+}
+
+func _if__2(_bt OBlockType, _es1 []OInstr) func(_es2 []OInstr) OInstr_ {
+	return func(_es2 []OInstr) OInstr_ {
+		return _if__3(_bt, _es1, _es2)
+	}
+}
+
+func _if__1(_bt OBlockType) func(_es1 []OInstr, _es2 []OInstr) OInstr_ {
+	return func(_es1 []OInstr, _es2 []OInstr) OInstr_ {
+		return _if__3(_bt, _es1, _es2)
+	}
+}
+
+var _if_ = _if__3
+
+func _br_1(_x OIdx) OInstr_ {
+	__tmp1 := _Br_1(_x)
+	return __tmp1
+}
+
+var _br = _br_1
+
+func _br_if_1(_x OIdx) OInstr_ {
+	__tmp1 := _BrIf_1(_x)
+	return __tmp1
+}
+
+var _br_if = _br_if_1
+
+func _br_table_2(_xs []OIdx, _x OIdx) OInstr_ {
+	__tmp1 := _BrTable_1(struct {
+		F0 []OIdx
+		F1 OIdx
+	}{_xs, _x})
+	return __tmp1
+}
+
+func _br_table_1(_xs []OIdx) func(_x OIdx) OInstr_ {
+	return func(_x OIdx) OInstr_ {
+		return _br_table_2(_xs, _x)
+	}
+}
+
+var _br_table = _br_table_2
+
+func _br_on_null_1(_x OIdx) OInstr_ {
+	__tmp1 := _BrOnNull_1(_x)
+	return __tmp1
+}
+
+var _br_on_null = _br_on_null_1
+
+func _br_on_non_null_1(_x OIdx) OInstr_ {
+	__tmp1 := _BrOnNonNull_1(_x)
+	return __tmp1
+}
+
+var _br_on_non_null = _br_on_non_null_1
+
+func _br_on_cast_3(_x OIdx, _t1 ORefType, _t2 ORefType) OInstr_ {
+	__tmp1 := _BrOnCast_1(struct {
+		F0 OIdx
+		F1 ORefType
+		F2 ORefType
+	}{_x, _t1, _t2})
+	return __tmp1
+}
+
+func _br_on_cast_2(_x OIdx, _t1 ORefType) func(_t2 ORefType) OInstr_ {
+	return func(_t2 ORefType) OInstr_ {
+		return _br_on_cast_3(_x, _t1, _t2)
+	}
+}
+
+func _br_on_cast_1(_x OIdx) func(_t1 ORefType, _t2 ORefType) OInstr_ {
+	return func(_t1 ORefType, _t2 ORefType) OInstr_ {
+		return _br_on_cast_3(_x, _t1, _t2)
+	}
+}
+
+var _br_on_cast = _br_on_cast_3
+
+func _br_on_cast_fail_3(_x OIdx, _t1 ORefType, _t2 ORefType) OInstr_ {
+	__tmp1 := _BrOnCastFail_1(struct {
+		F0 OIdx
+		F1 ORefType
+		F2 ORefType
+	}{_x, _t1, _t2})
+	return __tmp1
+}
+
+func _br_on_cast_fail_2(_x OIdx, _t1 ORefType) func(_t2 ORefType) OInstr_ {
+	return func(_t2 ORefType) OInstr_ {
+		return _br_on_cast_fail_3(_x, _t1, _t2)
+	}
+}
+
+func _br_on_cast_fail_1(_x OIdx) func(_t1 ORefType, _t2 ORefType) OInstr_ {
+	return func(_t1 ORefType, _t2 ORefType) OInstr_ {
+		return _br_on_cast_fail_3(_x, _t1, _t2)
+	}
+}
+
+var _br_on_cast_fail = _br_on_cast_fail_3
+
+func _catch_2(_x1 OIdx, _x2 OIdx) OCatch_ {
+	__tmp1 := _Catch_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x1, _x2})
+	return __tmp1
+}
+
+func _catch_1(_x1 OIdx) func(_x2 OIdx) OCatch_ {
+	return func(_x2 OIdx) OCatch_ {
+		return _catch_2(_x1, _x2)
+	}
+}
+
+var _catch = _catch_2
+
+func _catch_ref_2(_x1 OIdx, _x2 OIdx) OCatch_ {
+	__tmp1 := _CatchRef_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x1, _x2})
+	return __tmp1
+}
+
+func _catch_ref_1(_x1 OIdx) func(_x2 OIdx) OCatch_ {
+	return func(_x2 OIdx) OCatch_ {
+		return _catch_ref_2(_x1, _x2)
+	}
+}
+
+var _catch_ref = _catch_ref_2
+
+func _catch_all_1(_x OIdx) OCatch_ {
+	__tmp1 := _CatchAll_1(_x)
+	return __tmp1
+}
+
+var _catch_all = _catch_all_1
+
+func _catch_all_ref_1(_x OIdx) OCatch_ {
+	__tmp1 := _CatchAllRef_1(_x)
+	return __tmp1
+}
+
+var _catch_all_ref = _catch_all_ref_1
+
+var _return = _Return
+
+func _call_1(_x OIdx) OInstr_ {
+	__tmp1 := _Call_1(_x)
+	return __tmp1
+}
+
+var _call = _call_1
+
+func _call_ref_1(_x OIdx) OInstr_ {
+	__tmp1 := _CallRef_1(_x)
+	return __tmp1
+}
+
+var _call_ref = _call_ref_1
+
+func _call_indirect_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _CallIndirect_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _call_indirect_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _call_indirect_2(_x, _y)
+	}
+}
+
+var _call_indirect = _call_indirect_2
+
+func _return_call_1(_x OIdx) OInstr_ {
+	__tmp1 := _ReturnCall_1(_x)
+	return __tmp1
+}
+
+var _return_call = _return_call_1
+
+func _return_call_ref_1(_x OIdx) OInstr_ {
+	__tmp1 := _ReturnCallRef_1(_x)
+	return __tmp1
+}
+
+var _return_call_ref = _return_call_ref_1
+
+func _return_call_indirect_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ReturnCallIndirect_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _return_call_indirect_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _return_call_indirect_2(_x, _y)
+	}
+}
+
+var _return_call_indirect = _return_call_indirect_2
+
+func _throw_1(_x OIdx) OInstr_ {
+	__tmp1 := _Throw_1(_x)
+	return __tmp1
+}
+
+var _throw = _throw_1
+
+var _throw_ref = _ThrowRef
+
+func _try_table_3(_bt OBlockType, _cs []OCatch, _es []OInstr) OInstr_ {
+	__tmp1 := _TryTable_1(struct {
+		F0 OBlockType
+		F1 []OCatch
+		F2 []OInstr
+	}{_bt, _cs, _es})
+	return __tmp1
+}
+
+func _try_table_2(_bt OBlockType, _cs []OCatch) func(_es []OInstr) OInstr_ {
+	return func(_es []OInstr) OInstr_ {
+		return _try_table_3(_bt, _cs, _es)
+	}
+}
+
+func _try_table_1(_bt OBlockType) func(_cs []OCatch, _es []OInstr) OInstr_ {
+	return func(_cs []OCatch, _es []OInstr) OInstr_ {
+		return _try_table_3(_bt, _cs, _es)
+	}
+}
+
+var _try_table = _try_table_3
+
+func _local_get_1(_x OIdx) OInstr_ {
+	__tmp1 := _LocalGet_1(_x)
+	return __tmp1
+}
+
+var _local_get = _local_get_1
+
+func _local_set_1(_x OIdx) OInstr_ {
+	__tmp1 := _LocalSet_1(_x)
+	return __tmp1
+}
+
+var _local_set = _local_set_1
+
+func _local_tee_1(_x OIdx) OInstr_ {
+	__tmp1 := _LocalTee_1(_x)
+	return __tmp1
+}
+
+var _local_tee = _local_tee_1
+
+func _global_get_1(_x OIdx) OInstr_ {
+	__tmp1 := _GlobalGet_1(_x)
+	return __tmp1
+}
+
+var _global_get = _global_get_1
+
+func _global_set_1(_x OIdx) OInstr_ {
+	__tmp1 := _GlobalSet_1(_x)
+	return __tmp1
+}
+
+var _global_set = _global_set_1
+
+func _table_get_1(_x OIdx) OInstr_ {
+	__tmp1 := _TableGet_1(_x)
+	return __tmp1
+}
+
+var _table_get = _table_get_1
+
+func _table_set_1(_x OIdx) OInstr_ {
+	__tmp1 := _TableSet_1(_x)
+	return __tmp1
+}
+
+var _table_set = _table_set_1
+
+func _table_size_1(_x OIdx) OInstr_ {
+	__tmp1 := _TableSize_1(_x)
+	return __tmp1
+}
+
+var _table_size = _table_size_1
+
+func _table_grow_1(_x OIdx) OInstr_ {
+	__tmp1 := _TableGrow_1(_x)
+	return __tmp1
+}
+
+var _table_grow = _table_grow_1
+
+func _table_fill_1(_x OIdx) OInstr_ {
+	__tmp1 := _TableFill_1(_x)
+	return __tmp1
+}
+
+var _table_fill = _table_fill_1
+
+func _table_copy_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _TableCopy_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _table_copy_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _table_copy_2(_x, _y)
+	}
+}
+
+var _table_copy = _table_copy_2
+
+func _table_init_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _TableInit_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _table_init_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _table_init_2(_x, _y)
+	}
+}
+
+var _table_init = _table_init_2
+
+func _elem_drop_1(_x OIdx) OInstr_ {
+	__tmp1 := _ElemDrop_1(_x)
+	return __tmp1
+}
+
+var _elem_drop = _elem_drop_1
+
+func _i32_load_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_load_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_load_3(_x, _align, _offset)
+	}
+}
+
+func _i32_load_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_load_3(_x, _align, _offset)
+	}
+}
+
+var _i32_load = _i32_load_3
+
+func _i64_load_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load = _i64_load_3
+
+func _f32_load_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _f32_load_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _f32_load_3(_x, _align, _offset)
+	}
+}
+
+func _f32_load_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _f32_load_3(_x, _align, _offset)
+	}
+}
+
+var _f32_load = _f32_load_3
+
+func _f64_load_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _f64_load_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _f64_load_3(_x, _align, _offset)
+	}
+}
+
+func _f64_load_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _f64_load_3(_x, _align, _offset)
+	}
+}
+
+var _f64_load = _f64_load_3
+
+func _i32_load8_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_load8_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_load8_s_3(_x, _align, _offset)
+	}
+}
+
+func _i32_load8_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_load8_s_3(_x, _align, _offset)
+	}
+}
+
+var _i32_load8_s = _i32_load8_s_3
+
+func _i32_load8_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_load8_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_load8_u_3(_x, _align, _offset)
+	}
+}
+
+func _i32_load8_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_load8_u_3(_x, _align, _offset)
+	}
+}
+
+var _i32_load8_u = _i32_load8_u_3
+
+func _i32_load16_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_load16_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_load16_s_3(_x, _align, _offset)
+	}
+}
+
+func _i32_load16_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_load16_s_3(_x, _align, _offset)
+	}
+}
+
+var _i32_load16_s = _i32_load16_s_3
+
+func _i32_load16_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_load16_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_load16_u_3(_x, _align, _offset)
+	}
+}
+
+func _i32_load16_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_load16_u_3(_x, _align, _offset)
+	}
+}
+
+var _i32_load16_u = _i32_load16_u_3
+
+func _i64_load8_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load8_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load8_s_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load8_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load8_s_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load8_s = _i64_load8_s_3
+
+func _i64_load8_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load8_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load8_u_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load8_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load8_u_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load8_u = _i64_load8_u_3
+
+func _i64_load16_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load16_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load16_s_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load16_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load16_s_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load16_s = _i64_load16_s_3
+
+func _i64_load16_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load16_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load16_u_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load16_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load16_u_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load16_u = _i64_load16_u_3
+
+func _i64_load32_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load32_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load32_s_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load32_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load32_s_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load32_s = _i64_load32_s_3
+
+func _i64_load32_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Load_1(struct {
+		F0 OIdx
+		F1 OLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_load32_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_load32_u_3(_x, _align, _offset)
+	}
+}
+
+func _i64_load32_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_load32_u_3(_x, _align, _offset)
+	}
+}
+
+var _i64_load32_u = _i64_load32_u_3
+
+func _i32_store_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_store_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_store_3(_x, _align, _offset)
+	}
+}
+
+func _i32_store_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_store_3(_x, _align, _offset)
+	}
+}
+
+var _i32_store = _i32_store_3
+
+func _i64_store_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_store_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_store_3(_x, _align, _offset)
+	}
+}
+
+func _i64_store_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_store_3(_x, _align, _offset)
+	}
+}
+
+var _i64_store = _i64_store_3
+
+func _f32_store_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _f32_store_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _f32_store_3(_x, _align, _offset)
+	}
+}
+
+func _f32_store_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _f32_store_3(_x, _align, _offset)
+	}
+}
+
+var _f32_store = _f32_store_3
+
+func _f64_store_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _f64_store_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _f64_store_3(_x, _align, _offset)
+	}
+}
+
+func _f64_store_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _f64_store_3(_x, _align, _offset)
+	}
+}
+
+var _f64_store = _f64_store_3
+
+func _i32_store8_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_store8_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_store8_3(_x, _align, _offset)
+	}
+}
+
+func _i32_store8_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_store8_3(_x, _align, _offset)
+	}
+}
+
+var _i32_store8 = _i32_store8_3
+
+func _i32_store16_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i32_store16_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i32_store16_3(_x, _align, _offset)
+	}
+}
+
+func _i32_store16_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i32_store16_3(_x, _align, _offset)
+	}
+}
+
+var _i32_store16 = _i32_store16_3
+
+func _i64_store8_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_store8_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_store8_3(_x, _align, _offset)
+	}
+}
+
+func _i64_store8_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_store8_3(_x, _align, _offset)
+	}
+}
+
+var _i64_store8 = _i64_store8_3
+
+func _i64_store16_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_store16_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_store16_3(_x, _align, _offset)
+	}
+}
+
+func _i64_store16_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_store16_3(_x, _align, _offset)
+	}
+}
+
+var _i64_store16 = _i64_store16_3
+
+func _i64_store32_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _Store_1(struct {
+		F0 OIdx
+		F1 OStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _i64_store32_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _i64_store32_3(_x, _align, _offset)
+	}
+}
+
+func _i64_store32_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _i64_store32_3(_x, _align, _offset)
+	}
+}
+
+var _i64_store32 = _i64_store32_3
+
+func _v128_load_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load = _v128_load_3
+
+func _v128_load8x8_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load8x8_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load8x8_s_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load8x8_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load8x8_s_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load8x8_s = _v128_load8x8_s_3
+
+func _v128_load8x8_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load8x8_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load8x8_u_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load8x8_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load8x8_u_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load8x8_u = _v128_load8x8_u_3
+
+func _v128_load16x4_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load16x4_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load16x4_s_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load16x4_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load16x4_s_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load16x4_s = _v128_load16x4_s_3
+
+func _v128_load16x4_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load16x4_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load16x4_u_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load16x4_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load16x4_u_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load16x4_u = _v128_load16x4_u_3
+
+func _v128_load32x2_s_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load32x2_s_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load32x2_s_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load32x2_s_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load32x2_s_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load32x2_s = _v128_load32x2_s_3
+
+func _v128_load32x2_u_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load32x2_u_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load32x2_u_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load32x2_u_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load32x2_u_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load32x2_u = _v128_load32x2_u_3
+
+func _v128_load8_splat_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load8_splat_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load8_splat_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load8_splat_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load8_splat_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load8_splat = _v128_load8_splat_3
+
+func _v128_load16_splat_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load16_splat_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load16_splat_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load16_splat_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load16_splat_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load16_splat = _v128_load16_splat_3
+
+func _v128_load32_splat_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load32_splat_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load32_splat_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load32_splat_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load32_splat_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load32_splat = _v128_load32_splat_3
+
+func _v128_load64_splat_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load64_splat_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load64_splat_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load64_splat_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load64_splat_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load64_splat = _v128_load64_splat_3
+
+func _v128_load32_zero_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load32_zero_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load32_zero_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load32_zero_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load32_zero_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load32_zero = _v128_load32_zero_3
+
+func _v128_load64_zero_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecLoad_1(struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_load64_zero_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_load64_zero_3(_x, _align, _offset)
+	}
+}
+
+func _v128_load64_zero_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_load64_zero_3(_x, _align, _offset)
+	}
+}
+
+var _v128_load64_zero = _v128_load64_zero_3
+
+func _v128_load8_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecLoadLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_load8_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_load8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load8_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_load8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load8_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_load8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_load8_lane = _v128_load8_lane_4
+
+func _v128_load16_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecLoadLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_load16_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_load16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load16_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_load16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load16_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_load16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_load16_lane = _v128_load16_lane_4
+
+func _v128_load32_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecLoadLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_load32_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_load32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load32_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_load32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load32_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_load32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_load32_lane = _v128_load32_lane_4
+
+func _v128_load64_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecLoadLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_load64_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_load64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load64_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_load64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_load64_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_load64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_load64_lane = _v128_load64_lane_4
+
+func _v128_store_3(_x OIdx, _align OInt, _offset OInt64) OInstr_ {
+	__tmp1 := _VecStore_1(struct {
+		F0 OIdx
+		F1 OVecStoreop
+	}{_x, nil /* TODO: record_expression */})
+	return __tmp1
+}
+
+func _v128_store_2(_x OIdx, _align OInt) func(_offset OInt64) OInstr_ {
+	return func(_offset OInt64) OInstr_ {
+		return _v128_store_3(_x, _align, _offset)
+	}
+}
+
+func _v128_store_1(_x OIdx) func(_align OInt, _offset OInt64) OInstr_ {
+	return func(_align OInt, _offset OInt64) OInstr_ {
+		return _v128_store_3(_x, _align, _offset)
+	}
+}
+
+var _v128_store = _v128_store_3
+
+func _v128_store8_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecStoreLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_store8_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_store8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store8_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_store8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store8_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_store8_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_store8_lane = _v128_store8_lane_4
+
+func _v128_store16_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecStoreLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_store16_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_store16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store16_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_store16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store16_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_store16_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_store16_lane = _v128_store16_lane_4
+
+func _v128_store32_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecStoreLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_store32_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_store32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store32_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_store32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store32_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_store32_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_store32_lane = _v128_store32_lane_4
+
+func _v128_store64_lane_4(_x OIdx, _align OInt, _offset OInt64, _i OInt) OInstr_ {
+	__tmp1 := _VecStoreLane_1(struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}{_x, nil /* TODO: record_expression */, _i})
+	return __tmp1
+}
+
+func _v128_store64_lane_3(_x OIdx, _align OInt, _offset OInt64) func(_i OInt) OInstr_ {
+	return func(_i OInt) OInstr_ {
+		return _v128_store64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store64_lane_2(_x OIdx, _align OInt) func(_offset OInt64, _i OInt) OInstr_ {
+	return func(_offset OInt64, _i OInt) OInstr_ {
+		return _v128_store64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+func _v128_store64_lane_1(_x OIdx) func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+	return func(_align OInt, _offset OInt64, _i OInt) OInstr_ {
+		return _v128_store64_lane_4(_x, _align, _offset, _i)
+	}
+}
+
+var _v128_store64_lane = _v128_store64_lane_4
+
+func _memory_size_1(_x OIdx) OInstr_ {
+	__tmp1 := _MemorySize_1(_x)
+	return __tmp1
+}
+
+var _memory_size = _memory_size_1
+
+func _memory_grow_1(_x OIdx) OInstr_ {
+	__tmp1 := _MemoryGrow_1(_x)
+	return __tmp1
+}
+
+var _memory_grow = _memory_grow_1
+
+func _memory_fill_1(_x OIdx) OInstr_ {
+	__tmp1 := _MemoryFill_1(_x)
+	return __tmp1
+}
+
+var _memory_fill = _memory_fill_1
+
+func _memory_copy_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _MemoryCopy_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _memory_copy_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _memory_copy_2(_x, _y)
+	}
+}
+
+var _memory_copy = _memory_copy_2
+
+func _memory_init_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _MemoryInit_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _memory_init_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _memory_init_2(_x, _y)
+	}
+}
+
+var _memory_init = _memory_init_2
+
+func _data_drop_1(_x OIdx) OInstr_ {
+	__tmp1 := _DataDrop_1(_x)
+	return __tmp1
+}
+
+var _data_drop = _data_drop_1
+
+var _ref_is_null = _RefIsNull
+var _ref_as_non_null = _RefAsNonNull
+
+func _ref_test_1(_t ORefType) OInstr_ {
+	__tmp1 := _RefTest_1(_t)
+	return __tmp1
+}
+
+var _ref_test = _ref_test_1
+
+func _ref_cast_1(_t ORefType) OInstr_ {
+	__tmp1 := _RefCast_1(_t)
+	return __tmp1
+}
+
+var _ref_cast = _ref_cast_1
+
+var _ref_eq = _RefEq
+var _ref_i31 = _RefI31
+var _i31_get_u = _I31Get_1(_ZX)
+var _i31_get_s = _I31Get_1(_SX)
+
+func _struct_new_1(_x OIdx) OInstr_ {
+	__tmp1 := _StructNew_1(struct {
+		F0 OIdx
+		F1 OInitop
+	}{_x, _Explicit})
+	return __tmp1
+}
+
+var _struct_new = _struct_new_1
+
+func _struct_new_default_1(_x OIdx) OInstr_ {
+	__tmp1 := _StructNew_1(struct {
+		F0 OIdx
+		F1 OInitop
+	}{_x, _Implicit})
+	return __tmp1
+}
+
+var _struct_new_default = _struct_new_default_1
+
+func _struct_get_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _StructGet_1(struct {
+		F0 OIdx
+		F1 OIdx
+		F2 *OExtension
+	}{_x, _y, _None})
+	return __tmp1
+}
+
+func _struct_get_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _struct_get_2(_x, _y)
+	}
+}
+
+var _struct_get = _struct_get_2
+
+func _struct_get_u_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _StructGet_1(struct {
+		F0 OIdx
+		F1 OIdx
+		F2 *OExtension
+	}{_x, _y, _Some_1(_ZX)})
+	return __tmp1
+}
+
+func _struct_get_u_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _struct_get_u_2(_x, _y)
+	}
+}
+
+var _struct_get_u = _struct_get_u_2
+
+func _struct_get_s_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _StructGet_1(struct {
+		F0 OIdx
+		F1 OIdx
+		F2 *OExtension
+	}{_x, _y, _Some_1(_SX)})
+	return __tmp1
+}
+
+func _struct_get_s_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _struct_get_s_2(_x, _y)
+	}
+}
+
+var _struct_get_s = _struct_get_s_2
+
+func _struct_set_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _StructSet_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _struct_set_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _struct_set_2(_x, _y)
+	}
+}
+
+var _struct_set = _struct_set_2
+
+func _array_new_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayNew_1(struct {
+		F0 OIdx
+		F1 OInitop
+	}{_x, _Explicit})
+	return __tmp1
+}
+
+var _array_new = _array_new_1
+
+func _array_new_default_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayNew_1(struct {
+		F0 OIdx
+		F1 OInitop
+	}{_x, _Implicit})
+	return __tmp1
+}
+
+var _array_new_default = _array_new_default_1
+
+func _array_new_fixed_2(_x OIdx, _n OTypeIdx) OInstr_ {
+	__tmp1 := _ArrayNewFixed_1(struct {
+		F0 OIdx
+		F1 OTypeIdx
+	}{_x, _n})
+	return __tmp1
+}
+
+func _array_new_fixed_1(_x OIdx) func(_n OTypeIdx) OInstr_ {
+	return func(_n OTypeIdx) OInstr_ {
+		return _array_new_fixed_2(_x, _n)
+	}
+}
+
+var _array_new_fixed = _array_new_fixed_2
+
+func _array_new_elem_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ArrayNewElem_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _array_new_elem_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _array_new_elem_2(_x, _y)
+	}
+}
+
+var _array_new_elem = _array_new_elem_2
+
+func _array_new_data_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ArrayNewData_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _array_new_data_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _array_new_data_2(_x, _y)
+	}
+}
+
+var _array_new_data = _array_new_data_2
+
+func _array_get_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayGet_1(struct {
+		F0 OIdx
+		F1 *OExtension
+	}{_x, _None})
+	return __tmp1
+}
+
+var _array_get = _array_get_1
+
+func _array_get_u_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayGet_1(struct {
+		F0 OIdx
+		F1 *OExtension
+	}{_x, _Some_1(_ZX)})
+	return __tmp1
+}
+
+var _array_get_u = _array_get_u_1
+
+func _array_get_s_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayGet_1(struct {
+		F0 OIdx
+		F1 *OExtension
+	}{_x, _Some_1(_SX)})
+	return __tmp1
+}
+
+var _array_get_s = _array_get_s_1
+
+func _array_set_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArraySet_1(_x)
+	return __tmp1
+}
+
+var _array_set = _array_set_1
+
+var _array_len = _ArrayLen
+
+func _array_copy_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ArrayCopy_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _array_copy_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _array_copy_2(_x, _y)
+	}
+}
+
+var _array_copy = _array_copy_2
+
+func _array_fill_1(_x OIdx) OInstr_ {
+	__tmp1 := _ArrayFill_1(_x)
+	return __tmp1
+}
+
+var _array_fill = _array_fill_1
+
+func _array_init_data_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ArrayInitData_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _array_init_data_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _array_init_data_2(_x, _y)
+	}
+}
+
+var _array_init_data = _array_init_data_2
+
+func _array_init_elem_2(_x OIdx, _y OIdx) OInstr_ {
+	__tmp1 := _ArrayInitElem_1(struct {
+		F0 OIdx
+		F1 OIdx
+	}{_x, _y})
+	return __tmp1
+}
+
+func _array_init_elem_1(_x OIdx) func(_y OIdx) OInstr_ {
+	return func(_y OIdx) OInstr_ {
+		return _array_init_elem_2(_x, _y)
+	}
+}
+
+var _array_init_elem = _array_init_elem_2
+
+var _any_convert_extern = _ExternConvert_1(_Internalize)
+var _extern_convert_any = _ExternConvert_1(_Externalize)
+var _i32_clz = _Unary_1(_I32_1( /*I32Op.*/ _Clz))
+var _i32_ctz = _Unary_1(_I32_1( /*I32Op.*/ _Ctz))
+var _i32_popcnt = _Unary_1(_I32_1( /*I32Op.*/ _Popcnt))
+var _i64_clz = _Unary_1(_I64_1( /*I64Op.*/ _Clz))
+var _i64_ctz = _Unary_1(_I64_1( /*I64Op.*/ _Ctz))
+var _i64_popcnt = _Unary_1(_I64_1( /*I64Op.*/ _Popcnt))
+var _f32_neg = _Unary_1(_F32_1( /*F32Op.*/ _Neg))
+var _f32_abs = _Unary_1(_F32_1( /*F32Op.*/ _Abs))
+var _f32_sqrt = _Unary_1(_F32_1( /*F32Op.*/ _Sqrt))
+var _f32_ceil = _Unary_1(_F32_1( /*F32Op.*/ _Ceil))
+var _f32_floor = _Unary_1(_F32_1( /*F32Op.*/ _Floor))
+var _f32_trunc = _Unary_1(_F32_1( /*F32Op.*/ _Trunc))
+var _f32_nearest = _Unary_1(_F32_1( /*F32Op.*/ _Nearest))
+var _f64_neg = _Unary_1(_F64_1( /*F64Op.*/ _Neg))
+var _f64_abs = _Unary_1(_F64_1( /*F64Op.*/ _Abs))
+var _f64_sqrt = _Unary_1(_F64_1( /*F64Op.*/ _Sqrt))
+var _f64_ceil = _Unary_1(_F64_1( /*F64Op.*/ _Ceil))
+var _f64_floor = _Unary_1(_F64_1( /*F64Op.*/ _Floor))
+var _f64_trunc = _Unary_1(_F64_1( /*F64Op.*/ _Trunc))
+var _f64_nearest = _Unary_1(_F64_1( /*F64Op.*/ _Nearest))
+var _i32_add = _Binary_1(_I32_1( /*I32Op.*/ _Add))
+var _i32_sub = _Binary_1(_I32_1( /*I32Op.*/ _Sub))
+var _i32_mul = _Binary_1(_I32_1( /*I32Op.*/ _Mul))
+var _i32_div_s = _Binary_1(_I32_1( /*I32Op.*/ _DivS))
+var _i32_div_u = _Binary_1(_I32_1( /*I32Op.*/ _DivU))
+var _i32_rem_s = _Binary_1(_I32_1( /*I32Op.*/ _RemS))
+var _i32_rem_u = _Binary_1(_I32_1( /*I32Op.*/ _RemU))
+var _i32_and = _Binary_1(_I32_1( /*I32Op.*/ _And))
+var _i32_or = _Binary_1(_I32_1( /*I32Op.*/ _Or))
+var _i32_xor = _Binary_1(_I32_1( /*I32Op.*/ _Xor))
+var _i32_shl = _Binary_1(_I32_1( /*I32Op.*/ _Shl))
+var _i32_shr_s = _Binary_1(_I32_1( /*I32Op.*/ _ShrS))
+var _i32_shr_u = _Binary_1(_I32_1( /*I32Op.*/ _ShrU))
+var _i32_rotl = _Binary_1(_I32_1( /*I32Op.*/ _Rotl))
+var _i32_rotr = _Binary_1(_I32_1( /*I32Op.*/ _Rotr))
+var _i64_add = _Binary_1(_I64_1( /*I64Op.*/ _Add))
+var _i64_sub = _Binary_1(_I64_1( /*I64Op.*/ _Sub))
+var _i64_mul = _Binary_1(_I64_1( /*I64Op.*/ _Mul))
+var _i64_div_s = _Binary_1(_I64_1( /*I64Op.*/ _DivS))
+var _i64_div_u = _Binary_1(_I64_1( /*I64Op.*/ _DivU))
+var _i64_rem_s = _Binary_1(_I64_1( /*I64Op.*/ _RemS))
+var _i64_rem_u = _Binary_1(_I64_1( /*I64Op.*/ _RemU))
+var _i64_and = _Binary_1(_I64_1( /*I64Op.*/ _And))
+var _i64_or = _Binary_1(_I64_1( /*I64Op.*/ _Or))
+var _i64_xor = _Binary_1(_I64_1( /*I64Op.*/ _Xor))
+var _i64_shl = _Binary_1(_I64_1( /*I64Op.*/ _Shl))
+var _i64_shr_s = _Binary_1(_I64_1( /*I64Op.*/ _ShrS))
+var _i64_shr_u = _Binary_1(_I64_1( /*I64Op.*/ _ShrU))
+var _i64_rotl = _Binary_1(_I64_1( /*I64Op.*/ _Rotl))
+var _i64_rotr = _Binary_1(_I64_1( /*I64Op.*/ _Rotr))
+var _f32_add = _Binary_1(_F32_1( /*F32Op.*/ _Add))
+var _f32_sub = _Binary_1(_F32_1( /*F32Op.*/ _Sub))
+var _f32_mul = _Binary_1(_F32_1( /*F32Op.*/ _Mul))
+var _f32_div = _Binary_1(_F32_1( /*F32Op.*/ _Div))
+var _f32_min = _Binary_1(_F32_1( /*F32Op.*/ _Min))
+var _f32_max = _Binary_1(_F32_1( /*F32Op.*/ _Max))
+var _f32_copysign = _Binary_1(_F32_1( /*F32Op.*/ _CopySign))
+var _f64_add = _Binary_1(_F64_1( /*F64Op.*/ _Add))
+var _f64_sub = _Binary_1(_F64_1( /*F64Op.*/ _Sub))
+var _f64_mul = _Binary_1(_F64_1( /*F64Op.*/ _Mul))
+var _f64_div = _Binary_1(_F64_1( /*F64Op.*/ _Div))
+var _f64_min = _Binary_1(_F64_1( /*F64Op.*/ _Min))
+var _f64_max = _Binary_1(_F64_1( /*F64Op.*/ _Max))
+var _f64_copysign = _Binary_1(_F64_1( /*F64Op.*/ _CopySign))
+var _i32_eqz = _Test_1(_I32_1( /*I32Op.*/ _Eqz))
+var _i64_eqz = _Test_1(_I64_1( /*I64Op.*/ _Eqz))
+var _i32_eq = _Compare_1(_I32_1( /*I32Op.*/ _Eq))
+var _i32_ne = _Compare_1(_I32_1( /*I32Op.*/ _Ne))
+var _i32_lt_s = _Compare_1(_I32_1( /*I32Op.*/ _LtS))
+var _i32_lt_u = _Compare_1(_I32_1( /*I32Op.*/ _LtU))
+var _i32_le_s = _Compare_1(_I32_1( /*I32Op.*/ _LeS))
+var _i32_le_u = _Compare_1(_I32_1( /*I32Op.*/ _LeU))
+var _i32_gt_s = _Compare_1(_I32_1( /*I32Op.*/ _GtS))
+var _i32_gt_u = _Compare_1(_I32_1( /*I32Op.*/ _GtU))
+var _i32_ge_s = _Compare_1(_I32_1( /*I32Op.*/ _GeS))
+var _i32_ge_u = _Compare_1(_I32_1( /*I32Op.*/ _GeU))
+var _i64_eq = _Compare_1(_I64_1( /*I64Op.*/ _Eq))
+var _i64_ne = _Compare_1(_I64_1( /*I64Op.*/ _Ne))
+var _i64_lt_s = _Compare_1(_I64_1( /*I64Op.*/ _LtS))
+var _i64_lt_u = _Compare_1(_I64_1( /*I64Op.*/ _LtU))
+var _i64_le_s = _Compare_1(_I64_1( /*I64Op.*/ _LeS))
+var _i64_le_u = _Compare_1(_I64_1( /*I64Op.*/ _LeU))
+var _i64_gt_s = _Compare_1(_I64_1( /*I64Op.*/ _GtS))
+var _i64_gt_u = _Compare_1(_I64_1( /*I64Op.*/ _GtU))
+var _i64_ge_s = _Compare_1(_I64_1( /*I64Op.*/ _GeS))
+var _i64_ge_u = _Compare_1(_I64_1( /*I64Op.*/ _GeU))
+var _f32_eq = _Compare_1(_F32_1( /*F32Op.*/ _Eq))
+var _f32_ne = _Compare_1(_F32_1( /*F32Op.*/ _Ne))
+var _f32_lt = _Compare_1(_F32_1( /*F32Op.*/ _Lt))
+var _f32_le = _Compare_1(_F32_1( /*F32Op.*/ _Le))
+var _f32_gt = _Compare_1(_F32_1( /*F32Op.*/ _Gt))
+var _f32_ge = _Compare_1(_F32_1( /*F32Op.*/ _Ge))
+var _f64_eq = _Compare_1(_F64_1( /*F64Op.*/ _Eq))
+var _f64_ne = _Compare_1(_F64_1( /*F64Op.*/ _Ne))
+var _f64_lt = _Compare_1(_F64_1( /*F64Op.*/ _Lt))
+var _f64_le = _Compare_1(_F64_1( /*F64Op.*/ _Le))
+var _f64_gt = _Compare_1(_F64_1( /*F64Op.*/ _Gt))
+var _f64_ge = _Compare_1(_F64_1( /*F64Op.*/ _Ge))
+var _i32_extend8_s = _Unary_1(_I32_1(_I32Op_ExtendS_1(_Pack8)))
+var _i32_extend16_s = _Unary_1(_I32_1(_I32Op_ExtendS_1(_Pack16)))
+var _i64_extend8_s = _Unary_1(_I64_1(_I64Op_ExtendS_1(_Pack8)))
+var _i64_extend16_s = _Unary_1(_I64_1(_I64Op_ExtendS_1(_Pack16)))
+var _i64_extend32_s = _Unary_1(_I64_1(_I64Op_ExtendS_1(_Pack32)))
+var _i32_wrap_i64 = _Convert_1(_I32_1( /*I32Op.*/ _WrapI64))
+var _i32_trunc_f32_s = _Convert_1(_I32_1( /*I32Op.*/ _TruncSF32))
+var _i32_trunc_f32_u = _Convert_1(_I32_1( /*I32Op.*/ _TruncUF32))
+var _i32_trunc_f64_s = _Convert_1(_I32_1( /*I32Op.*/ _TruncSF64))
+var _i32_trunc_f64_u = _Convert_1(_I32_1( /*I32Op.*/ _TruncUF64))
+var _i32_trunc_sat_f32_s = _Convert_1(_I32_1( /*I32Op.*/ _TruncSatSF32))
+var _i32_trunc_sat_f32_u = _Convert_1(_I32_1( /*I32Op.*/ _TruncSatUF32))
+var _i32_trunc_sat_f64_s = _Convert_1(_I32_1( /*I32Op.*/ _TruncSatSF64))
+var _i32_trunc_sat_f64_u = _Convert_1(_I32_1( /*I32Op.*/ _TruncSatUF64))
+var _i64_extend_i32_s = _Convert_1(_I64_1( /*I64Op.*/ _ExtendSI32))
+var _i64_extend_i32_u = _Convert_1(_I64_1( /*I64Op.*/ _ExtendUI32))
+var _i64_trunc_f32_s = _Convert_1(_I64_1( /*I64Op.*/ _TruncSF32))
+var _i64_trunc_f32_u = _Convert_1(_I64_1( /*I64Op.*/ _TruncUF32))
+var _i64_trunc_f64_s = _Convert_1(_I64_1( /*I64Op.*/ _TruncSF64))
+var _i64_trunc_f64_u = _Convert_1(_I64_1( /*I64Op.*/ _TruncUF64))
+var _f32_convert_i32_s = _Convert_1(_F32_1( /*F32Op.*/ _ConvertSI32))
+var _f32_convert_i32_u = _Convert_1(_F32_1( /*F32Op.*/ _ConvertUI32))
+var _f32_convert_i64_s = _Convert_1(_F32_1( /*F32Op.*/ _ConvertSI64))
+var _f32_convert_i64_u = _Convert_1(_F32_1( /*F32Op.*/ _ConvertUI64))
+var _i64_trunc_sat_f32_s = _Convert_1(_I64_1( /*I64Op.*/ _TruncSatSF32))
+var _i64_trunc_sat_f32_u = _Convert_1(_I64_1( /*I64Op.*/ _TruncSatUF32))
+var _i64_trunc_sat_f64_s = _Convert_1(_I64_1( /*I64Op.*/ _TruncSatSF64))
+var _i64_trunc_sat_f64_u = _Convert_1(_I64_1( /*I64Op.*/ _TruncSatUF64))
+var _f32_demote_f64 = _Convert_1(_F32_1( /*F32Op.*/ _DemoteF64))
+var _f64_convert_i32_s = _Convert_1(_F64_1( /*F64Op.*/ _ConvertSI32))
+var _f64_convert_i32_u = _Convert_1(_F64_1( /*F64Op.*/ _ConvertUI32))
+var _f64_convert_i64_s = _Convert_1(_F64_1( /*F64Op.*/ _ConvertSI64))
+var _f64_convert_i64_u = _Convert_1(_F64_1( /*F64Op.*/ _ConvertUI64))
+var _f64_promote_f32 = _Convert_1(_F64_1( /*F64Op.*/ _PromoteF32))
+var _i32_reinterpret_f32 = _Convert_1(_I32_1( /*I32Op.*/ _ReinterpretFloat))
+var _i64_reinterpret_f64 = _Convert_1(_I64_1( /*I64Op.*/ _ReinterpretFloat))
+var _f32_reinterpret_i32 = _Convert_1(_F32_1( /*F32Op.*/ _ReinterpretInt))
+var _f64_reinterpret_i64 = _Convert_1(_F64_1( /*F64Op.*/ _ReinterpretInt))
+var _v128_not = _VecUnaryBits_1(_V128_1( /*V128Op.*/ _Not))
+var _v128_and = _VecBinaryBits_1(_V128_1( /*V128Op.*/ _And))
+var _v128_andnot = _VecBinaryBits_1(_V128_1( /*V128Op.*/ _AndNot))
+var _v128_or = _VecBinaryBits_1(_V128_1( /*V128Op.*/ _Or))
+var _v128_xor = _VecBinaryBits_1(_V128_1( /*V128Op.*/ _Xor))
+var _v128_bitselect = _VecTernaryBits_1(_V128_1( /*V128Op.*/ _Bitselect))
+var _v128_any_true = _VecTestBits_1(_V128_1( /*V128Op.*/ _AnyTrue))
+var _i8x16_swizzle = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Swizzle)))
+
+func _i8x16_shuffle_1(_is []OInt) OInstr_ {
+	__tmp1 := _VecBinary_1(_V128_1(_I8x16_1(_V128Op_Shuffle_1(_is))))
+	return __tmp1
+}
+
+var _i8x16_shuffle = _i8x16_shuffle_1
+
+var _i8x16_splat = _VecSplat_1(_V128_1(_I8x16_1( /*V128Op.*/ _Splat)))
+
+func _i8x16_extract_lane_s_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I8x16_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, _SX}))))
+	return __tmp1
+}
+
+var _i8x16_extract_lane_s = _i8x16_extract_lane_s_1
+
+func _i8x16_extract_lane_u_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I8x16_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, _ZX}))))
+	return __tmp1
+}
+
+var _i8x16_extract_lane_u = _i8x16_extract_lane_u_1
+
+func _i8x16_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_I8x16_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _i8x16_replace_lane = _i8x16_replace_lane_1
+
+var _i8x16_eq = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _Eq)))
+var _i8x16_ne = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _Ne)))
+var _i8x16_lt_s = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _LtS)))
+var _i8x16_lt_u = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _LtU)))
+var _i8x16_le_s = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _LeS)))
+var _i8x16_le_u = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _LeU)))
+var _i8x16_gt_s = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _GtS)))
+var _i8x16_gt_u = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _GtU)))
+var _i8x16_ge_s = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _GeS)))
+var _i8x16_ge_u = _VecCompare_1(_V128_1(_I8x16_1( /*V128Op.*/ _GeU)))
+var _i8x16_neg = _VecUnary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Neg)))
+var _i8x16_bitmask = _VecBitmask_1(_V128_1(_I8x16_1( /*V128Op.*/ _Bitmask)))
+var _i8x16_all_true = _VecTest_1(_V128_1(_I8x16_1( /*V128Op.*/ _AllTrue)))
+var _i8x16_narrow_i16x8_s = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _NarrowS)))
+var _i8x16_narrow_i16x8_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _NarrowU)))
+var _i16x8_extend_low_i8x16_s = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtendLowS)))
+var _i16x8_extend_high_i8x16_s = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtendHighS)))
+var _i16x8_extend_low_i8x16_u = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtendLowU)))
+var _i16x8_extend_high_i8x16_u = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtendHighU)))
+var _i8x16_shl = _VecShift_1(_V128_1(_I8x16_1( /*V128Op.*/ _Shl)))
+var _i8x16_shr_s = _VecShift_1(_V128_1(_I8x16_1( /*V128Op.*/ _ShrS)))
+var _i8x16_shr_u = _VecShift_1(_V128_1(_I8x16_1( /*V128Op.*/ _ShrU)))
+var _i8x16_add = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Add)))
+var _i8x16_add_sat_s = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _AddSatS)))
+var _i8x16_add_sat_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _AddSatU)))
+var _i8x16_sub = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Sub)))
+var _i8x16_sub_sat_s = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _SubSatS)))
+var _i8x16_sub_sat_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _SubSatU)))
+var _i8x16_abs = _VecUnary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Abs)))
+var _i8x16_popcnt = _VecUnary_1(_V128_1(_I8x16_1( /*V128Op.*/ _Popcnt)))
+var _i8x16_min_s = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _MinS)))
+var _i8x16_min_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _MinU)))
+var _i8x16_max_s = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _MaxS)))
+var _i8x16_max_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _MaxU)))
+var _i8x16_avgr_u = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _AvgrU)))
+var _i16x8_splat = _VecSplat_1(_V128_1(_I16x8_1( /*V128Op.*/ _Splat)))
+
+func _i16x8_extract_lane_s_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I16x8_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, _SX}))))
+	return __tmp1
+}
+
+var _i16x8_extract_lane_s = _i16x8_extract_lane_s_1
+
+func _i16x8_extract_lane_u_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I16x8_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, _ZX}))))
+	return __tmp1
+}
+
+var _i16x8_extract_lane_u = _i16x8_extract_lane_u_1
+
+func _i16x8_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_I16x8_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _i16x8_replace_lane = _i16x8_replace_lane_1
+
+var _i16x8_eq = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _Eq)))
+var _i16x8_ne = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _Ne)))
+var _i16x8_lt_s = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _LtS)))
+var _i16x8_lt_u = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _LtU)))
+var _i16x8_le_s = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _LeS)))
+var _i16x8_le_u = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _LeU)))
+var _i16x8_gt_s = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _GtS)))
+var _i16x8_gt_u = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _GtU)))
+var _i16x8_ge_s = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _GeS)))
+var _i16x8_ge_u = _VecCompare_1(_V128_1(_I16x8_1( /*V128Op.*/ _GeU)))
+var _i16x8_neg = _VecUnary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Neg)))
+var _i16x8_bitmask = _VecBitmask_1(_V128_1(_I16x8_1( /*V128Op.*/ _Bitmask)))
+var _i16x8_all_true = _VecTest_1(_V128_1(_I16x8_1( /*V128Op.*/ _AllTrue)))
+var _i16x8_narrow_i32x4_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _NarrowS)))
+var _i16x8_narrow_i32x4_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _NarrowU)))
+var _i16x8_shl = _VecShift_1(_V128_1(_I16x8_1( /*V128Op.*/ _Shl)))
+var _i16x8_shr_s = _VecShift_1(_V128_1(_I16x8_1( /*V128Op.*/ _ShrS)))
+var _i16x8_shr_u = _VecShift_1(_V128_1(_I16x8_1( /*V128Op.*/ _ShrU)))
+var _i16x8_add = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Add)))
+var _i16x8_add_sat_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _AddSatS)))
+var _i16x8_add_sat_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _AddSatU)))
+var _i16x8_sub = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Sub)))
+var _i16x8_sub_sat_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _SubSatS)))
+var _i16x8_sub_sat_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _SubSatU)))
+var _i16x8_mul = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Mul)))
+var _i16x8_abs = _VecUnary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Abs)))
+var _i16x8_min_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _MinS)))
+var _i16x8_min_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _MinU)))
+var _i16x8_max_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _MaxS)))
+var _i16x8_max_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _MaxU)))
+var _i16x8_avgr_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _AvgrU)))
+var _i16x8_extmul_low_i8x16_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtMulLowS)))
+var _i16x8_extmul_high_i8x16_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtMulHighS)))
+var _i16x8_extmul_low_i8x16_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtMulLowU)))
+var _i16x8_extmul_high_i8x16_u = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtMulHighU)))
+var _i16x8_q15mulr_sat_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _Q15MulRSatS)))
+var _i16x8_extadd_pairwise_i8x16_s = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var _i16x8_extadd_pairwise_i8x16_u = _VecConvert_1(_V128_1(_I16x8_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var _i32x4_splat = _VecSplat_1(_V128_1(_I32x4_1( /*V128Op.*/ _Splat)))
+
+func _i32x4_extract_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I32x4_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, TODO /* unknown expression type unit */}))))
+	return __tmp1
+}
+
+var _i32x4_extract_lane = _i32x4_extract_lane_1
+
+func _i32x4_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_I32x4_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _i32x4_replace_lane = _i32x4_replace_lane_1
+
+var _i32x4_eq = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _Eq)))
+var _i32x4_ne = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _Ne)))
+var _i32x4_lt_s = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _LtS)))
+var _i32x4_lt_u = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _LtU)))
+var _i32x4_le_s = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _LeS)))
+var _i32x4_le_u = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _LeU)))
+var _i32x4_gt_s = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _GtS)))
+var _i32x4_gt_u = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _GtU)))
+var _i32x4_ge_s = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _GeS)))
+var _i32x4_ge_u = _VecCompare_1(_V128_1(_I32x4_1( /*V128Op.*/ _GeU)))
+var _i32x4_abs = _VecUnary_1(_V128_1(_I32x4_1( /*V128Op.*/ _Abs)))
+var _i32x4_neg = _VecUnary_1(_V128_1(_I32x4_1( /*V128Op.*/ _Neg)))
+var _i32x4_bitmask = _VecBitmask_1(_V128_1(_I32x4_1( /*V128Op.*/ _Bitmask)))
+var _i32x4_all_true = _VecTest_1(_V128_1(_I32x4_1( /*V128Op.*/ _AllTrue)))
+var _i32x4_extend_low_i16x8_s = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtendLowS)))
+var _i32x4_extend_high_i16x8_s = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtendHighS)))
+var _i32x4_extend_low_i16x8_u = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtendLowU)))
+var _i32x4_extend_high_i16x8_u = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtendHighU)))
+var _i32x4_shl = _VecShift_1(_V128_1(_I32x4_1( /*V128Op.*/ _Shl)))
+var _i32x4_shr_s = _VecShift_1(_V128_1(_I32x4_1( /*V128Op.*/ _ShrS)))
+var _i32x4_shr_u = _VecShift_1(_V128_1(_I32x4_1( /*V128Op.*/ _ShrU)))
+var _i32x4_add = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _Add)))
+var _i32x4_sub = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _Sub)))
+var _i32x4_min_s = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _MinS)))
+var _i32x4_min_u = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _MinU)))
+var _i32x4_max_s = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _MaxS)))
+var _i32x4_max_u = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _MaxU)))
+var _i32x4_mul = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _Mul)))
+var _i32x4_dot_i16x8_s = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _DotS)))
+var _i32x4_trunc_sat_f32x4_s = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _TruncSatSF32x4)))
+var _i32x4_trunc_sat_f32x4_u = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _TruncSatUF32x4)))
+var _i32x4_trunc_sat_f64x2_s_zero = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _TruncSatSZeroF64x2)))
+var _i32x4_trunc_sat_f64x2_u_zero = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _TruncSatUZeroF64x2)))
+var _i32x4_extmul_low_i16x8_s = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtMulLowS)))
+var _i32x4_extmul_high_i16x8_s = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtMulHighS)))
+var _i32x4_extmul_low_i16x8_u = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtMulLowU)))
+var _i32x4_extmul_high_i16x8_u = _VecBinary_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtMulHighU)))
+var _i32x4_extadd_pairwise_i16x8_s = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var _i32x4_extadd_pairwise_i16x8_u = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var _i64x2_splat = _VecSplat_1(_V128_1(_I64x2_1( /*V128Op.*/ _Splat)))
+
+func _i64x2_extract_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_I64x2_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, TODO /* unknown expression type unit */}))))
+	return __tmp1
+}
+
+var _i64x2_extract_lane = _i64x2_extract_lane_1
+
+func _i64x2_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_I64x2_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _i64x2_replace_lane = _i64x2_replace_lane_1
+
+var _i64x2_extend_low_i32x4_s = _VecConvert_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtendLowS)))
+var _i64x2_extend_high_i32x4_s = _VecConvert_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtendHighS)))
+var _i64x2_extend_low_i32x4_u = _VecConvert_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtendLowU)))
+var _i64x2_extend_high_i32x4_u = _VecConvert_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtendHighU)))
+var _i64x2_eq = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _Eq)))
+var _i64x2_ne = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _Ne)))
+var _i64x2_lt_s = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _LtS)))
+var _i64x2_le_s = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _LeS)))
+var _i64x2_gt_s = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _GtS)))
+var _i64x2_ge_s = _VecCompare_1(_V128_1(_I64x2_1( /*V128Op.*/ _GeS)))
+var _i64x2_abs = _VecUnary_1(_V128_1(_I64x2_1( /*V128Op.*/ _Abs)))
+var _i64x2_neg = _VecUnary_1(_V128_1(_I64x2_1( /*V128Op.*/ _Neg)))
+var _i64x2_bitmask = _VecBitmask_1(_V128_1(_I64x2_1( /*V128Op.*/ _Bitmask)))
+var _i64x2_all_true = _VecTest_1(_V128_1(_I64x2_1( /*V128Op.*/ _AllTrue)))
+var _i64x2_add = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _Add)))
+var _i64x2_sub = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _Sub)))
+var _i64x2_mul = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _Mul)))
+var _i64x2_shl = _VecShift_1(_V128_1(_I64x2_1( /*V128Op.*/ _Shl)))
+var _i64x2_shr_s = _VecShift_1(_V128_1(_I64x2_1( /*V128Op.*/ _ShrS)))
+var _i64x2_shr_u = _VecShift_1(_V128_1(_I64x2_1( /*V128Op.*/ _ShrU)))
+var _i64x2_extmul_low_i32x4_s = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtMulLowS)))
+var _i64x2_extmul_high_i32x4_s = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtMulHighS)))
+var _i64x2_extmul_low_i32x4_u = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtMulLowU)))
+var _i64x2_extmul_high_i32x4_u = _VecBinary_1(_V128_1(_I64x2_1( /*V128Op.*/ _ExtMulHighU)))
+var _f32x4_splat = _VecSplat_1(_V128_1(_F32x4_1( /*V128Op.*/ _Splat)))
+
+func _f32x4_extract_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_F32x4_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, TODO /* unknown expression type unit */}))))
+	return __tmp1
+}
+
+var _f32x4_extract_lane = _f32x4_extract_lane_1
+
+func _f32x4_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_F32x4_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _f32x4_replace_lane = _f32x4_replace_lane_1
+
+var _f32x4_eq = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Eq)))
+var _f32x4_ne = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Ne)))
+var _f32x4_lt = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Lt)))
+var _f32x4_le = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Le)))
+var _f32x4_gt = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Gt)))
+var _f32x4_ge = _VecCompare_1(_V128_1(_F32x4_1( /*V128Op.*/ _Ge)))
+var _f32x4_abs = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Abs)))
+var _f32x4_neg = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Neg)))
+var _f32x4_sqrt = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Sqrt)))
+var _f32x4_ceil = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Ceil)))
+var _f32x4_floor = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Floor)))
+var _f32x4_trunc = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Trunc)))
+var _f32x4_nearest = _VecUnary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Nearest)))
+var _f32x4_add = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Add)))
+var _f32x4_sub = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Sub)))
+var _f32x4_mul = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Mul)))
+var _f32x4_div = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Div)))
+var _f32x4_min = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Min)))
+var _f32x4_max = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Max)))
+var _f32x4_pmin = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Pmin)))
+var _f32x4_pmax = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _Pmax)))
+var _f32x4_demote_f64x2_zero = _VecConvert_1(_V128_1(_F32x4_1( /*V128Op.*/ _DemoteZeroF64x2)))
+var _f32x4_convert_i32x4_s = _VecConvert_1(_V128_1(_F32x4_1( /*V128Op.*/ _ConvertSI32x4)))
+var _f32x4_convert_i32x4_u = _VecConvert_1(_V128_1(_F32x4_1( /*V128Op.*/ _ConvertUI32x4)))
+var _f64x2_splat = _VecSplat_1(_V128_1(_F64x2_1( /*V128Op.*/ _Splat)))
+
+func _f64x2_extract_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecExtract_1(_V128_1(_F64x2_1(_V128Op_Extract_1(struct {
+		F0 OInt
+		F1 any /* 'a */
+	}{_i, TODO /* unknown expression type unit */}))))
+	return __tmp1
+}
+
+var _f64x2_extract_lane = _f64x2_extract_lane_1
+
+func _f64x2_replace_lane_1(_i OInt) OInstr_ {
+	__tmp1 := _VecReplace_1(_V128_1(_F64x2_1(_V128Op_Replace_1(_i))))
+	return __tmp1
+}
+
+var _f64x2_replace_lane = _f64x2_replace_lane_1
+
+var _f64x2_eq = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Eq)))
+var _f64x2_ne = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Ne)))
+var _f64x2_lt = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Lt)))
+var _f64x2_le = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Le)))
+var _f64x2_gt = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Gt)))
+var _f64x2_ge = _VecCompare_1(_V128_1(_F64x2_1( /*V128Op.*/ _Ge)))
+var _f64x2_neg = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Neg)))
+var _f64x2_sqrt = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Sqrt)))
+var _f64x2_ceil = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Ceil)))
+var _f64x2_floor = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Floor)))
+var _f64x2_trunc = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Trunc)))
+var _f64x2_nearest = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Nearest)))
+var _f64x2_add = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Add)))
+var _f64x2_sub = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Sub)))
+var _f64x2_mul = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Mul)))
+var _f64x2_div = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Div)))
+var _f64x2_min = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Min)))
+var _f64x2_max = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Max)))
+var _f64x2_abs = _VecUnary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Abs)))
+var _f64x2_pmin = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Pmin)))
+var _f64x2_pmax = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _Pmax)))
+var _f64x2_promote_low_f32x4 = _VecConvert_1(_V128_1(_F64x2_1( /*V128Op.*/ _PromoteLowF32x4)))
+var _f64x2_convert_low_i32x4_s = _VecConvert_1(_V128_1(_F64x2_1( /*V128Op.*/ _ConvertSI32x4)))
+var _f64x2_convert_low_i32x4_u = _VecConvert_1(_V128_1(_F64x2_1( /*V128Op.*/ _ConvertUI32x4)))
+var _i8x16_relaxed_swizzle = _VecBinary_1(_V128_1(_I8x16_1( /*V128Op.*/ _RelaxedSwizzle)))
+var _i8x16_relaxed_laneselect = _VecTernary_1(_V128_1(_I8x16_1( /*V128Op.*/ _RelaxedLaneselect)))
+var _i16x8_relaxed_q15mulr_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _RelaxedQ15MulRS)))
+var _i16x8_relaxed_laneselect = _VecTernary_1(_V128_1(_I16x8_1( /*V128Op.*/ _RelaxedLaneselect)))
+var _i32x4_relaxed_trunc_f32x4_s = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedTruncSF32x4)))
+var _i32x4_relaxed_trunc_f32x4_u = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedTruncUF32x4)))
+var _i32x4_relaxed_trunc_f64x2_s_zero = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedTruncSZeroF64x2)))
+var _i32x4_relaxed_trunc_f64x2_u_zero = _VecConvert_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedTruncUZeroF64x2)))
+var _i32x4_relaxed_laneselect = _VecTernary_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedLaneselect)))
+var _i64x2_relaxed_laneselect = _VecTernary_1(_V128_1(_I64x2_1( /*V128Op.*/ _RelaxedLaneselect)))
+var _f32x4_relaxed_madd = _VecTernary_1(_V128_1(_F32x4_1( /*V128Op.*/ _RelaxedMadd)))
+var _f32x4_relaxed_nmadd = _VecTernary_1(_V128_1(_F32x4_1( /*V128Op.*/ _RelaxedNmadd)))
+var _f32x4_relaxed_min = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _RelaxedMin)))
+var _f32x4_relaxed_max = _VecBinary_1(_V128_1(_F32x4_1( /*V128Op.*/ _RelaxedMax)))
+var _f64x2_relaxed_madd = _VecTernary_1(_V128_1(_F64x2_1( /*V128Op.*/ _RelaxedMadd)))
+var _f64x2_relaxed_nmadd = _VecTernary_1(_V128_1(_F64x2_1( /*V128Op.*/ _RelaxedNmadd)))
+var _f64x2_relaxed_min = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _RelaxedMin)))
+var _f64x2_relaxed_max = _VecBinary_1(_V128_1(_F64x2_1( /*V128Op.*/ _RelaxedMax)))
+var _i16x8_relaxed_dot_i8x16_i7x16_s = _VecBinary_1(_V128_1(_I16x8_1( /*V128Op.*/ _RelaxedDot)))
+var _i32x4_relaxed_dot_i8x16_i7x16_add_s = _VecTernary_1(_V128_1(_I32x4_1( /*V128Op.*/ _RelaxedDotAccum)))
+
 type OStream struct {
 	Name  string
 	Bytes string
@@ -5628,6 +7960,8 @@ func _instr_1(_s *Stream) OInstr_ {
 }
 
 var _instr = _instr_1
+
+var _magic = 0x6d736100
 
 func __unpack_addr_type___limits(t struct {
 	F0 OAddrType
