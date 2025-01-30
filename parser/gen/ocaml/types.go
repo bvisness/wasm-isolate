@@ -26,6 +26,7 @@ const (
 	TCons
 	TVariants
 	TAlias
+	TModule
 	TSimple
 )
 
@@ -127,6 +128,19 @@ func (t Alias) Kind() TypeKind {
 	return TAlias
 }
 
+type ModuleType struct {
+	Modules []string
+	Type    Type
+}
+
+func (t ModuleType) String() string {
+	return fmt.Sprintf("%s.%s", strings.Join(t.Modules, "."), t.Type)
+}
+
+func (t ModuleType) Kind() TypeKind {
+	return TModule
+}
+
 type SimpleType string
 
 func (t SimpleType) String() string {
@@ -149,15 +163,32 @@ func ParseType(t string, typeDefs TypeDefs) Type {
 }
 
 func parseTypeNode(n *tree_sitter.Node, t string, typeDefs TypeDefs) Type {
+	fmt.Fprintf(os.Stderr, "type node %s: %s\n", n.GrammarName(), n.Utf8Text([]byte(t)))
+	fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
+
 	switch n.GrammarName() {
 	case "type", "parenthesized_type":
 		return parseTypeNode(n.NamedChild(0), t, typeDefs)
-	case "package_type", "type_constructor_path", "type_variable":
+	case "package_type", "type_variable", "type_constructor", "_lowercase_identifier":
 		name := n.Utf8Text([]byte(t))
 		if def, ok := typeDefs[name]; ok {
 			return def
 		}
 		return SimpleType(name)
+	case "type_constructor_path":
+		var modules []string
+		for i := range n.NamedChildCount() - 1 {
+			modules = append(modules, n.NamedChild(i).Utf8Text([]byte(t)))
+		}
+		ty := parseTypeNode(n.NamedChild(n.NamedChildCount()-1), t, typeDefs)
+		if len(modules) > 0 {
+			return ModuleType{
+				Modules: modules,
+				Type:    ty,
+			}
+		} else {
+			return ty
+		}
 
 	case "constructed_type":
 		var cons Cons
