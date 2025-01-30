@@ -2918,6 +2918,12 @@ func _bit_2(_i OInt, _n OInt) bool {
 	return __tmp1
 }
 
+func _bit_1(_i OInt) func(_n OInt) bool {
+	return func(_n OInt) bool {
+		return _bit_2(_i, _n)
+	}
+}
+
 var _bit = _bit_2
 
 func _byte_1(_s *Stream) OInt {
@@ -2981,6 +2987,12 @@ func _uN_2(_n OInt, _s *Stream) OInt64 {
 
 }
 
+func _uN_1(_n OInt) func(_s *Stream) OInt64 {
+	return func(_s *Stream) OInt64 {
+		return _uN_2(_n, _s)
+	}
+}
+
 var _uN = _uN_2
 
 func _sN_2(_n OInt, _s *Stream) OInt64 {
@@ -3011,6 +3023,12 @@ func _sN_2(_n OInt, _s *Stream) OInt64 {
 	}
 	return __tmp37
 
+}
+
+func _sN_1(_n OInt) func(_s *Stream) OInt64 {
+	return func(_s *Stream) OInt64 {
+		return _sN_2(_n, _s)
+	}
 }
 
 var _sN = _sN_2
@@ -3153,6 +3171,12 @@ func _var_type_2(_var func(*Stream) OLocalIdx, _s *Stream) OVar {
 		__tmp4 = __tmp16
 	}
 	return __tmp4
+}
+
+func _var_type_1(_var func(*Stream) OLocalIdx) func(_s *Stream) OVar {
+	return func(_s *Stream) OVar {
+		return _var_type_2(_var, _s)
+	}
 }
 
 var _var_type = _var_type_2
@@ -3575,6 +3599,16 @@ func _limits_2(_uN func(*Stream) OInt64, _s *Stream) struct {
 		F1 OLimits
 	}{_at, nil /* TODO: record_expression */}
 
+}
+
+func _limits_1(_uN func(*Stream) OInt64) func(_s *Stream) struct {
+	F0 OAddrType
+	F1 OLimits
+} {
+	return func(_s *Stream) struct {
+		F0 OAddrType
+		F1 OLimits
+	} { return _limits_2(_uN, _s) }
 }
 
 var _limits = _limits_2

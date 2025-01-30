@@ -416,10 +416,6 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	pattern := Lookup{f}.Field("pattern", "").Node
 	body := Lookup{f}.Field("body", "").Node
 
-	// if body.GrammarName() != "function_expression" {
-	// 	return
-	// }
-
 	var params []*tree_sitter.Node
 	for _, child := range f.NamedChildren(f.Walk()) {
 		if child.GrammarName() == "parameter" {
@@ -441,10 +437,41 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 		w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
 	}
 	w(") %s {\n", ocaml2go(funcResultType, typeDefs))
-
 	p.parseExpr(body, funcResultType, "", true, true)
-
 	w("}\n\n")
+
+	for i := len(params) - 1; i >= 1; i-- {
+		w("func %s(", funcName("", name, i))
+		for j := 0; j < i; j++ {
+			param := params[j]
+			paramName := safeName(p.s(param))
+			paramType := p.getTypeEnd(param)
+			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+		}
+		w(") func(")
+		for j := i; j < len(params); j++ {
+			param := params[j]
+			paramName := safeName(p.s(param))
+			paramType := p.getTypeEnd(param)
+			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+		}
+		w(") %s {\n", ocaml2go(funcResultType, typeDefs))
+		w("  return func(")
+		for j := i; j < len(params); j++ {
+			param := params[j]
+			paramName := safeName(p.s(param))
+			paramType := p.getTypeEnd(param)
+			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+		}
+		w(") %s {\n", ocaml2go(funcResultType, typeDefs))
+		w("    return %s(", fullFuncName)
+		for _, param := range params {
+			w("%s, ", safeName(p.s(param)))
+		}
+		w(")\n")
+		w("  }\n")
+		w("}\n\n")
+	}
 
 	w("var %s = %s\n\n", funcName("", p.s(pattern), -1), fullFuncName)
 }
