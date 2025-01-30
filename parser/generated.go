@@ -358,13 +358,21 @@ func (t SimpleOInstrType) Kind() OInstrTypeKind {
 }
 
 type OInstrType_InstrT struct {
-	V OResultType
+	V struct {
+		F0 OResultType
+		F1 OResultType
+		F2 []OLocalIdx
+	}
 }
 
 func (t OInstrType_InstrT) Kind() OInstrTypeKind {
 	return KInstrT
 }
-func _InstrT_1(v OResultType) OInstrType {
+func _InstrT_1(v struct {
+	F0 OResultType
+	F1 OResultType
+	F2 []OLocalIdx
+}) OInstrType {
 	return OInstrType_InstrT{v}
 }
 
@@ -428,13 +436,19 @@ func (t SimpleOFieldType) Kind() OFieldTypeKind {
 }
 
 type OFieldType_FieldT struct {
-	V OMut
+	V struct {
+		F0 OMut
+		F1 OStorageType
+	}
 }
 
 func (t OFieldType_FieldT) Kind() OFieldTypeKind {
 	return KFieldT
 }
-func _FieldT_1(v OMut) OFieldType {
+func _FieldT_1(v struct {
+	F0 OMut
+	F1 OStorageType
+}) OFieldType {
 	return OFieldType_FieldT{v}
 }
 
@@ -515,13 +529,19 @@ func (t SimpleOFuncType) Kind() OFuncTypeKind {
 }
 
 type OFuncType_FuncT struct {
-	V OResultType
+	V struct {
+		F0 OResultType
+		F1 OResultType
+	}
 }
 
 func (t OFuncType_FuncT) Kind() OFuncTypeKind {
 	return KFuncT
 }
-func _FuncT_1(v OResultType) OFuncType {
+func _FuncT_1(v struct {
+	F0 OResultType
+	F1 OResultType
+}) OFuncType {
 	return OFuncType_FuncT{v}
 }
 
@@ -597,13 +617,21 @@ func (t SimpleOSubType) Kind() OSubTypeKind {
 }
 
 type OSubType_SubT struct {
-	V OFinal
+	V struct {
+		F0 OFinal
+		F1 []OHeapType
+		F2 OStrType
+	}
 }
 
 func (t OSubType_SubT) Kind() OSubTypeKind {
 	return KSubT
 }
-func _SubT_1(v OFinal) OSubType {
+func _SubT_1(v struct {
+	F0 OFinal
+	F1 []OHeapType
+	F2 OStrType
+}) OSubType {
 	return OSubType_SubT{v}
 }
 
@@ -655,13 +683,19 @@ func (t SimpleODefType) Kind() ODefTypeKind {
 }
 
 type ODefType_DefT struct {
-	V ORecType
+	V struct {
+		F0 ORecType
+		F1 OInt32
+	}
 }
 
 func (t ODefType_DefT) Kind() ODefTypeKind {
 	return KDefT
 }
-func _DefT_1(v ORecType) ODefType {
+func _DefT_1(v struct {
+	F0 ORecType
+	F1 OInt32
+}) ODefType {
 	return ODefType_DefT{v}
 }
 
@@ -684,13 +718,21 @@ func (t SimpleOTableType) Kind() OTableTypeKind {
 }
 
 type OTableType_TableT struct {
-	V OAddrType
+	V struct {
+		F0 OAddrType
+		F1 OLimits
+		F2 ORefType
+	}
 }
 
 func (t OTableType_TableT) Kind() OTableTypeKind {
 	return KTableT
 }
-func _TableT_1(v OAddrType) OTableType {
+func _TableT_1(v struct {
+	F0 OAddrType
+	F1 OLimits
+	F2 ORefType
+}) OTableType {
 	return OTableType_TableT{v}
 }
 
@@ -713,13 +755,19 @@ func (t SimpleOMemoryType) Kind() OMemoryTypeKind {
 }
 
 type OMemoryType_MemoryT struct {
-	V OAddrType
+	V struct {
+		F0 OAddrType
+		F1 OLimits
+	}
 }
 
 func (t OMemoryType_MemoryT) Kind() OMemoryTypeKind {
 	return KMemoryT
 }
-func _MemoryT_1(v OAddrType) OMemoryType {
+func _MemoryT_1(v struct {
+	F0 OAddrType
+	F1 OLimits
+}) OMemoryType {
 	return OMemoryType_MemoryT{v}
 }
 
@@ -742,13 +790,19 @@ func (t SimpleOGlobalType) Kind() OGlobalTypeKind {
 }
 
 type OGlobalType_GlobalT struct {
-	V OMut
+	V struct {
+		F0 OMut
+		F1 OValType
+	}
 }
 
 func (t OGlobalType_GlobalT) Kind() OGlobalTypeKind {
 	return KGlobalT
 }
-func _GlobalT_1(v OMut) OGlobalType {
+func _GlobalT_1(v struct {
+	F0 OMut
+	F1 OValType
+}) OGlobalType {
 	return OGlobalType_GlobalT{v}
 }
 
@@ -800,13 +854,19 @@ func (t SimpleOLocalType) Kind() OLocalTypeKind {
 }
 
 type OLocalType_LocalT struct {
-	V OInit
+	V struct {
+		F0 OInit
+		F1 OValType
+	}
 }
 
 func (t OLocalType_LocalT) Kind() OLocalTypeKind {
 	return KLocalT
 }
-func _LocalT_1(v OInit) OLocalType {
+func _LocalT_1(v struct {
+	F0 OInit
+	F1 OValType
+}) OLocalType {
 	return OLocalType_LocalT{v}
 }
 
@@ -906,13 +966,19 @@ func (t SimpleOExportType) Kind() OExportTypeKind {
 }
 
 type OExportType_ExportT struct {
-	V OExternType
+	V struct {
+		F0 OExternType
+		F1 OName
+	}
 }
 
 func (t OExportType_ExportT) Kind() OExportTypeKind {
 	return KExportT
 }
-func _ExportT_1(v OExternType) OExportType {
+func _ExportT_1(v struct {
+	F0 OExternType
+	F1 OName
+}) OExportType {
 	return OExportType_ExportT{v}
 }
 
@@ -935,13 +1001,21 @@ func (t SimpleOImportType) Kind() OImportTypeKind {
 }
 
 type OImportType_ImportT struct {
-	V OExternType
+	V struct {
+		F0 OExternType
+		F1 OName
+		F2 OName
+	}
 }
 
 func (t OImportType_ImportT) Kind() OImportTypeKind {
 	return KImportT
 }
-func _ImportT_1(v OExternType) OImportType {
+func _ImportT_1(v struct {
+	F0 OExternType
+	F1 OName
+	F2 OName
+}) OImportType {
 	return OImportType_ImportT{v}
 }
 
@@ -964,13 +1038,19 @@ func (t SimpleOModuleType) Kind() OModuleTypeKind {
 }
 
 type OModuleType_ModuleT struct {
-	V []OImportType
+	V struct {
+		F0 []OImportType
+		F1 []OExportType
+	}
 }
 
 func (t OModuleType_ModuleT) Kind() OModuleTypeKind {
 	return KModuleT
 }
-func _ModuleT_1(v []OImportType) OModuleType {
+func _ModuleT_1(v struct {
+	F0 []OImportType
+	F1 []OExportType
+}) OModuleType {
 	return OModuleType_ModuleT{v}
 }
 
@@ -1069,13 +1149,19 @@ func (t SimpleOVecExtension) Kind() OVecExtensionKind {
 }
 
 type OVecExtension_ExtLane struct {
-	V OPackShape
+	V struct {
+		F0 OPackShape
+		F1 OExtension
+	}
 }
 
 func (t OVecExtension_ExtLane) Kind() OVecExtensionKind {
 	return KExtLane
 }
-func _ExtLane_1(v OPackShape) OVecExtension {
+func _ExtLane_1(v struct {
+	F0 OPackShape
+	F1 OExtension
+}) OVecExtension {
 	return OVecExtension_ExtLane{v}
 }
 
@@ -1342,35 +1428,55 @@ func _Select_1(v *[]OValType) OInstr_ {
 }
 
 type OInstr__Block struct {
-	V OBlockType
+	V struct {
+		F0 OBlockType
+		F1 []OInstr
+	}
 }
 
 func (t OInstr__Block) Kind() OInstr_Kind {
 	return KBlock
 }
-func _Block_1(v OBlockType) OInstr_ {
+func _Block_1(v struct {
+	F0 OBlockType
+	F1 []OInstr
+}) OInstr_ {
 	return OInstr__Block{v}
 }
 
 type OInstr__Loop struct {
-	V OBlockType
+	V struct {
+		F0 OBlockType
+		F1 []OInstr
+	}
 }
 
 func (t OInstr__Loop) Kind() OInstr_Kind {
 	return KLoop
 }
-func _Loop_1(v OBlockType) OInstr_ {
+func _Loop_1(v struct {
+	F0 OBlockType
+	F1 []OInstr
+}) OInstr_ {
 	return OInstr__Loop{v}
 }
 
 type OInstr__If struct {
-	V OBlockType
+	V struct {
+		F0 OBlockType
+		F1 []OInstr
+		F2 []OInstr
+	}
 }
 
 func (t OInstr__If) Kind() OInstr_Kind {
 	return KIf
 }
-func _If_1(v OBlockType) OInstr_ {
+func _If_1(v struct {
+	F0 OBlockType
+	F1 []OInstr
+	F2 []OInstr
+}) OInstr_ {
 	return OInstr__If{v}
 }
 
@@ -1397,13 +1503,19 @@ func _BrIf_1(v OIdx) OInstr_ {
 }
 
 type OInstr__BrTable struct {
-	V []OIdx
+	V struct {
+		F0 []OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__BrTable) Kind() OInstr_Kind {
 	return KBrTable
 }
-func _BrTable_1(v []OIdx) OInstr_ {
+func _BrTable_1(v struct {
+	F0 []OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__BrTable{v}
 }
 
@@ -1430,24 +1542,40 @@ func _BrOnNonNull_1(v OIdx) OInstr_ {
 }
 
 type OInstr__BrOnCast struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 ORefType
+		F2 ORefType
+	}
 }
 
 func (t OInstr__BrOnCast) Kind() OInstr_Kind {
 	return KBrOnCast
 }
-func _BrOnCast_1(v OIdx) OInstr_ {
+func _BrOnCast_1(v struct {
+	F0 OIdx
+	F1 ORefType
+	F2 ORefType
+}) OInstr_ {
 	return OInstr__BrOnCast{v}
 }
 
 type OInstr__BrOnCastFail struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 ORefType
+		F2 ORefType
+	}
 }
 
 func (t OInstr__BrOnCastFail) Kind() OInstr_Kind {
 	return KBrOnCastFail
 }
-func _BrOnCastFail_1(v OIdx) OInstr_ {
+func _BrOnCastFail_1(v struct {
+	F0 OIdx
+	F1 ORefType
+	F2 ORefType
+}) OInstr_ {
 	return OInstr__BrOnCastFail{v}
 }
 
@@ -1476,13 +1604,19 @@ func _CallRef_1(v OIdx) OInstr_ {
 }
 
 type OInstr__CallIndirect struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__CallIndirect) Kind() OInstr_Kind {
 	return KCallIndirect
 }
-func _CallIndirect_1(v OIdx) OInstr_ {
+func _CallIndirect_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__CallIndirect{v}
 }
 
@@ -1509,13 +1643,19 @@ func _ReturnCallRef_1(v OIdx) OInstr_ {
 }
 
 type OInstr__ReturnCallIndirect struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ReturnCallIndirect) Kind() OInstr_Kind {
 	return KReturnCallIndirect
 }
-func _ReturnCallIndirect_1(v OIdx) OInstr_ {
+func _ReturnCallIndirect_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ReturnCallIndirect{v}
 }
 
@@ -1533,13 +1673,21 @@ func _Throw_1(v OIdx) OInstr_ {
 var _ThrowRef OInstr_ = SimpleOInstr_{KThrowRef}
 
 type OInstr__TryTable struct {
-	V OBlockType
+	V struct {
+		F0 OBlockType
+		F1 []OCatch
+		F2 []OInstr
+	}
 }
 
 func (t OInstr__TryTable) Kind() OInstr_Kind {
 	return KTryTable
 }
-func _TryTable_1(v OBlockType) OInstr_ {
+func _TryTable_1(v struct {
+	F0 OBlockType
+	F1 []OCatch
+	F2 []OInstr
+}) OInstr_ {
 	return OInstr__TryTable{v}
 }
 
@@ -1654,24 +1802,36 @@ func _TableFill_1(v OIdx) OInstr_ {
 }
 
 type OInstr__TableCopy struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__TableCopy) Kind() OInstr_Kind {
 	return KTableCopy
 }
-func _TableCopy_1(v OIdx) OInstr_ {
+func _TableCopy_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__TableCopy{v}
 }
 
 type OInstr__TableInit struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__TableInit) Kind() OInstr_Kind {
 	return KTableInit
 }
-func _TableInit_1(v OIdx) OInstr_ {
+func _TableInit_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__TableInit{v}
 }
 
@@ -1687,68 +1847,108 @@ func _ElemDrop_1(v OIdx) OInstr_ {
 }
 
 type OInstr__Load struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OLoadop
+	}
 }
 
 func (t OInstr__Load) Kind() OInstr_Kind {
 	return KLoad
 }
-func _Load_1(v OIdx) OInstr_ {
+func _Load_1(v struct {
+	F0 OIdx
+	F1 OLoadop
+}) OInstr_ {
 	return OInstr__Load{v}
 }
 
 type OInstr__Store struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OStoreop
+	}
 }
 
 func (t OInstr__Store) Kind() OInstr_Kind {
 	return KStore
 }
-func _Store_1(v OIdx) OInstr_ {
+func _Store_1(v struct {
+	F0 OIdx
+	F1 OStoreop
+}) OInstr_ {
 	return OInstr__Store{v}
 }
 
 type OInstr__VecLoad struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OVecLoadop
+	}
 }
 
 func (t OInstr__VecLoad) Kind() OInstr_Kind {
 	return KVecLoad
 }
-func _VecLoad_1(v OIdx) OInstr_ {
+func _VecLoad_1(v struct {
+	F0 OIdx
+	F1 OVecLoadop
+}) OInstr_ {
 	return OInstr__VecLoad{v}
 }
 
 type OInstr__VecStore struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OVecStoreop
+	}
 }
 
 func (t OInstr__VecStore) Kind() OInstr_Kind {
 	return KVecStore
 }
-func _VecStore_1(v OIdx) OInstr_ {
+func _VecStore_1(v struct {
+	F0 OIdx
+	F1 OVecStoreop
+}) OInstr_ {
 	return OInstr__VecStore{v}
 }
 
 type OInstr__VecLoadLane struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}
 }
 
 func (t OInstr__VecLoadLane) Kind() OInstr_Kind {
 	return KVecLoadLane
 }
-func _VecLoadLane_1(v OIdx) OInstr_ {
+func _VecLoadLane_1(v struct {
+	F0 OIdx
+	F1 OVecLaneop
+	F2 OInt
+}) OInstr_ {
 	return OInstr__VecLoadLane{v}
 }
 
 type OInstr__VecStoreLane struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OVecLaneop
+		F2 OInt
+	}
 }
 
 func (t OInstr__VecStoreLane) Kind() OInstr_Kind {
 	return KVecStoreLane
 }
-func _VecStoreLane_1(v OIdx) OInstr_ {
+func _VecStoreLane_1(v struct {
+	F0 OIdx
+	F1 OVecLaneop
+	F2 OInt
+}) OInstr_ {
 	return OInstr__VecStoreLane{v}
 }
 
@@ -1786,24 +1986,36 @@ func _MemoryFill_1(v OIdx) OInstr_ {
 }
 
 type OInstr__MemoryCopy struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__MemoryCopy) Kind() OInstr_Kind {
 	return KMemoryCopy
 }
-func _MemoryCopy_1(v OIdx) OInstr_ {
+func _MemoryCopy_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__MemoryCopy{v}
 }
 
 type OInstr__MemoryInit struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__MemoryInit) Kind() OInstr_Kind {
 	return KMemoryInit
 }
-func _MemoryInit_1(v OIdx) OInstr_ {
+func _MemoryInit_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__MemoryInit{v}
 }
 
@@ -1946,90 +2158,140 @@ func _I31Get_1(v OExtension) OInstr_ {
 }
 
 type OInstr__StructNew struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OInitop
+	}
 }
 
 func (t OInstr__StructNew) Kind() OInstr_Kind {
 	return KStructNew
 }
-func _StructNew_1(v OIdx) OInstr_ {
+func _StructNew_1(v struct {
+	F0 OIdx
+	F1 OInitop
+}) OInstr_ {
 	return OInstr__StructNew{v}
 }
 
 type OInstr__StructGet struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+		F2 *OExtension
+	}
 }
 
 func (t OInstr__StructGet) Kind() OInstr_Kind {
 	return KStructGet
 }
-func _StructGet_1(v OIdx) OInstr_ {
+func _StructGet_1(v struct {
+	F0 OIdx
+	F1 OIdx
+	F2 *OExtension
+}) OInstr_ {
 	return OInstr__StructGet{v}
 }
 
 type OInstr__StructSet struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__StructSet) Kind() OInstr_Kind {
 	return KStructSet
 }
-func _StructSet_1(v OIdx) OInstr_ {
+func _StructSet_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__StructSet{v}
 }
 
 type OInstr__ArrayNew struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OInitop
+	}
 }
 
 func (t OInstr__ArrayNew) Kind() OInstr_Kind {
 	return KArrayNew
 }
-func _ArrayNew_1(v OIdx) OInstr_ {
+func _ArrayNew_1(v struct {
+	F0 OIdx
+	F1 OInitop
+}) OInstr_ {
 	return OInstr__ArrayNew{v}
 }
 
 type OInstr__ArrayNewFixed struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OInt32
+	}
 }
 
 func (t OInstr__ArrayNewFixed) Kind() OInstr_Kind {
 	return KArrayNewFixed
 }
-func _ArrayNewFixed_1(v OIdx) OInstr_ {
+func _ArrayNewFixed_1(v struct {
+	F0 OIdx
+	F1 OInt32
+}) OInstr_ {
 	return OInstr__ArrayNewFixed{v}
 }
 
 type OInstr__ArrayNewElem struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ArrayNewElem) Kind() OInstr_Kind {
 	return KArrayNewElem
 }
-func _ArrayNewElem_1(v OIdx) OInstr_ {
+func _ArrayNewElem_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ArrayNewElem{v}
 }
 
 type OInstr__ArrayNewData struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ArrayNewData) Kind() OInstr_Kind {
 	return KArrayNewData
 }
-func _ArrayNewData_1(v OIdx) OInstr_ {
+func _ArrayNewData_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ArrayNewData{v}
 }
 
 type OInstr__ArrayGet struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 *OExtension
+	}
 }
 
 func (t OInstr__ArrayGet) Kind() OInstr_Kind {
 	return KArrayGet
 }
-func _ArrayGet_1(v OIdx) OInstr_ {
+func _ArrayGet_1(v struct {
+	F0 OIdx
+	F1 *OExtension
+}) OInstr_ {
 	return OInstr__ArrayGet{v}
 }
 
@@ -2047,13 +2309,19 @@ func _ArraySet_1(v OIdx) OInstr_ {
 var _ArrayLen OInstr_ = SimpleOInstr_{KArrayLen}
 
 type OInstr__ArrayCopy struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ArrayCopy) Kind() OInstr_Kind {
 	return KArrayCopy
 }
-func _ArrayCopy_1(v OIdx) OInstr_ {
+func _ArrayCopy_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ArrayCopy{v}
 }
 
@@ -2069,24 +2337,36 @@ func _ArrayFill_1(v OIdx) OInstr_ {
 }
 
 type OInstr__ArrayInitData struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ArrayInitData) Kind() OInstr_Kind {
 	return KArrayInitData
 }
-func _ArrayInitData_1(v OIdx) OInstr_ {
+func _ArrayInitData_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ArrayInitData{v}
 }
 
 type OInstr__ArrayInitElem struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OInstr__ArrayInitElem) Kind() OInstr_Kind {
 	return KArrayInitElem
 }
-func _ArrayInitElem_1(v OIdx) OInstr_ {
+func _ArrayInitElem_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OInstr_ {
 	return OInstr__ArrayInitElem{v}
 }
 
@@ -2301,24 +2581,36 @@ func (t SimpleOCatch_) Kind() OCatch_Kind {
 }
 
 type OCatch__Catch struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OCatch__Catch) Kind() OCatch_Kind {
 	return KCatch
 }
-func _Catch_1(v OIdx) OCatch_ {
+func _Catch_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OCatch_ {
 	return OCatch__Catch{v}
 }
 
 type OCatch__CatchRef struct {
-	V OIdx
+	V struct {
+		F0 OIdx
+		F1 OIdx
+	}
 }
 
 func (t OCatch__CatchRef) Kind() OCatch_Kind {
 	return KCatchRef
 }
-func _CatchRef_1(v OIdx) OCatch_ {
+func _CatchRef_1(v struct {
+	F0 OIdx
+	F1 OIdx
+}) OCatch_ {
 	return OCatch__CatchRef{v}
 }
 

@@ -295,8 +295,16 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 				Name: p.s(constructorName),
 			}
 			if constructor.NamedChildCount() > 1 {
-				backingType := p.parseTypeDecl(constructor.NamedChild(1), typeDefs)
-				variant.Type = &backingType
+				var tup ocaml.Tuple
+				for i := uint(1); i < constructor.NamedChildCount(); i++ {
+					tup = append(tup, p.parseTypeDecl(constructor.NamedChild(i), typeDefs))
+				}
+				if len(tup) == 1 {
+					variant.Type = &tup[0]
+				} else {
+					var t ocaml.Type = tup
+					variant.Type = &t
+				}
 			}
 			variants = append(variants, variant)
 		}
