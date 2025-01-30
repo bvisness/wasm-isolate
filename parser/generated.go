@@ -1077,6 +1077,1471 @@ func _ExtLane_1(v OPackShape) OVecExtension {
 var _ExtSplat OVecExtension = SimpleOVecExtension{KExtSplat}
 var _ExtZero OVecExtension = SimpleOVecExtension{KExtZero}
 
+type OVoid = OVoid
+type OTestop = TODO       /* I32Op.testop I64Op.testop */
+type OUnop = TODO         /* I32Op.unop I64Op.unop */
+type OBinop = TODO        /* I32Op.binop I64Op.binop */
+type ORelop = TODO        /* I32Op.relop I64Op.relop */
+type OCvtop = TODO        /* I32Op.cvtop I64Op.cvtop */
+type OVecTestop = TODO    /* V128Op.testop Value.vecop */
+type OVecRelop = TODO     /* V128Op.relop Value.vecop */
+type OVecUnop = TODO      /* V128Op.unop Value.vecop */
+type OVecBinop = TODO     /* V128Op.binop Value.vecop */
+type OVecTernop = TODO    /* V128Op.ternop Value.vecop */
+type OVecCvtop = TODO     /* V128Op.cvtop Value.vecop */
+type OVecShiftop = TODO   /* V128Op.shiftop Value.vecop */
+type OVecBitmaskop = TODO /* V128Op.bitmaskop Value.vecop */
+type OVecVtestop = TODO   /* V128Op.vtestop Value.vecop */
+type OVecVunop = TODO     /* V128Op.vunop Value.vecop */
+type OVecVbinop = TODO    /* V128Op.vbinop Value.vecop */
+type OVecVternop = TODO   /* V128Op.vternop Value.vecop */
+type OVecSplatop = TODO   /* V128Op.splatop Value.vecop */
+type OVecExtractop = TODO /* V128Op.extractop Value.vecop */
+type OVecReplaceop = TODO /* V128Op.replaceop Value.vecop */
+type OMemop = OUnknownTypeVariableP
+type OLoadop = TODO     /* num_type pack_size * extension option */
+type OStoreop = TODO    /* num_type pack_size option */
+type OVecLoadop = TODO  /* vec_type pack_size * vec_extension option */
+type OVecStoreop = TODO /* vec_type unit */
+type OVecLaneop = TODO  /* vec_type pack_size */
+
+type OInitopKind int
+
+const (
+	KExplicit OInitopKind = iota + 1
+	KImplicit
+)
+
+type OInitop interface {
+	Kind() OInitopKind
+}
+
+type SimpleOInitop struct {
+	kind OInitopKind
+}
+
+func (t SimpleOInitop) Kind() OInitopKind {
+	return t.kind
+}
+
+var _Explicit OInitop = SimpleOInitop{KExplicit}
+var _Implicit OInitop = SimpleOInitop{KImplicit}
+
+type OExternopKind int
+
+const (
+	KInternalize OExternopKind = iota + 1
+	KExternalize
+)
+
+type OExternop interface {
+	Kind() OExternopKind
+}
+
+type SimpleOExternop struct {
+	kind OExternopKind
+}
+
+func (t SimpleOExternop) Kind() OExternopKind {
+	return t.kind
+}
+
+var _Internalize OExternop = SimpleOExternop{KInternalize}
+var _Externalize OExternop = SimpleOExternop{KExternalize}
+
+type OIdx = TODO /* int32 Source.phrase */
+type ONum = TODO /* Value.num Source.phrase */
+type OVec = TODO /* Value.vec Source.phrase */
+type OName = string
+
+type OBlockTypeKind int
+
+const (
+	KVarBlockType OBlockTypeKind = iota + 1
+	KValBlockType
+)
+
+type OBlockType interface {
+	Kind() OBlockTypeKind
+}
+
+type SimpleOBlockType struct {
+	kind OBlockTypeKind
+}
+
+func (t SimpleOBlockType) Kind() OBlockTypeKind {
+	return t.kind
+}
+
+type OBlockType_VarBlockType struct {
+	V *Phrase[OInt32]
+}
+
+func (t OBlockType_VarBlockType) Kind() OBlockTypeKind {
+	return KVarBlockType
+}
+func _VarBlockType_1(v *Phrase[OInt32]) OBlockType {
+	return OBlockType_VarBlockType{v}
+}
+
+type OBlockType_ValBlockType struct {
+	V *OValType
+}
+
+func (t OBlockType_ValBlockType) Kind() OBlockTypeKind {
+	return KValBlockType
+}
+func _ValBlockType_1(v *OValType) OBlockType {
+	return OBlockType_ValBlockType{v}
+}
+
+type OInstr = TODO /* instr' Source.phrase */
+
+type OInstr_Kind int
+
+const (
+	KUnreachable OInstr_Kind = iota + 1
+	KNop
+	KDrop
+	KSelect
+	KBlock
+	KLoop
+	KIf
+	KBr
+	KBrIf
+	KBrTable
+	KBrOnNull
+	KBrOnNonNull
+	KBrOnCast
+	KBrOnCastFail
+	KReturn
+	KCall
+	KCallRef
+	KCallIndirect
+	KReturnCall
+	KReturnCallRef
+	KReturnCallIndirect
+	KThrow
+	KThrowRef
+	KTryTable
+	KLocalGet
+	KLocalSet
+	KLocalTee
+	KGlobalGet
+	KGlobalSet
+	KTableGet
+	KTableSet
+	KTableSize
+	KTableGrow
+	KTableFill
+	KTableCopy
+	KTableInit
+	KElemDrop
+	KLoad
+	KStore
+	KVecLoad
+	KVecStore
+	KVecLoadLane
+	KVecStoreLane
+	KMemorySize
+	KMemoryGrow
+	KMemoryFill
+	KMemoryCopy
+	KMemoryInit
+	KDataDrop
+	KConst
+	KTest
+	KCompare
+	KUnary
+	KBinary
+	KConvert
+	KRefNull
+	KRefFunc
+	KRefIsNull
+	KRefAsNonNull
+	KRefTest
+	KRefCast
+	KRefEq
+	KRefI31
+	KI31Get
+	KStructNew
+	KStructGet
+	KStructSet
+	KArrayNew
+	KArrayNewFixed
+	KArrayNewElem
+	KArrayNewData
+	KArrayGet
+	KArraySet
+	KArrayLen
+	KArrayCopy
+	KArrayFill
+	KArrayInitData
+	KArrayInitElem
+	KExternConvert
+	KVecConst
+	KVecTest
+	KVecCompare
+	KVecUnary
+	KVecBinary
+	KVecTernary
+	KVecConvert
+	KVecShift
+	KVecBitmask
+	KVecTestBits
+	KVecUnaryBits
+	KVecBinaryBits
+	KVecTernaryBits
+	KVecSplat
+	KVecExtract
+	KVecReplace
+)
+
+type OInstr_ interface {
+	Kind() OInstr_Kind
+}
+
+type SimpleOInstr_ struct {
+	kind OInstr_Kind
+}
+
+func (t SimpleOInstr_) Kind() OInstr_Kind {
+	return t.kind
+}
+
+var _Unreachable OInstr_ = SimpleOInstr_{KUnreachable}
+var _Nop OInstr_ = SimpleOInstr_{KNop}
+var _Drop OInstr_ = SimpleOInstr_{KDrop}
+
+type OInstr__Select struct {
+	V *[]OValType
+}
+
+func (t OInstr__Select) Kind() OInstr_Kind {
+	return KSelect
+}
+func _Select_1(v *[]OValType) OInstr_ {
+	return OInstr__Select{v}
+}
+
+type OInstr__Block struct {
+	V OBlockType
+}
+
+func (t OInstr__Block) Kind() OInstr_Kind {
+	return KBlock
+}
+func _Block_1(v OBlockType) OInstr_ {
+	return OInstr__Block{v}
+}
+
+type OInstr__Loop struct {
+	V OBlockType
+}
+
+func (t OInstr__Loop) Kind() OInstr_Kind {
+	return KLoop
+}
+func _Loop_1(v OBlockType) OInstr_ {
+	return OInstr__Loop{v}
+}
+
+type OInstr__If struct {
+	V OBlockType
+}
+
+func (t OInstr__If) Kind() OInstr_Kind {
+	return KIf
+}
+func _If_1(v OBlockType) OInstr_ {
+	return OInstr__If{v}
+}
+
+type OInstr__Br struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__Br) Kind() OInstr_Kind {
+	return KBr
+}
+func _Br_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__Br{v}
+}
+
+type OInstr__BrIf struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__BrIf) Kind() OInstr_Kind {
+	return KBrIf
+}
+func _BrIf_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__BrIf{v}
+}
+
+type OInstr__BrTable struct {
+	V []*Phrase[OInt32]
+}
+
+func (t OInstr__BrTable) Kind() OInstr_Kind {
+	return KBrTable
+}
+func _BrTable_1(v []*Phrase[OInt32]) OInstr_ {
+	return OInstr__BrTable{v}
+}
+
+type OInstr__BrOnNull struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__BrOnNull) Kind() OInstr_Kind {
+	return KBrOnNull
+}
+func _BrOnNull_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__BrOnNull{v}
+}
+
+type OInstr__BrOnNonNull struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__BrOnNonNull) Kind() OInstr_Kind {
+	return KBrOnNonNull
+}
+func _BrOnNonNull_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__BrOnNonNull{v}
+}
+
+type OInstr__BrOnCast struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__BrOnCast) Kind() OInstr_Kind {
+	return KBrOnCast
+}
+func _BrOnCast_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__BrOnCast{v}
+}
+
+type OInstr__BrOnCastFail struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__BrOnCastFail) Kind() OInstr_Kind {
+	return KBrOnCastFail
+}
+func _BrOnCastFail_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__BrOnCastFail{v}
+}
+
+var _Return OInstr_ = SimpleOInstr_{KReturn}
+
+type OInstr__Call struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__Call) Kind() OInstr_Kind {
+	return KCall
+}
+func _Call_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__Call{v}
+}
+
+type OInstr__CallRef struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__CallRef) Kind() OInstr_Kind {
+	return KCallRef
+}
+func _CallRef_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__CallRef{v}
+}
+
+type OInstr__CallIndirect struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__CallIndirect) Kind() OInstr_Kind {
+	return KCallIndirect
+}
+func _CallIndirect_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__CallIndirect{v}
+}
+
+type OInstr__ReturnCall struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ReturnCall) Kind() OInstr_Kind {
+	return KReturnCall
+}
+func _ReturnCall_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ReturnCall{v}
+}
+
+type OInstr__ReturnCallRef struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ReturnCallRef) Kind() OInstr_Kind {
+	return KReturnCallRef
+}
+func _ReturnCallRef_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ReturnCallRef{v}
+}
+
+type OInstr__ReturnCallIndirect struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ReturnCallIndirect) Kind() OInstr_Kind {
+	return KReturnCallIndirect
+}
+func _ReturnCallIndirect_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ReturnCallIndirect{v}
+}
+
+type OInstr__Throw struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__Throw) Kind() OInstr_Kind {
+	return KThrow
+}
+func _Throw_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__Throw{v}
+}
+
+var _ThrowRef OInstr_ = SimpleOInstr_{KThrowRef}
+
+type OInstr__TryTable struct {
+	V OBlockType
+}
+
+func (t OInstr__TryTable) Kind() OInstr_Kind {
+	return KTryTable
+}
+func _TryTable_1(v OBlockType) OInstr_ {
+	return OInstr__TryTable{v}
+}
+
+type OInstr__LocalGet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__LocalGet) Kind() OInstr_Kind {
+	return KLocalGet
+}
+func _LocalGet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__LocalGet{v}
+}
+
+type OInstr__LocalSet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__LocalSet) Kind() OInstr_Kind {
+	return KLocalSet
+}
+func _LocalSet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__LocalSet{v}
+}
+
+type OInstr__LocalTee struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__LocalTee) Kind() OInstr_Kind {
+	return KLocalTee
+}
+func _LocalTee_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__LocalTee{v}
+}
+
+type OInstr__GlobalGet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__GlobalGet) Kind() OInstr_Kind {
+	return KGlobalGet
+}
+func _GlobalGet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__GlobalGet{v}
+}
+
+type OInstr__GlobalSet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__GlobalSet) Kind() OInstr_Kind {
+	return KGlobalSet
+}
+func _GlobalSet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__GlobalSet{v}
+}
+
+type OInstr__TableGet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableGet) Kind() OInstr_Kind {
+	return KTableGet
+}
+func _TableGet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableGet{v}
+}
+
+type OInstr__TableSet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableSet) Kind() OInstr_Kind {
+	return KTableSet
+}
+func _TableSet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableSet{v}
+}
+
+type OInstr__TableSize struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableSize) Kind() OInstr_Kind {
+	return KTableSize
+}
+func _TableSize_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableSize{v}
+}
+
+type OInstr__TableGrow struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableGrow) Kind() OInstr_Kind {
+	return KTableGrow
+}
+func _TableGrow_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableGrow{v}
+}
+
+type OInstr__TableFill struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableFill) Kind() OInstr_Kind {
+	return KTableFill
+}
+func _TableFill_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableFill{v}
+}
+
+type OInstr__TableCopy struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableCopy) Kind() OInstr_Kind {
+	return KTableCopy
+}
+func _TableCopy_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableCopy{v}
+}
+
+type OInstr__TableInit struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__TableInit) Kind() OInstr_Kind {
+	return KTableInit
+}
+func _TableInit_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__TableInit{v}
+}
+
+type OInstr__ElemDrop struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ElemDrop) Kind() OInstr_Kind {
+	return KElemDrop
+}
+func _ElemDrop_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ElemDrop{v}
+}
+
+type OInstr__Load struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__Load) Kind() OInstr_Kind {
+	return KLoad
+}
+func _Load_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__Load{v}
+}
+
+type OInstr__Store struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__Store) Kind() OInstr_Kind {
+	return KStore
+}
+func _Store_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__Store{v}
+}
+
+type OInstr__VecLoad struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__VecLoad) Kind() OInstr_Kind {
+	return KVecLoad
+}
+func _VecLoad_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__VecLoad{v}
+}
+
+type OInstr__VecStore struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__VecStore) Kind() OInstr_Kind {
+	return KVecStore
+}
+func _VecStore_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__VecStore{v}
+}
+
+type OInstr__VecLoadLane struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__VecLoadLane) Kind() OInstr_Kind {
+	return KVecLoadLane
+}
+func _VecLoadLane_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__VecLoadLane{v}
+}
+
+type OInstr__VecStoreLane struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__VecStoreLane) Kind() OInstr_Kind {
+	return KVecStoreLane
+}
+func _VecStoreLane_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__VecStoreLane{v}
+}
+
+type OInstr__MemorySize struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__MemorySize) Kind() OInstr_Kind {
+	return KMemorySize
+}
+func _MemorySize_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__MemorySize{v}
+}
+
+type OInstr__MemoryGrow struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__MemoryGrow) Kind() OInstr_Kind {
+	return KMemoryGrow
+}
+func _MemoryGrow_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__MemoryGrow{v}
+}
+
+type OInstr__MemoryFill struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__MemoryFill) Kind() OInstr_Kind {
+	return KMemoryFill
+}
+func _MemoryFill_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__MemoryFill{v}
+}
+
+type OInstr__MemoryCopy struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__MemoryCopy) Kind() OInstr_Kind {
+	return KMemoryCopy
+}
+func _MemoryCopy_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__MemoryCopy{v}
+}
+
+type OInstr__MemoryInit struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__MemoryInit) Kind() OInstr_Kind {
+	return KMemoryInit
+}
+func _MemoryInit_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__MemoryInit{v}
+}
+
+type OInstr__DataDrop struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__DataDrop) Kind() OInstr_Kind {
+	return KDataDrop
+}
+func _DataDrop_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__DataDrop{v}
+}
+
+type OInstr__Const struct {
+	V ONum
+}
+
+func (t OInstr__Const) Kind() OInstr_Kind {
+	return KConst
+}
+func _Const_1(v ONum) OInstr_ {
+	return OInstr__Const{v}
+}
+
+type OInstr__Test struct {
+	V OTestop
+}
+
+func (t OInstr__Test) Kind() OInstr_Kind {
+	return KTest
+}
+func _Test_1(v OTestop) OInstr_ {
+	return OInstr__Test{v}
+}
+
+type OInstr__Compare struct {
+	V ORelop
+}
+
+func (t OInstr__Compare) Kind() OInstr_Kind {
+	return KCompare
+}
+func _Compare_1(v ORelop) OInstr_ {
+	return OInstr__Compare{v}
+}
+
+type OInstr__Unary struct {
+	V OUnop
+}
+
+func (t OInstr__Unary) Kind() OInstr_Kind {
+	return KUnary
+}
+func _Unary_1(v OUnop) OInstr_ {
+	return OInstr__Unary{v}
+}
+
+type OInstr__Binary struct {
+	V OBinop
+}
+
+func (t OInstr__Binary) Kind() OInstr_Kind {
+	return KBinary
+}
+func _Binary_1(v OBinop) OInstr_ {
+	return OInstr__Binary{v}
+}
+
+type OInstr__Convert struct {
+	V OCvtop
+}
+
+func (t OInstr__Convert) Kind() OInstr_Kind {
+	return KConvert
+}
+func _Convert_1(v OCvtop) OInstr_ {
+	return OInstr__Convert{v}
+}
+
+type OInstr__RefNull struct {
+	V OHeapType
+}
+
+func (t OInstr__RefNull) Kind() OInstr_Kind {
+	return KRefNull
+}
+func _RefNull_1(v OHeapType) OInstr_ {
+	return OInstr__RefNull{v}
+}
+
+type OInstr__RefFunc struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__RefFunc) Kind() OInstr_Kind {
+	return KRefFunc
+}
+func _RefFunc_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__RefFunc{v}
+}
+
+var _RefIsNull OInstr_ = SimpleOInstr_{KRefIsNull}
+var _RefAsNonNull OInstr_ = SimpleOInstr_{KRefAsNonNull}
+
+type OInstr__RefTest struct {
+	V ORefType
+}
+
+func (t OInstr__RefTest) Kind() OInstr_Kind {
+	return KRefTest
+}
+func _RefTest_1(v ORefType) OInstr_ {
+	return OInstr__RefTest{v}
+}
+
+type OInstr__RefCast struct {
+	V ORefType
+}
+
+func (t OInstr__RefCast) Kind() OInstr_Kind {
+	return KRefCast
+}
+func _RefCast_1(v ORefType) OInstr_ {
+	return OInstr__RefCast{v}
+}
+
+var _RefEq OInstr_ = SimpleOInstr_{KRefEq}
+var _RefI31 OInstr_ = SimpleOInstr_{KRefI31}
+
+type OInstr__I31Get struct {
+	V OExtension
+}
+
+func (t OInstr__I31Get) Kind() OInstr_Kind {
+	return KI31Get
+}
+func _I31Get_1(v OExtension) OInstr_ {
+	return OInstr__I31Get{v}
+}
+
+type OInstr__StructNew struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__StructNew) Kind() OInstr_Kind {
+	return KStructNew
+}
+func _StructNew_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__StructNew{v}
+}
+
+type OInstr__StructGet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__StructGet) Kind() OInstr_Kind {
+	return KStructGet
+}
+func _StructGet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__StructGet{v}
+}
+
+type OInstr__StructSet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__StructSet) Kind() OInstr_Kind {
+	return KStructSet
+}
+func _StructSet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__StructSet{v}
+}
+
+type OInstr__ArrayNew struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayNew) Kind() OInstr_Kind {
+	return KArrayNew
+}
+func _ArrayNew_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayNew{v}
+}
+
+type OInstr__ArrayNewFixed struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayNewFixed) Kind() OInstr_Kind {
+	return KArrayNewFixed
+}
+func _ArrayNewFixed_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayNewFixed{v}
+}
+
+type OInstr__ArrayNewElem struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayNewElem) Kind() OInstr_Kind {
+	return KArrayNewElem
+}
+func _ArrayNewElem_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayNewElem{v}
+}
+
+type OInstr__ArrayNewData struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayNewData) Kind() OInstr_Kind {
+	return KArrayNewData
+}
+func _ArrayNewData_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayNewData{v}
+}
+
+type OInstr__ArrayGet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayGet) Kind() OInstr_Kind {
+	return KArrayGet
+}
+func _ArrayGet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayGet{v}
+}
+
+type OInstr__ArraySet struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArraySet) Kind() OInstr_Kind {
+	return KArraySet
+}
+func _ArraySet_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArraySet{v}
+}
+
+var _ArrayLen OInstr_ = SimpleOInstr_{KArrayLen}
+
+type OInstr__ArrayCopy struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayCopy) Kind() OInstr_Kind {
+	return KArrayCopy
+}
+func _ArrayCopy_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayCopy{v}
+}
+
+type OInstr__ArrayFill struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayFill) Kind() OInstr_Kind {
+	return KArrayFill
+}
+func _ArrayFill_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayFill{v}
+}
+
+type OInstr__ArrayInitData struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayInitData) Kind() OInstr_Kind {
+	return KArrayInitData
+}
+func _ArrayInitData_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayInitData{v}
+}
+
+type OInstr__ArrayInitElem struct {
+	V *Phrase[OInt32]
+}
+
+func (t OInstr__ArrayInitElem) Kind() OInstr_Kind {
+	return KArrayInitElem
+}
+func _ArrayInitElem_1(v *Phrase[OInt32]) OInstr_ {
+	return OInstr__ArrayInitElem{v}
+}
+
+type OInstr__ExternConvert struct {
+	V OExternop
+}
+
+func (t OInstr__ExternConvert) Kind() OInstr_Kind {
+	return KExternConvert
+}
+func _ExternConvert_1(v OExternop) OInstr_ {
+	return OInstr__ExternConvert{v}
+}
+
+type OInstr__VecConst struct {
+	V OVec
+}
+
+func (t OInstr__VecConst) Kind() OInstr_Kind {
+	return KVecConst
+}
+func _VecConst_1(v OVec) OInstr_ {
+	return OInstr__VecConst{v}
+}
+
+type OInstr__VecTest struct {
+	V OVecTestop
+}
+
+func (t OInstr__VecTest) Kind() OInstr_Kind {
+	return KVecTest
+}
+func _VecTest_1(v OVecTestop) OInstr_ {
+	return OInstr__VecTest{v}
+}
+
+type OInstr__VecCompare struct {
+	V OVecRelop
+}
+
+func (t OInstr__VecCompare) Kind() OInstr_Kind {
+	return KVecCompare
+}
+func _VecCompare_1(v OVecRelop) OInstr_ {
+	return OInstr__VecCompare{v}
+}
+
+type OInstr__VecUnary struct {
+	V OVecUnop
+}
+
+func (t OInstr__VecUnary) Kind() OInstr_Kind {
+	return KVecUnary
+}
+func _VecUnary_1(v OVecUnop) OInstr_ {
+	return OInstr__VecUnary{v}
+}
+
+type OInstr__VecBinary struct {
+	V OVecBinop
+}
+
+func (t OInstr__VecBinary) Kind() OInstr_Kind {
+	return KVecBinary
+}
+func _VecBinary_1(v OVecBinop) OInstr_ {
+	return OInstr__VecBinary{v}
+}
+
+type OInstr__VecTernary struct {
+	V OVecTernop
+}
+
+func (t OInstr__VecTernary) Kind() OInstr_Kind {
+	return KVecTernary
+}
+func _VecTernary_1(v OVecTernop) OInstr_ {
+	return OInstr__VecTernary{v}
+}
+
+type OInstr__VecConvert struct {
+	V OVecCvtop
+}
+
+func (t OInstr__VecConvert) Kind() OInstr_Kind {
+	return KVecConvert
+}
+func _VecConvert_1(v OVecCvtop) OInstr_ {
+	return OInstr__VecConvert{v}
+}
+
+type OInstr__VecShift struct {
+	V OVecShiftop
+}
+
+func (t OInstr__VecShift) Kind() OInstr_Kind {
+	return KVecShift
+}
+func _VecShift_1(v OVecShiftop) OInstr_ {
+	return OInstr__VecShift{v}
+}
+
+type OInstr__VecBitmask struct {
+	V OVecBitmaskop
+}
+
+func (t OInstr__VecBitmask) Kind() OInstr_Kind {
+	return KVecBitmask
+}
+func _VecBitmask_1(v OVecBitmaskop) OInstr_ {
+	return OInstr__VecBitmask{v}
+}
+
+type OInstr__VecTestBits struct {
+	V OVecVtestop
+}
+
+func (t OInstr__VecTestBits) Kind() OInstr_Kind {
+	return KVecTestBits
+}
+func _VecTestBits_1(v OVecVtestop) OInstr_ {
+	return OInstr__VecTestBits{v}
+}
+
+type OInstr__VecUnaryBits struct {
+	V OVecVunop
+}
+
+func (t OInstr__VecUnaryBits) Kind() OInstr_Kind {
+	return KVecUnaryBits
+}
+func _VecUnaryBits_1(v OVecVunop) OInstr_ {
+	return OInstr__VecUnaryBits{v}
+}
+
+type OInstr__VecBinaryBits struct {
+	V OVecVbinop
+}
+
+func (t OInstr__VecBinaryBits) Kind() OInstr_Kind {
+	return KVecBinaryBits
+}
+func _VecBinaryBits_1(v OVecVbinop) OInstr_ {
+	return OInstr__VecBinaryBits{v}
+}
+
+type OInstr__VecTernaryBits struct {
+	V OVecVternop
+}
+
+func (t OInstr__VecTernaryBits) Kind() OInstr_Kind {
+	return KVecTernaryBits
+}
+func _VecTernaryBits_1(v OVecVternop) OInstr_ {
+	return OInstr__VecTernaryBits{v}
+}
+
+type OInstr__VecSplat struct {
+	V OVecSplatop
+}
+
+func (t OInstr__VecSplat) Kind() OInstr_Kind {
+	return KVecSplat
+}
+func _VecSplat_1(v OVecSplatop) OInstr_ {
+	return OInstr__VecSplat{v}
+}
+
+type OInstr__VecExtract struct {
+	V OVecExtractop
+}
+
+func (t OInstr__VecExtract) Kind() OInstr_Kind {
+	return KVecExtract
+}
+func _VecExtract_1(v OVecExtractop) OInstr_ {
+	return OInstr__VecExtract{v}
+}
+
+type OInstr__VecReplace struct {
+	V OVecReplaceop
+}
+
+func (t OInstr__VecReplace) Kind() OInstr_Kind {
+	return KVecReplace
+}
+func _VecReplace_1(v OVecReplaceop) OInstr_ {
+	return OInstr__VecReplace{v}
+}
+
+type OCatch = TODO /* catch' Source.phrase */
+
+type OCatch_Kind int
+
+const (
+	KCatch OCatch_Kind = iota + 1
+	KCatchRef
+	KCatchAll
+	KCatchAllRef
+)
+
+type OCatch_ interface {
+	Kind() OCatch_Kind
+}
+
+type SimpleOCatch_ struct {
+	kind OCatch_Kind
+}
+
+func (t SimpleOCatch_) Kind() OCatch_Kind {
+	return t.kind
+}
+
+type OCatch__Catch struct {
+	V *Phrase[OInt32]
+}
+
+func (t OCatch__Catch) Kind() OCatch_Kind {
+	return KCatch
+}
+func _Catch_1(v *Phrase[OInt32]) OCatch_ {
+	return OCatch__Catch{v}
+}
+
+type OCatch__CatchRef struct {
+	V *Phrase[OInt32]
+}
+
+func (t OCatch__CatchRef) Kind() OCatch_Kind {
+	return KCatchRef
+}
+func _CatchRef_1(v *Phrase[OInt32]) OCatch_ {
+	return OCatch__CatchRef{v}
+}
+
+type OCatch__CatchAll struct {
+	V *Phrase[OInt32]
+}
+
+func (t OCatch__CatchAll) Kind() OCatch_Kind {
+	return KCatchAll
+}
+func _CatchAll_1(v *Phrase[OInt32]) OCatch_ {
+	return OCatch__CatchAll{v}
+}
+
+type OCatch__CatchAllRef struct {
+	V *Phrase[OInt32]
+}
+
+func (t OCatch__CatchAllRef) Kind() OCatch_Kind {
+	return KCatchAllRef
+}
+func _CatchAllRef_1(v *Phrase[OInt32]) OCatch_ {
+	return OCatch__CatchAllRef{v}
+}
+
+type OConst = TODO       /* instr list Source.phrase */
+type OLocal = TODO       /* local' Source.phrase */
+type OGlobal = TODO      /* global' Source.phrase */
+type OFunc = TODO        /* func' Source.phrase */
+type OTable = TODO       /* table' Source.phrase */
+type OMemory = TODO      /* memory' Source.phrase */
+type OTag = TODO         /* tag' Source.phrase */
+type OSegmentMode = TODO /* segment_mode' Source.phrase */
+
+type OSegmentMode_Kind int
+
+const (
+	KPassive OSegmentMode_Kind = iota + 1
+	KActive
+	KDeclarative
+)
+
+type OSegmentMode_ interface {
+	Kind() OSegmentMode_Kind
+}
+
+type SimpleOSegmentMode_ struct {
+	kind OSegmentMode_Kind
+}
+
+func (t SimpleOSegmentMode_) Kind() OSegmentMode_Kind {
+	return t.kind
+}
+
+var _Passive OSegmentMode_ = SimpleOSegmentMode_{KPassive}
+
+type OSegmentMode__Active struct {
+	V struct {
+		Index  *Phrase[OInt32]
+		Offset OConst
+	}
+}
+
+func (t OSegmentMode__Active) Kind() OSegmentMode_Kind {
+	return KActive
+}
+func _Active_1(v struct {
+	Index  *Phrase[OInt32]
+	Offset OConst
+}) OSegmentMode_ {
+	return OSegmentMode__Active{v}
+}
+
+var _Declarative OSegmentMode_ = SimpleOSegmentMode_{KDeclarative}
+
+type OElemSegment = TODO /* elem_segment' Source.phrase */
+type ODataSegment = TODO /* data_segment' Source.phrase */
+type OType = TODO        /* rec_type Source.phrase */
+type OExportDesc = TODO  /* export_desc' Source.phrase */
+
+type OExportDesc_Kind int
+
+const (
+	KFuncExport OExportDesc_Kind = iota + 1
+	KTableExport
+	KMemoryExport
+	KGlobalExport
+	KTagExport
+)
+
+type OExportDesc_ interface {
+	Kind() OExportDesc_Kind
+}
+
+type SimpleOExportDesc_ struct {
+	kind OExportDesc_Kind
+}
+
+func (t SimpleOExportDesc_) Kind() OExportDesc_Kind {
+	return t.kind
+}
+
+type OExportDesc__FuncExport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OExportDesc__FuncExport) Kind() OExportDesc_Kind {
+	return KFuncExport
+}
+func _FuncExport_1(v *Phrase[OInt32]) OExportDesc_ {
+	return OExportDesc__FuncExport{v}
+}
+
+type OExportDesc__TableExport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OExportDesc__TableExport) Kind() OExportDesc_Kind {
+	return KTableExport
+}
+func _TableExport_1(v *Phrase[OInt32]) OExportDesc_ {
+	return OExportDesc__TableExport{v}
+}
+
+type OExportDesc__MemoryExport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OExportDesc__MemoryExport) Kind() OExportDesc_Kind {
+	return KMemoryExport
+}
+func _MemoryExport_1(v *Phrase[OInt32]) OExportDesc_ {
+	return OExportDesc__MemoryExport{v}
+}
+
+type OExportDesc__GlobalExport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OExportDesc__GlobalExport) Kind() OExportDesc_Kind {
+	return KGlobalExport
+}
+func _GlobalExport_1(v *Phrase[OInt32]) OExportDesc_ {
+	return OExportDesc__GlobalExport{v}
+}
+
+type OExportDesc__TagExport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OExportDesc__TagExport) Kind() OExportDesc_Kind {
+	return KTagExport
+}
+func _TagExport_1(v *Phrase[OInt32]) OExportDesc_ {
+	return OExportDesc__TagExport{v}
+}
+
+type OExport = TODO     /* export' Source.phrase */
+type OImportDesc = TODO /* import_desc' Source.phrase */
+
+type OImportDesc_Kind int
+
+const (
+	KFuncImport OImportDesc_Kind = iota + 1
+	KTableImport
+	KMemoryImport
+	KGlobalImport
+	KTagImport
+)
+
+type OImportDesc_ interface {
+	Kind() OImportDesc_Kind
+}
+
+type SimpleOImportDesc_ struct {
+	kind OImportDesc_Kind
+}
+
+func (t SimpleOImportDesc_) Kind() OImportDesc_Kind {
+	return t.kind
+}
+
+type OImportDesc__FuncImport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OImportDesc__FuncImport) Kind() OImportDesc_Kind {
+	return KFuncImport
+}
+func _FuncImport_1(v *Phrase[OInt32]) OImportDesc_ {
+	return OImportDesc__FuncImport{v}
+}
+
+type OImportDesc__TableImport struct {
+	V OTableType
+}
+
+func (t OImportDesc__TableImport) Kind() OImportDesc_Kind {
+	return KTableImport
+}
+func _TableImport_1(v OTableType) OImportDesc_ {
+	return OImportDesc__TableImport{v}
+}
+
+type OImportDesc__MemoryImport struct {
+	V OMemoryType
+}
+
+func (t OImportDesc__MemoryImport) Kind() OImportDesc_Kind {
+	return KMemoryImport
+}
+func _MemoryImport_1(v OMemoryType) OImportDesc_ {
+	return OImportDesc__MemoryImport{v}
+}
+
+type OImportDesc__GlobalImport struct {
+	V OGlobalType
+}
+
+func (t OImportDesc__GlobalImport) Kind() OImportDesc_Kind {
+	return KGlobalImport
+}
+func _GlobalImport_1(v OGlobalType) OImportDesc_ {
+	return OImportDesc__GlobalImport{v}
+}
+
+type OImportDesc__TagImport struct {
+	V *Phrase[OInt32]
+}
+
+func (t OImportDesc__TagImport) Kind() OImportDesc_Kind {
+	return KTagImport
+}
+func _TagImport_1(v *Phrase[OInt32]) OImportDesc_ {
+	return OImportDesc__TagImport{v}
+}
+
+type OImport = TODO /* import' Source.phrase */
+type OStart = TODO  /* start' Source.phrase */
+type OModule = TODO /* module_' Source.phrase */
 type Instr_i32_const struct {
 	N *Phrase[OTypeIdx]
 }
@@ -1449,11 +2914,11 @@ var _throw_ref = _throw_ref_0
 
 type Instr_try_table struct {
 	Bt OBlockType
-	Cs []TODO /* catch */
+	Cs []OCatch
 	Es []*Phrase[Instruction_]
 }
 
-func _try_table_3(_bt OBlockType, _cs []TODO /* catch */, _es []*Phrase[Instruction_]) Instr_try_table {
+func _try_table_3(_bt OBlockType, _cs []OCatch, _es []*Phrase[Instruction_]) Instr_try_table {
 	return Instr_try_table{
 		Bt: _bt,
 		Cs: _cs,

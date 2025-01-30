@@ -20,6 +20,7 @@ var specpath = filepath.Join("gen", "spec")
 var typeFiles = []string{
 	filepath.Join("interpreter", "syntax", "types.ml"),
 	filepath.Join("interpreter", "syntax", "pack.ml"),
+	filepath.Join("interpreter", "syntax", "ast.ml"),
 }
 
 var funcsToTranslate = []string{
@@ -88,6 +89,13 @@ func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
 		case ocaml.SimpleType("option"):
 			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1], typeDefs))
 		}
+	} else if asRecord, ok := t.(ocaml.Record); ok {
+		res := "struct{"
+		for _, f := range asRecord {
+			res += fmt.Sprintf("%s %s; ", fieldName(f.Name), ocaml2go(f.Type, typeDefs))
+		}
+		res += "}"
+		return res
 	} else if asFunc, ok := t.(ocaml.Func); ok {
 		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In, typeDefs), ocaml2go(asFunc.Out, typeDefs))
 	} else if asTuple, ok := t.(ocaml.Tuple); ok {
@@ -197,7 +205,7 @@ func main() {
 						}
 					}
 
-					if asSimple, ok := retType.(ocaml.SimpleType); !ok || asSimple != "instr'" {
+					if retType.String() != "instr'" {
 						// Not an instruction definition
 						continue
 					}
@@ -249,9 +257,10 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, typeDefs map[string]ocaml
 
 		name := p.s(nName)
 
-		fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, nBody.ToSexp())
+		// fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, p.s(n))
+		// fmt.Fprintf(os.Stderr, "  %s\n", nBody.ToSexp())
 		if existingType, ok := typeDefs[name]; ok {
-			exitWithError("duplicate definition of type %s: already had %s but got %s as well", p.s(nName), existingType, p.s(nBody))
+			fmt.Fprintf(os.Stderr, "WARNING: duplicate definition of type %s: already had %s but got %s as well\n", p.s(nName), existingType, p.s(nBody))
 		}
 
 		if nBody.GrammarName() == "record_declaration" {
@@ -310,8 +319,11 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 			Out: out,
 		}
 	case "variant_declaration":
-		variants := make(ocaml.Variants, n.NamedChildCount())
+		var variants ocaml.Variants
 		for i := range n.NamedChildCount() {
+			if n.NamedChild(i).GrammarName() == "comment" {
+				continue
+			}
 			constructor := Lookup{n}.Child(i, "constructor_declaration").Node
 			constructorName := constructor.NamedChild(0)
 			variant := ocaml.Variant{
@@ -321,7 +333,7 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 				backingType := p.parseTypeDecl(constructor.NamedChild(1), typeDefs)
 				variant.Type = &backingType
 			}
-			variants[i] = variant
+			variants = append(variants, variant)
 		}
 		return variants
 	case "tuple_type":
@@ -335,6 +347,22 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 		}
 		tup = append(tup, tr)
 		return tup
+	case "record_declaration":
+		var rec ocaml.Record
+		for _, f := range n.NamedChildren(n.Walk()) {
+			if f.GrammarName() != "field_declaration" {
+				continue
+			}
+			name := f.NamedChild(0)
+			t := p.parseTypeDecl(f.NamedChild(1), typeDefs)
+			rec = append(rec, ocaml.RecordField{
+				Name: p.s(name),
+				Type: t,
+			})
+		}
+		return rec
+	case "type_variable":
+		return ocaml.SimpleType("UnknownTypeVariable_" + safeName(name))
 	default:
 		exitWithError("unexpected type declaration node %s", n.GrammarName())
 		return nil
@@ -402,8 +430,8 @@ func (p *ocamlParse) writeTypeDef(def ocaml.Alias, typeDefs map[string]ocaml.Typ
 }
 
 func (p *ocamlParse) parseInstrBinding(instrDef *tree_sitter.Node) {
-	// fmt.Fprintf(os.Stderr, "parsing instr def: %s\n", p.s(instrDef))
-	// fmt.Fprintf(os.Stderr, "  %s\n", instrDef.ToSexp())
+	fmt.Fprintf(os.Stderr, "parsing instr def: %s\n", p.s(instrDef))
+	fmt.Fprintf(os.Stderr, "  %s\n", instrDef.ToSexp())
 
 	pattern := instrDef.ChildByFieldName("pattern")
 	var params []*tree_sitter.Node
@@ -502,20 +530,26 @@ func paramName(name string) string {
 	return strings.ToUpper(safe[:1]) + safe[1:]
 }
 
-func typeName(name string) string {
-	parts := strings.Split(name, "_")
+func snake2camel(s string) string {
+	parts := strings.Split(s, "_")
 	for i := range parts {
-		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+		if parts[i] != "" {
+			parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+		}
 	}
-	return "O" + strings.Join(parts, "")
+	return strings.Join(parts, "")
+}
+
+func typeName(name string) string {
+	return "O" + reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
 }
 
 func variantKindName(name string) string {
-	parts := strings.Split(name, "_")
-	for i := range parts {
-		parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
-	}
-	return "K" + strings.Join(parts, "")
+	return "K" + reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
+}
+
+func fieldName(name string) string {
+	return reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
 }
 
 func (p *ocamlParse) parseExpr(
@@ -525,9 +559,9 @@ func (p *ocamlParse) parseExpr(
 	statement bool,
 	returnIfTerminal bool,
 ) string {
-	fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, in module: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, currentModule, statement, returnIfTerminal)
-	fmt.Fprintf(os.Stderr, "  %s\n", p.s(expr))
-	fmt.Fprintf(os.Stderr, "  %s\n", expr.ToSexp())
+	// fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, in module: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, currentModule, statement, returnIfTerminal)
+	// fmt.Fprintf(os.Stderr, "  %s\n", p.s(expr))
+	// fmt.Fprintf(os.Stderr, "  %s\n", expr.ToSexp())
 
 	if returnIfTerminal && !statement {
 		exitWithError("for %s expression: cannot return a non-statement", expr.GrammarName())

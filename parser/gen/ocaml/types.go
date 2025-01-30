@@ -25,6 +25,7 @@ const (
 	TTuple
 	TCons
 	TVariants
+	TRecord
 	TAlias
 	TModule
 	TSimple
@@ -115,6 +116,29 @@ func (t Variants) Kind() TypeKind {
 	return TVariants
 }
 
+type Record []RecordField
+
+type RecordField struct {
+	Name string
+	Type Type
+}
+
+func (t Record) String() string {
+	res := "{"
+	for i, f := range t {
+		if i > 0 {
+			res += "; "
+		}
+		res += fmt.Sprintf("%s : %s", f.Name, f.Type)
+	}
+	res += "}"
+	return res
+}
+
+func (t Record) Kind() TypeKind {
+	return TRecord
+}
+
 type Alias struct {
 	Name string
 	Type Type
@@ -163,8 +187,8 @@ func ParseType(t string, typeDefs TypeDefs) Type {
 }
 
 func parseTypeNode(n *tree_sitter.Node, t string, typeDefs TypeDefs) Type {
-	fmt.Fprintf(os.Stderr, "type node %s: %s\n", n.GrammarName(), n.Utf8Text([]byte(t)))
-	fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
+	// fmt.Fprintf(os.Stderr, "type node %s: %s\n", n.GrammarName(), n.Utf8Text([]byte(t)))
+	// fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
 
 	switch n.GrammarName() {
 	case "type", "parenthesized_type":
