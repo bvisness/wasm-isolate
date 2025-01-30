@@ -1168,18 +1168,6 @@ func _ExtLane_1(v struct {
 var _ExtSplat OVecExtension = SimpleOVecExtension{KExtSplat}
 var _ExtZero OVecExtension = SimpleOVecExtension{KExtZero}
 
-func _packed_size_0() func(OPackSize) OInt {
-	TODO /* unknown expression type function_expression */
-}
-
-var _packed_size = _packed_size_0
-
-func _packed_shape_size_0() func(OPackShape) OInt {
-	TODO /* unknown expression type function_expression */
-}
-
-var _packed_shape_size = _packed_shape_size_0
-
 type OVoid = OVoid
 type OTestop = TODO       /* I32Op.testop I64Op.testop (kind 3) */
 type OUnop = TODO         /* I32Op.unop I64Op.unop (kind 3) */
@@ -3617,7 +3605,7 @@ func _table_type_1(_s *Stream) OTableType {
 	__tmp1 := _ref_type_1(_s)
 	_t := __tmp1
 	__tmp4 := _limits_2(_u64, _s)
-	_at, _lim := __tmp4
+	_at, _lim := __unpack_addr_type___limits(__tmp4)
 	__tmp9 := _TableT_1(struct {
 		F0 OAddrType
 		F1 OLimits
@@ -3913,117 +3901,117 @@ func _instr_1(_s *Stream) OInstr_ {
 		__tmp4 = __tmp204
 	} else if __tmp5 == 0x28 {
 		__tmp208 := _memop_1(_s)
-		_x, _a, _o := __tmp208
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp208)
 		__tmp213 := _i32_load_3(_x, _a, _o)
 		__tmp4 = __tmp213
 	} else if __tmp5 == 0x29 {
 		__tmp217 := _memop_1(_s)
-		_x, _a, _o := __tmp217
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp217)
 		__tmp222 := _i64_load_3(_x, _a, _o)
 		__tmp4 = __tmp222
 	} else if __tmp5 == 0x2a {
 		__tmp226 := _memop_1(_s)
-		_x, _a, _o := __tmp226
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp226)
 		__tmp231 := _f32_load_3(_x, _a, _o)
 		__tmp4 = __tmp231
 	} else if __tmp5 == 0x2b {
 		__tmp235 := _memop_1(_s)
-		_x, _a, _o := __tmp235
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp235)
 		__tmp240 := _f64_load_3(_x, _a, _o)
 		__tmp4 = __tmp240
 	} else if __tmp5 == 0x2c {
 		__tmp244 := _memop_1(_s)
-		_x, _a, _o := __tmp244
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp244)
 		__tmp249 := _i32_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp249
 	} else if __tmp5 == 0x2d {
 		__tmp253 := _memop_1(_s)
-		_x, _a, _o := __tmp253
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp253)
 		__tmp258 := _i32_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp258
 	} else if __tmp5 == 0x2e {
 		__tmp262 := _memop_1(_s)
-		_x, _a, _o := __tmp262
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp262)
 		__tmp267 := _i32_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp267
 	} else if __tmp5 == 0x2f {
 		__tmp271 := _memop_1(_s)
-		_x, _a, _o := __tmp271
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp271)
 		__tmp276 := _i32_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp276
 	} else if __tmp5 == 0x30 {
 		__tmp280 := _memop_1(_s)
-		_x, _a, _o := __tmp280
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp280)
 		__tmp285 := _i64_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp285
 	} else if __tmp5 == 0x31 {
 		__tmp289 := _memop_1(_s)
-		_x, _a, _o := __tmp289
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp289)
 		__tmp294 := _i64_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp294
 	} else if __tmp5 == 0x32 {
 		__tmp298 := _memop_1(_s)
-		_x, _a, _o := __tmp298
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp298)
 		__tmp303 := _i64_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp303
 	} else if __tmp5 == 0x33 {
 		__tmp307 := _memop_1(_s)
-		_x, _a, _o := __tmp307
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp307)
 		__tmp312 := _i64_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp312
 	} else if __tmp5 == 0x34 {
 		__tmp316 := _memop_1(_s)
-		_x, _a, _o := __tmp316
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp316)
 		__tmp321 := _i64_load32_s_3(_x, _a, _o)
 		__tmp4 = __tmp321
 	} else if __tmp5 == 0x35 {
 		__tmp325 := _memop_1(_s)
-		_x, _a, _o := __tmp325
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp325)
 		__tmp330 := _i64_load32_u_3(_x, _a, _o)
 		__tmp4 = __tmp330
 	} else if __tmp5 == 0x36 {
 		__tmp334 := _memop_1(_s)
-		_x, _a, _o := __tmp334
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp334)
 		__tmp339 := _i32_store_3(_x, _a, _o)
 		__tmp4 = __tmp339
 	} else if __tmp5 == 0x37 {
 		__tmp343 := _memop_1(_s)
-		_x, _a, _o := __tmp343
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp343)
 		__tmp348 := _i64_store_3(_x, _a, _o)
 		__tmp4 = __tmp348
 	} else if __tmp5 == 0x38 {
 		__tmp352 := _memop_1(_s)
-		_x, _a, _o := __tmp352
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp352)
 		__tmp357 := _f32_store_3(_x, _a, _o)
 		__tmp4 = __tmp357
 	} else if __tmp5 == 0x39 {
 		__tmp361 := _memop_1(_s)
-		_x, _a, _o := __tmp361
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp361)
 		__tmp366 := _f64_store_3(_x, _a, _o)
 		__tmp4 = __tmp366
 	} else if __tmp5 == 0x3a {
 		__tmp370 := _memop_1(_s)
-		_x, _a, _o := __tmp370
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp370)
 		__tmp375 := _i32_store8_3(_x, _a, _o)
 		__tmp4 = __tmp375
 	} else if __tmp5 == 0x3b {
 		__tmp379 := _memop_1(_s)
-		_x, _a, _o := __tmp379
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp379)
 		__tmp384 := _i32_store16_3(_x, _a, _o)
 		__tmp4 = __tmp384
 	} else if __tmp5 == 0x3c {
 		__tmp388 := _memop_1(_s)
-		_x, _a, _o := __tmp388
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp388)
 		__tmp393 := _i64_store8_3(_x, _a, _o)
 		__tmp4 = __tmp393
 	} else if __tmp5 == 0x3d {
 		__tmp397 := _memop_1(_s)
-		_x, _a, _o := __tmp397
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp397)
 		__tmp402 := _i64_store16_3(_x, _a, _o)
 		__tmp4 = __tmp402
 	} else if __tmp5 == 0x3e {
 		__tmp406 := _memop_1(_s)
-		_x, _a, _o := __tmp406
+		_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp406)
 		__tmp411 := _i64_store32_3(_x, _a, _o)
 		__tmp4 = __tmp411
 	} else if __tmp5 == 0x3f {
@@ -4728,62 +4716,62 @@ func _instr_1(_s *Stream) OInstr_ {
 		__tmp907 := _u32_1(_s)
 		if __tmp907 == 0x00 {
 			__tmp910 := _memop_1(_s)
-			_x, _a, _o := __tmp910
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp910)
 			__tmp915 := _v128_load_3(_x, _a, _o)
 			__tmp906 = __tmp915
 		} else if __tmp907 == 0x01 {
 			__tmp919 := _memop_1(_s)
-			_x, _a, _o := __tmp919
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp919)
 			__tmp924 := _v128_load8x8_s_3(_x, _a, _o)
 			__tmp906 = __tmp924
 		} else if __tmp907 == 0x02 {
 			__tmp928 := _memop_1(_s)
-			_x, _a, _o := __tmp928
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp928)
 			__tmp933 := _v128_load8x8_u_3(_x, _a, _o)
 			__tmp906 = __tmp933
 		} else if __tmp907 == 0x03 {
 			__tmp937 := _memop_1(_s)
-			_x, _a, _o := __tmp937
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp937)
 			__tmp942 := _v128_load16x4_s_3(_x, _a, _o)
 			__tmp906 = __tmp942
 		} else if __tmp907 == 0x04 {
 			__tmp946 := _memop_1(_s)
-			_x, _a, _o := __tmp946
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp946)
 			__tmp951 := _v128_load16x4_u_3(_x, _a, _o)
 			__tmp906 = __tmp951
 		} else if __tmp907 == 0x05 {
 			__tmp955 := _memop_1(_s)
-			_x, _a, _o := __tmp955
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp955)
 			__tmp960 := _v128_load32x2_s_3(_x, _a, _o)
 			__tmp906 = __tmp960
 		} else if __tmp907 == 0x06 {
 			__tmp964 := _memop_1(_s)
-			_x, _a, _o := __tmp964
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp964)
 			__tmp969 := _v128_load32x2_u_3(_x, _a, _o)
 			__tmp906 = __tmp969
 		} else if __tmp907 == 0x07 {
 			__tmp973 := _memop_1(_s)
-			_x, _a, _o := __tmp973
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp973)
 			__tmp978 := _v128_load8_splat_3(_x, _a, _o)
 			__tmp906 = __tmp978
 		} else if __tmp907 == 0x08 {
 			__tmp982 := _memop_1(_s)
-			_x, _a, _o := __tmp982
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp982)
 			__tmp987 := _v128_load16_splat_3(_x, _a, _o)
 			__tmp906 = __tmp987
 		} else if __tmp907 == 0x09 {
 			__tmp991 := _memop_1(_s)
-			_x, _a, _o := __tmp991
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp991)
 			__tmp996 := _v128_load32_splat_3(_x, _a, _o)
 			__tmp906 = __tmp996
 		} else if __tmp907 == 0x0a {
 			__tmp1000 := _memop_1(_s)
-			_x, _a, _o := __tmp1000
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1000)
 			__tmp1005 := _v128_load64_splat_3(_x, _a, _o)
 			__tmp906 = __tmp1005
 		} else if __tmp907 == 0x0b {
 			__tmp1009 := _memop_1(_s)
-			_x, _a, _o := __tmp1009
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1009)
 			__tmp1014 := _v128_store_3(_x, _a, _o)
 			__tmp906 = __tmp1014
 		} else if __tmp907 == 0x0c {
@@ -5035,68 +5023,68 @@ func _instr_1(_s *Stream) OInstr_ {
 			__tmp906 = __tmp1151
 		} else if __tmp907 == 0x54 {
 			__tmp1152 := _memop_1(_s)
-			_x, _a, _o := __tmp1152
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1152)
 			__tmp1157 := _byte_1(_s)
 			_lane := __tmp1157
 			__tmp1160 := _v128_load8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1160
 		} else if __tmp907 == 0x55 {
 			__tmp1165 := _memop_1(_s)
-			_x, _a, _o := __tmp1165
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1165)
 			__tmp1170 := _byte_1(_s)
 			_lane := __tmp1170
 			__tmp1173 := _v128_load16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1173
 		} else if __tmp907 == 0x56 {
 			__tmp1178 := _memop_1(_s)
-			_x, _a, _o := __tmp1178
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1178)
 			__tmp1183 := _byte_1(_s)
 			_lane := __tmp1183
 			__tmp1186 := _v128_load32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1186
 		} else if __tmp907 == 0x57 {
 			__tmp1191 := _memop_1(_s)
-			_x, _a, _o := __tmp1191
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1191)
 			__tmp1196 := _byte_1(_s)
 			_lane := __tmp1196
 			__tmp1199 := _v128_load64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1199
 		} else if __tmp907 == 0x58 {
 			__tmp1204 := _memop_1(_s)
-			_x, _a, _o := __tmp1204
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1204)
 			__tmp1209 := _byte_1(_s)
 			_lane := __tmp1209
 			__tmp1212 := _v128_store8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1212
 		} else if __tmp907 == 0x59 {
 			__tmp1217 := _memop_1(_s)
-			_x, _a, _o := __tmp1217
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1217)
 			__tmp1222 := _byte_1(_s)
 			_lane := __tmp1222
 			__tmp1225 := _v128_store16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1225
 		} else if __tmp907 == 0x5a {
 			__tmp1230 := _memop_1(_s)
-			_x, _a, _o := __tmp1230
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1230)
 			__tmp1235 := _byte_1(_s)
 			_lane := __tmp1235
 			__tmp1238 := _v128_store32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1238
 		} else if __tmp907 == 0x5b {
 			__tmp1243 := _memop_1(_s)
-			_x, _a, _o := __tmp1243
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1243)
 			__tmp1248 := _byte_1(_s)
 			_lane := __tmp1248
 			__tmp1251 := _v128_store64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1251
 		} else if __tmp907 == 0x5c {
 			__tmp1256 := _memop_1(_s)
-			_x, _a, _o := __tmp1256
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1256)
 			__tmp1261 := _v128_load32_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1261
 		} else if __tmp907 == 0x5d {
 			__tmp1265 := _memop_1(_s)
-			_x, _a, _o := __tmp1265
+			_x, _a, _o := __unpack_local_idx_phrase___int___int64(__tmp1265)
 			__tmp1270 := _v128_load64_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1270
 		} else if __tmp907 == 0x5e {
@@ -5640,3 +5628,18 @@ func _instr_1(_s *Stream) OInstr_ {
 }
 
 var _instr = _instr_1
+
+func __unpack_addr_type___limits(t struct {
+	F0 OAddrType
+	F1 OLimits
+}) (OAddrType, OLimits) {
+	return t.F0, t.F1
+}
+
+func __unpack_local_idx_phrase___int___int64(t struct {
+	F0 *Phrase[OLocalIdx]
+	F1 OInt
+	F2 OInt64
+}) (*Phrase[OLocalIdx], OInt, OInt64) {
+	return t.F0, t.F1, t.F2
+}

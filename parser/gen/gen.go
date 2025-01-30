@@ -29,14 +29,15 @@ var files = []File{
 		Path:      []string{"interpreter", "syntax", "types.ml"},
 		SkipFuncs: true,
 	},
-	{
-		Path:     []string{"interpreter", "syntax", "pack.ml"},
-		AllFuncs: true,
-	},
+	{Path: []string{"interpreter", "syntax", "pack.ml"}},
 	{
 		Path:      []string{"interpreter", "syntax", "ast.ml"},
 		SkipFuncs: true,
 	},
+	// {
+	// 	Path:     []string{"interpreter", "syntax", "operators.ml"},
+	// 	AllFuncs: true,
+	// },
 	{Path: []string{"interpreter", "binary", "decode.ml"}},
 }
 
@@ -59,6 +60,7 @@ var funcsToTranslate = []string{
 	"instr",
 }
 
+// TODO: Remove the typeDefs param, it's global
 func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
 	base := map[string]string{
 		"bool":         "bool",
@@ -205,6 +207,8 @@ func main() {
 					}
 				}
 			}
+
+			writeUnpacks()
 		},
 	}
 
@@ -763,8 +767,8 @@ func (p *ocamlParse) parseExpr(
 		var bindingType ocaml.Type
 		if pattern.GrammarName() == "tuple_pattern" {
 			var tup ocaml.Tuple
-			for _, v := range pattern.NamedChildren(pattern.Walk()) {
-				tup = append(tup, p.getTypeEnd(&v))
+			for _, v := range flattenTuplePattern(pattern) {
+				tup = append(tup, p.getTypeEnd(v))
 			}
 			bindingType = tup
 		} else {
@@ -773,9 +777,14 @@ func (p *ocamlParse) parseExpr(
 		bindingRes := p.parseExpr(body, bindingType, currentModule, true, false)
 
 		p.parseExpr(pattern, nil, currentModule, false, false)
-		w(" := %s\n", bindingRes)
-
-		// TODO: UNPACK!
+		w(" := ")
+		if pattern.GrammarName() == "tuple_pattern" {
+			unpackName := trackUnpack(bindingType.(ocaml.Tuple))
+			w("%s(%s)", unpackName, bindingRes)
+		} else {
+			w("%s", bindingRes)
+		}
+		w("\n")
 
 		return p.parseExpr(expr.NamedChild(1), expectedType, currentModule, true, returnIfTerminal)
 	case "list_expression":
@@ -984,6 +993,18 @@ func (p *ocamlParse) parseMatchPattern(
 	}
 }
 
+func flattenTuplePattern(p *tree_sitter.Node) []*tree_sitter.Node {
+	switch p.GrammarName() {
+	case "tuple_pattern":
+		var res []*tree_sitter.Node
+		res = append(res, flattenTuplePattern(p.NamedChild(0))...)
+		res = append(res, flattenTuplePattern(p.NamedChild(1))...)
+		return res
+	default:
+		return []*tree_sitter.Node{p}
+	}
+}
+
 func flattenOrPattern(p *tree_sitter.Node) []*tree_sitter.Node {
 	switch p.GrammarName() {
 	case "or_pattern":
@@ -1066,4 +1087,47 @@ func (l Lookup) Field(fieldName string, grammarName string) Lookup {
 		utils.Assert(node.GrammarName() == grammarName, "expected %s but got %s", grammarName, node.GrammarName())
 	}
 	return Lookup{node}
+}
+
+var unpacks []Unpack
+
+type Unpack struct {
+	Name string
+	Type ocaml.Tuple
+}
+
+func trackUnpack(tup ocaml.Tuple) string {
+	name := "__unpack" + safeName(tup.String())
+	already := false
+	for _, unpack := range unpacks {
+		if unpack.Name == name {
+			already = true
+		}
+	}
+	if !already {
+		unpacks = append(unpacks, Unpack{
+			Name: name,
+			Type: tup,
+		})
+	}
+	return name
+}
+
+func writeUnpacks() {
+	for _, unpack := range unpacks {
+		w("func %s(t %s) (", unpack.Name, ocaml2go(unpack.Type, typeDefs))
+		for _, t := range unpack.Type {
+			w("%s, ", ocaml2go(t, typeDefs))
+		}
+		w(") {\n")
+		w("  return ")
+		for i := range unpack.Type {
+			if i > 0 {
+				w(", ")
+			}
+			w("t.F%d", i)
+		}
+		w("\n")
+		w("}\n\n")
+	}
 }
