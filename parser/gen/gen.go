@@ -19,6 +19,9 @@ var specpath = filepath.Join("gen", "spec")
 
 type File struct {
 	Path []string
+	Skip []string
+
+	ModuleName string
 
 	AllFuncs             bool
 	SkipTypes, SkipFuncs bool
@@ -26,19 +29,29 @@ type File struct {
 
 var files = []File{
 	{
-		Path:      []string{"interpreter", "syntax", "types.ml"},
-		SkipFuncs: true,
-	},
-	{Path: []string{"interpreter", "syntax", "pack.ml"}},
-	{
-		Path:      []string{"interpreter", "syntax", "ast.ml"},
-		SkipFuncs: true,
+		Path:       []string{"interpreter", "syntax", "types.ml"},
+		ModuleName: "Types",
+		SkipFuncs:  true,
 	},
 	{
-		Path:     []string{"interpreter", "syntax", "operators.ml"},
-		AllFuncs: true,
+		Path:       []string{"interpreter", "syntax", "pack.ml"},
+		ModuleName: "Pack",
 	},
-	{Path: []string{"interpreter", "binary", "decode.ml"}},
+	{
+		Path:       []string{"interpreter", "syntax", "ast.ml"},
+		Skip:       []string{"void"},
+		ModuleName: "Ast",
+		SkipFuncs:  true,
+	},
+	{
+		Path:       []string{"interpreter", "syntax", "operators.ml"},
+		ModuleName: "Operators",
+		AllFuncs:   true,
+	},
+	{
+		Path:       []string{"interpreter", "binary", "decode.ml"},
+		ModuleName: "Decode",
+	},
 }
 
 var toTranslate = []string{
@@ -60,8 +73,15 @@ var toTranslate = []string{
 	"instr",
 }
 
-// TODO: Remove the typeDefs param, it's global
-func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
+var outFile *os.File
+var tmpCount int
+
+var lspClient *ocaml.Client
+var ocamlParser *tree_sitter.Parser
+var typeDefs = make(map[string]ocaml.TypeDef)
+var globalDefs = map[string]struct{}{}
+
+func ocaml2go(t ocaml.Type) string {
 	base := map[string]string{
 		"bool":         "bool",
 		"string":       "string",
@@ -86,38 +106,35 @@ func ocaml2go(t ocaml.Type, typeDefs map[string]ocaml.Type) string {
 	if goType, ok := base[t.String()]; ok {
 		return goType
 	} else if existing, ok := typeDefs[t.String()]; ok {
-		return typeName(existing.(ocaml.Alias).Name)
-	} else if asSimple, ok := t.(ocaml.SimpleType); ok {
-		return typeName(asSimple.String())
-	} else if asModule, ok := t.(ocaml.ModuleType); ok {
-		// Ignore module paths in our output, at least for now.
-		return ocaml2go(asModule.Type, typeDefs)
+		return typeName(existing.Modules, existing.Name)
+	} else if asNamed, ok := t.(ocaml.NamedType); ok {
+		return typeName(asNamed.Modules, asNamed.Name)
 	} else if asCons, ok := t.(ocaml.Cons); ok {
 		last := asCons[len(asCons)-1]
 		switch last.String() {
 		case "list":
-			return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1], typeDefs))
+			return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1]))
 		case "phrase", "Source.phrase":
-			return fmt.Sprintf("*Phrase[%s]", ocaml2go(asCons[:len(asCons)-1], typeDefs))
+			return fmt.Sprintf("*Phrase[%s]", ocaml2go(asCons[:len(asCons)-1]))
 		case "option":
-			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1], typeDefs))
+			return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1]))
 		}
 		if len(asCons) == 1 {
-			return ocaml2go(asCons[0], typeDefs)
+			return ocaml2go(asCons[0])
 		}
 	} else if asRecord, ok := t.(ocaml.Record); ok {
 		res := "struct{"
 		for _, f := range asRecord {
-			res += fmt.Sprintf("%s %s; ", fieldName(f.Name), ocaml2go(f.Type, typeDefs))
+			res += fmt.Sprintf("%s %s; ", fieldName(f.Name), ocaml2go(f.Type))
 		}
 		res += "}"
 		return res
 	} else if asFunc, ok := t.(ocaml.Func); ok {
-		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In, typeDefs), ocaml2go(asFunc.Out, typeDefs))
+		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In), ocaml2go(asFunc.Out))
 	} else if asTuple, ok := t.(ocaml.Tuple); ok {
 		res := "struct{"
 		for i, t := range asTuple {
-			res += fmt.Sprintf("F%d %s; ", i, ocaml2go(t, typeDefs))
+			res += fmt.Sprintf("F%d %s; ", i, ocaml2go(t))
 		}
 		res += "}"
 		return res
@@ -138,13 +155,6 @@ var opNames = map[string]string{
 	"<=": "Lte",
 	"||": "Or",
 }
-
-var outFile *os.File
-var tmpCount int
-
-var lspClient *ocaml.Client
-var ocamlParser *tree_sitter.Parser
-var typeDefs = make(map[string]ocaml.Type)
 
 func init() {
 	lang := tree_sitter.NewLanguage(tree_sitter_ocaml.LanguageOCaml())
@@ -189,9 +199,10 @@ func main() {
 				for _, child := range root.NamedChildren(root.Walk()) {
 					switch child.GrammarName() {
 					case "type_definition":
-						if !f.SkipTypes {
-							p.parseTypeDef(&child, typeDefs)
+						if f.SkipTypes {
+							continue
 						}
+						p.parseTypeDef(&child, f, []string{f.ModuleName})
 					case "value_definition":
 						for _, def := range child.NamedChildren(child.Walk()) {
 							switch def.GrammarName() {
@@ -199,20 +210,30 @@ func main() {
 								pattern := def.ChildByFieldName("pattern")
 								t := p.getTypeStart(pattern)
 
+								if slices.Contains(f.Skip, p.s(pattern)) {
+									fmt.Fprintf(os.Stderr, "skipping %s = ...\n", p.s(pattern))
+									continue
+								}
+
 								switch t.(type) {
 								case ocaml.Func:
 									if f.AllFuncs || slices.Contains(toTranslate, p.s(pattern)) {
 										if !f.SkipFuncs {
-											p.parseFunc(&def)
+											p.parseFunc(&def, []string{f.ModuleName})
 										}
 									}
-								case ocaml.Alias:
+								case ocaml.TypeDef:
 									p.parseValueDef(&def)
 								default:
 									w("// TODO: Unknown type for definition of %s: %s\n\n", p.s(pattern), t)
 								}
 							}
 						}
+					case "module_definition":
+						fmt.Fprintf(os.Stderr, "  %s\n", child.ToSexp())
+					case "comment":
+					default:
+						fmt.Fprintf(os.Stderr, "skipping unknown %s\n", child.GrammarName())
 					}
 				}
 			}
@@ -228,7 +249,7 @@ func (p *ocamlParse) s(n *tree_sitter.Node) string {
 	return n.Utf8Text(p.source)
 }
 
-func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, typeDefs map[string]ocaml.Type) {
+func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, modulePath []string) {
 	for _, binding := range n.NamedChildren(n.Walk()) {
 		if binding.GrammarName() != "type_binding" {
 			fmt.Fprintf(os.Stderr, "spurious %s while processing type definitions\n", binding.GrammarName())
@@ -240,24 +261,38 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, typeDefs map[string]ocaml
 
 		name := p.s(nName)
 
-		fmt.Fprintf(os.Stderr, "parsing type %s = ...\n", p.s(nName))
+		if slices.Contains(f.Skip, name) {
+			fmt.Fprintf(os.Stderr, "skipping type %s = ...\n", name)
+			continue
+		}
+
+		fmt.Fprintf(os.Stderr, "parsing type %s = ...\n", name)
 
 		// fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, p.s(n))
 		// fmt.Fprintf(os.Stderr, "  %s\n", nBody.ToSexp())
-		if existingType, ok := typeDefs[name]; ok {
+		if existingType, ok := typeDefs[ocaml.NamedType{modulePath, name}.String()]; ok {
 			fmt.Fprintf(os.Stderr, "WARNING: duplicate definition of type %s: already had %s but got %s as well\n", p.s(nName), existingType, p.s(nBody))
 		}
 
-		def := ocaml.Alias{
-			Name: name,
-			Type: p.parseTypeDecl(nBody, typeDefs),
+		def := ocaml.TypeDef{
+			Modules: modulePath,
+			Name:    name,
+			Type:    p.parseTypeDecl(nBody),
 		}
-		typeDefs[name] = def
-		p.writeTypeDef(def, typeDefs)
+		typeDefs[def.String()] = def
+		if _, exists := typeDefs[def.Name]; exists {
+			fmt.Fprintf(os.Stderr, "WARNING: a global definition of type %s already exists; you may get unexpected results\n", def.Name)
+		} else {
+			typeDefs[def.Name] = def
+		}
+		p.writeTypeDef(def)
 	}
 }
 
-func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocaml.Type) ocaml.Type {
+func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node) ocaml.Type {
+	fmt.Fprintf(os.Stderr, "type decl %s: %s\n", n.GrammarName(), p.s(n))
+	fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
+
 	name := p.s(n)
 	if existingType, ok := typeDefs[name]; ok {
 		return existingType
@@ -265,25 +300,25 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 
 	switch n.GrammarName() {
 	case "_lowercase_identifier":
-		return ocaml.SimpleType(p.s(n))
+		return ocaml.NamedType{nil, p.s(n)}
 	case "type_constructor_path":
-		var modules []string
-		for i := range n.NamedChildCount() - 1 {
-			modules = append(modules, p.s(n.NamedChild(i)))
-		}
-		ty := p.parseTypeDecl(n.NamedChild(n.NamedChildCount()-1), typeDefs)
-		if len(modules) > 0 {
-			return ocaml.ModuleType{
-				Modules: modules,
-				Type:    ty,
+		ty := p.parseTypeDecl(n.NamedChild(n.NamedChildCount() - 1))
+		switch ty := ty.(type) {
+		case ocaml.NamedType:
+			for i := range n.NamedChildCount() - 1 {
+				ty.Modules = append(ty.Modules, p.s(n.NamedChild(i)))
 			}
-		} else {
 			return ty
+		case ocaml.TypeDef:
+			return ty
+		default:
+			exitWithError("how can you even have a %+v in a type_constructor_path", ty)
+			return nil
 		}
 	case "constructed_type":
 		var cons ocaml.Cons
-		tl := p.parseTypeDecl(n.NamedChild(0), typeDefs)
-		tr := p.parseTypeDecl(n.NamedChild(1), typeDefs)
+		tl := p.parseTypeDecl(n.NamedChild(0))
+		tr := p.parseTypeDecl(n.NamedChild(1))
 		if tlcons, ok := tl.(ocaml.Cons); ok {
 			cons = append(cons, tlcons...)
 		} else {
@@ -292,8 +327,8 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 		cons = append(cons, tr)
 		return cons
 	case "function_type":
-		in := p.parseTypeDecl(n.NamedChild(0), typeDefs)
-		out := p.parseTypeDecl(n.NamedChild(1), typeDefs)
+		in := p.parseTypeDecl(n.NamedChild(0))
+		out := p.parseTypeDecl(n.NamedChild(1))
 		return ocaml.Func{
 			In:  in,
 			Out: out,
@@ -312,7 +347,7 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 			if constructor.NamedChildCount() > 1 {
 				var tup ocaml.Tuple
 				for i := uint(1); i < constructor.NamedChildCount(); i++ {
-					tup = append(tup, p.parseTypeDecl(constructor.NamedChild(i), typeDefs))
+					tup = append(tup, p.parseTypeDecl(constructor.NamedChild(i)))
 				}
 				if len(tup) == 1 {
 					variant.Type = &tup[0]
@@ -326,8 +361,8 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 		return variants
 	case "tuple_type":
 		var tup ocaml.Tuple
-		tl := p.parseTypeDecl(n.NamedChild(0), typeDefs)
-		tr := p.parseTypeDecl(n.NamedChild(1), typeDefs)
+		tl := p.parseTypeDecl(n.NamedChild(0))
+		tr := p.parseTypeDecl(n.NamedChild(1))
 		if tltup, ok := tl.(ocaml.Tuple); ok {
 			tup = append(tup, tltup...)
 		} else {
@@ -342,7 +377,7 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 				continue
 			}
 			name := f.NamedChild(0)
-			t := p.parseTypeDecl(f.NamedChild(1), typeDefs)
+			t := p.parseTypeDecl(f.NamedChild(1))
 			rec = append(rec, ocaml.RecordField{
 				Name: p.s(name),
 				Type: t,
@@ -350,31 +385,31 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, typeDefs map[string]ocam
 		}
 		return rec
 	case "type_variable":
-		return ocaml.SimpleType("UnknownTypeVariable_" + safeName(name))
+		return ocaml.NamedType{nil, "UnknownTypeVariable_" + varName(name)}
 	default:
 		exitWithError("unexpected type declaration node %s", n.GrammarName())
 		return nil
 	}
 }
 
-func (p *ocamlParse) writeTypeDef(def ocaml.Alias, typeDefs map[string]ocaml.Type) {
+func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef) {
 	switch t := def.Type.(type) {
-	case ocaml.SimpleType, ocaml.Cons, ocaml.Func, ocaml.ModuleType:
-		w("type %s = %s\n", typeName(def.Name), ocaml2go(t, typeDefs))
+	case ocaml.NamedType, ocaml.Cons, ocaml.Func:
+		w("type %s = %s\n", typeName(def.Modules, def.Name), ocaml2go(t))
 	case ocaml.Tuple:
-		w("type %s = struct {\n", typeName(def.Name))
+		w("type %s = struct {\n", typeName(def.Modules, def.Name))
 		for i, f := range t {
-			w("  F%d %s\n", i, ocaml2go(f, typeDefs))
+			w("  F%d %s\n", i, ocaml2go(f))
 		}
 		w("}\n")
 	case ocaml.Variants:
-		tn := typeName(def.Name)
-		kindName := typeName(def.Name + "_kind")
+		tn := typeName(def.Modules, def.Name)
+		kindName := typeName(def.Modules, def.Name+"_kind")
 		w("\ntype %s int\n\n", kindName)
 
 		w("const(\n")
 		for i, variant := range t {
-			w("%s", variantKindName(variant.Name))
+			w("%s", variantKindName(def.Modules, variant.Name))
 			if i == 0 {
 				w(" %s = iota + 1", kindName)
 			}
@@ -396,34 +431,39 @@ func (p *ocamlParse) writeTypeDef(def ocaml.Alias, typeDefs map[string]ocaml.Typ
 
 		for _, variant := range t {
 			if variant.Type == nil {
-				w("var %s %s = Simple%s{%s}\n", safeName(variant.Name), tn, tn, variantKindName(variant.Name))
+				w("var %s %s = Simple%s{%s}\n", varName(variant.Name), tn, tn, variantKindName(def.Modules, variant.Name))
 			} else {
 				variantTypeName := tn + "_" + variant.Name
 				w("type %s struct {\n", variantTypeName)
-				w("  V %s\n", ocaml2go(*variant.Type, typeDefs))
+				w("  V %s\n", ocaml2go(*variant.Type))
 				w("}\n")
 
 				w("func (t %s) Kind() %s {\n", variantTypeName, kindName)
-				w("  return %s\n", variantKindName(variant.Name))
+				w("  return %s\n", variantKindName(def.Modules, variant.Name))
 				w("}\n")
 
-				w("func %s(v %s) %s {\n", funcName("", variant.Name, 1), ocaml2go(*variant.Type, typeDefs), tn)
+				w("func %s(v %s) %s {\n", funcName(def.Modules, variant.Name, 1), ocaml2go(*variant.Type), tn)
 				w("  return %s{v}\n", variantTypeName)
 				w("}\n")
 			}
 		}
 	case ocaml.Record:
-		w("type %s struct {\n", typeName(def.Name))
+		w("type %s struct {\n", typeName(def.Modules, def.Name))
 		for _, f := range t {
-			w("  %s %s\n", fieldName(f.Name), ocaml2go(f.Type, typeDefs))
+			w("  %s %s\n", fieldName(f.Name), ocaml2go(f.Type))
 		}
 		w("}\n")
 	default:
 		exitWithError("don't know how to write type %s = %s", def.Name, def.Type)
 	}
+
+	if _, globalAlreadyWritten := globalDefs[def.String()]; !globalAlreadyWritten {
+		w("type %s = %s\n", typeName(nil, def.Name), typeName(def.Modules, def.Name))
+		globalDefs[def.String()] = struct{}{}
+	}
 }
 
-func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
+func (p *ocamlParse) parseFunc(f *tree_sitter.Node, modulePath []string) {
 	utils.Assert(f.GrammarName() == "let_binding", "expected a let")
 
 	// fmt.Fprintf(os.Stderr, "func? %s\n", f.ToSexp())
@@ -446,51 +486,53 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	funcType := p.getTypeStart(pattern).(ocaml.Func)
 	funcResultType := funcType.GetTypeAfterApplyingArgs(len(params))
 
-	fullFuncName := funcName("", name, len(params))
+	fullFuncName := funcName(modulePath, name, len(params))
 	w("func %s(", fullFuncName)
 	for _, param := range params {
-		paramName := safeName(p.s(param))
+		paramName := varName(p.s(param))
 		paramType := p.getTypeEnd(param)
-		w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+		w("%s %s, ", paramName, ocaml2go(paramType))
 	}
-	w(") %s {\n", ocaml2go(funcResultType, typeDefs))
-	p.parseExpr(body, funcResultType, "", true, true)
+	w(") %s {\n", ocaml2go(funcResultType))
+	p.parseExpr(body, funcResultType, nil, true, true)
 	w("}\n\n")
 
 	for i := len(params) - 1; i >= 1; i-- {
-		w("func %s(", funcName("", name, i))
+		w("func %s(", funcName(modulePath, name, i))
 		for j := 0; j < i; j++ {
 			param := params[j]
-			paramName := safeName(p.s(param))
+			paramName := varName(p.s(param))
 			paramType := p.getTypeEnd(param)
-			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+			w("%s %s, ", paramName, ocaml2go(paramType))
 		}
 		w(") func(")
 		for j := i; j < len(params); j++ {
 			param := params[j]
-			paramName := safeName(p.s(param))
+			paramName := varName(p.s(param))
 			paramType := p.getTypeEnd(param)
-			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+			w("%s %s, ", paramName, ocaml2go(paramType))
 		}
-		w(") %s {\n", ocaml2go(funcResultType, typeDefs))
+		w(") %s {\n", ocaml2go(funcResultType))
 		w("  return func(")
 		for j := i; j < len(params); j++ {
 			param := params[j]
-			paramName := safeName(p.s(param))
+			paramName := varName(p.s(param))
 			paramType := p.getTypeEnd(param)
-			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+			w("%s %s, ", paramName, ocaml2go(paramType))
 		}
-		w(") %s {\n", ocaml2go(funcResultType, typeDefs))
+		w(") %s {\n", ocaml2go(funcResultType))
 		w("    return %s(", fullFuncName)
 		for _, param := range params {
-			w("%s, ", safeName(p.s(param)))
+			w("%s, ", varName(p.s(param)))
 		}
 		w(")\n")
 		w("  }\n")
 		w("}\n\n")
 	}
 
-	w("var %s = %s\n\n", funcName("", p.s(pattern), -1), fullFuncName)
+	w("var %s = %s\n\n", funcName(modulePath, p.s(pattern), -1), fullFuncName)
+
+	// TODO: Global version of definition (un-module'd)
 }
 
 func (p *ocamlParse) parseValueDef(def *tree_sitter.Node) {
@@ -501,28 +543,12 @@ func (p *ocamlParse) parseValueDef(def *tree_sitter.Node) {
 
 	expectedType := p.getTypeStart(pattern)
 
-	w("var %s = ", safeName(p.s(pattern)))
-	p.parseExpr(body, expectedType, "", false, false)
+	w("var %s = ", varName(p.s(pattern)))
+	p.parseExpr(body, expectedType, nil, false, false)
 	w("\n")
 }
 
 var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
-
-func safeName(name string) string {
-	return "_" + reUnsafeChar.ReplaceAllString(name, "_")
-}
-
-func funcName(mod, name string, numArgs int) string {
-	var res string
-	if mod != "" {
-		res += safeName(mod)
-	}
-	res += safeName(name)
-	if numArgs >= 0 {
-		res += fmt.Sprintf("_%d", numArgs)
-	}
-	return res
-}
 
 func snake2camel(s string) string {
 	parts := strings.Split(s, "_")
@@ -534,22 +560,43 @@ func snake2camel(s string) string {
 	return strings.Join(parts, "")
 }
 
-func typeName(name string) string {
-	return "O" + reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
+func camelName(modulePath []string, name string) string {
+	var cameled []string
+	for _, n := range modulePath {
+		cameled = append(cameled, reUnsafeChar.ReplaceAllString(snake2camel(n), "_"))
+	}
+	cameled = append(cameled, reUnsafeChar.ReplaceAllString(snake2camel(name), "_"))
+	return strings.Join(cameled, "_")
 }
 
-func variantKindName(name string) string {
-	return "K" + reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
+func varName(name string) string {
+	return "_" + reUnsafeChar.ReplaceAllString(name, "_")
+}
+
+func funcName(modulePath []string, name string, numArgs int) string {
+	res := camelName(modulePath, name)
+	if numArgs >= 0 {
+		res += fmt.Sprintf("_%d", numArgs)
+	}
+	return res
+}
+
+func typeName(modulePath []string, name string) string {
+	return "O" + camelName(modulePath, name)
+}
+
+func variantKindName(modulePath []string, name string) string {
+	return "K" + camelName(modulePath, name)
 }
 
 func fieldName(name string) string {
-	return reUnsafeChar.ReplaceAllString(snake2camel(name), "_")
+	return camelName(nil, name)
 }
 
 func (p *ocamlParse) parseExpr(
 	expr *tree_sitter.Node,
 	expectedType ocaml.Type,
-	currentModule string,
+	module []string,
 	statement bool,
 	returnIfTerminal bool,
 ) string {
@@ -567,7 +614,7 @@ func (p *ocamlParse) parseExpr(
 		if statement {
 			w("%s := ", res)
 		}
-		name := safeName(p.s(expr))
+		name := varName(p.s(expr))
 		w("%s", name)
 		if statement {
 			w("\n")
@@ -586,7 +633,7 @@ func (p *ocamlParse) parseExpr(
 			if i < expr.NamedChildCount()-1 {
 				w("/*%s.*/", p.s(expr.NamedChild(i)))
 			} else {
-				p.parseExpr(expr.NamedChild(i), expectedType, currentModule, false, false)
+				p.parseExpr(expr.NamedChild(i), expectedType, module, false, false)
 			}
 		}
 		if statement {
@@ -602,9 +649,9 @@ func (p *ocamlParse) parseExpr(
 		n = strings.TrimRight(n, "lL")
 		w("%s", n)
 	case "or_pattern", "tuple_pattern":
-		p.parseExpr(expr.NamedChild(0), nil, currentModule, false, false)
+		p.parseExpr(expr.NamedChild(0), nil, module, false, false)
 		w(", ")
-		p.parseExpr(expr.NamedChild(1), nil, currentModule, false, false)
+		p.parseExpr(expr.NamedChild(1), nil, module, false, false)
 	case "add_operator", "mult_operator", "pow_operator", "rel_operator", "concat_operator":
 		// TODO: Implement more of these:
 		// https://ocaml.org/manual/5.3/expr.html
@@ -638,16 +685,9 @@ func (p *ocamlParse) parseExpr(
 			w("%s := ", res)
 		}
 
-		funcModule := currentModule
-		if slices.Contains(toTranslate, p.s(function)) {
-			// HACK: Don't apply a module to any function we are translating;
-			// they have been defined and are already in scope.
-			funcModule = ""
-		}
-
-		w("%s(", funcName(funcModule, p.s(function), len(args)))
+		w("%s(", funcName(module, p.s(function), len(args)))
 		for i, arg := range args {
-			p.parseExpr(&arg, funcType.GetArgType(i), currentModule, false, false)
+			p.parseExpr(&arg, funcType.GetArgType(i), module, false, false)
 			w(", ")
 		}
 		w(")")
@@ -680,13 +720,13 @@ func (p *ocamlParse) parseExpr(
 
 		w("func(")
 		for _, param := range params {
-			paramName := safeName(p.s(param))
+			paramName := varName(p.s(param))
 			paramType := p.getTypeEnd(param)
-			w("%s %s, ", paramName, ocaml2go(paramType, typeDefs))
+			w("%s %s, ", paramName, ocaml2go(paramType))
 		}
-		w(") %s {\n", ocaml2go(funcType.Out, typeDefs))
+		w(") %s {\n", ocaml2go(funcType.Out))
 
-		p.parseExpr(body, funcType.Out, currentModule, true, true)
+		p.parseExpr(body, funcType.Out, module, true, true)
 
 		w("}")
 	case "if_expression":
@@ -696,13 +736,13 @@ func (p *ocamlParse) parseExpr(
 
 		if !statement {
 			// Emit an inline, immediately-invoked function
-			w("func() %s {\n", ocaml2go(expectedType, typeDefs))
+			w("func() %s {\n", ocaml2go(expectedType))
 		}
 
-		w("var %s %s\n", res, ocaml2go(expectedType, typeDefs))
+		w("var %s %s\n", res, ocaml2go(expectedType))
 
 		w("if ")
-		p.parseExpr(condition, ocaml.SimpleType("bool"), currentModule, false, false)
+		p.parseExpr(condition, ocaml.NamedType{nil, "bool"}, module, false, false)
 		for _, child := range expr.NamedChildren(expr.Walk()) {
 			if child.Id() == condition.Id() {
 				continue
@@ -711,14 +751,14 @@ func (p *ocamlParse) parseExpr(
 			switch child.GrammarName() {
 			case "then_clause":
 				w(" {\n")
-				thenRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
+				thenRes := p.parseExpr(child.NamedChild(0), expectedType, module, true, false)
 				if len(res) > 0 {
 					w("%s = %s\n", res, thenRes)
 				}
 				w("} ")
 			case "else_clause":
 				w(" else {\n")
-				elseRes := p.parseExpr(child.NamedChild(0), expectedType, currentModule, true, false)
+				elseRes := p.parseExpr(child.NamedChild(0), expectedType, module, true, false)
 				if len(res) > 0 {
 					w("%s = %s\n", res, elseRes)
 				}
@@ -761,9 +801,9 @@ func (p *ocamlParse) parseExpr(
 		}
 
 		w("%s(", funcName)
-		p.parseExpr(left, opType.GetArgType(0), currentModule, false, false)
+		p.parseExpr(left, opType.GetArgType(0), module, false, false)
 		w(", ")
-		p.parseExpr(right, opType.GetArgType(1), currentModule, false, false)
+		p.parseExpr(right, opType.GetArgType(1), module, false, false)
 		w(")")
 
 		if statement {
@@ -800,9 +840,9 @@ func (p *ocamlParse) parseExpr(
 		} else {
 			bindingType = p.getTypeEnd(pattern)
 		}
-		bindingRes := p.parseExpr(body, bindingType, currentModule, true, false)
+		bindingRes := p.parseExpr(body, bindingType, module, true, false)
 
-		p.parseExpr(pattern, nil, currentModule, false, false)
+		p.parseExpr(pattern, nil, module, false, false)
 		w(" := ")
 		if pattern.GrammarName() == "tuple_pattern" {
 			unpackName := trackUnpack(bindingType.(ocaml.Tuple))
@@ -812,15 +852,15 @@ func (p *ocamlParse) parseExpr(
 		}
 		w("\n")
 
-		return p.parseExpr(expr.NamedChild(1), expectedType, currentModule, true, returnIfTerminal)
+		return p.parseExpr(expr.NamedChild(1), expectedType, module, true, returnIfTerminal)
 	case "list_expression":
 		listType := p.getTypeEnd(expr)
 		var elemType ocaml.Type
 
 		if asCons, ok := listType.(ocaml.Cons); ok {
-			if len(asCons) != 2 || asCons[1] != ocaml.SimpleType("list") {
-				exitWithError("list_expression needs a list type, but got: %s", expectedType)
-			}
+			// if len(asCons) != 2 || asCons[1] != ocaml.NamedType{nil,"list"} {
+			// 	exitWithError("list_expression needs a list type, but got: %s", expectedType)
+			// }
 			elemType = asCons[0]
 		} else {
 			exitWithError("list_expression needs a cons type (that is a list), but got: %s", expectedType)
@@ -828,23 +868,23 @@ func (p *ocamlParse) parseExpr(
 
 		// TODO: Statement mode
 
-		w("[]%s{", ocaml2go(elemType, typeDefs))
+		w("[]%s{", ocaml2go(elemType))
 		for _, child := range expr.NamedChildren(expr.Walk()) {
-			p.parseExpr(&child, elemType, currentModule, false, false)
+			p.parseExpr(&child, elemType, module, false, false)
 			w(", ")
 		}
 		w("}")
 	case "local_open_expression":
 		// e.g. "Int32.(add lo (shift_left hi 16))"
 		mod := p.s(expr.NamedChild(0))
-		return p.parseExpr(expr.NamedChild(1), expectedType, mod, statement, returnIfTerminal)
+		return p.parseExpr(expr.NamedChild(1), expectedType, []string{mod}, statement, returnIfTerminal)
 	case "match_expression":
 		matchResult := tmpVar()
-		w("var %s %s\n", matchResult, ocaml2go(expectedType, typeDefs))
+		w("var %s %s\n", matchResult, ocaml2go(expectedType))
 
 		matchVar := tmpVar()
 		w("%s := ", matchVar)
-		p.parseExpr(expr.NamedChild(0), nil, currentModule, false, false)
+		p.parseExpr(expr.NamedChild(0), nil, module, false, false)
 		w("\n")
 
 		for i, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
@@ -870,7 +910,7 @@ func (p *ocamlParse) parseExpr(
 			// Will open the body of the if
 			p.parseMatchPattern(pattern, matchVar, guard)
 
-			res := p.parseExpr(body, expectedType, currentModule, true, false)
+			res := p.parseExpr(body, expectedType, module, true, false)
 			if len(matchResult) > 0 {
 				w("%s = %s", matchResult, res)
 			}
@@ -887,7 +927,7 @@ func (p *ocamlParse) parseExpr(
 			return matchResult
 		}
 	case "parenthesized_expression":
-		return p.parseExpr(expr.NamedChild(0), expectedType, currentModule, statement, returnIfTerminal)
+		return p.parseExpr(expr.NamedChild(0), expectedType, module, statement, returnIfTerminal)
 	case "product_expression":
 		nodes := flattenProductExpression(expr)
 
@@ -902,17 +942,17 @@ func (p *ocamlParse) parseExpr(
 		switch t := expectedType.(type) {
 		case ocaml.Tuple:
 			tup = t
-		case ocaml.Alias:
+		case ocaml.TypeDef:
 			tup = t.Type.(ocaml.Tuple)
 		default:
-			exitWithError("unexpected type in product_expression: %s", expectedType)
+			exitWithError("unexpected type in product_expression: %s (kind %d)", expectedType, expectedType.Kind())
 		}
 
 		utils.Assert(len(nodes) == len(tup), "mismatch between product values and expected tuple type")
 
-		w("%s{", ocaml2go(tup, typeDefs))
+		w("%s{", ocaml2go(tup))
 		for i, n := range nodes {
-			p.parseExpr(n, tup[i], currentModule, false, false)
+			p.parseExpr(n, tup[i], module, false, false)
 			w(", ")
 		}
 		w("}")
@@ -935,18 +975,18 @@ func (p *ocamlParse) parseExpr(
 		left := expr.ChildByFieldName("left")
 		right := expr.ChildByFieldName("right")
 
-		leftRes := p.parseExpr(left, nil, currentModule, true, false)
+		leftRes := p.parseExpr(left, nil, module, true, false)
 		if leftRes != "" {
 			w("_ = %s\n", leftRes)
 		}
 
-		rightRes := p.parseExpr(right, expectedType, currentModule, true, returnIfTerminal)
+		rightRes := p.parseExpr(right, expectedType, module, true, returnIfTerminal)
 		w("\n")
 
 		return rightRes
 	case "sign_expression":
 		w("%s(", p.s(expr.ChildByFieldName("operator")))
-		p.parseExpr(expr.ChildByFieldName("right"), expectedType, currentModule, false, false)
+		p.parseExpr(expr.ChildByFieldName("right"), expectedType, module, false, false)
 		w(")")
 	default:
 		w("TODO /* unknown expression type %s */", expr.GrammarName())
@@ -964,38 +1004,38 @@ func (p *ocamlParse) parseMatchPattern(
 ) {
 	switch pattern.GrammarName() {
 	case "_lowercase_identifier":
-		p.parseExpr(pattern, nil, "", false, false)
+		p.parseExpr(pattern, nil, nil, false, false)
 		w(" := %s; ", matchVar)
 		if guard == nil {
 			w("true")
 		} else {
-			p.parseExpr(guard, ocaml.SimpleType("bool"), "", false, false)
+			p.parseExpr(guard, ocaml.NamedType{nil, "bool"}, nil, false, false)
 		}
 		w(" {\n")
 
 		// Ignore in case it is unused
 		w("_ = ")
-		p.parseExpr(pattern, nil, "", false, false)
+		p.parseExpr(pattern, nil, nil, false, false)
 		w("\n")
 	case "number", "signed_number":
 		w("%s == ", matchVar)
-		p.parseExpr(pattern, nil, "", false, false)
+		p.parseExpr(pattern, nil, nil, false, false)
 		utils.Assert(guard == nil, "expected no guard")
 		w(" {\n")
 	case "alias_pattern":
 		p.parseMatchPattern(pattern.NamedChild(0), matchVar, nil)
-		p.parseExpr(pattern.NamedChild(1), nil, "", false, false)
+		p.parseExpr(pattern.NamedChild(1), nil, nil, false, false)
 		w(" := %s\n", matchVar)
 		utils.Assert(guard == nil, "expected no guard")
 	case "constructor_pattern":
 		// We only handle Some and None.
 		switch p.s(pattern.NamedChild(0)) {
 		case "Some":
-			p.parseExpr(pattern.NamedChild(1), nil, "", false, false)
+			p.parseExpr(pattern.NamedChild(1), nil, nil, false, false)
 			w(" := __derefIfNotNil(%s); %s != nil ", matchVar, matchVar)
 			if guard != nil {
 				w("&& (")
-				p.parseExpr(guard, ocaml.SimpleType("bool"), "", false, false)
+				p.parseExpr(guard, ocaml.NamedType{nil, "bool"}, nil, false, false)
 				w(") ")
 			}
 			w("{\n")
@@ -1010,7 +1050,7 @@ func (p *ocamlParse) parseMatchPattern(
 				w("||")
 			}
 			w("%s == ", matchVar)
-			p.parseExpr(orValue, nil, "", false, false)
+			p.parseExpr(orValue, nil, nil, false, false)
 		}
 		w(" {\n")
 		utils.Assert(guard == nil, "expected no guard")
@@ -1123,7 +1163,7 @@ type Unpack struct {
 }
 
 func trackUnpack(tup ocaml.Tuple) string {
-	name := "__unpack" + safeName(tup.String())
+	name := "__unpack" + varName(tup.String())
 	already := false
 	for _, unpack := range unpacks {
 		if unpack.Name == name {
@@ -1141,9 +1181,9 @@ func trackUnpack(tup ocaml.Tuple) string {
 
 func writeUnpacks() {
 	for _, unpack := range unpacks {
-		w("func %s(t %s) (", unpack.Name, ocaml2go(unpack.Type, typeDefs))
+		w("func %s(t %s) (", unpack.Name, ocaml2go(unpack.Type))
 		for _, t := range unpack.Type {
-			w("%s, ", ocaml2go(t, typeDefs))
+			w("%s, ", ocaml2go(t))
 		}
 		w(") {\n")
 		w("  return ")

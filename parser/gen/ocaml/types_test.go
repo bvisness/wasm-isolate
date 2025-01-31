@@ -14,29 +14,29 @@ func TestParseType(t *testing.T) {
 	cases := []Case{
 		{
 			t:   "int32",
-			res: SimpleType("int32"),
+			res: NamedType("int32"),
 		},
 		{
 			t:   "stream -> int32",
-			res: Func{SimpleType("stream"), SimpleType("int32")},
+			res: Func{NamedType("stream"), NamedType("int32")},
 		},
 		{
 			t:   "int -> stream -> int64",
-			res: Func{SimpleType("int"), Func{SimpleType("stream"), SimpleType("int64")}},
+			res: Func{NamedType("int"), Func{NamedType("stream"), NamedType("int64")}},
 		},
 		{
 			t:   "(stream -> 'a) -> stream -> 'a",
-			res: Func{Func{SimpleType("stream"), SimpleType("'a")}, Func{SimpleType("stream"), SimpleType("'a")}},
+			res: Func{Func{NamedType("stream"), NamedType("'a")}, Func{NamedType("stream"), NamedType("'a")}},
 		},
 		{
 			t: "('a -> 'b) -> bool -> 'a -> 'b option",
 			res: Func{
-				Func{SimpleType("'a"), SimpleType("'b")},
+				Func{NamedType("'a"), NamedType("'b")},
 				Func{
-					SimpleType("bool"),
+					NamedType("bool"),
 					Func{
-						SimpleType("'a"),
-						Cons{SimpleType("'b"), SimpleType("option")},
+						NamedType("'a"),
+						Cons{NamedType("'b"), NamedType("option")},
 					},
 				},
 			},
@@ -44,26 +44,26 @@ func TestParseType(t *testing.T) {
 		{
 			t: "stream -> local_idx * local' phrase",
 			res: Func{
-				SimpleType("stream"),
-				Tuple{SimpleType("local_idx"), Cons{SimpleType("local'"), SimpleType("phrase")}},
+				NamedType("stream"),
+				Tuple{NamedType("local_idx"), Cons{NamedType("local'"), NamedType("phrase")}},
 			},
 		},
 		{
 			t: "stream -> module_' * Custom.custom' phrase list",
 			res: Func{
-				SimpleType("stream"),
-				Tuple{SimpleType("module_'"), Cons{SimpleType("Custom.custom'"), SimpleType("phrase"), SimpleType("list")}},
+				NamedType("stream"),
+				Tuple{NamedType("module_'"), Cons{NamedType("Custom.custom'"), NamedType("phrase"), NamedType("list")}},
 			},
 		},
 		{
 			t: "module_ -> string -> Custom.custom' phrase -> (module Custom.Section) list",
 			res: Func{
-				SimpleType("module_"),
+				NamedType("module_"),
 				Func{
-					SimpleType("string"),
+					NamedType("string"),
 					Func{
-						Cons{SimpleType("Custom.custom'"), SimpleType("phrase")},
-						Cons{SimpleType("(module Custom.Section)"), SimpleType("list")},
+						Cons{NamedType("Custom.custom'"), NamedType("phrase")},
+						Cons{NamedType("(module Custom.Section)"), NamedType("list")},
 					},
 				},
 			},
