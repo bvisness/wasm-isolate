@@ -240,6 +240,8 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, typeDefs map[string]ocaml
 
 		name := p.s(nName)
 
+		fmt.Fprintf(os.Stderr, "parsing type %s = ...\n", p.s(nName))
+
 		// fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, p.s(n))
 		// fmt.Fprintf(os.Stderr, "  %s\n", nBody.ToSexp())
 		if existingType, ok := typeDefs[name]; ok {
@@ -429,6 +431,8 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 	pattern := Lookup{f}.Field("pattern", "").Node
 	body := Lookup{f}.Field("body", "").Node
 
+	fmt.Fprintf(os.Stderr, "parsing func %s = ...\n", p.s(pattern))
+
 	var params []*tree_sitter.Node
 	for _, child := range f.NamedChildren(f.Walk()) {
 		if child.GrammarName() == "parameter" {
@@ -492,6 +496,8 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node) {
 func (p *ocamlParse) parseValueDef(def *tree_sitter.Node) {
 	pattern := def.ChildByFieldName("pattern")
 	body := def.ChildByFieldName("body")
+
+	fmt.Fprintf(os.Stderr, "parsing value %s = ...\n", p.s(pattern))
 
 	expectedType := p.getTypeStart(pattern)
 
