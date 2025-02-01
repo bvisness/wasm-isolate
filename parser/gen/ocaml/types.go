@@ -16,6 +16,34 @@ func init() {
 	parser.SetLanguage(ocaml)
 }
 
+type Module struct {
+	ParentModules []string
+	Name          string
+	Defs          map[string]Type
+}
+
+func NewModule(name string) *Module {
+	return &Module{
+		Name: name,
+		Defs: map[string]Type{
+			"bool":   Primitive("bool"),
+			"string": Primitive("string"),
+			"int":    Primitive("OInt"),
+			"int32":  Primitive("OInt32"),
+			"int64":  Primitive("OInt64"),
+
+			"list":   Primitive("list"),
+			"option": Primitive("option"),
+		},
+	}
+}
+
+func (m Module) Namespace() []string {
+	return append(m.ParentModules, m.Name)
+}
+
+type Defs map[string]Type
+
 type TypeKind int
 
 const (
@@ -25,7 +53,8 @@ const (
 	TVariants
 	TRecord
 	TTypeDef
-	TNamed
+	TIdentifier
+	TPrimitive
 )
 
 type Type interface {
@@ -136,42 +165,47 @@ func (t Record) Kind() TypeKind {
 	return TRecord
 }
 
-type TypeDef struct {
+type Identifier struct {
 	Modules []string
 	Name    string
-	Type    Type
 }
 
-func (t TypeDef) String() string {
+func (t Identifier) String() string {
 	if len(t.Modules) > 0 {
 		return strings.Join(t.Modules, ".") + "." + t.Name
 	} else {
 		return t.Name
 	}
+}
+
+func (t Identifier) Kind() TypeKind {
+	return TIdentifier
+}
+
+type TypeDef struct {
+	Identifier
+	Type Type
+}
+
+func (t TypeDef) String() string {
+	return t.Identifier.String()
 }
 
 func (t TypeDef) Kind() TypeKind {
 	return TTypeDef
 }
 
-type NamedType struct {
-	Modules []string
-	Name    string
+type Primitive string
+
+func (t Primitive) String() string {
+	return string(t)
 }
 
-func (t NamedType) String() string {
-	if len(t.Modules) > 0 {
-		return strings.Join(t.Modules, ".") + "." + t.Name
-	} else {
-		return t.Name
-	}
+func (t Primitive) Kind() TypeKind {
+	return TPrimitive
 }
 
-func (t NamedType) Kind() TypeKind {
-	return TNamed
-}
-
-func ParseType(t string, typeDefs map[string]TypeDef) Type {
+func ParseType(t string, currentModule *Module) Type {
 	tree := parser.Parse([]byte(t), nil)
 	defer tree.Close()
 
@@ -179,40 +213,41 @@ func ParseType(t string, typeDefs map[string]TypeDef) Type {
 		panic(fmt.Sprintf("type has error: %s", t))
 	}
 
-	return parseTypeNode(tree.RootNode(), t, typeDefs)
+	return parseTypeNode(tree.RootNode(), t, currentModule)
 }
 
-func parseTypeNode(n *tree_sitter.Node, t string, typeDefs map[string]TypeDef) Type {
+func parseTypeNode(n *tree_sitter.Node, t string, currentModule *Module) Type {
 	// fmt.Fprintf(os.Stderr, "type node %s: %s\n", n.GrammarName(), n.Utf8Text([]byte(t)))
 	// fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
 
 	switch n.GrammarName() {
 	case "type", "parenthesized_type":
-		return parseTypeNode(n.NamedChild(0), t, typeDefs)
+		return parseTypeNode(n.NamedChild(0), t, currentModule)
 	case "package_type", "type_variable", "type_constructor", "_lowercase_identifier":
 		name := n.Utf8Text([]byte(t))
-		if def, ok := typeDefs[name]; ok {
+		if def, ok := currentModule.Defs[name]; ok {
 			return def
+			// return def.(TypeDef) // assert
 		}
-		return NamedType{nil, name}
+		return Identifier{currentModule.Namespace(), name}
 	case "type_constructor_path":
-		ty := parseTypeNode(n.NamedChild(n.NamedChildCount()-1), t, typeDefs)
+		ty := parseTypeNode(n.NamedChild(n.NamedChildCount()-1), t, currentModule)
 		switch ty := ty.(type) {
-		case NamedType:
+		case Identifier:
 			for i := range n.NamedChildCount() - 1 {
 				ty.Modules = append(ty.Modules, n.NamedChild(i).Utf8Text([]byte(t)))
 			}
 			return ty
-		case TypeDef:
+		case Primitive, TypeDef:
 			return ty
 		default:
-			panic(fmt.Sprintf("how can you even have a %+v in a type_constructor_path", ty))
+			panic(fmt.Sprintf("how can you even have a %#v in a type_constructor_path", ty))
 		}
 
 	case "constructed_type":
 		var cons Cons
-		t1 := parseTypeNode(n.NamedChild(0), t, typeDefs)
-		t2 := parseTypeNode(n.NamedChild(1), t, typeDefs)
+		t1 := parseTypeNode(n.NamedChild(0), t, currentModule)
+		t2 := parseTypeNode(n.NamedChild(1), t, currentModule)
 		if t1cons, ok := t1.(Cons); ok {
 			cons = append(cons, t1cons...)
 		} else {
@@ -226,13 +261,13 @@ func parseTypeNode(n *tree_sitter.Node, t string, typeDefs map[string]TypeDef) T
 		return cons
 	case "function_type":
 		return Func{
-			In:  parseTypeNode(n.NamedChild(0), t, typeDefs),
-			Out: parseTypeNode(n.NamedChild(1), t, typeDefs),
+			In:  parseTypeNode(n.NamedChild(0), t, currentModule),
+			Out: parseTypeNode(n.NamedChild(1), t, currentModule),
 		}
 	case "tuple_type":
 		var tup Tuple
-		t1 := parseTypeNode(n.NamedChild(0), t, typeDefs)
-		t2 := parseTypeNode(n.NamedChild(1), t, typeDefs)
+		t1 := parseTypeNode(n.NamedChild(0), t, currentModule)
+		t2 := parseTypeNode(n.NamedChild(1), t, currentModule)
 		if t1tup, ok := t1.(Tuple); ok {
 			tup = append(tup, t1tup...)
 		} else {
