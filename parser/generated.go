@@ -5485,7 +5485,7 @@ func Operators_struct_get_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
 		F0 OAst_idx
 		F1 OAst_idx
 		F2 *OPack_extension
-	}{_x, _y, _None})
+	}{_x, _y, nil})
 	return __tmp1
 }
 
@@ -5619,7 +5619,7 @@ func Operators_array_get_1(_x OAst_idx) OAst_instr_ {
 	__tmp1 := Ast_ArrayGet_1(struct {
 		F0 OAst_idx
 		F1 *OPack_extension
-	}{_x, _None})
+	}{_x, nil})
 	return __tmp1
 }
 
@@ -7007,7 +7007,7 @@ func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
 	}, func(_s ODecode_stream) OAst_block_type {
 		__tmp9 := expect_3(0x40, _s, "")
 		_ = __tmp9
-		__tmp11 := Ast_ValBlockType_1(_None)
+		__tmp11 := Ast_ValBlockType_1(nil)
 		return __tmp11
 
 	}, func(_s ODecode_stream) OAst_block_type {
@@ -7160,7 +7160,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp144 := _drop
 		__tmp4 = __tmp144
 	} else if __tmp5 == 0x1b {
-		__tmp145 := select_1(_None)
+		__tmp145 := select_1(nil)
 		__tmp4 = __tmp145
 	} else if __tmp5 == 0x1c {
 		__tmp148 := select_1(Some_1(Ast_vec_2(Types_val_type, _s)))

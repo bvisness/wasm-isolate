@@ -135,7 +135,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 			return ocaml2go(asCons[0], currentModule)
 		}
 	} else if asRecord, ok := t.(ocaml.Record); ok {
-		res := "struct{"
+		res := "struct {"
 		for _, f := range asRecord {
 			res += fmt.Sprintf("%s %s; ", fieldName(f.Name), ocaml2go(f.Type, currentModule))
 		}
@@ -144,7 +144,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 	} else if asFunc, ok := t.(ocaml.Func); ok {
 		return fmt.Sprintf("func(%s) %s", ocaml2go(asFunc.In, currentModule), ocaml2go(asFunc.Out, currentModule))
 	} else if asTuple, ok := t.(ocaml.Tuple); ok {
-		res := "struct{"
+		res := "struct {"
 		for i, t := range asTuple {
 			res += fmt.Sprintf("F%d %s; ", i, ocaml2go(t, currentModule))
 		}
@@ -746,7 +746,12 @@ func (p *ocamlParse) parseExpr(
 			namespace = def.Namespace
 		}
 		name := varName(namespace, p.s(expr))
-		w("%s", name)
+		if name == "_None" {
+			// HACK: Replace _None with nil
+			w("nil")
+		} else {
+			w("%s", name)
+		}
 
 		if statement {
 			w("\n")
