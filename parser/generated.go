@@ -3908,7 +3908,7 @@ func Operators_v128_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
 var Operators_v128_const = Operators_v128_const_1
 
 func Operators_ref_null_1(_t OTypes_heap_type) OAst_instr_ {
-	__tmp1 := Ast_RefNull_1(Value_t)
+	__tmp1 := Ast_RefNull_1(_t)
 	return __tmp1
 }
 
@@ -3932,7 +3932,7 @@ var Operators_nop = Ast_Nop
 var Operators_drop = Ast_Drop
 
 func Operators_select_1(_t *[]OTypes_val_type) OAst_instr_ {
-	__tmp1 := Ast_Select_1(Value_t)
+	__tmp1 := Ast_Select_1(_t)
 	return __tmp1
 }
 
@@ -5442,14 +5442,14 @@ var Operators_ref_is_null = Ast_RefIsNull
 var Operators_ref_as_non_null = Ast_RefAsNonNull
 
 func Operators_ref_test_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Ast_RefTest_1(Value_t)
+	__tmp1 := Ast_RefTest_1(_t)
 	return __tmp1
 }
 
 var Operators_ref_test = Operators_ref_test_1
 
 func Operators_ref_cast_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Ast_RefCast_1(Value_t)
+	__tmp1 := Ast_RefCast_1(_t)
 	return __tmp1
 }
 
@@ -6397,11 +6397,11 @@ func Decode_len32_1(_s ODecode_stream) OInt {
 	__tmp4 := u32_1(_s)
 	_n := __tmp4
 	var __tmp7 OInt
-	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(len_1(_s), Source_pos))) {
+	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(len_1(_s), _pos))) {
 		__tmp15 := Int32_to_int_1(_n)
 		__tmp7 = __tmp15
 	} else {
-		__tmp17 := error_3(_s, Source_pos, "length out of bounds")
+		__tmp17 := error_3(_s, _pos, "length out of bounds")
 		__tmp7 = __tmp17
 	}
 	return __tmp7
@@ -6455,14 +6455,14 @@ func Decode_var_type_2(_var func(ODecode_stream) OTypes_local_idx, _s ODecode_st
 	__tmp1 := Source_pos_1(_s)
 	Source_pos := __tmp1
 	var __tmp4 OTypes_var
-	__tmp5 := Types_var_1(_s)
+	__tmp5 := var_1(_s)
 	if _i := __tmp5; _operatorGte_2(_i, 0) {
 		_ = _i
 		__tmp12 := Types_StatX_1(_i)
 		__tmp4 = __tmp12
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp16 := error_3(_s, Source_pos, "malformed type index")
+		__tmp16 := error_3(_s, _pos, "malformed type index")
 		__tmp4 = __tmp16
 	}
 	return __tmp4
@@ -6564,7 +6564,7 @@ func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
 			__tmp9 = __tmp35
 		} else if __ := __tmp10; true {
 			_ = __
-			__tmp39 := error_3(_s, Source_pos, "malformed heap type")
+			__tmp39 := error_3(_s, _pos, "malformed heap type")
 			__tmp9 = __tmp39
 		}
 		return __tmp9
@@ -6671,7 +6671,7 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 		__tmp4 = __tmp73
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp80 := error_3(_s, Source_pos, "malformed reference type")
+		__tmp80 := error_3(_s, _pos, "malformed reference type")
 		__tmp4 = __tmp80
 	}
 	return __tmp4
@@ -6715,7 +6715,7 @@ func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
 		__tmp4 = __tmp10
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp14 := error_3(_s, Source_pos, "malformed storage type")
+		__tmp14 := error_3(_s, _pos, "malformed storage type")
 		__tmp4 = __tmp14
 	}
 	return __tmp4
@@ -6744,7 +6744,7 @@ func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
 	__tmp7 := Types_FieldT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_storage_type
-	}{Types_mut, _t})
+	}{_mut, _t})
 	return __tmp7
 }
 
@@ -6931,7 +6931,7 @@ func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
 	__tmp7 := Types_GlobalT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_val_type
-	}{Types_mut, _t})
+	}{_mut, _t})
 	return __tmp7
 }
 
@@ -6970,7 +6970,7 @@ func Decode_memop_1(_s ODecode_stream) struct {
 	Source_pos := __tmp1
 	__tmp4 := u32_1(_s)
 	_flags := __tmp4
-	__tmp7 := require_4(I32_lt_u_2(_flags, 0x80), _s, Source_pos, "malformed memop flags")
+	__tmp7 := require_4(I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
 	__tmp12 := _operatorNotEq_2(Int32_logand_2(_flags, 0x40), 0)
 	_has_var := __tmp12
@@ -7091,24 +7091,24 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		}
 		__tmp4 = __tmp38
 	} else if __tmp5 == 0x05 {
-		__tmp59 := error_3(_s, Source_pos, "misplaced ELSE opcode")
+		__tmp59 := error_3(_s, _pos, "misplaced ELSE opcode")
 		__tmp4 = __tmp59
 	} else if __tmp5 == 0x06 || __tmp5 == 0x07 {
 		_b := __tmp5
-		__tmp63 := illegal_3(_s, Source_pos, _b)
+		__tmp63 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp63
 	} else if __tmp5 == 0x08 {
 		__tmp67 := throw_1(at_2(Types_var, _s))
 		__tmp4 = __tmp67
 	} else if __tmp5 == 0x09 {
 		_b := __tmp5
-		__tmp72 := illegal_3(_s, Source_pos, _b)
+		__tmp72 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp72
 	} else if __tmp5 == 0x0a {
 		__tmp76 := _throw_ref
 		__tmp4 = __tmp76
 	} else if __tmp5 == 0x0b {
-		__tmp77 := error_3(_s, Source_pos, "misplaced END opcode")
+		__tmp77 := error_3(_s, _pos, "misplaced END opcode")
 		__tmp4 = __tmp77
 	} else if __tmp5 == 0x0c {
 		__tmp80 := br_1(at_2(Types_var, _s))
@@ -7154,7 +7154,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp135
 	} else if __tmp5 == 0x16 || __tmp5 == 0x17 || __tmp5 == 0x18 || __tmp5 == 0x19 {
 		_b := __tmp5
-		__tmp140 := illegal_3(_s, Source_pos, _b)
+		__tmp140 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp140
 	} else if __tmp5 == 0x1a {
 		__tmp144 := _drop
@@ -7167,7 +7167,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp148
 	} else if __tmp5 == 0x1d || __tmp5 == 0x1e {
 		_b := __tmp5
-		__tmp154 := illegal_3(_s, Source_pos, _b)
+		__tmp154 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp154
 	} else if __tmp5 == 0x1f {
 		__tmp158 := Ast_block_type_1(_s)
@@ -7204,7 +7204,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp199
 	} else if __tmp5 == 0x27 {
 		_b := __tmp5
-		__tmp204 := illegal_3(_s, Source_pos, _b)
+		__tmp204 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp204
 	} else if __tmp5 == 0x28 {
 		__tmp208 := Ast_memop_1(_s)
@@ -7725,7 +7725,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp566
 	} else if __tmp5 == 0xc5 || __tmp5 == 0xc6 || __tmp5 == 0xc7 || __tmp5 == 0xc8 || __tmp5 == 0xc9 || __tmp5 == 0xca || __tmp5 == 0xcb || __tmp5 == 0xcc || __tmp5 == 0xcd || __tmp5 == 0xce || __tmp5 == 0xcf {
 		_b := __tmp5
-		__tmp568 := illegal_3(_s, Source_pos, _b)
+		__tmp568 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp568
 	} else if __tmp5 == 0xd0 {
 		__tmp572 := ref_null_1(Types_heap_type_1(_s))
@@ -7880,7 +7880,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			_opcode := __tmp592
 			__tmp766 := byte_1(_s)
 			_flags := __tmp766
-			__tmp769 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(Source_pos, 2), "malformed br_on_cast flags")
+			__tmp769 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp769
 			__tmp776 := at_2(Types_var, _s)
 			_x := __tmp776
@@ -7934,7 +7934,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp591 = __tmp810
 		} else if _n := __tmp592; true {
 			_ = _n
-			__tmp813 := illegal2_4(_s, Source_pos, _b, _n)
+			__tmp813 := illegal2_4(_s, _pos, _b, _n)
 			__tmp591 = __tmp813
 		}
 		__tmp4 = __tmp591
@@ -8014,7 +8014,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp819 = __tmp895
 		} else if _n := __tmp820; true {
 			_ = _n
-			__tmp901 := illegal2_4(_s, Source_pos, _b, _n)
+			__tmp901 := illegal2_4(_s, _pos, _b, _n)
 			__tmp819 = __tmp901
 		}
 		__tmp4 = __tmp819
@@ -8576,7 +8576,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1333
 		} else if __tmp907 == 0x9a {
 			_n := __tmp907
-			__tmp1335 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1335 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1335
 		} else if __tmp907 == 0x9b {
 			__tmp1340 := _i16x8_avgr_u
@@ -8601,7 +8601,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1346
 		} else if __tmp907 == 0xa2 {
 			_n := __tmp907
-			__tmp1348 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1348 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1348
 		} else if __tmp907 == 0xa3 {
 			__tmp1353 := _i32x4_all_true
@@ -8611,7 +8611,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1354
 		} else if __tmp907 == 0xa5 || __tmp907 == 0xa6 {
 			_n := __tmp907
-			__tmp1356 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1356 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1356
 		} else if __tmp907 == 0xa7 {
 			__tmp1361 := _i32x4_extend_low_i16x8_s
@@ -8639,14 +8639,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1368
 		} else if __tmp907 == 0xaf || __tmp907 == 0xb0 {
 			_n := __tmp907
-			__tmp1370 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1370 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1370
 		} else if __tmp907 == 0xb1 {
 			__tmp1375 := _i32x4_sub
 			__tmp906 = __tmp1375
 		} else if __tmp907 == 0xb2 || __tmp907 == 0xb3 || __tmp907 == 0xb4 {
 			_n := __tmp907
-			__tmp1377 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1377 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1377
 		} else if __tmp907 == 0xb5 {
 			__tmp1382 := _i32x4_mul
@@ -8686,7 +8686,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1393
 		} else if __tmp907 == 0xc2 {
 			_n := __tmp907
-			__tmp1395 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1395 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1395
 		} else if __tmp907 == 0xc3 {
 			__tmp1400 := _i64x2_all_true
@@ -8696,7 +8696,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1401
 		} else if __tmp907 == 0xc5 || __tmp907 == 0xc6 {
 			_n := __tmp907
-			__tmp1403 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1403 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1403
 		} else if __tmp907 == 0xc7 {
 			__tmp1408 := _i64x2_extend_low_i32x4_s
@@ -8724,14 +8724,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1415
 		} else if __tmp907 == 0xcf || __tmp907 == 0xd0 {
 			_n := __tmp907
-			__tmp1417 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1417 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1417
 		} else if __tmp907 == 0xd1 {
 			__tmp1422 := _i64x2_sub
 			__tmp906 = __tmp1422
 		} else if __tmp907 == 0xd2 || __tmp907 == 0xd3 || __tmp907 == 0xd4 {
 			_n := __tmp907
-			__tmp1424 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1424 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1424
 		} else if __tmp907 == 0xd5 {
 			__tmp1429 := _i64x2_mul
@@ -8774,7 +8774,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1441
 		} else if __tmp907 == 0xe2 {
 			_n := __tmp907
-			__tmp1443 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1443 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1443
 		} else if __tmp907 == 0xe3 {
 			__tmp1448 := _f32x4_sqrt
@@ -8922,13 +8922,13 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1495
 		} else if _n := __tmp907; true {
 			_ = _n
-			__tmp1498 := illegal_3(_s, Source_pos, I32_to_int_u_1(_n))
+			__tmp1498 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1498
 		}
 		__tmp4 = __tmp906
 	} else if _b := __tmp5; true {
 		_ = _b
-		__tmp1505 := illegal_3(_s, Source_pos, _b)
+		__tmp1505 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp1505
 	}
 	return __tmp4

@@ -551,14 +551,16 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node, currentModule *ocaml.Module)
 	funcResultType := funcType.GetTypeAfterApplyingArgs(len(params))
 
 	fullFuncName := funcName(currentModule.Namespace(), name, len(params))
+	var locals []string
 	w("func %s(", fullFuncName)
 	for _, param := range params {
 		paramName := varName(nil, p.s(param))
 		paramType := p.getTypeEnd(param, currentModule)
 		w("%s %s, ", paramName, ocaml2go(paramType, currentModule))
+		locals = append(locals, p.s(param))
 	}
 	w(") %s {\n", ocaml2go(funcResultType, currentModule))
-	p.parseExpr(body, funcResultType, currentModule, true, true)
+	p.parseExpr(body, funcResultType, currentModule, locals, true, true)
 	w("}\n\n")
 
 	for i := len(params) - 1; i >= 1; i-- {
@@ -607,7 +609,7 @@ func (p *ocamlParse) parseValueDef(def *tree_sitter.Node, currentModule *ocaml.M
 	expectedType := p.getTypeStart(pattern, currentModule)
 
 	w("var %s = ", varName(currentModule.Namespace(), p.s(pattern)))
-	p.parseExpr(body, expectedType, currentModule, false, false)
+	p.parseExpr(body, expectedType, currentModule, nil, false, false)
 	w("\n")
 }
 
@@ -708,6 +710,7 @@ func (p *ocamlParse) parseExpr(
 	expr *tree_sitter.Node,
 	expectedType ocaml.Type,
 	module *ocaml.Module,
+	locals []string,
 	statement bool,
 	returnIfTerminal bool,
 ) string {
@@ -721,6 +724,16 @@ func (p *ocamlParse) parseExpr(
 		exitWithError("for %s expression: cannot return a non-statement", expr.GrammarName())
 	}
 
+	lookup := func(name string) (ocaml.Def, bool) {
+		if slices.Contains(locals, name) {
+			return ocaml.Def{}, false
+		}
+		if def, ok := module.Defs[name]; ok {
+			return def, true
+		}
+		return ocaml.Def{}, false
+	}
+
 	switch expr.GrammarName() {
 	case "value_path", "_lowercase_identifier", "_uppercase_identifier":
 		res := tmpVar()
@@ -729,7 +742,7 @@ func (p *ocamlParse) parseExpr(
 		}
 
 		var namespace []string
-		if def, ok := module.Defs[p.s(expr)]; ok {
+		if def, ok := lookup(p.s(expr)); ok {
 			namespace = def.Namespace
 		}
 		name := varName(namespace, p.s(expr))
@@ -752,7 +765,7 @@ func (p *ocamlParse) parseExpr(
 			if i < expr.NamedChildCount()-1 {
 				w("/*%s.*/", p.s(expr.NamedChild(i)))
 			} else {
-				p.parseExpr(expr.NamedChild(i), expectedType, module, false, false)
+				p.parseExpr(expr.NamedChild(i), expectedType, module, locals, false, false)
 			}
 		}
 		if statement {
@@ -768,9 +781,9 @@ func (p *ocamlParse) parseExpr(
 		n = strings.TrimRight(n, "lL")
 		w("%s", n)
 	case "or_pattern", "tuple_pattern":
-		p.parseExpr(expr.NamedChild(0), nil, module, false, false)
+		p.parseExpr(expr.NamedChild(0), nil, module, locals, false, false)
 		w(", ")
-		p.parseExpr(expr.NamedChild(1), nil, module, false, false)
+		p.parseExpr(expr.NamedChild(1), nil, module, locals, false, false)
 	case "add_operator", "mult_operator", "pow_operator", "rel_operator", "concat_operator":
 		// TODO: Implement more of these:
 		// https://ocaml.org/manual/5.3/expr.html
@@ -805,7 +818,7 @@ func (p *ocamlParse) parseExpr(
 		}
 
 		var namespace []string
-		if def, ok := module.Defs[p.s(function)]; ok {
+		if def, ok := lookup(p.s(function)); ok {
 			namespace = def.Namespace
 		} else {
 			fmt.Fprintf(os.Stderr, "WARNING: Calling unknown function %s with no namespace.\n", p.s(function))
@@ -813,7 +826,7 @@ func (p *ocamlParse) parseExpr(
 
 		w("%s(", funcName(namespace, p.s(function), len(args)))
 		for i, arg := range args {
-			p.parseExpr(&arg, funcType.GetArgType(i), module, false, false)
+			p.parseExpr(&arg, funcType.GetArgType(i), module, locals, false, false)
 			w(", ")
 		}
 		w(")")
@@ -852,7 +865,7 @@ func (p *ocamlParse) parseExpr(
 		}
 		w(") %s {\n", ocaml2go(funcType.Out, module))
 
-		p.parseExpr(body, funcType.Out, module, true, true)
+		p.parseExpr(body, funcType.Out, module, locals, true, true)
 
 		w("}")
 	case "if_expression":
@@ -868,7 +881,7 @@ func (p *ocamlParse) parseExpr(
 		w("var %s %s\n", res, ocaml2go(expectedType, module))
 
 		w("if ")
-		p.parseExpr(condition, ocaml.Identifier{nil, "bool"}, module, false, false)
+		p.parseExpr(condition, ocaml.Identifier{nil, "bool"}, module, locals, false, false)
 		for _, child := range expr.NamedChildren(expr.Walk()) {
 			if child.Id() == condition.Id() {
 				continue
@@ -877,14 +890,14 @@ func (p *ocamlParse) parseExpr(
 			switch child.GrammarName() {
 			case "then_clause":
 				w(" {\n")
-				thenRes := p.parseExpr(child.NamedChild(0), expectedType, module, true, false)
+				thenRes := p.parseExpr(child.NamedChild(0), expectedType, module, locals, true, false)
 				if len(res) > 0 {
 					w("%s = %s\n", res, thenRes)
 				}
 				w("} ")
 			case "else_clause":
 				w(" else {\n")
-				elseRes := p.parseExpr(child.NamedChild(0), expectedType, module, true, false)
+				elseRes := p.parseExpr(child.NamedChild(0), expectedType, module, locals, true, false)
 				if len(res) > 0 {
 					w("%s = %s\n", res, elseRes)
 				}
@@ -927,9 +940,9 @@ func (p *ocamlParse) parseExpr(
 		// }
 
 		w("%s(", funcName)
-		p.parseExpr(left, opType.GetArgType(0), module, false, false)
+		p.parseExpr(left, opType.GetArgType(0), module, locals, false, false)
 		w(", ")
-		p.parseExpr(right, opType.GetArgType(1), module, false, false)
+		p.parseExpr(right, opType.GetArgType(1), module, locals, false, false)
 		w(")")
 
 		if statement {
@@ -956,19 +969,22 @@ func (p *ocamlParse) parseExpr(
 		pattern := Lookup{binding}.Field("pattern", "").Node
 		body := Lookup{binding}.Field("body", "").Node
 
+		var bindingNames []string
 		var bindingType ocaml.Type
 		if pattern.GrammarName() == "tuple_pattern" {
 			var tup ocaml.Tuple
 			for _, v := range flattenTuplePattern(pattern) {
+				bindingNames = append(bindingNames, p.s(v))
 				tup = append(tup, p.getTypeEnd(v, module))
 			}
 			bindingType = tup
 		} else {
+			bindingNames = append(bindingNames, p.s(pattern))
 			bindingType = p.getTypeEnd(pattern, module)
 		}
-		bindingRes := p.parseExpr(body, bindingType, module, true, false)
+		bindingRes := p.parseExpr(body, bindingType, module, locals, true, false)
 
-		p.parseExpr(pattern, nil, module, false, false)
+		p.parseExpr(pattern, nil, module, locals, false, false)
 		w(" := ")
 		if pattern.GrammarName() == "tuple_pattern" {
 			unpackName := trackUnpack(bindingType.(ocaml.Tuple), module)
@@ -978,7 +994,8 @@ func (p *ocamlParse) parseExpr(
 		}
 		w("\n")
 
-		return p.parseExpr(expr.NamedChild(1), expectedType, module, true, returnIfTerminal)
+		newLocals := append(locals, bindingNames...)
+		return p.parseExpr(expr.NamedChild(1), expectedType, module, newLocals, true, returnIfTerminal)
 	case "list_expression":
 		listType := p.getTypeEnd(expr, module)
 		var elemType ocaml.Type
@@ -996,7 +1013,7 @@ func (p *ocamlParse) parseExpr(
 
 		w("[]%s{", ocaml2go(elemType, module))
 		for _, child := range expr.NamedChildren(expr.Walk()) {
-			p.parseExpr(&child, elemType, module, false, false)
+			p.parseExpr(&child, elemType, module, locals, false, false)
 			w(", ")
 		}
 		w("}")
@@ -1007,14 +1024,14 @@ func (p *ocamlParse) parseExpr(
 		if localMod == nil {
 			localMod = ocaml.NewModule(nil, modName)
 		}
-		return p.parseExpr(expr.NamedChild(1), expectedType, localMod, statement, returnIfTerminal)
+		return p.parseExpr(expr.NamedChild(1), expectedType, localMod, locals, statement, returnIfTerminal)
 	case "match_expression":
 		matchResult := tmpVar()
 		w("var %s %s\n", matchResult, ocaml2go(expectedType, module))
 
 		matchVar := tmpVar()
 		w("%s := ", matchVar)
-		p.parseExpr(expr.NamedChild(0), nil, module, false, false)
+		p.parseExpr(expr.NamedChild(0), nil, module, locals, false, false)
 		w("\n")
 
 		for i, matchCase := range expr.NamedChildren(expr.Walk())[1:] {
@@ -1038,9 +1055,10 @@ func (p *ocamlParse) parseExpr(
 			}
 
 			// Will open the body of the if
-			p.parseMatchPattern(pattern, matchVar, guard, module)
+			newlyDefinedLocals := p.parseMatchPattern(pattern, matchVar, guard, module, locals)
+			newLocals := append(locals, newlyDefinedLocals...)
 
-			res := p.parseExpr(body, expectedType, module, true, false)
+			res := p.parseExpr(body, expectedType, module, newLocals, true, false)
 			if len(matchResult) > 0 {
 				w("%s = %s", matchResult, res)
 			}
@@ -1057,7 +1075,7 @@ func (p *ocamlParse) parseExpr(
 			return matchResult
 		}
 	case "parenthesized_expression":
-		return p.parseExpr(expr.NamedChild(0), expectedType, module, statement, returnIfTerminal)
+		return p.parseExpr(expr.NamedChild(0), expectedType, module, locals, statement, returnIfTerminal)
 	case "product_expression":
 		nodes := flattenProductExpression(expr)
 
@@ -1082,7 +1100,7 @@ func (p *ocamlParse) parseExpr(
 
 		w("%s{", ocaml2go(tup, module))
 		for i, n := range nodes {
-			p.parseExpr(n, tup[i], module, false, false)
+			p.parseExpr(n, tup[i], module, locals, false, false)
 			w(", ")
 		}
 		w("}")
@@ -1105,18 +1123,18 @@ func (p *ocamlParse) parseExpr(
 		left := expr.ChildByFieldName("left")
 		right := expr.ChildByFieldName("right")
 
-		leftRes := p.parseExpr(left, nil, module, true, false)
+		leftRes := p.parseExpr(left, nil, module, locals, true, false)
 		if leftRes != "" {
 			w("_ = %s\n", leftRes)
 		}
 
-		rightRes := p.parseExpr(right, expectedType, module, true, returnIfTerminal)
+		rightRes := p.parseExpr(right, expectedType, module, locals, true, returnIfTerminal)
 		w("\n")
 
 		return rightRes
 	case "sign_expression":
 		w("%s(", p.s(expr.ChildByFieldName("operator")))
-		p.parseExpr(expr.ChildByFieldName("right"), expectedType, module, false, false)
+		p.parseExpr(expr.ChildByFieldName("right"), expectedType, module, locals, false, false)
 		w(")")
 	default:
 		w("TODO /* unknown expression type %s */", expr.GrammarName())
@@ -1126,52 +1144,56 @@ func (p *ocamlParse) parseExpr(
 }
 
 // You are expected to write the start of the if case before calling this,
-// e.g. "if " or "} else if ".
+// e.g. "if " or "} else if ". Returns the names of any newly-defined variables.
 func (p *ocamlParse) parseMatchPattern(
 	pattern *tree_sitter.Node,
 	matchVar string,
 	guard *tree_sitter.Node,
 	currentModule *ocaml.Module,
-) {
+	locals []string,
+) []string {
 	utils.Assert(currentModule != nil, "must have a module to parse match patterns")
 
+	var newLocals []string
 	switch pattern.GrammarName() {
 	case "_lowercase_identifier":
-		p.parseExpr(pattern, nil, currentModule, false, false)
+		p.parseExpr(pattern, nil, currentModule, locals, false, false)
 		w(" := %s; ", matchVar)
 		if guard == nil {
 			w("true")
 		} else {
-			p.parseExpr(guard, ocaml.Identifier{nil, "bool"}, currentModule, false, false)
+			p.parseExpr(guard, ocaml.Identifier{nil, "bool"}, currentModule, locals, false, false)
 		}
 		w(" {\n")
 
 		// Ignore in case it is unused
 		w("_ = ")
-		p.parseExpr(pattern, nil, currentModule, false, false)
+		p.parseExpr(pattern, nil, currentModule, locals, false, false)
 		w("\n")
 	case "number", "signed_number":
 		w("%s == ", matchVar)
-		p.parseExpr(pattern, nil, currentModule, false, false)
+		p.parseExpr(pattern, nil, currentModule, locals, false, false)
 		utils.Assert(guard == nil, "expected no guard")
 		w(" {\n")
 	case "alias_pattern":
-		p.parseMatchPattern(pattern.NamedChild(0), matchVar, nil, currentModule)
-		p.parseExpr(pattern.NamedChild(1), nil, currentModule, false, false)
+		p.parseMatchPattern(pattern.NamedChild(0), matchVar, nil, currentModule, locals)
+		p.parseExpr(pattern.NamedChild(1), nil, currentModule, locals, false, false)
 		w(" := %s\n", matchVar)
+		newLocals = append(newLocals, p.s(pattern.NamedChild(1)))
 		utils.Assert(guard == nil, "expected no guard")
 	case "constructor_pattern":
 		// We only handle Some and None.
 		switch p.s(pattern.NamedChild(0)) {
 		case "Some":
-			p.parseExpr(pattern.NamedChild(1), nil, currentModule, false, false)
+			p.parseExpr(pattern.NamedChild(1), nil, currentModule, locals, false, false)
 			w(" := __derefIfNotNil(%s); %s != nil ", matchVar, matchVar)
 			if guard != nil {
 				w("&& (")
-				p.parseExpr(guard, ocaml.Identifier{nil, "bool"}, currentModule, false, false)
+				p.parseExpr(guard, ocaml.Identifier{nil, "bool"}, currentModule, locals, false, false)
 				w(") ")
 			}
 			w("{\n")
+			newLocals = append(newLocals, p.s(pattern.NamedChild(1)))
 		case "None":
 			w("%s == nil {\n", matchVar)
 		default:
@@ -1183,13 +1205,15 @@ func (p *ocamlParse) parseMatchPattern(
 				w("||")
 			}
 			w("%s == ", matchVar)
-			p.parseExpr(orValue, nil, currentModule, false, false)
+			p.parseExpr(orValue, nil, currentModule, locals, false, false)
 		}
 		w(" {\n")
 		utils.Assert(guard == nil, "expected no guard")
 	default:
 		exitWithError("unknown type of match case: %s", pattern.GrammarName())
 	}
+
+	return newLocals
 }
 
 func flattenTuplePattern(p *tree_sitter.Node) []*tree_sitter.Node {
