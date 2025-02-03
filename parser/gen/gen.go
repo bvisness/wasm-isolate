@@ -216,7 +216,10 @@ func main() {
 						if f.SkipTypes {
 							continue
 						}
-						p.parseTypeDef(&child, f, mod)
+						defs := p.parseTypeDef(&child, f, mod)
+						for _, def := range defs {
+							mod.Defs[def.Name] = def
+						}
 					case "value_definition":
 						for _, def := range child.NamedChildren(child.Walk()) {
 							switch def.GrammarName() {
@@ -255,8 +258,8 @@ func main() {
 						} else {
 							fmt.Fprintf(os.Stderr, "WARNING: in module %s: no module defined with name %s, so inheriting no definitions\n", mod.Name, modName)
 						}
-					// case "module_definition":
-					// 	fmt.Fprintf(os.Stderr, "  %s\n", child.ToSexp())
+					case "module_definition":
+						p.parseModuleDef(&child, f, mod)
 					case "comment":
 					default:
 						fmt.Fprintf(os.Stderr, "skipping unknown %s\n", child.GrammarName())
@@ -275,7 +278,8 @@ func (p *ocamlParse) s(n *tree_sitter.Node) string {
 	return n.Utf8Text(p.source)
 }
 
-func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, currentModule *ocaml.Module) {
+func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, currentModule *ocaml.Module) []ocaml.TypeDef {
+	var defs []ocaml.TypeDef
 	for _, binding := range n.NamedChildren(n.Walk()) {
 		if binding.GrammarName() != "type_binding" {
 			fmt.Fprintf(os.Stderr, "spurious %s while processing type definitions\n", binding.GrammarName())
@@ -307,9 +311,10 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, currentModule *oc
 			},
 			Type: p.parseTypeDecl(nBody, currentModule),
 		}
-		currentModule.Defs[def.Name] = def
+		defs = append(defs, def)
 		p.writeTypeDef(def, currentModule)
 	}
+	return defs
 }
 
 func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, currentModule *ocaml.Module) ocaml.Type {
@@ -520,7 +525,7 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node, currentModule *ocaml.Module)
 	w("}\n\n")
 
 	for i := len(params) - 1; i >= 1; i-- {
-		w("func %s(", funcName(currentModule.ParentModules, name, i))
+		w("func %s(", funcName(currentModule.Namespace(), name, i))
 		for j := 0; j < i; j++ {
 			param := params[j]
 			paramName := varName(nil, p.s(param))
@@ -569,6 +574,46 @@ func (p *ocamlParse) parseValueDef(def *tree_sitter.Node, currentModule *ocaml.M
 	w("\n")
 }
 
+func (p *ocamlParse) parseModuleDef(def *tree_sitter.Node, f File, currentModule *ocaml.Module) {
+	binding := def.NamedChild(0)
+	name := binding.ChildByFieldName("name")
+	body := binding.ChildByFieldName("body")
+
+	switch body.GrammarName() {
+	case "structure":
+		newMod := ocaml.NewModule(p.s(name))
+		newMod.ParentModules = currentModule.Namespace()
+
+		for _, def := range body.NamedChildren(body.Walk()) {
+			switch def.GrammarName() {
+			case "type_definition":
+				// We need to parse the thing in the current context, including opened defs
+				// from the outer module, but we also need functions to be generated with the
+				// right name. So we cheat.
+				phonyModule := *newMod
+				phonyModule.Defs = currentModule.Defs
+				defs := p.parseTypeDef(&def, f, &phonyModule)
+				for _, def := range defs {
+					newMod.Defs[def.Name] = def
+				}
+			default:
+				w("// Ignoring %s in module definition\n", def.GrammarName())
+			}
+		}
+
+		modules[newMod.Name] = newMod
+	case "module_path":
+		// Module alias
+		thisName := p.s(name)
+		otherName := p.s(body)
+		modules[thisName] = modules[otherName]
+	case "module_application":
+		// Ignore
+	default:
+		exitWithError("Unknown type of body for module definition: %s", body.GrammarName())
+	}
+}
+
 var reUnsafeChar = regexp.MustCompile("[^a-zA-Z0-9_]")
 
 func snake2camel(s string) string {
@@ -582,16 +627,25 @@ func snake2camel(s string) string {
 }
 
 func camelName(modulePath []string, name string) string {
-	var cameled []string
+	var parts []string
 	for _, n := range modulePath {
-		cameled = append(cameled, reUnsafeChar.ReplaceAllString(snake2camel(n), "_"))
+		parts = append(parts, reUnsafeChar.ReplaceAllString(snake2camel(n), "_"))
 	}
-	cameled = append(cameled, reUnsafeChar.ReplaceAllString(snake2camel(name), "_"))
-	return strings.Join(cameled, "_")
+	parts = append(parts, reUnsafeChar.ReplaceAllString(name, "_"))
+	return strings.Join(parts, "_")
 }
 
 func varName(modulePath []string, name string) string {
-	return "_" + reUnsafeChar.ReplaceAllString(name, "_")
+	res := ""
+	if len(modulePath) > 0 {
+		var parts []string
+		for _, n := range modulePath {
+			parts = append(parts, reUnsafeChar.ReplaceAllString(snake2camel(n), "_"))
+		}
+		res += strings.Join(parts, "_")
+	}
+	res += "_" + reUnsafeChar.ReplaceAllString(name, "_")
+	return res
 }
 
 func funcName(modulePath []string, name string, numArgs int) string {
