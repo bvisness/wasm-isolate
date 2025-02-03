@@ -118,7 +118,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 		return string(asPrimitive)
 	} else if asCons, ok := t.(ocaml.Cons); ok {
 		last := asCons[len(asCons)-1]
-		if last.String() == "Source.phrase" {
+		if last.String() == "phrase" || last.String() == "Source.phrase" {
 			// Temporary™ hack because generics
 			return fmt.Sprintf("*OSource_Phrase[%s]", ocaml2go(asCons[:len(asCons)-1], currentModule))
 		}
@@ -698,8 +698,14 @@ func (p *ocamlParse) parseExpr(
 		if statement {
 			w("%s := ", res)
 		}
-		name := varName(nil, p.s(expr))
+
+		var namespace []string
+		if def, ok := module.Defs[p.s(expr)]; ok {
+			namespace = def.Namespace
+		}
+		name := varName(namespace, p.s(expr))
 		w("%s", name)
+
 		if statement {
 			w("\n")
 			if returnIfTerminal {
