@@ -1056,6 +1056,73 @@ func Types_ModuleT_1(v struct {
 
 type OTypes_subst = func(OTypes_var) OTypes_heap_type
 
+// Not writing type def Value.op because it has unfilled type variables.
+// Not writing type def Value.vecop because it has unfilled type variables.
+type OValue_num = TODO /* I32.t I64.t (kind 3) */
+type OValue_vec = TODO /* V128.t Value.vecop (kind 3) */
+
+type OValue_value_kind int
+
+const (
+	KValue_Num OValue_value_kind = iota + 1
+	KValue_Vec
+	KValue_Ref
+)
+
+type OValue_value interface {
+	Kind() OValue_value_kind
+}
+
+type SimpleOValue_value struct {
+	kind OValue_value_kind
+}
+
+func (t SimpleOValue_value) Kind() OValue_value_kind {
+	return t.kind
+}
+
+type OValue_value_Num struct {
+	V OValue_num
+}
+
+func (t OValue_value_Num) Kind() OValue_value_kind {
+	return KValue_Num
+}
+func Value_Num_1(v OValue_num) OValue_value {
+	return OValue_value_Num{v}
+}
+
+type OValue_value_Vec struct {
+	V OValue_vec
+}
+
+func (t OValue_value_Vec) Kind() OValue_value_kind {
+	return KValue_Vec
+}
+func Value_Vec_1(v OValue_vec) OValue_value {
+	return OValue_value_Vec{v}
+}
+
+type OValue_value_Ref struct {
+	V OValue_ref_
+}
+
+func (t OValue_value_Ref) Kind() OValue_value_kind {
+	return KValue_Ref
+}
+func Value_Ref_1(v OValue_ref_) OValue_value {
+	return OValue_value_Ref{v}
+}
+
+type OValue_t = OValue_value
+type OValue_address = OI64_t
+
+// TODO: Unknown type for definition of type_of_ref': ref_ -> Types.heap_type ref
+
+// TODO: Unknown type for definition of eq_ref': ref_ -> ref_ -> bool ref
+
+// TODO: Unknown type for definition of string_of_ref': ref_ -> string ref
+
 type OPack_pack_size_kind int
 
 const (
@@ -2043,7 +2110,7 @@ func (t SimpleOAst_V128Op_nsplatop) Kind() OAst_V128Op_nsplatop_kind {
 
 var Ast_V128Op_Splat OAst_V128Op_nsplatop = SimpleOAst_V128Op_nsplatop{KAst_V128Op_Splat}
 
-type OAst_V128Op_nextractop = OAst_V128Op_nextractop
+// Not writing type def Ast.V128Op.nextractop because it has unfilled type variables.
 
 type OAst_V128Op_nreplaceop_kind int
 
@@ -2077,27 +2144,27 @@ func Ast_V128Op_Replace_1(v OInt) OAst_V128Op_nreplaceop {
 type OAst_V128Op_splatop = TODO   /* Ast.V128Op.nsplatop Ast.V128Op.nsplatop (kind 3) */
 type OAst_V128Op_extractop = TODO /* Pack.extension Ast.V128Op.nextractop Pack.extension Ast.V128Op.nextractop (kind 3) */
 type OAst_V128Op_replaceop = TODO /* Ast.V128Op.nreplaceop Ast.V128Op.nreplaceop (kind 3) */
-type OAst_testop = TODO           /* I32Op.testop I64Op.testop (kind 3) */
-type OAst_unop = TODO             /* I32Op.unop I64Op.unop (kind 3) */
-type OAst_binop = TODO            /* I32Op.binop I64Op.binop (kind 3) */
-type OAst_relop = TODO            /* I32Op.relop I64Op.relop (kind 3) */
-type OAst_cvtop = TODO            /* I32Op.cvtop I64Op.cvtop (kind 3) */
-type OAst_vec_testop = TODO       /* Ast.testop Value.vecop (kind 3) */
-type OAst_vec_relop = TODO        /* Ast.relop Value.vecop (kind 3) */
-type OAst_vec_unop = TODO         /* Ast.unop Value.vecop (kind 3) */
-type OAst_vec_binop = TODO        /* Ast.binop Value.vecop (kind 3) */
-type OAst_vec_ternop = TODO       /* V128Op.ternop Value.vecop (kind 3) */
-type OAst_vec_cvtop = TODO        /* Ast.cvtop Value.vecop (kind 3) */
-type OAst_vec_shiftop = TODO      /* V128Op.shiftop Value.vecop (kind 3) */
-type OAst_vec_bitmaskop = TODO    /* V128Op.bitmaskop Value.vecop (kind 3) */
-type OAst_vec_vtestop = TODO      /* V128Op.vtestop Value.vecop (kind 3) */
-type OAst_vec_vunop = TODO        /* V128Op.vunop Value.vecop (kind 3) */
-type OAst_vec_vbinop = TODO       /* V128Op.vbinop Value.vecop (kind 3) */
-type OAst_vec_vternop = TODO      /* V128Op.vternop Value.vecop (kind 3) */
-type OAst_vec_splatop = TODO      /* V128Op.splatop Value.vecop (kind 3) */
-type OAst_vec_extractop = TODO    /* V128Op.extractop Value.vecop (kind 3) */
-type OAst_vec_replaceop = TODO    /* V128Op.replaceop Value.vecop (kind 3) */
-type OAst_memop = OUnknownTypeVariable___p
+type OAst_testop = TODO           /* Ast.IntOp.testop Ast.IntOp.testop (kind 3) */
+type OAst_unop = TODO             /* Ast.IntOp.unop Ast.IntOp.unop (kind 3) */
+type OAst_binop = TODO            /* Ast.IntOp.binop Ast.IntOp.binop (kind 3) */
+type OAst_relop = TODO            /* Ast.IntOp.relop Ast.IntOp.relop (kind 3) */
+type OAst_cvtop = TODO            /* Ast.IntOp.cvtop Ast.IntOp.cvtop (kind 3) */
+type OAst_vec_testop = TODO       /* Ast.V128Op.testop Value.vecop (kind 3) */
+type OAst_vec_relop = TODO        /* Ast.V128Op.relop Value.vecop (kind 3) */
+type OAst_vec_unop = TODO         /* Ast.V128Op.unop Value.vecop (kind 3) */
+type OAst_vec_binop = TODO        /* Ast.V128Op.binop Value.vecop (kind 3) */
+type OAst_vec_ternop = TODO       /* Ast.V128Op.ternop Value.vecop (kind 3) */
+type OAst_vec_cvtop = TODO        /* Ast.V128Op.cvtop Value.vecop (kind 3) */
+type OAst_vec_shiftop = TODO      /* Ast.V128Op.shiftop Value.vecop (kind 3) */
+type OAst_vec_bitmaskop = TODO    /* Ast.V128Op.bitmaskop Value.vecop (kind 3) */
+type OAst_vec_vtestop = TODO      /* Ast.V128Op.vtestop Value.vecop (kind 3) */
+type OAst_vec_vunop = TODO        /* Ast.V128Op.vunop Value.vecop (kind 3) */
+type OAst_vec_vbinop = TODO       /* Ast.V128Op.vbinop Value.vecop (kind 3) */
+type OAst_vec_vternop = TODO      /* Ast.V128Op.vternop Value.vecop (kind 3) */
+type OAst_vec_splatop = TODO      /* Ast.V128Op.splatop Value.vecop (kind 3) */
+type OAst_vec_extractop = TODO    /* Ast.V128Op.extractop Value.vecop (kind 3) */
+type OAst_vec_replaceop = TODO    /* Ast.V128Op.replaceop Value.vecop (kind 3) */
+// Not writing type def Ast.memop because it has unfilled type variables.
 type OAst_loadop = TODO      /* Types.num_type Pack.pack_size * Pack.extension option (kind 3) */
 type OAst_storeop = TODO     /* Types.num_type Pack.pack_size option (kind 3) */
 type OAst_vec_loadop = TODO  /* Types.vec_type Pack.pack_size * Pack.vec_extension option (kind 3) */
@@ -3806,42 +3873,42 @@ type OAst_module__ struct {
 
 var Ast_empty_module = nil /* TODO: record_expression */
 func Operators_i32_const_1(_n *OSource_Phrase[OTypes_type_idx]) OAst_instr_ {
-	__tmp1 := Ast_Const_1(_operatorAtAt_2(I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i32_const = Operators_i32_const_1
 
-func Operators_i64_const_1(_n *OSource_Phrase[OInt64]) OAst_instr_ {
-	__tmp1 := Ast_Const_1(_operatorAtAt_2(I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+func Operators_i64_const_1(_n *OSource_Phrase[OValue_address]) OAst_instr_ {
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i64_const = Operators_i64_const_1
 
-func Operators_f32_const_1(_n *OSource_Phrase[float32]) OAst_instr_ {
-	__tmp1 := Ast_Const_1(_operatorAtAt_2(F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+func Operators_f32_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f32_const = Operators_f32_const_1
 
-func Operators_f64_const_1(_n *OSource_Phrase[float64]) OAst_instr_ {
-	__tmp1 := Ast_Const_1(_operatorAtAt_2(F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+func Operators_f64_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f64_const = Operators_f64_const_1
 
-func Operators_v128_const_1(_n *OSource_Phrase[V128]) OAst_instr_ {
-	__tmp1 := Ast_VecConst_1(_operatorAtAt_2(V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+func Operators_v128_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+	__tmp1 := Ast_VecConst_1(_operatorAtAt_2(Value_V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_v128_const = Operators_v128_const_1
 
 func Operators_ref_null_1(_t OTypes_heap_type) OAst_instr_ {
-	__tmp1 := Ast_RefNull_1(_t)
+	__tmp1 := Ast_RefNull_1(Value_t)
 	return __tmp1
 }
 
@@ -3854,7 +3921,7 @@ func Operators_ref_func_1(_x OAst_idx) OAst_instr_ {
 
 var Operators_ref_func = Operators_ref_func_1
 
-func Operators_at_const_0() func(OTypes_addr_type) func(*OSource_Phrase[OInt64]) OAst_instr_ {
+func Operators_at_const_0() func(OTypes_addr_type) func(*OSource_Phrase[OValue_address]) OAst_instr_ {
 	TODO /* unknown expression type function_expression */
 }
 
@@ -3865,7 +3932,7 @@ var Operators_nop = Ast_Nop
 var Operators_drop = Ast_Drop
 
 func Operators_select_1(_t *[]OTypes_val_type) OAst_instr_ {
-	__tmp1 := Ast_Select_1(_t)
+	__tmp1 := Ast_Select_1(Value_t)
 	return __tmp1
 }
 
@@ -4265,7 +4332,7 @@ func Operators_elem_drop_1(_x OAst_idx) OAst_instr_ {
 
 var Operators_elem_drop = Operators_elem_drop_1
 
-func Operators_i32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4273,21 +4340,21 @@ func Operators_i32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ 
 	return __tmp1
 }
 
-func Operators_i32_load_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_load_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_load_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_load_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_load = Operators_i32_load_3
 
-func Operators_i64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4295,21 +4362,21 @@ func Operators_i64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ 
 	return __tmp1
 }
 
-func Operators_i64_load_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load = Operators_i64_load_3
 
-func Operators_f32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f32_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4317,21 +4384,21 @@ func Operators_f32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ 
 	return __tmp1
 }
 
-func Operators_f32_load_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_f32_load_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_f32_load_3(_x, _align, _offset)
 	}
 }
 
-func Operators_f32_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f32_load_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_f32_load_3(_x, _align, _offset)
 	}
 }
 
 var Operators_f32_load = Operators_f32_load_3
 
-func Operators_f64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f64_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4339,21 +4406,21 @@ func Operators_f64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ 
 	return __tmp1
 }
 
-func Operators_f64_load_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_f64_load_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_f64_load_3(_x, _align, _offset)
 	}
 }
 
-func Operators_f64_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f64_load_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_f64_load_3(_x, _align, _offset)
 	}
 }
 
 var Operators_f64_load = Operators_f64_load_3
 
-func Operators_i32_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load8_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4361,21 +4428,21 @@ func Operators_i32_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i32_load8_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_load8_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_load8_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_load8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load8_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_load8_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_load8_s = Operators_i32_load8_s_3
 
-func Operators_i32_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load8_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4383,21 +4450,21 @@ func Operators_i32_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i32_load8_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_load8_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_load8_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_load8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load8_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_load8_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_load8_u = Operators_i32_load8_u_3
 
-func Operators_i32_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load16_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4405,21 +4472,21 @@ func Operators_i32_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i32_load16_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_load16_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_load16_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_load16_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load16_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_load16_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_load16_s = Operators_i32_load16_s_3
 
-func Operators_i32_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load16_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4427,21 +4494,21 @@ func Operators_i32_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i32_load16_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_load16_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_load16_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_load16_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_load16_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_load16_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_load16_u = Operators_i32_load16_u_3
 
-func Operators_i64_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load8_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4449,21 +4516,21 @@ func Operators_i64_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i64_load8_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load8_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load8_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load8_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load8_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load8_s = Operators_i64_load8_s_3
 
-func Operators_i64_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load8_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4471,21 +4538,21 @@ func Operators_i64_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i64_load8_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load8_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load8_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load8_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load8_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load8_u = Operators_i64_load8_u_3
 
-func Operators_i64_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load16_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4493,21 +4560,21 @@ func Operators_i64_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i64_load16_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load16_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load16_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load16_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load16_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load16_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load16_s = Operators_i64_load16_s_3
 
-func Operators_i64_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load16_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4515,21 +4582,21 @@ func Operators_i64_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i64_load16_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load16_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load16_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load16_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load16_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load16_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load16_u = Operators_i64_load16_u_3
 
-func Operators_i64_load32_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load32_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4537,21 +4604,21 @@ func Operators_i64_load32_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i64_load32_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load32_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load32_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load32_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load32_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load32_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load32_s = Operators_i64_load32_s_3
 
-func Operators_i64_load32_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load32_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
@@ -4559,21 +4626,21 @@ func Operators_i64_load32_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_ins
 	return __tmp1
 }
 
-func Operators_i64_load32_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_load32_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_load32_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_load32_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_load32_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_load32_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_load32_u = Operators_i64_load32_u_3
 
-func Operators_i32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4581,21 +4648,21 @@ func Operators_i32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_
 	return __tmp1
 }
 
-func Operators_i32_store_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_store_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_store_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_store_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_store = Operators_i32_store_3
 
-func Operators_i64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4603,21 +4670,21 @@ func Operators_i64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_
 	return __tmp1
 }
 
-func Operators_i64_store_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_store_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_store_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_store_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_store = Operators_i64_store_3
 
-func Operators_f32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f32_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4625,21 +4692,21 @@ func Operators_f32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_
 	return __tmp1
 }
 
-func Operators_f32_store_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_f32_store_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_f32_store_3(_x, _align, _offset)
 	}
 }
 
-func Operators_f32_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f32_store_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_f32_store_3(_x, _align, _offset)
 	}
 }
 
 var Operators_f32_store = Operators_f32_store_3
 
-func Operators_f64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f64_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4647,21 +4714,21 @@ func Operators_f64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_
 	return __tmp1
 }
 
-func Operators_f64_store_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_f64_store_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_f64_store_3(_x, _align, _offset)
 	}
 }
 
-func Operators_f64_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_f64_store_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_f64_store_3(_x, _align, _offset)
 	}
 }
 
 var Operators_f64_store = Operators_f64_store_3
 
-func Operators_i32_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store8_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4669,21 +4736,21 @@ func Operators_i32_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr
 	return __tmp1
 }
 
-func Operators_i32_store8_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_store8_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_store8_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_store8_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store8_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_store8_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_store8 = Operators_i32_store8_3
 
-func Operators_i32_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store16_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4691,21 +4758,21 @@ func Operators_i32_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i32_store16_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i32_store16_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i32_store16_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i32_store16_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i32_store16_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i32_store16_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i32_store16 = Operators_i32_store16_3
 
-func Operators_i64_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store8_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4713,21 +4780,21 @@ func Operators_i64_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr
 	return __tmp1
 }
 
-func Operators_i64_store8_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_store8_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_store8_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_store8_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store8_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_store8_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_store8 = Operators_i64_store8_3
 
-func Operators_i64_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store16_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4735,21 +4802,21 @@ func Operators_i64_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i64_store16_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_store16_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_store16_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_store16_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store16_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_store16_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_store16 = Operators_i64_store16_3
 
-func Operators_i64_store32_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store32_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
@@ -4757,21 +4824,21 @@ func Operators_i64_store32_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_inst
 	return __tmp1
 }
 
-func Operators_i64_store32_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_i64_store32_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_i64_store32_3(_x, _align, _offset)
 	}
 }
 
-func Operators_i64_store32_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_i64_store32_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_i64_store32_3(_x, _align, _offset)
 	}
 }
 
 var Operators_i64_store32 = Operators_i64_store32_3
 
-func Operators_v128_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4779,21 +4846,21 @@ func Operators_v128_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_
 	return __tmp1
 }
 
-func Operators_v128_load_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load = Operators_v128_load_3
 
-func Operators_v128_load8x8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4801,21 +4868,21 @@ func Operators_v128_load8x8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_i
 	return __tmp1
 }
 
-func Operators_v128_load8x8_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8x8_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load8x8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8x8_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load8x8_s = Operators_v128_load8x8_s_3
 
-func Operators_v128_load8x8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4823,21 +4890,21 @@ func Operators_v128_load8x8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_i
 	return __tmp1
 }
 
-func Operators_v128_load8x8_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8x8_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load8x8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8x8_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8x8_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load8x8_u = Operators_v128_load8x8_u_3
 
-func Operators_v128_load16x4_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4845,21 +4912,21 @@ func Operators_v128_load16x4_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_
 	return __tmp1
 }
 
-func Operators_v128_load16x4_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16x4_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load16x4_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16x4_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load16x4_s = Operators_v128_load16x4_s_3
 
-func Operators_v128_load16x4_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4867,21 +4934,21 @@ func Operators_v128_load16x4_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_
 	return __tmp1
 }
 
-func Operators_v128_load16x4_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16x4_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load16x4_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16x4_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16x4_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load16x4_u = Operators_v128_load16x4_u_3
 
-func Operators_v128_load32x2_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_s_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4889,21 +4956,21 @@ func Operators_v128_load32x2_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_
 	return __tmp1
 }
 
-func Operators_v128_load32x2_s_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_s_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32x2_s_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load32x2_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_s_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32x2_s_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load32x2_s = Operators_v128_load32x2_s_3
 
-func Operators_v128_load32x2_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_u_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4911,21 +4978,21 @@ func Operators_v128_load32x2_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_
 	return __tmp1
 }
 
-func Operators_v128_load32x2_u_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_u_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32x2_u_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load32x2_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32x2_u_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32x2_u_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load32x2_u = Operators_v128_load32x2_u_3
 
-func Operators_v128_load8_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8_splat_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4933,21 +5000,21 @@ func Operators_v128_load8_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst
 	return __tmp1
 }
 
-func Operators_v128_load8_splat_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load8_splat_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8_splat_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load8_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load8_splat_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load8_splat_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load8_splat = Operators_v128_load8_splat_3
 
-func Operators_v128_load16_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16_splat_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4955,21 +5022,21 @@ func Operators_v128_load16_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAs
 	return __tmp1
 }
 
-func Operators_v128_load16_splat_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load16_splat_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16_splat_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load16_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load16_splat_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load16_splat_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load16_splat = Operators_v128_load16_splat_3
 
-func Operators_v128_load32_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32_splat_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4977,21 +5044,21 @@ func Operators_v128_load32_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAs
 	return __tmp1
 }
 
-func Operators_v128_load32_splat_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load32_splat_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32_splat_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load32_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32_splat_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32_splat_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load32_splat = Operators_v128_load32_splat_3
 
-func Operators_v128_load64_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load64_splat_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -4999,21 +5066,21 @@ func Operators_v128_load64_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAs
 	return __tmp1
 }
 
-func Operators_v128_load64_splat_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load64_splat_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load64_splat_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load64_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load64_splat_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load64_splat_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load64_splat = Operators_v128_load64_splat_3
 
-func Operators_v128_load32_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32_zero_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -5021,21 +5088,21 @@ func Operators_v128_load32_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst
 	return __tmp1
 }
 
-func Operators_v128_load32_zero_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load32_zero_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32_zero_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load32_zero_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load32_zero_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load32_zero_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load32_zero = Operators_v128_load32_zero_3
 
-func Operators_v128_load64_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load64_zero_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
@@ -5043,21 +5110,21 @@ func Operators_v128_load64_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst
 	return __tmp1
 }
 
-func Operators_v128_load64_zero_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_load64_zero_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_load64_zero_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_load64_zero_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_load64_zero_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_load64_zero_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_load64_zero = Operators_v128_load64_zero_3
 
-func Operators_v128_load8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load8_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5066,27 +5133,27 @@ func Operators_v128_load8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OI
 	return __tmp1
 }
 
-func Operators_v128_load8_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_load8_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_load8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load8_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load8_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load8_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load8_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_load8_lane = Operators_v128_load8_lane_4
 
-func Operators_v128_load16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load16_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5095,27 +5162,27 @@ func Operators_v128_load16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i O
 	return __tmp1
 }
 
-func Operators_v128_load16_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_load16_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_load16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load16_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load16_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load16_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load16_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_load16_lane = Operators_v128_load16_lane_4
 
-func Operators_v128_load32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load32_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5124,27 +5191,27 @@ func Operators_v128_load32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i O
 	return __tmp1
 }
 
-func Operators_v128_load32_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_load32_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_load32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load32_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load32_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load32_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load32_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_load32_lane = Operators_v128_load32_lane_4
 
-func Operators_v128_load64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load64_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5153,27 +5220,27 @@ func Operators_v128_load64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i O
 	return __tmp1
 }
 
-func Operators_v128_load64_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_load64_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_load64_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load64_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load64_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load64_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_load64_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_load64_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_load64_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_load64_lane = Operators_v128_load64_lane_4
 
-func Operators_v128_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst_instr_ {
 	__tmp1 := Ast_VecStore_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_storeop
@@ -5181,21 +5248,21 @@ func Operators_v128_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr
 	return __tmp1
 }
 
-func Operators_v128_store_2(_x OAst_idx, _align OInt) func(_offset OInt64) OAst_instr_ {
-	return func(_offset OInt64) OAst_instr_ {
+func Operators_v128_store_2(_x OAst_idx, _align OInt) func(_offset OValue_address) OAst_instr_ {
+	return func(_offset OValue_address) OAst_instr_ {
 		return Operators_v128_store_3(_x, _align, _offset)
 	}
 }
 
-func Operators_v128_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_instr_ {
-	return func(_align OInt, _offset OInt64) OAst_instr_ {
+func Operators_v128_store_1(_x OAst_idx) func(_align OInt, _offset OValue_address) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address) OAst_instr_ {
 		return Operators_v128_store_3(_x, _align, _offset)
 	}
 }
 
 var Operators_v128_store = Operators_v128_store_3
 
-func Operators_v128_store8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store8_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5204,27 +5271,27 @@ func Operators_v128_store8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i O
 	return __tmp1
 }
 
-func Operators_v128_store8_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_store8_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_store8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store8_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store8_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store8_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store8_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store8_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_store8_lane = Operators_v128_store8_lane_4
 
-func Operators_v128_store16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store16_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5233,27 +5300,27 @@ func Operators_v128_store16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i 
 	return __tmp1
 }
 
-func Operators_v128_store16_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_store16_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_store16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store16_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store16_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store16_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store16_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store16_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_store16_lane = Operators_v128_store16_lane_4
 
-func Operators_v128_store32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store32_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5262,27 +5329,27 @@ func Operators_v128_store32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i 
 	return __tmp1
 }
 
-func Operators_v128_store32_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_store32_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_store32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store32_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store32_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store32_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store32_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store32_lane_4(_x, _align, _offset, _i)
 	}
 }
 
 var Operators_v128_store32_lane = Operators_v128_store32_lane_4
 
-func Operators_v128_store64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store64_lane_4(_x OAst_idx, _align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
@@ -5291,20 +5358,20 @@ func Operators_v128_store64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i 
 	return __tmp1
 }
 
-func Operators_v128_store64_lane_3(_x OAst_idx, _align OInt, _offset OInt64) func(_i OInt) OAst_instr_ {
+func Operators_v128_store64_lane_3(_x OAst_idx, _align OInt, _offset OValue_address) func(_i OInt) OAst_instr_ {
 	return func(_i OInt) OAst_instr_ {
 		return Operators_v128_store64_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store64_lane_2(_x OAst_idx, _align OInt) func(_offset OInt64, _i OInt) OAst_instr_ {
-	return func(_offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store64_lane_2(_x OAst_idx, _align OInt) func(_offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store64_lane_4(_x, _align, _offset, _i)
 	}
 }
 
-func Operators_v128_store64_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	return func(_align OInt, _offset OInt64, _i OInt) OAst_instr_ {
+func Operators_v128_store64_lane_1(_x OAst_idx) func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
+	return func(_align OInt, _offset OValue_address, _i OInt) OAst_instr_ {
 		return Operators_v128_store64_lane_4(_x, _align, _offset, _i)
 	}
 }
@@ -5375,14 +5442,14 @@ var Operators_ref_is_null = Ast_RefIsNull
 var Operators_ref_as_non_null = Ast_RefAsNonNull
 
 func Operators_ref_test_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Ast_RefTest_1(_t)
+	__tmp1 := Ast_RefTest_1(Value_t)
 	return __tmp1
 }
 
 var Operators_ref_test = Operators_ref_test_1
 
 func Operators_ref_cast_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Ast_RefCast_1(_t)
+	__tmp1 := Ast_RefCast_1(Value_t)
 	return __tmp1
 }
 
@@ -5644,164 +5711,164 @@ var Operators_array_init_elem = Operators_array_init_elem_2
 
 var Operators_any_convert_extern = Ast_ExternConvert_1(Ast_Internalize)
 var Operators_extern_convert_any = Ast_ExternConvert_1(Ast_Externalize)
-var Operators_i32_clz = Ast_Unary_1(I32_1( /*I32Op.*/ _Clz))
-var Operators_i32_ctz = Ast_Unary_1(I32_1( /*I32Op.*/ _Ctz))
-var Operators_i32_popcnt = Ast_Unary_1(I32_1( /*I32Op.*/ _Popcnt))
-var Operators_i64_clz = Ast_Unary_1(I64_1( /*I64Op.*/ _Clz))
-var Operators_i64_ctz = Ast_Unary_1(I64_1( /*I64Op.*/ _Ctz))
-var Operators_i64_popcnt = Ast_Unary_1(I64_1( /*I64Op.*/ _Popcnt))
-var Operators_f32_neg = Ast_Unary_1(F32_1( /*F32Op.*/ _Neg))
-var Operators_f32_abs = Ast_Unary_1(F32_1( /*F32Op.*/ _Abs))
-var Operators_f32_sqrt = Ast_Unary_1(F32_1( /*F32Op.*/ _Sqrt))
-var Operators_f32_ceil = Ast_Unary_1(F32_1( /*F32Op.*/ _Ceil))
-var Operators_f32_floor = Ast_Unary_1(F32_1( /*F32Op.*/ _Floor))
-var Operators_f32_trunc = Ast_Unary_1(F32_1( /*F32Op.*/ _Trunc))
-var Operators_f32_nearest = Ast_Unary_1(F32_1( /*F32Op.*/ _Nearest))
-var Operators_f64_neg = Ast_Unary_1(F64_1( /*F64Op.*/ _Neg))
-var Operators_f64_abs = Ast_Unary_1(F64_1( /*F64Op.*/ _Abs))
-var Operators_f64_sqrt = Ast_Unary_1(F64_1( /*F64Op.*/ _Sqrt))
-var Operators_f64_ceil = Ast_Unary_1(F64_1( /*F64Op.*/ _Ceil))
-var Operators_f64_floor = Ast_Unary_1(F64_1( /*F64Op.*/ _Floor))
-var Operators_f64_trunc = Ast_Unary_1(F64_1( /*F64Op.*/ _Trunc))
-var Operators_f64_nearest = Ast_Unary_1(F64_1( /*F64Op.*/ _Nearest))
-var Operators_i32_add = Ast_Binary_1(I32_1( /*I32Op.*/ _Add))
-var Operators_i32_sub = Ast_Binary_1(I32_1( /*I32Op.*/ _Sub))
-var Operators_i32_mul = Ast_Binary_1(I32_1( /*I32Op.*/ _Mul))
-var Operators_i32_div_s = Ast_Binary_1(I32_1( /*I32Op.*/ _DivS))
-var Operators_i32_div_u = Ast_Binary_1(I32_1( /*I32Op.*/ _DivU))
-var Operators_i32_rem_s = Ast_Binary_1(I32_1( /*I32Op.*/ _RemS))
-var Operators_i32_rem_u = Ast_Binary_1(I32_1( /*I32Op.*/ _RemU))
-var Operators_i32_and = Ast_Binary_1(I32_1( /*I32Op.*/ _And))
-var Operators_i32_or = Ast_Binary_1(I32_1( /*I32Op.*/ _Or))
-var Operators_i32_xor = Ast_Binary_1(I32_1( /*I32Op.*/ _Xor))
-var Operators_i32_shl = Ast_Binary_1(I32_1( /*I32Op.*/ _Shl))
-var Operators_i32_shr_s = Ast_Binary_1(I32_1( /*I32Op.*/ _ShrS))
-var Operators_i32_shr_u = Ast_Binary_1(I32_1( /*I32Op.*/ _ShrU))
-var Operators_i32_rotl = Ast_Binary_1(I32_1( /*I32Op.*/ _Rotl))
-var Operators_i32_rotr = Ast_Binary_1(I32_1( /*I32Op.*/ _Rotr))
-var Operators_i64_add = Ast_Binary_1(I64_1( /*I64Op.*/ _Add))
-var Operators_i64_sub = Ast_Binary_1(I64_1( /*I64Op.*/ _Sub))
-var Operators_i64_mul = Ast_Binary_1(I64_1( /*I64Op.*/ _Mul))
-var Operators_i64_div_s = Ast_Binary_1(I64_1( /*I64Op.*/ _DivS))
-var Operators_i64_div_u = Ast_Binary_1(I64_1( /*I64Op.*/ _DivU))
-var Operators_i64_rem_s = Ast_Binary_1(I64_1( /*I64Op.*/ _RemS))
-var Operators_i64_rem_u = Ast_Binary_1(I64_1( /*I64Op.*/ _RemU))
-var Operators_i64_and = Ast_Binary_1(I64_1( /*I64Op.*/ _And))
-var Operators_i64_or = Ast_Binary_1(I64_1( /*I64Op.*/ _Or))
-var Operators_i64_xor = Ast_Binary_1(I64_1( /*I64Op.*/ _Xor))
-var Operators_i64_shl = Ast_Binary_1(I64_1( /*I64Op.*/ _Shl))
-var Operators_i64_shr_s = Ast_Binary_1(I64_1( /*I64Op.*/ _ShrS))
-var Operators_i64_shr_u = Ast_Binary_1(I64_1( /*I64Op.*/ _ShrU))
-var Operators_i64_rotl = Ast_Binary_1(I64_1( /*I64Op.*/ _Rotl))
-var Operators_i64_rotr = Ast_Binary_1(I64_1( /*I64Op.*/ _Rotr))
-var Operators_f32_add = Ast_Binary_1(F32_1( /*F32Op.*/ _Add))
-var Operators_f32_sub = Ast_Binary_1(F32_1( /*F32Op.*/ _Sub))
-var Operators_f32_mul = Ast_Binary_1(F32_1( /*F32Op.*/ _Mul))
-var Operators_f32_div = Ast_Binary_1(F32_1( /*F32Op.*/ _Div))
-var Operators_f32_min = Ast_Binary_1(F32_1( /*F32Op.*/ _Min))
-var Operators_f32_max = Ast_Binary_1(F32_1( /*F32Op.*/ _Max))
-var Operators_f32_copysign = Ast_Binary_1(F32_1( /*F32Op.*/ _CopySign))
-var Operators_f64_add = Ast_Binary_1(F64_1( /*F64Op.*/ _Add))
-var Operators_f64_sub = Ast_Binary_1(F64_1( /*F64Op.*/ _Sub))
-var Operators_f64_mul = Ast_Binary_1(F64_1( /*F64Op.*/ _Mul))
-var Operators_f64_div = Ast_Binary_1(F64_1( /*F64Op.*/ _Div))
-var Operators_f64_min = Ast_Binary_1(F64_1( /*F64Op.*/ _Min))
-var Operators_f64_max = Ast_Binary_1(F64_1( /*F64Op.*/ _Max))
-var Operators_f64_copysign = Ast_Binary_1(F64_1( /*F64Op.*/ _CopySign))
-var Operators_i32_eqz = Ast_Test_1(I32_1( /*I32Op.*/ _Eqz))
-var Operators_i64_eqz = Ast_Test_1(I64_1( /*I64Op.*/ _Eqz))
-var Operators_i32_eq = Ast_Compare_1(I32_1( /*I32Op.*/ _Eq))
-var Operators_i32_ne = Ast_Compare_1(I32_1( /*I32Op.*/ _Ne))
-var Operators_i32_lt_s = Ast_Compare_1(I32_1( /*I32Op.*/ _LtS))
-var Operators_i32_lt_u = Ast_Compare_1(I32_1( /*I32Op.*/ _LtU))
-var Operators_i32_le_s = Ast_Compare_1(I32_1( /*I32Op.*/ _LeS))
-var Operators_i32_le_u = Ast_Compare_1(I32_1( /*I32Op.*/ _LeU))
-var Operators_i32_gt_s = Ast_Compare_1(I32_1( /*I32Op.*/ _GtS))
-var Operators_i32_gt_u = Ast_Compare_1(I32_1( /*I32Op.*/ _GtU))
-var Operators_i32_ge_s = Ast_Compare_1(I32_1( /*I32Op.*/ _GeS))
-var Operators_i32_ge_u = Ast_Compare_1(I32_1( /*I32Op.*/ _GeU))
-var Operators_i64_eq = Ast_Compare_1(I64_1( /*I64Op.*/ _Eq))
-var Operators_i64_ne = Ast_Compare_1(I64_1( /*I64Op.*/ _Ne))
-var Operators_i64_lt_s = Ast_Compare_1(I64_1( /*I64Op.*/ _LtS))
-var Operators_i64_lt_u = Ast_Compare_1(I64_1( /*I64Op.*/ _LtU))
-var Operators_i64_le_s = Ast_Compare_1(I64_1( /*I64Op.*/ _LeS))
-var Operators_i64_le_u = Ast_Compare_1(I64_1( /*I64Op.*/ _LeU))
-var Operators_i64_gt_s = Ast_Compare_1(I64_1( /*I64Op.*/ _GtS))
-var Operators_i64_gt_u = Ast_Compare_1(I64_1( /*I64Op.*/ _GtU))
-var Operators_i64_ge_s = Ast_Compare_1(I64_1( /*I64Op.*/ _GeS))
-var Operators_i64_ge_u = Ast_Compare_1(I64_1( /*I64Op.*/ _GeU))
-var Operators_f32_eq = Ast_Compare_1(F32_1( /*F32Op.*/ _Eq))
-var Operators_f32_ne = Ast_Compare_1(F32_1( /*F32Op.*/ _Ne))
-var Operators_f32_lt = Ast_Compare_1(F32_1( /*F32Op.*/ _Lt))
-var Operators_f32_le = Ast_Compare_1(F32_1( /*F32Op.*/ _Le))
-var Operators_f32_gt = Ast_Compare_1(F32_1( /*F32Op.*/ _Gt))
-var Operators_f32_ge = Ast_Compare_1(F32_1( /*F32Op.*/ _Ge))
-var Operators_f64_eq = Ast_Compare_1(F64_1( /*F64Op.*/ _Eq))
-var Operators_f64_ne = Ast_Compare_1(F64_1( /*F64Op.*/ _Ne))
-var Operators_f64_lt = Ast_Compare_1(F64_1( /*F64Op.*/ _Lt))
-var Operators_f64_le = Ast_Compare_1(F64_1( /*F64Op.*/ _Le))
-var Operators_f64_gt = Ast_Compare_1(F64_1( /*F64Op.*/ _Gt))
-var Operators_f64_ge = Ast_Compare_1(F64_1( /*F64Op.*/ _Ge))
-var Operators_i32_extend8_s = Ast_Unary_1(I32_1(I32Op_ExtendS_1(Pack_Pack8)))
-var Operators_i32_extend16_s = Ast_Unary_1(I32_1(I32Op_ExtendS_1(Pack_Pack16)))
-var Operators_i64_extend8_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(Pack_Pack8)))
-var Operators_i64_extend16_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(Pack_Pack16)))
-var Operators_i64_extend32_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(Pack_Pack32)))
-var Operators_i32_wrap_i64 = Ast_Convert_1(I32_1( /*I32Op.*/ _WrapI64))
-var Operators_i32_trunc_f32_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSF32))
-var Operators_i32_trunc_f32_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncUF32))
-var Operators_i32_trunc_f64_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSF64))
-var Operators_i32_trunc_f64_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncUF64))
-var Operators_i32_trunc_sat_f32_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatSF32))
-var Operators_i32_trunc_sat_f32_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatUF32))
-var Operators_i32_trunc_sat_f64_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatSF64))
-var Operators_i32_trunc_sat_f64_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatUF64))
-var Operators_i64_extend_i32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _ExtendSI32))
-var Operators_i64_extend_i32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _ExtendUI32))
-var Operators_i64_trunc_f32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSF32))
-var Operators_i64_trunc_f32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncUF32))
-var Operators_i64_trunc_f64_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSF64))
-var Operators_i64_trunc_f64_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncUF64))
-var Operators_f32_convert_i32_s = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertSI32))
-var Operators_f32_convert_i32_u = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertUI32))
-var Operators_f32_convert_i64_s = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertSI64))
-var Operators_f32_convert_i64_u = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertUI64))
-var Operators_i64_trunc_sat_f32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatSF32))
-var Operators_i64_trunc_sat_f32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatUF32))
-var Operators_i64_trunc_sat_f64_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatSF64))
-var Operators_i64_trunc_sat_f64_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatUF64))
-var Operators_f32_demote_f64 = Ast_Convert_1(F32_1( /*F32Op.*/ _DemoteF64))
-var Operators_f64_convert_i32_s = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertSI32))
-var Operators_f64_convert_i32_u = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertUI32))
-var Operators_f64_convert_i64_s = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertSI64))
-var Operators_f64_convert_i64_u = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertUI64))
-var Operators_f64_promote_f32 = Ast_Convert_1(F64_1( /*F64Op.*/ _PromoteF32))
-var Operators_i32_reinterpret_f32 = Ast_Convert_1(I32_1( /*I32Op.*/ _ReinterpretFloat))
-var Operators_i64_reinterpret_f64 = Ast_Convert_1(I64_1( /*I64Op.*/ _ReinterpretFloat))
-var Operators_f32_reinterpret_i32 = Ast_Convert_1(F32_1( /*F32Op.*/ _ReinterpretInt))
-var Operators_f64_reinterpret_i64 = Ast_Convert_1(F64_1( /*F64Op.*/ _ReinterpretInt))
-var Operators_v128_not = Ast_VecUnaryBits_1(V128_1( /*V128Op.*/ _Not))
-var Operators_v128_and = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _And))
-var Operators_v128_andnot = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _AndNot))
-var Operators_v128_or = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _Or))
-var Operators_v128_xor = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _Xor))
-var Operators_v128_bitselect = Ast_VecTernaryBits_1(V128_1( /*V128Op.*/ _Bitselect))
-var Operators_v128_any_true = Ast_VecTestBits_1(V128_1( /*V128Op.*/ _AnyTrue))
-var Operators_i8x16_swizzle = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Swizzle)))
+var Operators_i32_clz = Ast_Unary_1(Value_I32_1( /*I32Op.*/ _Clz))
+var Operators_i32_ctz = Ast_Unary_1(Value_I32_1( /*I32Op.*/ _Ctz))
+var Operators_i32_popcnt = Ast_Unary_1(Value_I32_1( /*I32Op.*/ _Popcnt))
+var Operators_i64_clz = Ast_Unary_1(Value_I64_1( /*I64Op.*/ _Clz))
+var Operators_i64_ctz = Ast_Unary_1(Value_I64_1( /*I64Op.*/ _Ctz))
+var Operators_i64_popcnt = Ast_Unary_1(Value_I64_1( /*I64Op.*/ _Popcnt))
+var Operators_f32_neg = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Neg))
+var Operators_f32_abs = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Abs))
+var Operators_f32_sqrt = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Sqrt))
+var Operators_f32_ceil = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Ceil))
+var Operators_f32_floor = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Floor))
+var Operators_f32_trunc = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Trunc))
+var Operators_f32_nearest = Ast_Unary_1(Value_F32_1( /*F32Op.*/ _Nearest))
+var Operators_f64_neg = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Neg))
+var Operators_f64_abs = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Abs))
+var Operators_f64_sqrt = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Sqrt))
+var Operators_f64_ceil = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Ceil))
+var Operators_f64_floor = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Floor))
+var Operators_f64_trunc = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Trunc))
+var Operators_f64_nearest = Ast_Unary_1(Value_F64_1( /*F64Op.*/ _Nearest))
+var Operators_i32_add = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Add))
+var Operators_i32_sub = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Sub))
+var Operators_i32_mul = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Mul))
+var Operators_i32_div_s = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _DivS))
+var Operators_i32_div_u = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _DivU))
+var Operators_i32_rem_s = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _RemS))
+var Operators_i32_rem_u = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _RemU))
+var Operators_i32_and = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _And))
+var Operators_i32_or = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Or))
+var Operators_i32_xor = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Xor))
+var Operators_i32_shl = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Shl))
+var Operators_i32_shr_s = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _ShrS))
+var Operators_i32_shr_u = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _ShrU))
+var Operators_i32_rotl = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Rotl))
+var Operators_i32_rotr = Ast_Binary_1(Value_I32_1( /*I32Op.*/ _Rotr))
+var Operators_i64_add = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Add))
+var Operators_i64_sub = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Sub))
+var Operators_i64_mul = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Mul))
+var Operators_i64_div_s = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _DivS))
+var Operators_i64_div_u = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _DivU))
+var Operators_i64_rem_s = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _RemS))
+var Operators_i64_rem_u = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _RemU))
+var Operators_i64_and = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _And))
+var Operators_i64_or = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Or))
+var Operators_i64_xor = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Xor))
+var Operators_i64_shl = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Shl))
+var Operators_i64_shr_s = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _ShrS))
+var Operators_i64_shr_u = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _ShrU))
+var Operators_i64_rotl = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Rotl))
+var Operators_i64_rotr = Ast_Binary_1(Value_I64_1( /*I64Op.*/ _Rotr))
+var Operators_f32_add = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Add))
+var Operators_f32_sub = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Sub))
+var Operators_f32_mul = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Mul))
+var Operators_f32_div = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Div))
+var Operators_f32_min = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Min))
+var Operators_f32_max = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _Max))
+var Operators_f32_copysign = Ast_Binary_1(Value_F32_1( /*F32Op.*/ _CopySign))
+var Operators_f64_add = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Add))
+var Operators_f64_sub = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Sub))
+var Operators_f64_mul = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Mul))
+var Operators_f64_div = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Div))
+var Operators_f64_min = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Min))
+var Operators_f64_max = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _Max))
+var Operators_f64_copysign = Ast_Binary_1(Value_F64_1( /*F64Op.*/ _CopySign))
+var Operators_i32_eqz = Ast_Test_1(Value_I32_1( /*I32Op.*/ _Eqz))
+var Operators_i64_eqz = Ast_Test_1(Value_I64_1( /*I64Op.*/ _Eqz))
+var Operators_i32_eq = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _Eq))
+var Operators_i32_ne = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _Ne))
+var Operators_i32_lt_s = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _LtS))
+var Operators_i32_lt_u = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _LtU))
+var Operators_i32_le_s = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _LeS))
+var Operators_i32_le_u = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _LeU))
+var Operators_i32_gt_s = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _GtS))
+var Operators_i32_gt_u = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _GtU))
+var Operators_i32_ge_s = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _GeS))
+var Operators_i32_ge_u = Ast_Compare_1(Value_I32_1( /*I32Op.*/ _GeU))
+var Operators_i64_eq = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _Eq))
+var Operators_i64_ne = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _Ne))
+var Operators_i64_lt_s = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _LtS))
+var Operators_i64_lt_u = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _LtU))
+var Operators_i64_le_s = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _LeS))
+var Operators_i64_le_u = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _LeU))
+var Operators_i64_gt_s = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _GtS))
+var Operators_i64_gt_u = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _GtU))
+var Operators_i64_ge_s = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _GeS))
+var Operators_i64_ge_u = Ast_Compare_1(Value_I64_1( /*I64Op.*/ _GeU))
+var Operators_f32_eq = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Eq))
+var Operators_f32_ne = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Ne))
+var Operators_f32_lt = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Lt))
+var Operators_f32_le = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Le))
+var Operators_f32_gt = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Gt))
+var Operators_f32_ge = Ast_Compare_1(Value_F32_1( /*F32Op.*/ _Ge))
+var Operators_f64_eq = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Eq))
+var Operators_f64_ne = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Ne))
+var Operators_f64_lt = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Lt))
+var Operators_f64_le = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Le))
+var Operators_f64_gt = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Gt))
+var Operators_f64_ge = Ast_Compare_1(Value_F64_1( /*F64Op.*/ _Ge))
+var Operators_i32_extend8_s = Ast_Unary_1(Value_I32_1(I32Op_ExtendS_1(Pack_Pack8)))
+var Operators_i32_extend16_s = Ast_Unary_1(Value_I32_1(I32Op_ExtendS_1(Pack_Pack16)))
+var Operators_i64_extend8_s = Ast_Unary_1(Value_I64_1(I64Op_ExtendS_1(Pack_Pack8)))
+var Operators_i64_extend16_s = Ast_Unary_1(Value_I64_1(I64Op_ExtendS_1(Pack_Pack16)))
+var Operators_i64_extend32_s = Ast_Unary_1(Value_I64_1(I64Op_ExtendS_1(Pack_Pack32)))
+var Operators_i32_wrap_i64 = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _WrapI64))
+var Operators_i32_trunc_f32_s = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSF32))
+var Operators_i32_trunc_f32_u = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncUF32))
+var Operators_i32_trunc_f64_s = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSF64))
+var Operators_i32_trunc_f64_u = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncUF64))
+var Operators_i32_trunc_sat_f32_s = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSatSF32))
+var Operators_i32_trunc_sat_f32_u = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSatUF32))
+var Operators_i32_trunc_sat_f64_s = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSatSF64))
+var Operators_i32_trunc_sat_f64_u = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _TruncSatUF64))
+var Operators_i64_extend_i32_s = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _ExtendSI32))
+var Operators_i64_extend_i32_u = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _ExtendUI32))
+var Operators_i64_trunc_f32_s = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSF32))
+var Operators_i64_trunc_f32_u = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncUF32))
+var Operators_i64_trunc_f64_s = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSF64))
+var Operators_i64_trunc_f64_u = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncUF64))
+var Operators_f32_convert_i32_s = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _ConvertSI32))
+var Operators_f32_convert_i32_u = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _ConvertUI32))
+var Operators_f32_convert_i64_s = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _ConvertSI64))
+var Operators_f32_convert_i64_u = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _ConvertUI64))
+var Operators_i64_trunc_sat_f32_s = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSatSF32))
+var Operators_i64_trunc_sat_f32_u = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSatUF32))
+var Operators_i64_trunc_sat_f64_s = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSatSF64))
+var Operators_i64_trunc_sat_f64_u = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _TruncSatUF64))
+var Operators_f32_demote_f64 = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _DemoteF64))
+var Operators_f64_convert_i32_s = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _ConvertSI32))
+var Operators_f64_convert_i32_u = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _ConvertUI32))
+var Operators_f64_convert_i64_s = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _ConvertSI64))
+var Operators_f64_convert_i64_u = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _ConvertUI64))
+var Operators_f64_promote_f32 = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _PromoteF32))
+var Operators_i32_reinterpret_f32 = Ast_Convert_1(Value_I32_1( /*I32Op.*/ _ReinterpretFloat))
+var Operators_i64_reinterpret_f64 = Ast_Convert_1(Value_I64_1( /*I64Op.*/ _ReinterpretFloat))
+var Operators_f32_reinterpret_i32 = Ast_Convert_1(Value_F32_1( /*F32Op.*/ _ReinterpretInt))
+var Operators_f64_reinterpret_i64 = Ast_Convert_1(Value_F64_1( /*F64Op.*/ _ReinterpretInt))
+var Operators_v128_not = Ast_VecUnaryBits_1(Value_V128_1( /*V128Op.*/ _Not))
+var Operators_v128_and = Ast_VecBinaryBits_1(Value_V128_1( /*V128Op.*/ _And))
+var Operators_v128_andnot = Ast_VecBinaryBits_1(Value_V128_1( /*V128Op.*/ _AndNot))
+var Operators_v128_or = Ast_VecBinaryBits_1(Value_V128_1( /*V128Op.*/ _Or))
+var Operators_v128_xor = Ast_VecBinaryBits_1(Value_V128_1( /*V128Op.*/ _Xor))
+var Operators_v128_bitselect = Ast_VecTernaryBits_1(Value_V128_1( /*V128Op.*/ _Bitselect))
+var Operators_v128_any_true = Ast_VecTestBits_1(Value_V128_1( /*V128Op.*/ _AnyTrue))
+var Operators_i8x16_swizzle = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Swizzle)))
 
 func Operators_i8x16_shuffle_1(_is []OInt) OAst_instr_ {
-	__tmp1 := Ast_VecBinary_1(V128_1(I8x16_1(V128Op_Shuffle_1(_is))))
+	__tmp1 := Ast_VecBinary_1(Value_V128_1(I8x16_1(V128Op_Shuffle_1(_is))))
 	return __tmp1
 }
 
 var Operators_i8x16_shuffle = Operators_i8x16_shuffle_1
 
-var Operators_i8x16_splat = Ast_VecSplat_1(V128_1(I8x16_1( /*V128Op.*/ _Splat)))
+var Operators_i8x16_splat = Ast_VecSplat_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Splat)))
 
 func Operators_i8x16_extract_lane_s_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I8x16_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I8x16_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, Pack_SX}))))
 	return __tmp1
 }
@@ -5809,9 +5876,9 @@ func Operators_i8x16_extract_lane_s_1(_i OInt) OAst_instr_ {
 var Operators_i8x16_extract_lane_s = Operators_i8x16_extract_lane_s_1
 
 func Operators_i8x16_extract_lane_u_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I8x16_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I8x16_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, Pack_ZX}))))
 	return __tmp1
 }
@@ -5819,53 +5886,53 @@ func Operators_i8x16_extract_lane_u_1(_i OInt) OAst_instr_ {
 var Operators_i8x16_extract_lane_u = Operators_i8x16_extract_lane_u_1
 
 func Operators_i8x16_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(I8x16_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(I8x16_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i8x16_replace_lane = Operators_i8x16_replace_lane_1
 
-var Operators_i8x16_eq = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _Eq)))
-var Operators_i8x16_ne = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _Ne)))
-var Operators_i8x16_lt_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LtS)))
-var Operators_i8x16_lt_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LtU)))
-var Operators_i8x16_le_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LeS)))
-var Operators_i8x16_le_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LeU)))
-var Operators_i8x16_gt_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GtS)))
-var Operators_i8x16_gt_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GtU)))
-var Operators_i8x16_ge_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GeS)))
-var Operators_i8x16_ge_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GeU)))
-var Operators_i8x16_neg = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Neg)))
-var Operators_i8x16_bitmask = Ast_VecBitmask_1(V128_1(I8x16_1( /*V128Op.*/ _Bitmask)))
-var Operators_i8x16_all_true = Ast_VecTest_1(V128_1(I8x16_1( /*V128Op.*/ _AllTrue)))
-var Operators_i8x16_narrow_i16x8_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _NarrowS)))
-var Operators_i8x16_narrow_i16x8_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _NarrowU)))
-var Operators_i16x8_extend_low_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i16x8_extend_high_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i16x8_extend_low_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i16x8_extend_high_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i8x16_shl = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _Shl)))
-var Operators_i8x16_shr_s = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _ShrS)))
-var Operators_i8x16_shr_u = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _ShrU)))
-var Operators_i8x16_add = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Add)))
-var Operators_i8x16_add_sat_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AddSatS)))
-var Operators_i8x16_add_sat_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AddSatU)))
-var Operators_i8x16_sub = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Sub)))
-var Operators_i8x16_sub_sat_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _SubSatS)))
-var Operators_i8x16_sub_sat_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _SubSatU)))
-var Operators_i8x16_abs = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Abs)))
-var Operators_i8x16_popcnt = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Popcnt)))
-var Operators_i8x16_min_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MinS)))
-var Operators_i8x16_min_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MinU)))
-var Operators_i8x16_max_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MaxS)))
-var Operators_i8x16_max_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MaxU)))
-var Operators_i8x16_avgr_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AvgrU)))
-var Operators_i16x8_splat = Ast_VecSplat_1(V128_1(I16x8_1( /*V128Op.*/ _Splat)))
+var Operators_i8x16_eq = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Eq)))
+var Operators_i8x16_ne = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Ne)))
+var Operators_i8x16_lt_s = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _LtS)))
+var Operators_i8x16_lt_u = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _LtU)))
+var Operators_i8x16_le_s = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _LeS)))
+var Operators_i8x16_le_u = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _LeU)))
+var Operators_i8x16_gt_s = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _GtS)))
+var Operators_i8x16_gt_u = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _GtU)))
+var Operators_i8x16_ge_s = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _GeS)))
+var Operators_i8x16_ge_u = Ast_VecCompare_1(Value_V128_1(I8x16_1( /*V128Op.*/ _GeU)))
+var Operators_i8x16_neg = Ast_VecUnary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Neg)))
+var Operators_i8x16_bitmask = Ast_VecBitmask_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Bitmask)))
+var Operators_i8x16_all_true = Ast_VecTest_1(Value_V128_1(I8x16_1( /*V128Op.*/ _AllTrue)))
+var Operators_i8x16_narrow_i16x8_s = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _NarrowS)))
+var Operators_i8x16_narrow_i16x8_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _NarrowU)))
+var Operators_i16x8_extend_low_i8x16_s = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i16x8_extend_high_i8x16_s = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i16x8_extend_low_i8x16_u = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i16x8_extend_high_i8x16_u = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i8x16_shl = Ast_VecShift_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Shl)))
+var Operators_i8x16_shr_s = Ast_VecShift_1(Value_V128_1(I8x16_1( /*V128Op.*/ _ShrS)))
+var Operators_i8x16_shr_u = Ast_VecShift_1(Value_V128_1(I8x16_1( /*V128Op.*/ _ShrU)))
+var Operators_i8x16_add = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Add)))
+var Operators_i8x16_add_sat_s = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _AddSatS)))
+var Operators_i8x16_add_sat_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _AddSatU)))
+var Operators_i8x16_sub = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Sub)))
+var Operators_i8x16_sub_sat_s = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _SubSatS)))
+var Operators_i8x16_sub_sat_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _SubSatU)))
+var Operators_i8x16_abs = Ast_VecUnary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Abs)))
+var Operators_i8x16_popcnt = Ast_VecUnary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _Popcnt)))
+var Operators_i8x16_min_s = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _MinS)))
+var Operators_i8x16_min_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _MinU)))
+var Operators_i8x16_max_s = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _MaxS)))
+var Operators_i8x16_max_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _MaxU)))
+var Operators_i8x16_avgr_u = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _AvgrU)))
+var Operators_i16x8_splat = Ast_VecSplat_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Splat)))
 
 func Operators_i16x8_extract_lane_s_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I16x8_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I16x8_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, Pack_SX}))))
 	return __tmp1
 }
@@ -5873,9 +5940,9 @@ func Operators_i16x8_extract_lane_s_1(_i OInt) OAst_instr_ {
 var Operators_i16x8_extract_lane_s = Operators_i16x8_extract_lane_s_1
 
 func Operators_i16x8_extract_lane_u_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I16x8_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I16x8_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, Pack_ZX}))))
 	return __tmp1
 }
@@ -5883,56 +5950,56 @@ func Operators_i16x8_extract_lane_u_1(_i OInt) OAst_instr_ {
 var Operators_i16x8_extract_lane_u = Operators_i16x8_extract_lane_u_1
 
 func Operators_i16x8_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(I16x8_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(I16x8_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i16x8_replace_lane = Operators_i16x8_replace_lane_1
 
-var Operators_i16x8_eq = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _Eq)))
-var Operators_i16x8_ne = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _Ne)))
-var Operators_i16x8_lt_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LtS)))
-var Operators_i16x8_lt_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LtU)))
-var Operators_i16x8_le_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LeS)))
-var Operators_i16x8_le_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LeU)))
-var Operators_i16x8_gt_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GtS)))
-var Operators_i16x8_gt_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GtU)))
-var Operators_i16x8_ge_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GeS)))
-var Operators_i16x8_ge_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GeU)))
-var Operators_i16x8_neg = Ast_VecUnary_1(V128_1(I16x8_1( /*V128Op.*/ _Neg)))
-var Operators_i16x8_bitmask = Ast_VecBitmask_1(V128_1(I16x8_1( /*V128Op.*/ _Bitmask)))
-var Operators_i16x8_all_true = Ast_VecTest_1(V128_1(I16x8_1( /*V128Op.*/ _AllTrue)))
-var Operators_i16x8_narrow_i32x4_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _NarrowS)))
-var Operators_i16x8_narrow_i32x4_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _NarrowU)))
-var Operators_i16x8_shl = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _Shl)))
-var Operators_i16x8_shr_s = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _ShrS)))
-var Operators_i16x8_shr_u = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _ShrU)))
-var Operators_i16x8_add = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Add)))
-var Operators_i16x8_add_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AddSatS)))
-var Operators_i16x8_add_sat_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AddSatU)))
-var Operators_i16x8_sub = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Sub)))
-var Operators_i16x8_sub_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _SubSatS)))
-var Operators_i16x8_sub_sat_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _SubSatU)))
-var Operators_i16x8_mul = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Mul)))
-var Operators_i16x8_abs = Ast_VecUnary_1(V128_1(I16x8_1( /*V128Op.*/ _Abs)))
-var Operators_i16x8_min_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MinS)))
-var Operators_i16x8_min_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MinU)))
-var Operators_i16x8_max_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MaxS)))
-var Operators_i16x8_max_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MaxU)))
-var Operators_i16x8_avgr_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AvgrU)))
-var Operators_i16x8_extmul_low_i8x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i16x8_extmul_high_i8x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i16x8_extmul_low_i8x16_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i16x8_extmul_high_i8x16_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_i16x8_q15mulr_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Q15MulRSatS)))
-var Operators_i16x8_extadd_pairwise_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseS)))
-var Operators_i16x8_extadd_pairwise_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseU)))
-var Operators_i32x4_splat = Ast_VecSplat_1(V128_1(I32x4_1( /*V128Op.*/ _Splat)))
+var Operators_i16x8_eq = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Eq)))
+var Operators_i16x8_ne = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Ne)))
+var Operators_i16x8_lt_s = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _LtS)))
+var Operators_i16x8_lt_u = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _LtU)))
+var Operators_i16x8_le_s = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _LeS)))
+var Operators_i16x8_le_u = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _LeU)))
+var Operators_i16x8_gt_s = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _GtS)))
+var Operators_i16x8_gt_u = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _GtU)))
+var Operators_i16x8_ge_s = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _GeS)))
+var Operators_i16x8_ge_u = Ast_VecCompare_1(Value_V128_1(I16x8_1( /*V128Op.*/ _GeU)))
+var Operators_i16x8_neg = Ast_VecUnary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Neg)))
+var Operators_i16x8_bitmask = Ast_VecBitmask_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Bitmask)))
+var Operators_i16x8_all_true = Ast_VecTest_1(Value_V128_1(I16x8_1( /*V128Op.*/ _AllTrue)))
+var Operators_i16x8_narrow_i32x4_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _NarrowS)))
+var Operators_i16x8_narrow_i32x4_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _NarrowU)))
+var Operators_i16x8_shl = Ast_VecShift_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Shl)))
+var Operators_i16x8_shr_s = Ast_VecShift_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ShrS)))
+var Operators_i16x8_shr_u = Ast_VecShift_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ShrU)))
+var Operators_i16x8_add = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Add)))
+var Operators_i16x8_add_sat_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _AddSatS)))
+var Operators_i16x8_add_sat_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _AddSatU)))
+var Operators_i16x8_sub = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Sub)))
+var Operators_i16x8_sub_sat_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _SubSatS)))
+var Operators_i16x8_sub_sat_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _SubSatU)))
+var Operators_i16x8_mul = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Mul)))
+var Operators_i16x8_abs = Ast_VecUnary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Abs)))
+var Operators_i16x8_min_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _MinS)))
+var Operators_i16x8_min_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _MinU)))
+var Operators_i16x8_max_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _MaxS)))
+var Operators_i16x8_max_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _MaxU)))
+var Operators_i16x8_avgr_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _AvgrU)))
+var Operators_i16x8_extmul_low_i8x16_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i16x8_extmul_high_i8x16_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i16x8_extmul_low_i8x16_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i16x8_extmul_high_i8x16_u = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_i16x8_q15mulr_sat_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _Q15MulRSatS)))
+var Operators_i16x8_extadd_pairwise_i8x16_s = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var Operators_i16x8_extadd_pairwise_i8x16_u = Ast_VecConvert_1(Value_V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var Operators_i32x4_splat = Ast_VecSplat_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Splat)))
 
 func Operators_i32x4_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I32x4_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I32x4_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, TODO /* unknown expression type unit */}))))
 	return __tmp1
 }
@@ -5940,57 +6007,57 @@ func Operators_i32x4_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_i32x4_extract_lane = Operators_i32x4_extract_lane_1
 
 func Operators_i32x4_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(I32x4_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(I32x4_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i32x4_replace_lane = Operators_i32x4_replace_lane_1
 
-var Operators_i32x4_eq = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _Eq)))
-var Operators_i32x4_ne = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _Ne)))
-var Operators_i32x4_lt_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LtS)))
-var Operators_i32x4_lt_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LtU)))
-var Operators_i32x4_le_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LeS)))
-var Operators_i32x4_le_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LeU)))
-var Operators_i32x4_gt_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GtS)))
-var Operators_i32x4_gt_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GtU)))
-var Operators_i32x4_ge_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GeS)))
-var Operators_i32x4_ge_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GeU)))
-var Operators_i32x4_abs = Ast_VecUnary_1(V128_1(I32x4_1( /*V128Op.*/ _Abs)))
-var Operators_i32x4_neg = Ast_VecUnary_1(V128_1(I32x4_1( /*V128Op.*/ _Neg)))
-var Operators_i32x4_bitmask = Ast_VecBitmask_1(V128_1(I32x4_1( /*V128Op.*/ _Bitmask)))
-var Operators_i32x4_all_true = Ast_VecTest_1(V128_1(I32x4_1( /*V128Op.*/ _AllTrue)))
-var Operators_i32x4_extend_low_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i32x4_extend_high_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i32x4_extend_low_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i32x4_extend_high_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i32x4_shl = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _Shl)))
-var Operators_i32x4_shr_s = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _ShrS)))
-var Operators_i32x4_shr_u = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _ShrU)))
-var Operators_i32x4_add = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Add)))
-var Operators_i32x4_sub = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Sub)))
-var Operators_i32x4_min_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MinS)))
-var Operators_i32x4_min_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MinU)))
-var Operators_i32x4_max_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MaxS)))
-var Operators_i32x4_max_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MaxU)))
-var Operators_i32x4_mul = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Mul)))
-var Operators_i32x4_dot_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _DotS)))
-var Operators_i32x4_trunc_sat_f32x4_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatSF32x4)))
-var Operators_i32x4_trunc_sat_f32x4_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatUF32x4)))
-var Operators_i32x4_trunc_sat_f64x2_s_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatSZeroF64x2)))
-var Operators_i32x4_trunc_sat_f64x2_u_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatUZeroF64x2)))
-var Operators_i32x4_extmul_low_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i32x4_extmul_high_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i32x4_extmul_low_i16x8_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i32x4_extmul_high_i16x8_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_i32x4_extadd_pairwise_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseS)))
-var Operators_i32x4_extadd_pairwise_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseU)))
-var Operators_i64x2_splat = Ast_VecSplat_1(V128_1(I64x2_1( /*V128Op.*/ _Splat)))
+var Operators_i32x4_eq = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Eq)))
+var Operators_i32x4_ne = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Ne)))
+var Operators_i32x4_lt_s = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _LtS)))
+var Operators_i32x4_lt_u = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _LtU)))
+var Operators_i32x4_le_s = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _LeS)))
+var Operators_i32x4_le_u = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _LeU)))
+var Operators_i32x4_gt_s = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _GtS)))
+var Operators_i32x4_gt_u = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _GtU)))
+var Operators_i32x4_ge_s = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _GeS)))
+var Operators_i32x4_ge_u = Ast_VecCompare_1(Value_V128_1(I32x4_1( /*V128Op.*/ _GeU)))
+var Operators_i32x4_abs = Ast_VecUnary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Abs)))
+var Operators_i32x4_neg = Ast_VecUnary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Neg)))
+var Operators_i32x4_bitmask = Ast_VecBitmask_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Bitmask)))
+var Operators_i32x4_all_true = Ast_VecTest_1(Value_V128_1(I32x4_1( /*V128Op.*/ _AllTrue)))
+var Operators_i32x4_extend_low_i16x8_s = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i32x4_extend_high_i16x8_s = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i32x4_extend_low_i16x8_u = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i32x4_extend_high_i16x8_u = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i32x4_shl = Ast_VecShift_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Shl)))
+var Operators_i32x4_shr_s = Ast_VecShift_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ShrS)))
+var Operators_i32x4_shr_u = Ast_VecShift_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ShrU)))
+var Operators_i32x4_add = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Add)))
+var Operators_i32x4_sub = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Sub)))
+var Operators_i32x4_min_s = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _MinS)))
+var Operators_i32x4_min_u = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _MinU)))
+var Operators_i32x4_max_s = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _MaxS)))
+var Operators_i32x4_max_u = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _MaxU)))
+var Operators_i32x4_mul = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _Mul)))
+var Operators_i32x4_dot_i16x8_s = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _DotS)))
+var Operators_i32x4_trunc_sat_f32x4_s = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _TruncSatSF32x4)))
+var Operators_i32x4_trunc_sat_f32x4_u = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _TruncSatUF32x4)))
+var Operators_i32x4_trunc_sat_f64x2_s_zero = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _TruncSatSZeroF64x2)))
+var Operators_i32x4_trunc_sat_f64x2_u_zero = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _TruncSatUZeroF64x2)))
+var Operators_i32x4_extmul_low_i16x8_s = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i32x4_extmul_high_i16x8_s = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i32x4_extmul_low_i16x8_u = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i32x4_extmul_high_i16x8_u = Ast_VecBinary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_i32x4_extadd_pairwise_i16x8_s = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var Operators_i32x4_extadd_pairwise_i16x8_u = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var Operators_i64x2_splat = Ast_VecSplat_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Splat)))
 
 func Operators_i64x2_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(I64x2_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(I64x2_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, TODO /* unknown expression type unit */}))))
 	return __tmp1
 }
@@ -5998,42 +6065,42 @@ func Operators_i64x2_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_i64x2_extract_lane = Operators_i64x2_extract_lane_1
 
 func Operators_i64x2_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(I64x2_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(I64x2_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i64x2_replace_lane = Operators_i64x2_replace_lane_1
 
-var Operators_i64x2_extend_low_i32x4_s = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i64x2_extend_high_i32x4_s = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i64x2_extend_low_i32x4_u = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i64x2_extend_high_i32x4_u = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i64x2_eq = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _Eq)))
-var Operators_i64x2_ne = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _Ne)))
-var Operators_i64x2_lt_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _LtS)))
-var Operators_i64x2_le_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _LeS)))
-var Operators_i64x2_gt_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _GtS)))
-var Operators_i64x2_ge_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _GeS)))
-var Operators_i64x2_abs = Ast_VecUnary_1(V128_1(I64x2_1( /*V128Op.*/ _Abs)))
-var Operators_i64x2_neg = Ast_VecUnary_1(V128_1(I64x2_1( /*V128Op.*/ _Neg)))
-var Operators_i64x2_bitmask = Ast_VecBitmask_1(V128_1(I64x2_1( /*V128Op.*/ _Bitmask)))
-var Operators_i64x2_all_true = Ast_VecTest_1(V128_1(I64x2_1( /*V128Op.*/ _AllTrue)))
-var Operators_i64x2_add = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Add)))
-var Operators_i64x2_sub = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Sub)))
-var Operators_i64x2_mul = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Mul)))
-var Operators_i64x2_shl = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _Shl)))
-var Operators_i64x2_shr_s = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _ShrS)))
-var Operators_i64x2_shr_u = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _ShrU)))
-var Operators_i64x2_extmul_low_i32x4_s = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i64x2_extmul_high_i32x4_s = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i64x2_extmul_low_i32x4_u = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i64x2_extmul_high_i32x4_u = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_f32x4_splat = Ast_VecSplat_1(V128_1(F32x4_1( /*V128Op.*/ _Splat)))
+var Operators_i64x2_extend_low_i32x4_s = Ast_VecConvert_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i64x2_extend_high_i32x4_s = Ast_VecConvert_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i64x2_extend_low_i32x4_u = Ast_VecConvert_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i64x2_extend_high_i32x4_u = Ast_VecConvert_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i64x2_eq = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Eq)))
+var Operators_i64x2_ne = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Ne)))
+var Operators_i64x2_lt_s = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _LtS)))
+var Operators_i64x2_le_s = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _LeS)))
+var Operators_i64x2_gt_s = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _GtS)))
+var Operators_i64x2_ge_s = Ast_VecCompare_1(Value_V128_1(I64x2_1( /*V128Op.*/ _GeS)))
+var Operators_i64x2_abs = Ast_VecUnary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Abs)))
+var Operators_i64x2_neg = Ast_VecUnary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Neg)))
+var Operators_i64x2_bitmask = Ast_VecBitmask_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Bitmask)))
+var Operators_i64x2_all_true = Ast_VecTest_1(Value_V128_1(I64x2_1( /*V128Op.*/ _AllTrue)))
+var Operators_i64x2_add = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Add)))
+var Operators_i64x2_sub = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Sub)))
+var Operators_i64x2_mul = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Mul)))
+var Operators_i64x2_shl = Ast_VecShift_1(Value_V128_1(I64x2_1( /*V128Op.*/ _Shl)))
+var Operators_i64x2_shr_s = Ast_VecShift_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ShrS)))
+var Operators_i64x2_shr_u = Ast_VecShift_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ShrU)))
+var Operators_i64x2_extmul_low_i32x4_s = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i64x2_extmul_high_i32x4_s = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i64x2_extmul_low_i32x4_u = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i64x2_extmul_high_i32x4_u = Ast_VecBinary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_f32x4_splat = Ast_VecSplat_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Splat)))
 
 func Operators_f32x4_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(F32x4_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(F32x4_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, TODO /* unknown expression type unit */}))))
 	return __tmp1
 }
@@ -6041,42 +6108,42 @@ func Operators_f32x4_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_f32x4_extract_lane = Operators_f32x4_extract_lane_1
 
 func Operators_f32x4_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(F32x4_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(F32x4_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_f32x4_replace_lane = Operators_f32x4_replace_lane_1
 
-var Operators_f32x4_eq = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Eq)))
-var Operators_f32x4_ne = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Ne)))
-var Operators_f32x4_lt = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Lt)))
-var Operators_f32x4_le = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Le)))
-var Operators_f32x4_gt = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Gt)))
-var Operators_f32x4_ge = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Ge)))
-var Operators_f32x4_abs = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Abs)))
-var Operators_f32x4_neg = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Neg)))
-var Operators_f32x4_sqrt = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Sqrt)))
-var Operators_f32x4_ceil = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Ceil)))
-var Operators_f32x4_floor = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Floor)))
-var Operators_f32x4_trunc = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Trunc)))
-var Operators_f32x4_nearest = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Nearest)))
-var Operators_f32x4_add = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Add)))
-var Operators_f32x4_sub = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Sub)))
-var Operators_f32x4_mul = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Mul)))
-var Operators_f32x4_div = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Div)))
-var Operators_f32x4_min = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Min)))
-var Operators_f32x4_max = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Max)))
-var Operators_f32x4_pmin = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Pmin)))
-var Operators_f32x4_pmax = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Pmax)))
-var Operators_f32x4_demote_f64x2_zero = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _DemoteZeroF64x2)))
-var Operators_f32x4_convert_i32x4_s = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _ConvertSI32x4)))
-var Operators_f32x4_convert_i32x4_u = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _ConvertUI32x4)))
-var Operators_f64x2_splat = Ast_VecSplat_1(V128_1(F64x2_1( /*V128Op.*/ _Splat)))
+var Operators_f32x4_eq = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Eq)))
+var Operators_f32x4_ne = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Ne)))
+var Operators_f32x4_lt = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Lt)))
+var Operators_f32x4_le = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Le)))
+var Operators_f32x4_gt = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Gt)))
+var Operators_f32x4_ge = Ast_VecCompare_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Ge)))
+var Operators_f32x4_abs = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Abs)))
+var Operators_f32x4_neg = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Neg)))
+var Operators_f32x4_sqrt = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Sqrt)))
+var Operators_f32x4_ceil = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Ceil)))
+var Operators_f32x4_floor = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Floor)))
+var Operators_f32x4_trunc = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Trunc)))
+var Operators_f32x4_nearest = Ast_VecUnary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Nearest)))
+var Operators_f32x4_add = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Add)))
+var Operators_f32x4_sub = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Sub)))
+var Operators_f32x4_mul = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Mul)))
+var Operators_f32x4_div = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Div)))
+var Operators_f32x4_min = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Min)))
+var Operators_f32x4_max = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Max)))
+var Operators_f32x4_pmin = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Pmin)))
+var Operators_f32x4_pmax = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _Pmax)))
+var Operators_f32x4_demote_f64x2_zero = Ast_VecConvert_1(Value_V128_1(F32x4_1( /*V128Op.*/ _DemoteZeroF64x2)))
+var Operators_f32x4_convert_i32x4_s = Ast_VecConvert_1(Value_V128_1(F32x4_1( /*V128Op.*/ _ConvertSI32x4)))
+var Operators_f32x4_convert_i32x4_u = Ast_VecConvert_1(Value_V128_1(F32x4_1( /*V128Op.*/ _ConvertUI32x4)))
+var Operators_f64x2_splat = Ast_VecSplat_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Splat)))
 
 func Operators_f64x2_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecExtract_1(V128_1(F64x2_1(V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(Value_V128_1(F64x2_1(V128Op_Extract_1(struct {
 		F0 OInt
-		F1 any /* 'a */
+		F1 O_a
 	}{_i, TODO /* unknown expression type unit */}))))
 	return __tmp1
 }
@@ -6084,56 +6151,56 @@ func Operators_f64x2_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_f64x2_extract_lane = Operators_f64x2_extract_lane_1
 
 func Operators_f64x2_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Ast_VecReplace_1(V128_1(F64x2_1(V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(Value_V128_1(F64x2_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_f64x2_replace_lane = Operators_f64x2_replace_lane_1
 
-var Operators_f64x2_eq = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Eq)))
-var Operators_f64x2_ne = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Ne)))
-var Operators_f64x2_lt = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Lt)))
-var Operators_f64x2_le = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Le)))
-var Operators_f64x2_gt = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Gt)))
-var Operators_f64x2_ge = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Ge)))
-var Operators_f64x2_neg = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Neg)))
-var Operators_f64x2_sqrt = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Sqrt)))
-var Operators_f64x2_ceil = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Ceil)))
-var Operators_f64x2_floor = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Floor)))
-var Operators_f64x2_trunc = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Trunc)))
-var Operators_f64x2_nearest = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Nearest)))
-var Operators_f64x2_add = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Add)))
-var Operators_f64x2_sub = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Sub)))
-var Operators_f64x2_mul = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Mul)))
-var Operators_f64x2_div = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Div)))
-var Operators_f64x2_min = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Min)))
-var Operators_f64x2_max = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Max)))
-var Operators_f64x2_abs = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Abs)))
-var Operators_f64x2_pmin = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Pmin)))
-var Operators_f64x2_pmax = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Pmax)))
-var Operators_f64x2_promote_low_f32x4 = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _PromoteLowF32x4)))
-var Operators_f64x2_convert_low_i32x4_s = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _ConvertSI32x4)))
-var Operators_f64x2_convert_low_i32x4_u = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _ConvertUI32x4)))
-var Operators_i8x16_relaxed_swizzle = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _RelaxedSwizzle)))
-var Operators_i8x16_relaxed_laneselect = Ast_VecTernary_1(V128_1(I8x16_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i16x8_relaxed_q15mulr_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedQ15MulRS)))
-var Operators_i16x8_relaxed_laneselect = Ast_VecTernary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i32x4_relaxed_trunc_f32x4_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSF32x4)))
-var Operators_i32x4_relaxed_trunc_f32x4_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUF32x4)))
-var Operators_i32x4_relaxed_trunc_f64x2_s_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSZeroF64x2)))
-var Operators_i32x4_relaxed_trunc_f64x2_u_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUZeroF64x2)))
-var Operators_i32x4_relaxed_laneselect = Ast_VecTernary_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i64x2_relaxed_laneselect = Ast_VecTernary_1(V128_1(I64x2_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_f32x4_relaxed_madd = Ast_VecTernary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMadd)))
-var Operators_f32x4_relaxed_nmadd = Ast_VecTernary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedNmadd)))
-var Operators_f32x4_relaxed_min = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMin)))
-var Operators_f32x4_relaxed_max = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMax)))
-var Operators_f64x2_relaxed_madd = Ast_VecTernary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMadd)))
-var Operators_f64x2_relaxed_nmadd = Ast_VecTernary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedNmadd)))
-var Operators_f64x2_relaxed_min = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMin)))
-var Operators_f64x2_relaxed_max = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMax)))
-var Operators_i16x8_relaxed_dot_i8x16_i7x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedDot)))
-var Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s = Ast_VecTernary_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedDotAccum)))
+var Operators_f64x2_eq = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Eq)))
+var Operators_f64x2_ne = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Ne)))
+var Operators_f64x2_lt = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Lt)))
+var Operators_f64x2_le = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Le)))
+var Operators_f64x2_gt = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Gt)))
+var Operators_f64x2_ge = Ast_VecCompare_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Ge)))
+var Operators_f64x2_neg = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Neg)))
+var Operators_f64x2_sqrt = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Sqrt)))
+var Operators_f64x2_ceil = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Ceil)))
+var Operators_f64x2_floor = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Floor)))
+var Operators_f64x2_trunc = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Trunc)))
+var Operators_f64x2_nearest = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Nearest)))
+var Operators_f64x2_add = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Add)))
+var Operators_f64x2_sub = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Sub)))
+var Operators_f64x2_mul = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Mul)))
+var Operators_f64x2_div = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Div)))
+var Operators_f64x2_min = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Min)))
+var Operators_f64x2_max = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Max)))
+var Operators_f64x2_abs = Ast_VecUnary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Abs)))
+var Operators_f64x2_pmin = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Pmin)))
+var Operators_f64x2_pmax = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _Pmax)))
+var Operators_f64x2_promote_low_f32x4 = Ast_VecConvert_1(Value_V128_1(F64x2_1( /*V128Op.*/ _PromoteLowF32x4)))
+var Operators_f64x2_convert_low_i32x4_s = Ast_VecConvert_1(Value_V128_1(F64x2_1( /*V128Op.*/ _ConvertSI32x4)))
+var Operators_f64x2_convert_low_i32x4_u = Ast_VecConvert_1(Value_V128_1(F64x2_1( /*V128Op.*/ _ConvertUI32x4)))
+var Operators_i8x16_relaxed_swizzle = Ast_VecBinary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _RelaxedSwizzle)))
+var Operators_i8x16_relaxed_laneselect = Ast_VecTernary_1(Value_V128_1(I8x16_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i16x8_relaxed_q15mulr_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _RelaxedQ15MulRS)))
+var Operators_i16x8_relaxed_laneselect = Ast_VecTernary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i32x4_relaxed_trunc_f32x4_s = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSF32x4)))
+var Operators_i32x4_relaxed_trunc_f32x4_u = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUF32x4)))
+var Operators_i32x4_relaxed_trunc_f64x2_s_zero = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSZeroF64x2)))
+var Operators_i32x4_relaxed_trunc_f64x2_u_zero = Ast_VecConvert_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUZeroF64x2)))
+var Operators_i32x4_relaxed_laneselect = Ast_VecTernary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i64x2_relaxed_laneselect = Ast_VecTernary_1(Value_V128_1(I64x2_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_f32x4_relaxed_madd = Ast_VecTernary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _RelaxedMadd)))
+var Operators_f32x4_relaxed_nmadd = Ast_VecTernary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _RelaxedNmadd)))
+var Operators_f32x4_relaxed_min = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _RelaxedMin)))
+var Operators_f32x4_relaxed_max = Ast_VecBinary_1(Value_V128_1(F32x4_1( /*V128Op.*/ _RelaxedMax)))
+var Operators_f64x2_relaxed_madd = Ast_VecTernary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _RelaxedMadd)))
+var Operators_f64x2_relaxed_nmadd = Ast_VecTernary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _RelaxedNmadd)))
+var Operators_f64x2_relaxed_min = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _RelaxedMin)))
+var Operators_f64x2_relaxed_max = Ast_VecBinary_1(Value_V128_1(F64x2_1( /*V128Op.*/ _RelaxedMax)))
+var Operators_i16x8_relaxed_dot_i8x16_i7x16_s = Ast_VecBinary_1(Value_V128_1(I16x8_1( /*V128Op.*/ _RelaxedDot)))
+var Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s = Ast_VecTernary_1(Value_V128_1(I32x4_1( /*V128Op.*/ _RelaxedDotAccum)))
 
 type ODecode_stream struct {
 	name  string
@@ -6303,14 +6370,14 @@ func Decode_s64_1(_s ODecode_stream) OInt64 {
 
 var Decode_s64 = Decode_s64_1
 
-func Decode_f32_1(_s ODecode_stream) float32 {
+func Decode_f32_1(_s ODecode_stream) OF32_t {
 	__tmp1 := F32_of_bits_1(word32_1(_s))
 	return __tmp1
 }
 
 var Decode_f32 = Decode_f32_1
 
-func Decode_f64_1(_s ODecode_stream) float64 {
+func Decode_f64_1(_s ODecode_stream) OF64_t {
 	__tmp1 := F64_of_bits_1(word64_1(_s))
 	return __tmp1
 }
@@ -6959,7 +7026,7 @@ func Decode_local_1(_s ODecode_stream) struct {
 	__tmp1 := u32_1(_s)
 	_n := __tmp1
 	__tmp4 := at_2(Types_val_type, _s)
-	_t := __tmp4
+	Value_t := __tmp4
 	return struct {
 		F0 OTypes_local_idx
 		F1 *OSource_Phrase[OAst_local_]
@@ -6972,7 +7039,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 	__tmp1 := Source_pos_1(_s)
 	Source_pos := __tmp1
 	var __tmp4 OAst_instr_
-	__tmp5 := op_1(_s)
+	__tmp5 := Value_op_1(_s)
 	if __tmp5 == 0x00 {
 		__tmp8 := _unreachable
 		__tmp4 = __tmp8

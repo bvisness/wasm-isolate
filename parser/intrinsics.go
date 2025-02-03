@@ -15,3 +15,8 @@ type OVoidKind int
 type OVoid interface {
 	Kind() OVoidKind
 }
+
+type OI32_t = OInt32
+type OI64_t = OInt64
+type OF32_t = float32
+type OF64_t = float64

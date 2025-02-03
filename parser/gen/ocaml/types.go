@@ -66,6 +66,7 @@ const (
 	TTypeDef
 	TIdentifier
 	TPrimitive
+	TTypeVar
 )
 
 type Type interface {
@@ -197,7 +198,8 @@ type TypeDef struct {
 	// TODO: Do we need modules in this any more? Now we're tracking a module path on all
 	// definitions, so this seems redundant and likely just wrong.
 	Identifier
-	Type Type
+	Type     Type
+	TypeVars []TypeVar
 }
 
 func (t TypeDef) String() string {
@@ -216,6 +218,16 @@ func (t Primitive) String() string {
 
 func (t Primitive) Kind() TypeKind {
 	return TPrimitive
+}
+
+type TypeVar string
+
+func (t TypeVar) String() string {
+	return string(t)
+}
+
+func (t TypeVar) Kind() TypeKind {
+	return TTypeVar
 }
 
 func ParseType(t string, currentModule *Module) Type {
