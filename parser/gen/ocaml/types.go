@@ -229,7 +229,7 @@ func parseTypeNode(n *tree_sitter.Node, t string, currentModule *Module) Type {
 			return def
 			// return def.(TypeDef) // assert
 		}
-		return Identifier{currentModule.Namespace(), name}
+		return Identifier{nil, name}
 	case "type_constructor_path":
 		ty := parseTypeNode(n.NamedChild(n.NamedChildCount()-1), t, currentModule)
 		switch ty := ty.(type) {
