@@ -102,7 +102,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 		return goType
 	} else if existing, ok := currentModule.Defs[t.String()]; ok {
 		// TODO: This logic is probably wrong now that t.String() has modules in it, right?
-		switch existing := existing.(type) {
+		switch existing := existing.Type.(type) {
 		case ocaml.TypeDef:
 			return typeName(existing.Modules, existing.Name)
 		default:
@@ -206,7 +206,7 @@ func main() {
 
 			for _, f := range files {
 				p := newOcamlParse(filepath.Join(append([]string{specpath}, f.Path...)...))
-				mod := ocaml.NewModule(f.ModuleName)
+				mod := ocaml.NewModule(nil, f.ModuleName)
 				modules[mod.Name] = mod
 
 				root := p.tree.RootNode()
@@ -218,7 +218,15 @@ func main() {
 						}
 						defs := p.parseTypeDef(&child, f, mod)
 						for _, def := range defs {
-							mod.Defs[def.Name] = def
+							mod.Defs[def.Name] = ocaml.Def{mod.Namespace(), def}
+							switch ty := def.Type.(type) {
+							case ocaml.Variants:
+								for _, variant := range ty {
+									// Individual variants are added as definitions, with the entire variant type
+									// as their type.
+									mod.Defs[variant.Name] = ocaml.Def{mod.Namespace(), ty}
+								}
+							}
 						}
 					case "value_definition":
 						for _, def := range child.NamedChildren(child.Walk()) {
@@ -322,8 +330,8 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, currentModule *ocaml.Mod
 	// fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
 
 	name := p.s(n)
-	if existingType, ok := currentModule.Defs[name]; ok {
-		return existingType
+	if existing, ok := currentModule.Defs[name]; ok {
+		return existing.Type
 	}
 
 	switch n.GrammarName() {
@@ -581,8 +589,7 @@ func (p *ocamlParse) parseModuleDef(def *tree_sitter.Node, f File, currentModule
 
 	switch body.GrammarName() {
 	case "structure":
-		newMod := ocaml.NewModule(p.s(name))
-		newMod.ParentModules = currentModule.Namespace()
+		newMod := ocaml.NewModule(currentModule.Namespace(), p.s(name))
 
 		for _, def := range body.NamedChildren(body.Walk()) {
 			switch def.GrammarName() {
@@ -594,7 +601,7 @@ func (p *ocamlParse) parseModuleDef(def *tree_sitter.Node, f File, currentModule
 				phonyModule.Defs = currentModule.Defs
 				defs := p.parseTypeDef(&def, f, &phonyModule)
 				for _, def := range defs {
-					newMod.Defs[def.Name] = def
+					newMod.Defs[def.Name] = ocaml.Def{newMod.Namespace(), def}
 				}
 			default:
 				w("// Ignoring %s in module definition\n", def.GrammarName())
@@ -762,7 +769,14 @@ func (p *ocamlParse) parseExpr(
 			w("%s := ", res)
 		}
 
-		w("%s(", funcName(module.Namespace(), p.s(function), len(args)))
+		var namespace []string
+		if def, ok := module.Defs[p.s(function)]; ok {
+			namespace = def.Namespace
+		} else {
+			fmt.Fprintf(os.Stderr, "WARNING: Calling unknown function %s with no namespace.\n", p.s(function))
+		}
+
+		w("%s(", funcName(namespace, p.s(function), len(args)))
 		for i, arg := range args {
 			p.parseExpr(&arg, funcType.GetArgType(i), module, false, false)
 			w(", ")
@@ -956,7 +970,7 @@ func (p *ocamlParse) parseExpr(
 		modName := p.s(expr.NamedChild(0))
 		localMod := modules[modName]
 		if localMod == nil {
-			localMod = ocaml.NewModule(modName)
+			localMod = ocaml.NewModule(nil, modName)
 		}
 		return p.parseExpr(expr.NamedChild(1), expectedType, localMod, statement, returnIfTerminal)
 	case "match_expression":

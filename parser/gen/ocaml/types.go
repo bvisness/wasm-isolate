@@ -19,30 +19,41 @@ func init() {
 type Module struct {
 	ParentModules []string
 	Name          string
-	Defs          map[string]Type
+	Defs          Defs
 }
 
-func NewModule(name string) *Module {
-	return &Module{
-		Name: name,
-		Defs: map[string]Type{
-			"bool":   Primitive("bool"),
-			"string": Primitive("string"),
-			"int":    Primitive("OInt"),
-			"int32":  Primitive("OInt32"),
-			"int64":  Primitive("OInt64"),
-
-			"list":   Primitive("list"),
-			"option": Primitive("option"),
-		},
+func NewModule(namespace []string, name string) *Module {
+	m := &Module{
+		ParentModules: namespace,
+		Name:          name,
 	}
+	m.Defs = Defs{
+		"bool":   Def{m.Namespace(), Primitive("bool")},
+		"string": Def{m.Namespace(), Primitive("string")},
+		"int":    Def{m.Namespace(), Primitive("OInt")},
+		"int32":  Def{m.Namespace(), Primitive("OInt32")},
+		"int64":  Def{m.Namespace(), Primitive("OInt64")},
+
+		"list":   Def{m.Namespace(), Primitive("list")},
+		"option": Def{m.Namespace(), Primitive("option")},
+	}
+	return m
 }
 
 func (m Module) Namespace() []string {
 	return append(m.ParentModules, m.Name)
 }
 
-type Defs map[string]Type
+func (m Module) AddOwnDef(name string, ty Type) {
+	m.Defs[name] = Def{m.Namespace(), ty}
+}
+
+type Def struct {
+	Namespace []string
+	Type      Type
+}
+
+type Defs map[string]Def
 
 type TypeKind int
 
@@ -183,6 +194,8 @@ func (t Identifier) Kind() TypeKind {
 }
 
 type TypeDef struct {
+	// TODO: Do we need modules in this any more? Now we're tracking a module path on all
+	// definitions, so this seems redundant and likely just wrong.
 	Identifier
 	Type Type
 }
@@ -226,8 +239,8 @@ func parseTypeNode(n *tree_sitter.Node, t string, currentModule *Module) Type {
 	case "package_type", "type_variable", "type_constructor", "_lowercase_identifier":
 		name := n.Utf8Text([]byte(t))
 		if def, ok := currentModule.Defs[name]; ok {
-			return def
-			// return def.(TypeDef) // assert
+			return def.Type
+			// return def.Type.(TypeDef) // assert
 		}
 		return Identifier{nil, name}
 	case "type_constructor_path":

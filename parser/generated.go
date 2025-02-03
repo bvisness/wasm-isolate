@@ -3806,49 +3806,49 @@ type OAst_module__ struct {
 
 var Ast_empty_module = nil /* TODO: record_expression */
 func Operators_i32_const_1(_n TODO /* Types.type_idx phrase (kind 3) */) OAst_instr_ {
-	__tmp1 := Operators_Const_1(_operatorAtAt_2(Operators_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i32_const = Operators_i32_const_1
 
 func Operators_i64_const_1(_n TODO /* address phrase (kind 3) */) OAst_instr_ {
-	__tmp1 := Operators_Const_1(_operatorAtAt_2(Operators_I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i64_const = Operators_i64_const_1
 
 func Operators_f32_const_1(_n TODO /* F32.t phrase (kind 3) */) OAst_instr_ {
-	__tmp1 := Operators_Const_1(_operatorAtAt_2(Operators_F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f32_const = Operators_f32_const_1
 
 func Operators_f64_const_1(_n TODO /* F64.t phrase (kind 3) */) OAst_instr_ {
-	__tmp1 := Operators_Const_1(_operatorAtAt_2(Operators_F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_Const_1(_operatorAtAt_2(F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f64_const = Operators_f64_const_1
 
 func Operators_v128_const_1(_n TODO /* V128.t phrase (kind 3) */) OAst_instr_ {
-	__tmp1 := Operators_VecConst_1(_operatorAtAt_2(Operators_V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
+	__tmp1 := Ast_VecConst_1(_operatorAtAt_2(V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_v128_const = Operators_v128_const_1
 
 func Operators_ref_null_1(_t OTypes_heap_type) OAst_instr_ {
-	__tmp1 := Operators_RefNull_1(_t)
+	__tmp1 := Ast_RefNull_1(_t)
 	return __tmp1
 }
 
 var Operators_ref_null = Operators_ref_null_1
 
 func Operators_ref_func_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_RefFunc_1(_x)
+	__tmp1 := Ast_RefFunc_1(_x)
 	return __tmp1
 }
 
@@ -3865,14 +3865,14 @@ var Operators_nop = _Nop
 var Operators_drop = _Drop
 
 func Operators_select_1(_t *[]OTypes_val_type) OAst_instr_ {
-	__tmp1 := Operators_Select_1(_t)
+	__tmp1 := Ast_Select_1(_t)
 	return __tmp1
 }
 
 var Operators_select = Operators_select_1
 
 func Operators_block_2(_bt OAst_block_type, _es []OAst_instr) OAst_instr_ {
-	__tmp1 := Operators_Block_1(struct {
+	__tmp1 := Ast_Block_1(struct {
 		F0 OAst_block_type
 		F1 []OAst_instr
 	}{_bt, _es})
@@ -3888,7 +3888,7 @@ func Operators_block_1(_bt OAst_block_type) func(_es []OAst_instr) OAst_instr_ {
 var Operators_block = Operators_block_2
 
 func Operators_loop_2(_bt OAst_block_type, _es []OAst_instr) OAst_instr_ {
-	__tmp1 := Operators_Loop_1(struct {
+	__tmp1 := Ast_Loop_1(struct {
 		F0 OAst_block_type
 		F1 []OAst_instr
 	}{_bt, _es})
@@ -3904,7 +3904,7 @@ func Operators_loop_1(_bt OAst_block_type) func(_es []OAst_instr) OAst_instr_ {
 var Operators_loop = Operators_loop_2
 
 func Operators_if__3(_bt OAst_block_type, _es1 []OAst_instr, _es2 []OAst_instr) OAst_instr_ {
-	__tmp1 := Operators_If_1(struct {
+	__tmp1 := Ast_If_1(struct {
 		F0 OAst_block_type
 		F1 []OAst_instr
 		F2 []OAst_instr
@@ -3927,21 +3927,21 @@ func Operators_if__1(_bt OAst_block_type) func(_es1 []OAst_instr, _es2 []OAst_in
 var Operators_if_ = Operators_if__3
 
 func Operators_br_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_Br_1(_x)
+	__tmp1 := Ast_Br_1(_x)
 	return __tmp1
 }
 
 var Operators_br = Operators_br_1
 
 func Operators_br_if_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_BrIf_1(_x)
+	__tmp1 := Ast_BrIf_1(_x)
 	return __tmp1
 }
 
 var Operators_br_if = Operators_br_if_1
 
 func Operators_br_table_2(_xs []OAst_idx, _x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_BrTable_1(struct {
+	__tmp1 := Ast_BrTable_1(struct {
 		F0 []OAst_idx
 		F1 OAst_idx
 	}{_xs, _x})
@@ -3957,21 +3957,21 @@ func Operators_br_table_1(_xs []OAst_idx) func(_x OAst_idx) OAst_instr_ {
 var Operators_br_table = Operators_br_table_2
 
 func Operators_br_on_null_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_BrOnNull_1(_x)
+	__tmp1 := Ast_BrOnNull_1(_x)
 	return __tmp1
 }
 
 var Operators_br_on_null = Operators_br_on_null_1
 
 func Operators_br_on_non_null_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_BrOnNonNull_1(_x)
+	__tmp1 := Ast_BrOnNonNull_1(_x)
 	return __tmp1
 }
 
 var Operators_br_on_non_null = Operators_br_on_non_null_1
 
 func Operators_br_on_cast_3(_x OAst_idx, _t1 OTypes_ref_type, _t2 OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Operators_BrOnCast_1(struct {
+	__tmp1 := Ast_BrOnCast_1(struct {
 		F0 OAst_idx
 		F1 OTypes_ref_type
 		F2 OTypes_ref_type
@@ -3994,7 +3994,7 @@ func Operators_br_on_cast_1(_x OAst_idx) func(_t1 OTypes_ref_type, _t2 OTypes_re
 var Operators_br_on_cast = Operators_br_on_cast_3
 
 func Operators_br_on_cast_fail_3(_x OAst_idx, _t1 OTypes_ref_type, _t2 OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Operators_BrOnCastFail_1(struct {
+	__tmp1 := Ast_BrOnCastFail_1(struct {
 		F0 OAst_idx
 		F1 OTypes_ref_type
 		F2 OTypes_ref_type
@@ -4017,7 +4017,7 @@ func Operators_br_on_cast_fail_1(_x OAst_idx) func(_t1 OTypes_ref_type, _t2 OTyp
 var Operators_br_on_cast_fail = Operators_br_on_cast_fail_3
 
 func Operators_catch_2(_x1 OAst_idx, _x2 OAst_idx) OAst_catch_ {
-	__tmp1 := Operators_Catch_1(struct {
+	__tmp1 := Ast_Catch_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x1, _x2})
@@ -4033,7 +4033,7 @@ func Operators_catch_1(_x1 OAst_idx) func(_x2 OAst_idx) OAst_catch_ {
 var Operators_catch = Operators_catch_2
 
 func Operators_catch_ref_2(_x1 OAst_idx, _x2 OAst_idx) OAst_catch_ {
-	__tmp1 := Operators_CatchRef_1(struct {
+	__tmp1 := Ast_CatchRef_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x1, _x2})
@@ -4049,14 +4049,14 @@ func Operators_catch_ref_1(_x1 OAst_idx) func(_x2 OAst_idx) OAst_catch_ {
 var Operators_catch_ref = Operators_catch_ref_2
 
 func Operators_catch_all_1(_x OAst_idx) OAst_catch_ {
-	__tmp1 := Operators_CatchAll_1(_x)
+	__tmp1 := Ast_CatchAll_1(_x)
 	return __tmp1
 }
 
 var Operators_catch_all = Operators_catch_all_1
 
 func Operators_catch_all_ref_1(_x OAst_idx) OAst_catch_ {
-	__tmp1 := Operators_CatchAllRef_1(_x)
+	__tmp1 := Ast_CatchAllRef_1(_x)
 	return __tmp1
 }
 
@@ -4065,21 +4065,21 @@ var Operators_catch_all_ref = Operators_catch_all_ref_1
 var Operators_return = _Return
 
 func Operators_call_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_Call_1(_x)
+	__tmp1 := Ast_Call_1(_x)
 	return __tmp1
 }
 
 var Operators_call = Operators_call_1
 
 func Operators_call_ref_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_CallRef_1(_x)
+	__tmp1 := Ast_CallRef_1(_x)
 	return __tmp1
 }
 
 var Operators_call_ref = Operators_call_ref_1
 
 func Operators_call_indirect_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_CallIndirect_1(struct {
+	__tmp1 := Ast_CallIndirect_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -4095,21 +4095,21 @@ func Operators_call_indirect_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_call_indirect = Operators_call_indirect_2
 
 func Operators_return_call_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ReturnCall_1(_x)
+	__tmp1 := Ast_ReturnCall_1(_x)
 	return __tmp1
 }
 
 var Operators_return_call = Operators_return_call_1
 
 func Operators_return_call_ref_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ReturnCallRef_1(_x)
+	__tmp1 := Ast_ReturnCallRef_1(_x)
 	return __tmp1
 }
 
 var Operators_return_call_ref = Operators_return_call_ref_1
 
 func Operators_return_call_indirect_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ReturnCallIndirect_1(struct {
+	__tmp1 := Ast_ReturnCallIndirect_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -4125,7 +4125,7 @@ func Operators_return_call_indirect_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_
 var Operators_return_call_indirect = Operators_return_call_indirect_2
 
 func Operators_throw_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_Throw_1(_x)
+	__tmp1 := Ast_Throw_1(_x)
 	return __tmp1
 }
 
@@ -4134,7 +4134,7 @@ var Operators_throw = Operators_throw_1
 var Operators_throw_ref = _ThrowRef
 
 func Operators_try_table_3(_bt OAst_block_type, _cs []OAst_catch, _es []OAst_instr) OAst_instr_ {
-	__tmp1 := Operators_TryTable_1(struct {
+	__tmp1 := Ast_TryTable_1(struct {
 		F0 OAst_block_type
 		F1 []OAst_catch
 		F2 []OAst_instr
@@ -4157,77 +4157,77 @@ func Operators_try_table_1(_bt OAst_block_type) func(_cs []OAst_catch, _es []OAs
 var Operators_try_table = Operators_try_table_3
 
 func Operators_local_get_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_LocalGet_1(_x)
+	__tmp1 := Ast_LocalGet_1(_x)
 	return __tmp1
 }
 
 var Operators_local_get = Operators_local_get_1
 
 func Operators_local_set_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_LocalSet_1(_x)
+	__tmp1 := Ast_LocalSet_1(_x)
 	return __tmp1
 }
 
 var Operators_local_set = Operators_local_set_1
 
 func Operators_local_tee_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_LocalTee_1(_x)
+	__tmp1 := Ast_LocalTee_1(_x)
 	return __tmp1
 }
 
 var Operators_local_tee = Operators_local_tee_1
 
 func Operators_global_get_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_GlobalGet_1(_x)
+	__tmp1 := Ast_GlobalGet_1(_x)
 	return __tmp1
 }
 
 var Operators_global_get = Operators_global_get_1
 
 func Operators_global_set_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_GlobalSet_1(_x)
+	__tmp1 := Ast_GlobalSet_1(_x)
 	return __tmp1
 }
 
 var Operators_global_set = Operators_global_set_1
 
 func Operators_table_get_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableGet_1(_x)
+	__tmp1 := Ast_TableGet_1(_x)
 	return __tmp1
 }
 
 var Operators_table_get = Operators_table_get_1
 
 func Operators_table_set_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableSet_1(_x)
+	__tmp1 := Ast_TableSet_1(_x)
 	return __tmp1
 }
 
 var Operators_table_set = Operators_table_set_1
 
 func Operators_table_size_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableSize_1(_x)
+	__tmp1 := Ast_TableSize_1(_x)
 	return __tmp1
 }
 
 var Operators_table_size = Operators_table_size_1
 
 func Operators_table_grow_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableGrow_1(_x)
+	__tmp1 := Ast_TableGrow_1(_x)
 	return __tmp1
 }
 
 var Operators_table_grow = Operators_table_grow_1
 
 func Operators_table_fill_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableFill_1(_x)
+	__tmp1 := Ast_TableFill_1(_x)
 	return __tmp1
 }
 
 var Operators_table_fill = Operators_table_fill_1
 
 func Operators_table_copy_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableCopy_1(struct {
+	__tmp1 := Ast_TableCopy_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -4243,7 +4243,7 @@ func Operators_table_copy_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_table_copy = Operators_table_copy_2
 
 func Operators_table_init_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_TableInit_1(struct {
+	__tmp1 := Ast_TableInit_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -4259,14 +4259,14 @@ func Operators_table_init_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_table_init = Operators_table_init_2
 
 func Operators_elem_drop_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ElemDrop_1(_x)
+	__tmp1 := Ast_ElemDrop_1(_x)
 	return __tmp1
 }
 
 var Operators_elem_drop = Operators_elem_drop_1
 
 func Operators_i32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4288,7 +4288,7 @@ func Operators_i32_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_in
 var Operators_i32_load = Operators_i32_load_3
 
 func Operators_i64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4310,7 +4310,7 @@ func Operators_i64_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_in
 var Operators_i64_load = Operators_i64_load_3
 
 func Operators_f32_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4332,7 +4332,7 @@ func Operators_f32_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_in
 var Operators_f32_load = Operators_f32_load_3
 
 func Operators_f64_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4354,7 +4354,7 @@ func Operators_f64_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_in
 var Operators_f64_load = Operators_f64_load_3
 
 func Operators_i32_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4376,7 +4376,7 @@ func Operators_i32_load8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i32_load8_s = Operators_i32_load8_s_3
 
 func Operators_i32_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4398,7 +4398,7 @@ func Operators_i32_load8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i32_load8_u = Operators_i32_load8_u_3
 
 func Operators_i32_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4420,7 +4420,7 @@ func Operators_i32_load16_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i32_load16_s = Operators_i32_load16_s_3
 
 func Operators_i32_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4442,7 +4442,7 @@ func Operators_i32_load16_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i32_load16_u = Operators_i32_load16_u_3
 
 func Operators_i64_load8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4464,7 +4464,7 @@ func Operators_i64_load8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i64_load8_s = Operators_i64_load8_s_3
 
 func Operators_i64_load8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4486,7 +4486,7 @@ func Operators_i64_load8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i64_load8_u = Operators_i64_load8_u_3
 
 func Operators_i64_load16_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4508,7 +4508,7 @@ func Operators_i64_load16_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i64_load16_s = Operators_i64_load16_s_3
 
 func Operators_i64_load16_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4530,7 +4530,7 @@ func Operators_i64_load16_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i64_load16_u = Operators_i64_load16_u_3
 
 func Operators_i64_load32_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4552,7 +4552,7 @@ func Operators_i64_load32_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i64_load32_s = Operators_i64_load32_s_3
 
 func Operators_i64_load32_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Load_1(struct {
+	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4574,7 +4574,7 @@ func Operators_i64_load32_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAs
 var Operators_i64_load32_u = Operators_i64_load32_u_3
 
 func Operators_i32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4596,7 +4596,7 @@ func Operators_i32_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_i
 var Operators_i32_store = Operators_i32_store_3
 
 func Operators_i64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4618,7 +4618,7 @@ func Operators_i64_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_i
 var Operators_i64_store = Operators_i64_store_3
 
 func Operators_f32_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4640,7 +4640,7 @@ func Operators_f32_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_i
 var Operators_f32_store = Operators_f32_store_3
 
 func Operators_f64_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4662,7 +4662,7 @@ func Operators_f64_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_i
 var Operators_f64_store = Operators_f64_store_3
 
 func Operators_i32_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4684,7 +4684,7 @@ func Operators_i32_store8_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_
 var Operators_i32_store8 = Operators_i32_store8_3
 
 func Operators_i32_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4706,7 +4706,7 @@ func Operators_i32_store16_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i32_store16 = Operators_i32_store16_3
 
 func Operators_i64_store8_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4728,7 +4728,7 @@ func Operators_i64_store8_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_
 var Operators_i64_store8 = Operators_i64_store8_3
 
 func Operators_i64_store16_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4750,7 +4750,7 @@ func Operators_i64_store16_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i64_store16 = Operators_i64_store16_3
 
 func Operators_i64_store32_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_Store_1(struct {
+	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -4772,7 +4772,7 @@ func Operators_i64_store32_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst
 var Operators_i64_store32 = Operators_i64_store32_3
 
 func Operators_v128_load_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4794,7 +4794,7 @@ func Operators_v128_load_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_i
 var Operators_v128_load = Operators_v128_load_3
 
 func Operators_v128_load8x8_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4816,7 +4816,7 @@ func Operators_v128_load8x8_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) O
 var Operators_v128_load8x8_s = Operators_v128_load8x8_s_3
 
 func Operators_v128_load8x8_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4838,7 +4838,7 @@ func Operators_v128_load8x8_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) O
 var Operators_v128_load8x8_u = Operators_v128_load8x8_u_3
 
 func Operators_v128_load16x4_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4860,7 +4860,7 @@ func Operators_v128_load16x4_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) 
 var Operators_v128_load16x4_s = Operators_v128_load16x4_s_3
 
 func Operators_v128_load16x4_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4882,7 +4882,7 @@ func Operators_v128_load16x4_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) 
 var Operators_v128_load16x4_u = Operators_v128_load16x4_u_3
 
 func Operators_v128_load32x2_s_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4904,7 +4904,7 @@ func Operators_v128_load32x2_s_1(_x OAst_idx) func(_align OInt, _offset OInt64) 
 var Operators_v128_load32x2_s = Operators_v128_load32x2_s_3
 
 func Operators_v128_load32x2_u_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4926,7 +4926,7 @@ func Operators_v128_load32x2_u_1(_x OAst_idx) func(_align OInt, _offset OInt64) 
 var Operators_v128_load32x2_u = Operators_v128_load32x2_u_3
 
 func Operators_v128_load8_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4948,7 +4948,7 @@ func Operators_v128_load8_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64)
 var Operators_v128_load8_splat = Operators_v128_load8_splat_3
 
 func Operators_v128_load16_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4970,7 +4970,7 @@ func Operators_v128_load16_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_load16_splat = Operators_v128_load16_splat_3
 
 func Operators_v128_load32_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -4992,7 +4992,7 @@ func Operators_v128_load32_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_load32_splat = Operators_v128_load32_splat_3
 
 func Operators_v128_load64_splat_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -5014,7 +5014,7 @@ func Operators_v128_load64_splat_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_load64_splat = Operators_v128_load64_splat_3
 
 func Operators_v128_load32_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -5036,7 +5036,7 @@ func Operators_v128_load32_zero_1(_x OAst_idx) func(_align OInt, _offset OInt64)
 var Operators_v128_load32_zero = Operators_v128_load32_zero_3
 
 func Operators_v128_load64_zero_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecLoad_1(struct {
+	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
 	}{_x, nil /* TODO: record_expression */})
@@ -5058,7 +5058,7 @@ func Operators_v128_load64_zero_1(_x OAst_idx) func(_align OInt, _offset OInt64)
 var Operators_v128_load64_zero = Operators_v128_load64_zero_3
 
 func Operators_v128_load8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecLoadLane_1(struct {
+	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5087,7 +5087,7 @@ func Operators_v128_load8_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64, 
 var Operators_v128_load8_lane = Operators_v128_load8_lane_4
 
 func Operators_v128_load16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecLoadLane_1(struct {
+	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5116,7 +5116,7 @@ func Operators_v128_load16_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64,
 var Operators_v128_load16_lane = Operators_v128_load16_lane_4
 
 func Operators_v128_load32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecLoadLane_1(struct {
+	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5145,7 +5145,7 @@ func Operators_v128_load32_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64,
 var Operators_v128_load32_lane = Operators_v128_load32_lane_4
 
 func Operators_v128_load64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecLoadLane_1(struct {
+	__tmp1 := Ast_VecLoadLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5174,7 +5174,7 @@ func Operators_v128_load64_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64,
 var Operators_v128_load64_lane = Operators_v128_load64_lane_4
 
 func Operators_v128_store_3(_x OAst_idx, _align OInt, _offset OInt64) OAst_instr_ {
-	__tmp1 := Operators_VecStore_1(struct {
+	__tmp1 := Ast_VecStore_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_storeop
 	}{_x, nil /* TODO: record_expression */})
@@ -5196,7 +5196,7 @@ func Operators_v128_store_1(_x OAst_idx) func(_align OInt, _offset OInt64) OAst_
 var Operators_v128_store = Operators_v128_store_3
 
 func Operators_v128_store8_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecStoreLane_1(struct {
+	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5225,7 +5225,7 @@ func Operators_v128_store8_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64,
 var Operators_v128_store8_lane = Operators_v128_store8_lane_4
 
 func Operators_v128_store16_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecStoreLane_1(struct {
+	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5254,7 +5254,7 @@ func Operators_v128_store16_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_store16_lane = Operators_v128_store16_lane_4
 
 func Operators_v128_store32_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecStoreLane_1(struct {
+	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5283,7 +5283,7 @@ func Operators_v128_store32_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_store32_lane = Operators_v128_store32_lane_4
 
 func Operators_v128_store64_lane_4(_x OAst_idx, _align OInt, _offset OInt64, _i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecStoreLane_1(struct {
+	__tmp1 := Ast_VecStoreLane_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
@@ -5312,28 +5312,28 @@ func Operators_v128_store64_lane_1(_x OAst_idx) func(_align OInt, _offset OInt64
 var Operators_v128_store64_lane = Operators_v128_store64_lane_4
 
 func Operators_memory_size_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_MemorySize_1(_x)
+	__tmp1 := Ast_MemorySize_1(_x)
 	return __tmp1
 }
 
 var Operators_memory_size = Operators_memory_size_1
 
 func Operators_memory_grow_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_MemoryGrow_1(_x)
+	__tmp1 := Ast_MemoryGrow_1(_x)
 	return __tmp1
 }
 
 var Operators_memory_grow = Operators_memory_grow_1
 
 func Operators_memory_fill_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_MemoryFill_1(_x)
+	__tmp1 := Ast_MemoryFill_1(_x)
 	return __tmp1
 }
 
 var Operators_memory_fill = Operators_memory_fill_1
 
 func Operators_memory_copy_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_MemoryCopy_1(struct {
+	__tmp1 := Ast_MemoryCopy_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5349,7 +5349,7 @@ func Operators_memory_copy_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_memory_copy = Operators_memory_copy_2
 
 func Operators_memory_init_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_MemoryInit_1(struct {
+	__tmp1 := Ast_MemoryInit_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5365,7 +5365,7 @@ func Operators_memory_init_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_memory_init = Operators_memory_init_2
 
 func Operators_data_drop_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_DataDrop_1(_x)
+	__tmp1 := Ast_DataDrop_1(_x)
 	return __tmp1
 }
 
@@ -5375,14 +5375,14 @@ var Operators_ref_is_null = _RefIsNull
 var Operators_ref_as_non_null = _RefAsNonNull
 
 func Operators_ref_test_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Operators_RefTest_1(_t)
+	__tmp1 := Ast_RefTest_1(_t)
 	return __tmp1
 }
 
 var Operators_ref_test = Operators_ref_test_1
 
 func Operators_ref_cast_1(_t OTypes_ref_type) OAst_instr_ {
-	__tmp1 := Operators_RefCast_1(_t)
+	__tmp1 := Ast_RefCast_1(_t)
 	return __tmp1
 }
 
@@ -5390,11 +5390,11 @@ var Operators_ref_cast = Operators_ref_cast_1
 
 var Operators_ref_eq = _RefEq
 var Operators_ref_i31 = _RefI31
-var Operators_i31_get_u = Operators_I31Get_1(_ZX)
-var Operators_i31_get_s = Operators_I31Get_1(_SX)
+var Operators_i31_get_u = Ast_I31Get_1(_ZX)
+var Operators_i31_get_s = Ast_I31Get_1(_SX)
 
 func Operators_struct_new_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructNew_1(struct {
+	__tmp1 := Ast_StructNew_1(struct {
 		F0 OAst_idx
 		F1 OAst_initop
 	}{_x, _Explicit})
@@ -5404,7 +5404,7 @@ func Operators_struct_new_1(_x OAst_idx) OAst_instr_ {
 var Operators_struct_new = Operators_struct_new_1
 
 func Operators_struct_new_default_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructNew_1(struct {
+	__tmp1 := Ast_StructNew_1(struct {
 		F0 OAst_idx
 		F1 OAst_initop
 	}{_x, _Implicit})
@@ -5414,7 +5414,7 @@ func Operators_struct_new_default_1(_x OAst_idx) OAst_instr_ {
 var Operators_struct_new_default = Operators_struct_new_default_1
 
 func Operators_struct_get_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructGet_1(struct {
+	__tmp1 := Ast_StructGet_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 		F2 *OPack_extension
@@ -5431,11 +5431,11 @@ func Operators_struct_get_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_struct_get = Operators_struct_get_2
 
 func Operators_struct_get_u_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructGet_1(struct {
+	__tmp1 := Ast_StructGet_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 		F2 *OPack_extension
-	}{_x, _y, Operators_Some_1(_ZX)})
+	}{_x, _y, Some_1(_ZX)})
 	return __tmp1
 }
 
@@ -5448,11 +5448,11 @@ func Operators_struct_get_u_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_struct_get_u = Operators_struct_get_u_2
 
 func Operators_struct_get_s_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructGet_1(struct {
+	__tmp1 := Ast_StructGet_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 		F2 *OPack_extension
-	}{_x, _y, Operators_Some_1(_SX)})
+	}{_x, _y, Some_1(_SX)})
 	return __tmp1
 }
 
@@ -5465,7 +5465,7 @@ func Operators_struct_get_s_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_struct_get_s = Operators_struct_get_s_2
 
 func Operators_struct_set_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_StructSet_1(struct {
+	__tmp1 := Ast_StructSet_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5481,7 +5481,7 @@ func Operators_struct_set_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_struct_set = Operators_struct_set_2
 
 func Operators_array_new_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayNew_1(struct {
+	__tmp1 := Ast_ArrayNew_1(struct {
 		F0 OAst_idx
 		F1 OAst_initop
 	}{_x, _Explicit})
@@ -5491,7 +5491,7 @@ func Operators_array_new_1(_x OAst_idx) OAst_instr_ {
 var Operators_array_new = Operators_array_new_1
 
 func Operators_array_new_default_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayNew_1(struct {
+	__tmp1 := Ast_ArrayNew_1(struct {
 		F0 OAst_idx
 		F1 OAst_initop
 	}{_x, _Implicit})
@@ -5501,7 +5501,7 @@ func Operators_array_new_default_1(_x OAst_idx) OAst_instr_ {
 var Operators_array_new_default = Operators_array_new_default_1
 
 func Operators_array_new_fixed_2(_x OAst_idx, _n OTypes_type_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayNewFixed_1(struct {
+	__tmp1 := Ast_ArrayNewFixed_1(struct {
 		F0 OAst_idx
 		F1 OTypes_type_idx
 	}{_x, _n})
@@ -5517,7 +5517,7 @@ func Operators_array_new_fixed_1(_x OAst_idx) func(_n OTypes_type_idx) OAst_inst
 var Operators_array_new_fixed = Operators_array_new_fixed_2
 
 func Operators_array_new_elem_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayNewElem_1(struct {
+	__tmp1 := Ast_ArrayNewElem_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5533,7 +5533,7 @@ func Operators_array_new_elem_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_array_new_elem = Operators_array_new_elem_2
 
 func Operators_array_new_data_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayNewData_1(struct {
+	__tmp1 := Ast_ArrayNewData_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5549,7 +5549,7 @@ func Operators_array_new_data_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_array_new_data = Operators_array_new_data_2
 
 func Operators_array_get_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayGet_1(struct {
+	__tmp1 := Ast_ArrayGet_1(struct {
 		F0 OAst_idx
 		F1 *OPack_extension
 	}{_x, _None})
@@ -5559,27 +5559,27 @@ func Operators_array_get_1(_x OAst_idx) OAst_instr_ {
 var Operators_array_get = Operators_array_get_1
 
 func Operators_array_get_u_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayGet_1(struct {
+	__tmp1 := Ast_ArrayGet_1(struct {
 		F0 OAst_idx
 		F1 *OPack_extension
-	}{_x, Operators_Some_1(_ZX)})
+	}{_x, Some_1(_ZX)})
 	return __tmp1
 }
 
 var Operators_array_get_u = Operators_array_get_u_1
 
 func Operators_array_get_s_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayGet_1(struct {
+	__tmp1 := Ast_ArrayGet_1(struct {
 		F0 OAst_idx
 		F1 *OPack_extension
-	}{_x, Operators_Some_1(_SX)})
+	}{_x, Some_1(_SX)})
 	return __tmp1
 }
 
 var Operators_array_get_s = Operators_array_get_s_1
 
 func Operators_array_set_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArraySet_1(_x)
+	__tmp1 := Ast_ArraySet_1(_x)
 	return __tmp1
 }
 
@@ -5588,7 +5588,7 @@ var Operators_array_set = Operators_array_set_1
 var Operators_array_len = _ArrayLen
 
 func Operators_array_copy_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayCopy_1(struct {
+	__tmp1 := Ast_ArrayCopy_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5604,14 +5604,14 @@ func Operators_array_copy_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_array_copy = Operators_array_copy_2
 
 func Operators_array_fill_1(_x OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayFill_1(_x)
+	__tmp1 := Ast_ArrayFill_1(_x)
 	return __tmp1
 }
 
 var Operators_array_fill = Operators_array_fill_1
 
 func Operators_array_init_data_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayInitData_1(struct {
+	__tmp1 := Ast_ArrayInitData_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5627,7 +5627,7 @@ func Operators_array_init_data_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 var Operators_array_init_data = Operators_array_init_data_2
 
 func Operators_array_init_elem_2(_x OAst_idx, _y OAst_idx) OAst_instr_ {
-	__tmp1 := Operators_ArrayInitElem_1(struct {
+	__tmp1 := Ast_ArrayInitElem_1(struct {
 		F0 OAst_idx
 		F1 OAst_idx
 	}{_x, _y})
@@ -5642,164 +5642,164 @@ func Operators_array_init_elem_1(_x OAst_idx) func(_y OAst_idx) OAst_instr_ {
 
 var Operators_array_init_elem = Operators_array_init_elem_2
 
-var Operators_any_convert_extern = Operators_ExternConvert_1(_Internalize)
-var Operators_extern_convert_any = Operators_ExternConvert_1(_Externalize)
-var Operators_i32_clz = Operators_Unary_1(Operators_I32_1( /*I32Op.*/ _Clz))
-var Operators_i32_ctz = Operators_Unary_1(Operators_I32_1( /*I32Op.*/ _Ctz))
-var Operators_i32_popcnt = Operators_Unary_1(Operators_I32_1( /*I32Op.*/ _Popcnt))
-var Operators_i64_clz = Operators_Unary_1(Operators_I64_1( /*I64Op.*/ _Clz))
-var Operators_i64_ctz = Operators_Unary_1(Operators_I64_1( /*I64Op.*/ _Ctz))
-var Operators_i64_popcnt = Operators_Unary_1(Operators_I64_1( /*I64Op.*/ _Popcnt))
-var Operators_f32_neg = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Neg))
-var Operators_f32_abs = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Abs))
-var Operators_f32_sqrt = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Sqrt))
-var Operators_f32_ceil = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Ceil))
-var Operators_f32_floor = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Floor))
-var Operators_f32_trunc = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Trunc))
-var Operators_f32_nearest = Operators_Unary_1(Operators_F32_1( /*F32Op.*/ _Nearest))
-var Operators_f64_neg = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Neg))
-var Operators_f64_abs = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Abs))
-var Operators_f64_sqrt = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Sqrt))
-var Operators_f64_ceil = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Ceil))
-var Operators_f64_floor = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Floor))
-var Operators_f64_trunc = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Trunc))
-var Operators_f64_nearest = Operators_Unary_1(Operators_F64_1( /*F64Op.*/ _Nearest))
-var Operators_i32_add = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Add))
-var Operators_i32_sub = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Sub))
-var Operators_i32_mul = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Mul))
-var Operators_i32_div_s = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _DivS))
-var Operators_i32_div_u = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _DivU))
-var Operators_i32_rem_s = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _RemS))
-var Operators_i32_rem_u = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _RemU))
-var Operators_i32_and = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _And))
-var Operators_i32_or = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Or))
-var Operators_i32_xor = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Xor))
-var Operators_i32_shl = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Shl))
-var Operators_i32_shr_s = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _ShrS))
-var Operators_i32_shr_u = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _ShrU))
-var Operators_i32_rotl = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Rotl))
-var Operators_i32_rotr = Operators_Binary_1(Operators_I32_1( /*I32Op.*/ _Rotr))
-var Operators_i64_add = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Add))
-var Operators_i64_sub = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Sub))
-var Operators_i64_mul = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Mul))
-var Operators_i64_div_s = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _DivS))
-var Operators_i64_div_u = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _DivU))
-var Operators_i64_rem_s = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _RemS))
-var Operators_i64_rem_u = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _RemU))
-var Operators_i64_and = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _And))
-var Operators_i64_or = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Or))
-var Operators_i64_xor = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Xor))
-var Operators_i64_shl = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Shl))
-var Operators_i64_shr_s = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _ShrS))
-var Operators_i64_shr_u = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _ShrU))
-var Operators_i64_rotl = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Rotl))
-var Operators_i64_rotr = Operators_Binary_1(Operators_I64_1( /*I64Op.*/ _Rotr))
-var Operators_f32_add = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Add))
-var Operators_f32_sub = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Sub))
-var Operators_f32_mul = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Mul))
-var Operators_f32_div = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Div))
-var Operators_f32_min = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Min))
-var Operators_f32_max = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _Max))
-var Operators_f32_copysign = Operators_Binary_1(Operators_F32_1( /*F32Op.*/ _CopySign))
-var Operators_f64_add = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Add))
-var Operators_f64_sub = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Sub))
-var Operators_f64_mul = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Mul))
-var Operators_f64_div = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Div))
-var Operators_f64_min = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Min))
-var Operators_f64_max = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _Max))
-var Operators_f64_copysign = Operators_Binary_1(Operators_F64_1( /*F64Op.*/ _CopySign))
-var Operators_i32_eqz = Operators_Test_1(Operators_I32_1( /*I32Op.*/ _Eqz))
-var Operators_i64_eqz = Operators_Test_1(Operators_I64_1( /*I64Op.*/ _Eqz))
-var Operators_i32_eq = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _Eq))
-var Operators_i32_ne = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _Ne))
-var Operators_i32_lt_s = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _LtS))
-var Operators_i32_lt_u = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _LtU))
-var Operators_i32_le_s = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _LeS))
-var Operators_i32_le_u = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _LeU))
-var Operators_i32_gt_s = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _GtS))
-var Operators_i32_gt_u = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _GtU))
-var Operators_i32_ge_s = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _GeS))
-var Operators_i32_ge_u = Operators_Compare_1(Operators_I32_1( /*I32Op.*/ _GeU))
-var Operators_i64_eq = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _Eq))
-var Operators_i64_ne = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _Ne))
-var Operators_i64_lt_s = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _LtS))
-var Operators_i64_lt_u = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _LtU))
-var Operators_i64_le_s = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _LeS))
-var Operators_i64_le_u = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _LeU))
-var Operators_i64_gt_s = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _GtS))
-var Operators_i64_gt_u = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _GtU))
-var Operators_i64_ge_s = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _GeS))
-var Operators_i64_ge_u = Operators_Compare_1(Operators_I64_1( /*I64Op.*/ _GeU))
-var Operators_f32_eq = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Eq))
-var Operators_f32_ne = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Ne))
-var Operators_f32_lt = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Lt))
-var Operators_f32_le = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Le))
-var Operators_f32_gt = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Gt))
-var Operators_f32_ge = Operators_Compare_1(Operators_F32_1( /*F32Op.*/ _Ge))
-var Operators_f64_eq = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Eq))
-var Operators_f64_ne = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Ne))
-var Operators_f64_lt = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Lt))
-var Operators_f64_le = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Le))
-var Operators_f64_gt = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Gt))
-var Operators_f64_ge = Operators_Compare_1(Operators_F64_1( /*F64Op.*/ _Ge))
-var Operators_i32_extend8_s = Operators_Unary_1(Operators_I32_1(Operators_I32Op_ExtendS_1(_Pack8)))
-var Operators_i32_extend16_s = Operators_Unary_1(Operators_I32_1(Operators_I32Op_ExtendS_1(_Pack16)))
-var Operators_i64_extend8_s = Operators_Unary_1(Operators_I64_1(Operators_I64Op_ExtendS_1(_Pack8)))
-var Operators_i64_extend16_s = Operators_Unary_1(Operators_I64_1(Operators_I64Op_ExtendS_1(_Pack16)))
-var Operators_i64_extend32_s = Operators_Unary_1(Operators_I64_1(Operators_I64Op_ExtendS_1(_Pack32)))
-var Operators_i32_wrap_i64 = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _WrapI64))
-var Operators_i32_trunc_f32_s = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSF32))
-var Operators_i32_trunc_f32_u = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncUF32))
-var Operators_i32_trunc_f64_s = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSF64))
-var Operators_i32_trunc_f64_u = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncUF64))
-var Operators_i32_trunc_sat_f32_s = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSatSF32))
-var Operators_i32_trunc_sat_f32_u = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSatUF32))
-var Operators_i32_trunc_sat_f64_s = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSatSF64))
-var Operators_i32_trunc_sat_f64_u = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _TruncSatUF64))
-var Operators_i64_extend_i32_s = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _ExtendSI32))
-var Operators_i64_extend_i32_u = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _ExtendUI32))
-var Operators_i64_trunc_f32_s = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSF32))
-var Operators_i64_trunc_f32_u = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncUF32))
-var Operators_i64_trunc_f64_s = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSF64))
-var Operators_i64_trunc_f64_u = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncUF64))
-var Operators_f32_convert_i32_s = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _ConvertSI32))
-var Operators_f32_convert_i32_u = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _ConvertUI32))
-var Operators_f32_convert_i64_s = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _ConvertSI64))
-var Operators_f32_convert_i64_u = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _ConvertUI64))
-var Operators_i64_trunc_sat_f32_s = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSatSF32))
-var Operators_i64_trunc_sat_f32_u = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSatUF32))
-var Operators_i64_trunc_sat_f64_s = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSatSF64))
-var Operators_i64_trunc_sat_f64_u = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _TruncSatUF64))
-var Operators_f32_demote_f64 = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _DemoteF64))
-var Operators_f64_convert_i32_s = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _ConvertSI32))
-var Operators_f64_convert_i32_u = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _ConvertUI32))
-var Operators_f64_convert_i64_s = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _ConvertSI64))
-var Operators_f64_convert_i64_u = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _ConvertUI64))
-var Operators_f64_promote_f32 = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _PromoteF32))
-var Operators_i32_reinterpret_f32 = Operators_Convert_1(Operators_I32_1( /*I32Op.*/ _ReinterpretFloat))
-var Operators_i64_reinterpret_f64 = Operators_Convert_1(Operators_I64_1( /*I64Op.*/ _ReinterpretFloat))
-var Operators_f32_reinterpret_i32 = Operators_Convert_1(Operators_F32_1( /*F32Op.*/ _ReinterpretInt))
-var Operators_f64_reinterpret_i64 = Operators_Convert_1(Operators_F64_1( /*F64Op.*/ _ReinterpretInt))
-var Operators_v128_not = Operators_VecUnaryBits_1(Operators_V128_1( /*V128Op.*/ _Not))
-var Operators_v128_and = Operators_VecBinaryBits_1(Operators_V128_1( /*V128Op.*/ _And))
-var Operators_v128_andnot = Operators_VecBinaryBits_1(Operators_V128_1( /*V128Op.*/ _AndNot))
-var Operators_v128_or = Operators_VecBinaryBits_1(Operators_V128_1( /*V128Op.*/ _Or))
-var Operators_v128_xor = Operators_VecBinaryBits_1(Operators_V128_1( /*V128Op.*/ _Xor))
-var Operators_v128_bitselect = Operators_VecTernaryBits_1(Operators_V128_1( /*V128Op.*/ _Bitselect))
-var Operators_v128_any_true = Operators_VecTestBits_1(Operators_V128_1( /*V128Op.*/ _AnyTrue))
-var Operators_i8x16_swizzle = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Swizzle)))
+var Operators_any_convert_extern = Ast_ExternConvert_1(_Internalize)
+var Operators_extern_convert_any = Ast_ExternConvert_1(_Externalize)
+var Operators_i32_clz = Ast_Unary_1(I32_1( /*I32Op.*/ _Clz))
+var Operators_i32_ctz = Ast_Unary_1(I32_1( /*I32Op.*/ _Ctz))
+var Operators_i32_popcnt = Ast_Unary_1(I32_1( /*I32Op.*/ _Popcnt))
+var Operators_i64_clz = Ast_Unary_1(I64_1( /*I64Op.*/ _Clz))
+var Operators_i64_ctz = Ast_Unary_1(I64_1( /*I64Op.*/ _Ctz))
+var Operators_i64_popcnt = Ast_Unary_1(I64_1( /*I64Op.*/ _Popcnt))
+var Operators_f32_neg = Ast_Unary_1(F32_1( /*F32Op.*/ _Neg))
+var Operators_f32_abs = Ast_Unary_1(F32_1( /*F32Op.*/ _Abs))
+var Operators_f32_sqrt = Ast_Unary_1(F32_1( /*F32Op.*/ _Sqrt))
+var Operators_f32_ceil = Ast_Unary_1(F32_1( /*F32Op.*/ _Ceil))
+var Operators_f32_floor = Ast_Unary_1(F32_1( /*F32Op.*/ _Floor))
+var Operators_f32_trunc = Ast_Unary_1(F32_1( /*F32Op.*/ _Trunc))
+var Operators_f32_nearest = Ast_Unary_1(F32_1( /*F32Op.*/ _Nearest))
+var Operators_f64_neg = Ast_Unary_1(F64_1( /*F64Op.*/ _Neg))
+var Operators_f64_abs = Ast_Unary_1(F64_1( /*F64Op.*/ _Abs))
+var Operators_f64_sqrt = Ast_Unary_1(F64_1( /*F64Op.*/ _Sqrt))
+var Operators_f64_ceil = Ast_Unary_1(F64_1( /*F64Op.*/ _Ceil))
+var Operators_f64_floor = Ast_Unary_1(F64_1( /*F64Op.*/ _Floor))
+var Operators_f64_trunc = Ast_Unary_1(F64_1( /*F64Op.*/ _Trunc))
+var Operators_f64_nearest = Ast_Unary_1(F64_1( /*F64Op.*/ _Nearest))
+var Operators_i32_add = Ast_Binary_1(I32_1( /*I32Op.*/ _Add))
+var Operators_i32_sub = Ast_Binary_1(I32_1( /*I32Op.*/ _Sub))
+var Operators_i32_mul = Ast_Binary_1(I32_1( /*I32Op.*/ _Mul))
+var Operators_i32_div_s = Ast_Binary_1(I32_1( /*I32Op.*/ _DivS))
+var Operators_i32_div_u = Ast_Binary_1(I32_1( /*I32Op.*/ _DivU))
+var Operators_i32_rem_s = Ast_Binary_1(I32_1( /*I32Op.*/ _RemS))
+var Operators_i32_rem_u = Ast_Binary_1(I32_1( /*I32Op.*/ _RemU))
+var Operators_i32_and = Ast_Binary_1(I32_1( /*I32Op.*/ _And))
+var Operators_i32_or = Ast_Binary_1(I32_1( /*I32Op.*/ _Or))
+var Operators_i32_xor = Ast_Binary_1(I32_1( /*I32Op.*/ _Xor))
+var Operators_i32_shl = Ast_Binary_1(I32_1( /*I32Op.*/ _Shl))
+var Operators_i32_shr_s = Ast_Binary_1(I32_1( /*I32Op.*/ _ShrS))
+var Operators_i32_shr_u = Ast_Binary_1(I32_1( /*I32Op.*/ _ShrU))
+var Operators_i32_rotl = Ast_Binary_1(I32_1( /*I32Op.*/ _Rotl))
+var Operators_i32_rotr = Ast_Binary_1(I32_1( /*I32Op.*/ _Rotr))
+var Operators_i64_add = Ast_Binary_1(I64_1( /*I64Op.*/ _Add))
+var Operators_i64_sub = Ast_Binary_1(I64_1( /*I64Op.*/ _Sub))
+var Operators_i64_mul = Ast_Binary_1(I64_1( /*I64Op.*/ _Mul))
+var Operators_i64_div_s = Ast_Binary_1(I64_1( /*I64Op.*/ _DivS))
+var Operators_i64_div_u = Ast_Binary_1(I64_1( /*I64Op.*/ _DivU))
+var Operators_i64_rem_s = Ast_Binary_1(I64_1( /*I64Op.*/ _RemS))
+var Operators_i64_rem_u = Ast_Binary_1(I64_1( /*I64Op.*/ _RemU))
+var Operators_i64_and = Ast_Binary_1(I64_1( /*I64Op.*/ _And))
+var Operators_i64_or = Ast_Binary_1(I64_1( /*I64Op.*/ _Or))
+var Operators_i64_xor = Ast_Binary_1(I64_1( /*I64Op.*/ _Xor))
+var Operators_i64_shl = Ast_Binary_1(I64_1( /*I64Op.*/ _Shl))
+var Operators_i64_shr_s = Ast_Binary_1(I64_1( /*I64Op.*/ _ShrS))
+var Operators_i64_shr_u = Ast_Binary_1(I64_1( /*I64Op.*/ _ShrU))
+var Operators_i64_rotl = Ast_Binary_1(I64_1( /*I64Op.*/ _Rotl))
+var Operators_i64_rotr = Ast_Binary_1(I64_1( /*I64Op.*/ _Rotr))
+var Operators_f32_add = Ast_Binary_1(F32_1( /*F32Op.*/ _Add))
+var Operators_f32_sub = Ast_Binary_1(F32_1( /*F32Op.*/ _Sub))
+var Operators_f32_mul = Ast_Binary_1(F32_1( /*F32Op.*/ _Mul))
+var Operators_f32_div = Ast_Binary_1(F32_1( /*F32Op.*/ _Div))
+var Operators_f32_min = Ast_Binary_1(F32_1( /*F32Op.*/ _Min))
+var Operators_f32_max = Ast_Binary_1(F32_1( /*F32Op.*/ _Max))
+var Operators_f32_copysign = Ast_Binary_1(F32_1( /*F32Op.*/ _CopySign))
+var Operators_f64_add = Ast_Binary_1(F64_1( /*F64Op.*/ _Add))
+var Operators_f64_sub = Ast_Binary_1(F64_1( /*F64Op.*/ _Sub))
+var Operators_f64_mul = Ast_Binary_1(F64_1( /*F64Op.*/ _Mul))
+var Operators_f64_div = Ast_Binary_1(F64_1( /*F64Op.*/ _Div))
+var Operators_f64_min = Ast_Binary_1(F64_1( /*F64Op.*/ _Min))
+var Operators_f64_max = Ast_Binary_1(F64_1( /*F64Op.*/ _Max))
+var Operators_f64_copysign = Ast_Binary_1(F64_1( /*F64Op.*/ _CopySign))
+var Operators_i32_eqz = Ast_Test_1(I32_1( /*I32Op.*/ _Eqz))
+var Operators_i64_eqz = Ast_Test_1(I64_1( /*I64Op.*/ _Eqz))
+var Operators_i32_eq = Ast_Compare_1(I32_1( /*I32Op.*/ _Eq))
+var Operators_i32_ne = Ast_Compare_1(I32_1( /*I32Op.*/ _Ne))
+var Operators_i32_lt_s = Ast_Compare_1(I32_1( /*I32Op.*/ _LtS))
+var Operators_i32_lt_u = Ast_Compare_1(I32_1( /*I32Op.*/ _LtU))
+var Operators_i32_le_s = Ast_Compare_1(I32_1( /*I32Op.*/ _LeS))
+var Operators_i32_le_u = Ast_Compare_1(I32_1( /*I32Op.*/ _LeU))
+var Operators_i32_gt_s = Ast_Compare_1(I32_1( /*I32Op.*/ _GtS))
+var Operators_i32_gt_u = Ast_Compare_1(I32_1( /*I32Op.*/ _GtU))
+var Operators_i32_ge_s = Ast_Compare_1(I32_1( /*I32Op.*/ _GeS))
+var Operators_i32_ge_u = Ast_Compare_1(I32_1( /*I32Op.*/ _GeU))
+var Operators_i64_eq = Ast_Compare_1(I64_1( /*I64Op.*/ _Eq))
+var Operators_i64_ne = Ast_Compare_1(I64_1( /*I64Op.*/ _Ne))
+var Operators_i64_lt_s = Ast_Compare_1(I64_1( /*I64Op.*/ _LtS))
+var Operators_i64_lt_u = Ast_Compare_1(I64_1( /*I64Op.*/ _LtU))
+var Operators_i64_le_s = Ast_Compare_1(I64_1( /*I64Op.*/ _LeS))
+var Operators_i64_le_u = Ast_Compare_1(I64_1( /*I64Op.*/ _LeU))
+var Operators_i64_gt_s = Ast_Compare_1(I64_1( /*I64Op.*/ _GtS))
+var Operators_i64_gt_u = Ast_Compare_1(I64_1( /*I64Op.*/ _GtU))
+var Operators_i64_ge_s = Ast_Compare_1(I64_1( /*I64Op.*/ _GeS))
+var Operators_i64_ge_u = Ast_Compare_1(I64_1( /*I64Op.*/ _GeU))
+var Operators_f32_eq = Ast_Compare_1(F32_1( /*F32Op.*/ _Eq))
+var Operators_f32_ne = Ast_Compare_1(F32_1( /*F32Op.*/ _Ne))
+var Operators_f32_lt = Ast_Compare_1(F32_1( /*F32Op.*/ _Lt))
+var Operators_f32_le = Ast_Compare_1(F32_1( /*F32Op.*/ _Le))
+var Operators_f32_gt = Ast_Compare_1(F32_1( /*F32Op.*/ _Gt))
+var Operators_f32_ge = Ast_Compare_1(F32_1( /*F32Op.*/ _Ge))
+var Operators_f64_eq = Ast_Compare_1(F64_1( /*F64Op.*/ _Eq))
+var Operators_f64_ne = Ast_Compare_1(F64_1( /*F64Op.*/ _Ne))
+var Operators_f64_lt = Ast_Compare_1(F64_1( /*F64Op.*/ _Lt))
+var Operators_f64_le = Ast_Compare_1(F64_1( /*F64Op.*/ _Le))
+var Operators_f64_gt = Ast_Compare_1(F64_1( /*F64Op.*/ _Gt))
+var Operators_f64_ge = Ast_Compare_1(F64_1( /*F64Op.*/ _Ge))
+var Operators_i32_extend8_s = Ast_Unary_1(I32_1(I32Op_ExtendS_1(_Pack8)))
+var Operators_i32_extend16_s = Ast_Unary_1(I32_1(I32Op_ExtendS_1(_Pack16)))
+var Operators_i64_extend8_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(_Pack8)))
+var Operators_i64_extend16_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(_Pack16)))
+var Operators_i64_extend32_s = Ast_Unary_1(I64_1(I64Op_ExtendS_1(_Pack32)))
+var Operators_i32_wrap_i64 = Ast_Convert_1(I32_1( /*I32Op.*/ _WrapI64))
+var Operators_i32_trunc_f32_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSF32))
+var Operators_i32_trunc_f32_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncUF32))
+var Operators_i32_trunc_f64_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSF64))
+var Operators_i32_trunc_f64_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncUF64))
+var Operators_i32_trunc_sat_f32_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatSF32))
+var Operators_i32_trunc_sat_f32_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatUF32))
+var Operators_i32_trunc_sat_f64_s = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatSF64))
+var Operators_i32_trunc_sat_f64_u = Ast_Convert_1(I32_1( /*I32Op.*/ _TruncSatUF64))
+var Operators_i64_extend_i32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _ExtendSI32))
+var Operators_i64_extend_i32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _ExtendUI32))
+var Operators_i64_trunc_f32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSF32))
+var Operators_i64_trunc_f32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncUF32))
+var Operators_i64_trunc_f64_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSF64))
+var Operators_i64_trunc_f64_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncUF64))
+var Operators_f32_convert_i32_s = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertSI32))
+var Operators_f32_convert_i32_u = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertUI32))
+var Operators_f32_convert_i64_s = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertSI64))
+var Operators_f32_convert_i64_u = Ast_Convert_1(F32_1( /*F32Op.*/ _ConvertUI64))
+var Operators_i64_trunc_sat_f32_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatSF32))
+var Operators_i64_trunc_sat_f32_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatUF32))
+var Operators_i64_trunc_sat_f64_s = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatSF64))
+var Operators_i64_trunc_sat_f64_u = Ast_Convert_1(I64_1( /*I64Op.*/ _TruncSatUF64))
+var Operators_f32_demote_f64 = Ast_Convert_1(F32_1( /*F32Op.*/ _DemoteF64))
+var Operators_f64_convert_i32_s = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertSI32))
+var Operators_f64_convert_i32_u = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertUI32))
+var Operators_f64_convert_i64_s = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertSI64))
+var Operators_f64_convert_i64_u = Ast_Convert_1(F64_1( /*F64Op.*/ _ConvertUI64))
+var Operators_f64_promote_f32 = Ast_Convert_1(F64_1( /*F64Op.*/ _PromoteF32))
+var Operators_i32_reinterpret_f32 = Ast_Convert_1(I32_1( /*I32Op.*/ _ReinterpretFloat))
+var Operators_i64_reinterpret_f64 = Ast_Convert_1(I64_1( /*I64Op.*/ _ReinterpretFloat))
+var Operators_f32_reinterpret_i32 = Ast_Convert_1(F32_1( /*F32Op.*/ _ReinterpretInt))
+var Operators_f64_reinterpret_i64 = Ast_Convert_1(F64_1( /*F64Op.*/ _ReinterpretInt))
+var Operators_v128_not = Ast_VecUnaryBits_1(V128_1( /*V128Op.*/ _Not))
+var Operators_v128_and = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _And))
+var Operators_v128_andnot = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _AndNot))
+var Operators_v128_or = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _Or))
+var Operators_v128_xor = Ast_VecBinaryBits_1(V128_1( /*V128Op.*/ _Xor))
+var Operators_v128_bitselect = Ast_VecTernaryBits_1(V128_1( /*V128Op.*/ _Bitselect))
+var Operators_v128_any_true = Ast_VecTestBits_1(V128_1( /*V128Op.*/ _AnyTrue))
+var Operators_i8x16_swizzle = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Swizzle)))
 
 func Operators_i8x16_shuffle_1(_is []OInt) OAst_instr_ {
-	__tmp1 := Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1(Operators_V128Op_Shuffle_1(_is))))
+	__tmp1 := Ast_VecBinary_1(V128_1(I8x16_1(V128Op_Shuffle_1(_is))))
 	return __tmp1
 }
 
 var Operators_i8x16_shuffle = Operators_i8x16_shuffle_1
 
-var Operators_i8x16_splat = Operators_VecSplat_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Splat)))
+var Operators_i8x16_splat = Ast_VecSplat_1(V128_1(I8x16_1( /*V128Op.*/ _Splat)))
 
 func Operators_i8x16_extract_lane_s_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I8x16_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I8x16_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, _SX}))))
@@ -5809,7 +5809,7 @@ func Operators_i8x16_extract_lane_s_1(_i OInt) OAst_instr_ {
 var Operators_i8x16_extract_lane_s = Operators_i8x16_extract_lane_s_1
 
 func Operators_i8x16_extract_lane_u_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I8x16_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I8x16_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, _ZX}))))
@@ -5819,51 +5819,51 @@ func Operators_i8x16_extract_lane_u_1(_i OInt) OAst_instr_ {
 var Operators_i8x16_extract_lane_u = Operators_i8x16_extract_lane_u_1
 
 func Operators_i8x16_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_I8x16_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(I8x16_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i8x16_replace_lane = Operators_i8x16_replace_lane_1
 
-var Operators_i8x16_eq = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Eq)))
-var Operators_i8x16_ne = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Ne)))
-var Operators_i8x16_lt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _LtS)))
-var Operators_i8x16_lt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _LtU)))
-var Operators_i8x16_le_s = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _LeS)))
-var Operators_i8x16_le_u = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _LeU)))
-var Operators_i8x16_gt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _GtS)))
-var Operators_i8x16_gt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _GtU)))
-var Operators_i8x16_ge_s = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _GeS)))
-var Operators_i8x16_ge_u = Operators_VecCompare_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _GeU)))
-var Operators_i8x16_neg = Operators_VecUnary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Neg)))
-var Operators_i8x16_bitmask = Operators_VecBitmask_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Bitmask)))
-var Operators_i8x16_all_true = Operators_VecTest_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _AllTrue)))
-var Operators_i8x16_narrow_i16x8_s = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _NarrowS)))
-var Operators_i8x16_narrow_i16x8_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _NarrowU)))
-var Operators_i16x8_extend_low_i8x16_s = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i16x8_extend_high_i8x16_s = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i16x8_extend_low_i8x16_u = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i16x8_extend_high_i8x16_u = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i8x16_shl = Operators_VecShift_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Shl)))
-var Operators_i8x16_shr_s = Operators_VecShift_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _ShrS)))
-var Operators_i8x16_shr_u = Operators_VecShift_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _ShrU)))
-var Operators_i8x16_add = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Add)))
-var Operators_i8x16_add_sat_s = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _AddSatS)))
-var Operators_i8x16_add_sat_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _AddSatU)))
-var Operators_i8x16_sub = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Sub)))
-var Operators_i8x16_sub_sat_s = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _SubSatS)))
-var Operators_i8x16_sub_sat_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _SubSatU)))
-var Operators_i8x16_abs = Operators_VecUnary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Abs)))
-var Operators_i8x16_popcnt = Operators_VecUnary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _Popcnt)))
-var Operators_i8x16_min_s = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _MinS)))
-var Operators_i8x16_min_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _MinU)))
-var Operators_i8x16_max_s = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _MaxS)))
-var Operators_i8x16_max_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _MaxU)))
-var Operators_i8x16_avgr_u = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _AvgrU)))
-var Operators_i16x8_splat = Operators_VecSplat_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Splat)))
+var Operators_i8x16_eq = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _Eq)))
+var Operators_i8x16_ne = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _Ne)))
+var Operators_i8x16_lt_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LtS)))
+var Operators_i8x16_lt_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LtU)))
+var Operators_i8x16_le_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LeS)))
+var Operators_i8x16_le_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _LeU)))
+var Operators_i8x16_gt_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GtS)))
+var Operators_i8x16_gt_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GtU)))
+var Operators_i8x16_ge_s = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GeS)))
+var Operators_i8x16_ge_u = Ast_VecCompare_1(V128_1(I8x16_1( /*V128Op.*/ _GeU)))
+var Operators_i8x16_neg = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Neg)))
+var Operators_i8x16_bitmask = Ast_VecBitmask_1(V128_1(I8x16_1( /*V128Op.*/ _Bitmask)))
+var Operators_i8x16_all_true = Ast_VecTest_1(V128_1(I8x16_1( /*V128Op.*/ _AllTrue)))
+var Operators_i8x16_narrow_i16x8_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _NarrowS)))
+var Operators_i8x16_narrow_i16x8_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _NarrowU)))
+var Operators_i16x8_extend_low_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i16x8_extend_high_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i16x8_extend_low_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i16x8_extend_high_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i8x16_shl = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _Shl)))
+var Operators_i8x16_shr_s = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _ShrS)))
+var Operators_i8x16_shr_u = Ast_VecShift_1(V128_1(I8x16_1( /*V128Op.*/ _ShrU)))
+var Operators_i8x16_add = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Add)))
+var Operators_i8x16_add_sat_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AddSatS)))
+var Operators_i8x16_add_sat_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AddSatU)))
+var Operators_i8x16_sub = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _Sub)))
+var Operators_i8x16_sub_sat_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _SubSatS)))
+var Operators_i8x16_sub_sat_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _SubSatU)))
+var Operators_i8x16_abs = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Abs)))
+var Operators_i8x16_popcnt = Ast_VecUnary_1(V128_1(I8x16_1( /*V128Op.*/ _Popcnt)))
+var Operators_i8x16_min_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MinS)))
+var Operators_i8x16_min_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MinU)))
+var Operators_i8x16_max_s = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MaxS)))
+var Operators_i8x16_max_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _MaxU)))
+var Operators_i8x16_avgr_u = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _AvgrU)))
+var Operators_i16x8_splat = Ast_VecSplat_1(V128_1(I16x8_1( /*V128Op.*/ _Splat)))
 
 func Operators_i16x8_extract_lane_s_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I16x8_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I16x8_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, _SX}))))
@@ -5873,7 +5873,7 @@ func Operators_i16x8_extract_lane_s_1(_i OInt) OAst_instr_ {
 var Operators_i16x8_extract_lane_s = Operators_i16x8_extract_lane_s_1
 
 func Operators_i16x8_extract_lane_u_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I16x8_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I16x8_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, _ZX}))))
@@ -5883,54 +5883,54 @@ func Operators_i16x8_extract_lane_u_1(_i OInt) OAst_instr_ {
 var Operators_i16x8_extract_lane_u = Operators_i16x8_extract_lane_u_1
 
 func Operators_i16x8_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_I16x8_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(I16x8_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i16x8_replace_lane = Operators_i16x8_replace_lane_1
 
-var Operators_i16x8_eq = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Eq)))
-var Operators_i16x8_ne = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Ne)))
-var Operators_i16x8_lt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _LtS)))
-var Operators_i16x8_lt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _LtU)))
-var Operators_i16x8_le_s = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _LeS)))
-var Operators_i16x8_le_u = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _LeU)))
-var Operators_i16x8_gt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _GtS)))
-var Operators_i16x8_gt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _GtU)))
-var Operators_i16x8_ge_s = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _GeS)))
-var Operators_i16x8_ge_u = Operators_VecCompare_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _GeU)))
-var Operators_i16x8_neg = Operators_VecUnary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Neg)))
-var Operators_i16x8_bitmask = Operators_VecBitmask_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Bitmask)))
-var Operators_i16x8_all_true = Operators_VecTest_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _AllTrue)))
-var Operators_i16x8_narrow_i32x4_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _NarrowS)))
-var Operators_i16x8_narrow_i32x4_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _NarrowU)))
-var Operators_i16x8_shl = Operators_VecShift_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Shl)))
-var Operators_i16x8_shr_s = Operators_VecShift_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ShrS)))
-var Operators_i16x8_shr_u = Operators_VecShift_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ShrU)))
-var Operators_i16x8_add = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Add)))
-var Operators_i16x8_add_sat_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _AddSatS)))
-var Operators_i16x8_add_sat_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _AddSatU)))
-var Operators_i16x8_sub = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Sub)))
-var Operators_i16x8_sub_sat_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _SubSatS)))
-var Operators_i16x8_sub_sat_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _SubSatU)))
-var Operators_i16x8_mul = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Mul)))
-var Operators_i16x8_abs = Operators_VecUnary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Abs)))
-var Operators_i16x8_min_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _MinS)))
-var Operators_i16x8_min_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _MinU)))
-var Operators_i16x8_max_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _MaxS)))
-var Operators_i16x8_max_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _MaxU)))
-var Operators_i16x8_avgr_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _AvgrU)))
-var Operators_i16x8_extmul_low_i8x16_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i16x8_extmul_high_i8x16_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i16x8_extmul_low_i8x16_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i16x8_extmul_high_i8x16_u = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_i16x8_q15mulr_sat_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _Q15MulRSatS)))
-var Operators_i16x8_extadd_pairwise_i8x16_s = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtAddPairwiseS)))
-var Operators_i16x8_extadd_pairwise_i8x16_u = Operators_VecConvert_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _ExtAddPairwiseU)))
-var Operators_i32x4_splat = Operators_VecSplat_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Splat)))
+var Operators_i16x8_eq = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _Eq)))
+var Operators_i16x8_ne = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _Ne)))
+var Operators_i16x8_lt_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LtS)))
+var Operators_i16x8_lt_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LtU)))
+var Operators_i16x8_le_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LeS)))
+var Operators_i16x8_le_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _LeU)))
+var Operators_i16x8_gt_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GtS)))
+var Operators_i16x8_gt_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GtU)))
+var Operators_i16x8_ge_s = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GeS)))
+var Operators_i16x8_ge_u = Ast_VecCompare_1(V128_1(I16x8_1( /*V128Op.*/ _GeU)))
+var Operators_i16x8_neg = Ast_VecUnary_1(V128_1(I16x8_1( /*V128Op.*/ _Neg)))
+var Operators_i16x8_bitmask = Ast_VecBitmask_1(V128_1(I16x8_1( /*V128Op.*/ _Bitmask)))
+var Operators_i16x8_all_true = Ast_VecTest_1(V128_1(I16x8_1( /*V128Op.*/ _AllTrue)))
+var Operators_i16x8_narrow_i32x4_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _NarrowS)))
+var Operators_i16x8_narrow_i32x4_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _NarrowU)))
+var Operators_i16x8_shl = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _Shl)))
+var Operators_i16x8_shr_s = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _ShrS)))
+var Operators_i16x8_shr_u = Ast_VecShift_1(V128_1(I16x8_1( /*V128Op.*/ _ShrU)))
+var Operators_i16x8_add = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Add)))
+var Operators_i16x8_add_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AddSatS)))
+var Operators_i16x8_add_sat_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AddSatU)))
+var Operators_i16x8_sub = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Sub)))
+var Operators_i16x8_sub_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _SubSatS)))
+var Operators_i16x8_sub_sat_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _SubSatU)))
+var Operators_i16x8_mul = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Mul)))
+var Operators_i16x8_abs = Ast_VecUnary_1(V128_1(I16x8_1( /*V128Op.*/ _Abs)))
+var Operators_i16x8_min_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MinS)))
+var Operators_i16x8_min_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MinU)))
+var Operators_i16x8_max_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MaxS)))
+var Operators_i16x8_max_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _MaxU)))
+var Operators_i16x8_avgr_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _AvgrU)))
+var Operators_i16x8_extmul_low_i8x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i16x8_extmul_high_i8x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i16x8_extmul_low_i8x16_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i16x8_extmul_high_i8x16_u = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_i16x8_q15mulr_sat_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _Q15MulRSatS)))
+var Operators_i16x8_extadd_pairwise_i8x16_s = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var Operators_i16x8_extadd_pairwise_i8x16_u = Ast_VecConvert_1(V128_1(I16x8_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var Operators_i32x4_splat = Ast_VecSplat_1(V128_1(I32x4_1( /*V128Op.*/ _Splat)))
 
 func Operators_i32x4_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I32x4_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I32x4_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, TODO /* unknown expression type unit */}))))
@@ -5940,55 +5940,55 @@ func Operators_i32x4_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_i32x4_extract_lane = Operators_i32x4_extract_lane_1
 
 func Operators_i32x4_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_I32x4_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(I32x4_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i32x4_replace_lane = Operators_i32x4_replace_lane_1
 
-var Operators_i32x4_eq = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Eq)))
-var Operators_i32x4_ne = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Ne)))
-var Operators_i32x4_lt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _LtS)))
-var Operators_i32x4_lt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _LtU)))
-var Operators_i32x4_le_s = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _LeS)))
-var Operators_i32x4_le_u = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _LeU)))
-var Operators_i32x4_gt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _GtS)))
-var Operators_i32x4_gt_u = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _GtU)))
-var Operators_i32x4_ge_s = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _GeS)))
-var Operators_i32x4_ge_u = Operators_VecCompare_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _GeU)))
-var Operators_i32x4_abs = Operators_VecUnary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Abs)))
-var Operators_i32x4_neg = Operators_VecUnary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Neg)))
-var Operators_i32x4_bitmask = Operators_VecBitmask_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Bitmask)))
-var Operators_i32x4_all_true = Operators_VecTest_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _AllTrue)))
-var Operators_i32x4_extend_low_i16x8_s = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i32x4_extend_high_i16x8_s = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i32x4_extend_low_i16x8_u = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i32x4_extend_high_i16x8_u = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i32x4_shl = Operators_VecShift_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Shl)))
-var Operators_i32x4_shr_s = Operators_VecShift_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ShrS)))
-var Operators_i32x4_shr_u = Operators_VecShift_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ShrU)))
-var Operators_i32x4_add = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Add)))
-var Operators_i32x4_sub = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Sub)))
-var Operators_i32x4_min_s = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _MinS)))
-var Operators_i32x4_min_u = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _MinU)))
-var Operators_i32x4_max_s = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _MaxS)))
-var Operators_i32x4_max_u = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _MaxU)))
-var Operators_i32x4_mul = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _Mul)))
-var Operators_i32x4_dot_i16x8_s = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _DotS)))
-var Operators_i32x4_trunc_sat_f32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _TruncSatSF32x4)))
-var Operators_i32x4_trunc_sat_f32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _TruncSatUF32x4)))
-var Operators_i32x4_trunc_sat_f64x2_s_zero = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _TruncSatSZeroF64x2)))
-var Operators_i32x4_trunc_sat_f64x2_u_zero = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _TruncSatUZeroF64x2)))
-var Operators_i32x4_extmul_low_i16x8_s = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i32x4_extmul_high_i16x8_s = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i32x4_extmul_low_i16x8_u = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i32x4_extmul_high_i16x8_u = Operators_VecBinary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_i32x4_extadd_pairwise_i16x8_s = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtAddPairwiseS)))
-var Operators_i32x4_extadd_pairwise_i16x8_u = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _ExtAddPairwiseU)))
-var Operators_i64x2_splat = Operators_VecSplat_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Splat)))
+var Operators_i32x4_eq = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _Eq)))
+var Operators_i32x4_ne = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _Ne)))
+var Operators_i32x4_lt_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LtS)))
+var Operators_i32x4_lt_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LtU)))
+var Operators_i32x4_le_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LeS)))
+var Operators_i32x4_le_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _LeU)))
+var Operators_i32x4_gt_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GtS)))
+var Operators_i32x4_gt_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GtU)))
+var Operators_i32x4_ge_s = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GeS)))
+var Operators_i32x4_ge_u = Ast_VecCompare_1(V128_1(I32x4_1( /*V128Op.*/ _GeU)))
+var Operators_i32x4_abs = Ast_VecUnary_1(V128_1(I32x4_1( /*V128Op.*/ _Abs)))
+var Operators_i32x4_neg = Ast_VecUnary_1(V128_1(I32x4_1( /*V128Op.*/ _Neg)))
+var Operators_i32x4_bitmask = Ast_VecBitmask_1(V128_1(I32x4_1( /*V128Op.*/ _Bitmask)))
+var Operators_i32x4_all_true = Ast_VecTest_1(V128_1(I32x4_1( /*V128Op.*/ _AllTrue)))
+var Operators_i32x4_extend_low_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i32x4_extend_high_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i32x4_extend_low_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i32x4_extend_high_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i32x4_shl = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _Shl)))
+var Operators_i32x4_shr_s = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _ShrS)))
+var Operators_i32x4_shr_u = Ast_VecShift_1(V128_1(I32x4_1( /*V128Op.*/ _ShrU)))
+var Operators_i32x4_add = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Add)))
+var Operators_i32x4_sub = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Sub)))
+var Operators_i32x4_min_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MinS)))
+var Operators_i32x4_min_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MinU)))
+var Operators_i32x4_max_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MaxS)))
+var Operators_i32x4_max_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _MaxU)))
+var Operators_i32x4_mul = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _Mul)))
+var Operators_i32x4_dot_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _DotS)))
+var Operators_i32x4_trunc_sat_f32x4_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatSF32x4)))
+var Operators_i32x4_trunc_sat_f32x4_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatUF32x4)))
+var Operators_i32x4_trunc_sat_f64x2_s_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatSZeroF64x2)))
+var Operators_i32x4_trunc_sat_f64x2_u_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _TruncSatUZeroF64x2)))
+var Operators_i32x4_extmul_low_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i32x4_extmul_high_i16x8_s = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i32x4_extmul_low_i16x8_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i32x4_extmul_high_i16x8_u = Ast_VecBinary_1(V128_1(I32x4_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_i32x4_extadd_pairwise_i16x8_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseS)))
+var Operators_i32x4_extadd_pairwise_i16x8_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _ExtAddPairwiseU)))
+var Operators_i64x2_splat = Ast_VecSplat_1(V128_1(I64x2_1( /*V128Op.*/ _Splat)))
 
 func Operators_i64x2_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_I64x2_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(I64x2_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, TODO /* unknown expression type unit */}))))
@@ -5998,40 +5998,40 @@ func Operators_i64x2_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_i64x2_extract_lane = Operators_i64x2_extract_lane_1
 
 func Operators_i64x2_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_I64x2_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(I64x2_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_i64x2_replace_lane = Operators_i64x2_replace_lane_1
 
-var Operators_i64x2_extend_low_i32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtendLowS)))
-var Operators_i64x2_extend_high_i32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtendHighS)))
-var Operators_i64x2_extend_low_i32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtendLowU)))
-var Operators_i64x2_extend_high_i32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtendHighU)))
-var Operators_i64x2_eq = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Eq)))
-var Operators_i64x2_ne = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Ne)))
-var Operators_i64x2_lt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _LtS)))
-var Operators_i64x2_le_s = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _LeS)))
-var Operators_i64x2_gt_s = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _GtS)))
-var Operators_i64x2_ge_s = Operators_VecCompare_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _GeS)))
-var Operators_i64x2_abs = Operators_VecUnary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Abs)))
-var Operators_i64x2_neg = Operators_VecUnary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Neg)))
-var Operators_i64x2_bitmask = Operators_VecBitmask_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Bitmask)))
-var Operators_i64x2_all_true = Operators_VecTest_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _AllTrue)))
-var Operators_i64x2_add = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Add)))
-var Operators_i64x2_sub = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Sub)))
-var Operators_i64x2_mul = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Mul)))
-var Operators_i64x2_shl = Operators_VecShift_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _Shl)))
-var Operators_i64x2_shr_s = Operators_VecShift_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ShrS)))
-var Operators_i64x2_shr_u = Operators_VecShift_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ShrU)))
-var Operators_i64x2_extmul_low_i32x4_s = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtMulLowS)))
-var Operators_i64x2_extmul_high_i32x4_s = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtMulHighS)))
-var Operators_i64x2_extmul_low_i32x4_u = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtMulLowU)))
-var Operators_i64x2_extmul_high_i32x4_u = Operators_VecBinary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _ExtMulHighU)))
-var Operators_f32x4_splat = Operators_VecSplat_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Splat)))
+var Operators_i64x2_extend_low_i32x4_s = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendLowS)))
+var Operators_i64x2_extend_high_i32x4_s = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendHighS)))
+var Operators_i64x2_extend_low_i32x4_u = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendLowU)))
+var Operators_i64x2_extend_high_i32x4_u = Ast_VecConvert_1(V128_1(I64x2_1( /*V128Op.*/ _ExtendHighU)))
+var Operators_i64x2_eq = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _Eq)))
+var Operators_i64x2_ne = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _Ne)))
+var Operators_i64x2_lt_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _LtS)))
+var Operators_i64x2_le_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _LeS)))
+var Operators_i64x2_gt_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _GtS)))
+var Operators_i64x2_ge_s = Ast_VecCompare_1(V128_1(I64x2_1( /*V128Op.*/ _GeS)))
+var Operators_i64x2_abs = Ast_VecUnary_1(V128_1(I64x2_1( /*V128Op.*/ _Abs)))
+var Operators_i64x2_neg = Ast_VecUnary_1(V128_1(I64x2_1( /*V128Op.*/ _Neg)))
+var Operators_i64x2_bitmask = Ast_VecBitmask_1(V128_1(I64x2_1( /*V128Op.*/ _Bitmask)))
+var Operators_i64x2_all_true = Ast_VecTest_1(V128_1(I64x2_1( /*V128Op.*/ _AllTrue)))
+var Operators_i64x2_add = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Add)))
+var Operators_i64x2_sub = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Sub)))
+var Operators_i64x2_mul = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _Mul)))
+var Operators_i64x2_shl = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _Shl)))
+var Operators_i64x2_shr_s = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _ShrS)))
+var Operators_i64x2_shr_u = Ast_VecShift_1(V128_1(I64x2_1( /*V128Op.*/ _ShrU)))
+var Operators_i64x2_extmul_low_i32x4_s = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowS)))
+var Operators_i64x2_extmul_high_i32x4_s = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighS)))
+var Operators_i64x2_extmul_low_i32x4_u = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulLowU)))
+var Operators_i64x2_extmul_high_i32x4_u = Ast_VecBinary_1(V128_1(I64x2_1( /*V128Op.*/ _ExtMulHighU)))
+var Operators_f32x4_splat = Ast_VecSplat_1(V128_1(F32x4_1( /*V128Op.*/ _Splat)))
 
 func Operators_f32x4_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_F32x4_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(F32x4_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, TODO /* unknown expression type unit */}))))
@@ -6041,40 +6041,40 @@ func Operators_f32x4_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_f32x4_extract_lane = Operators_f32x4_extract_lane_1
 
 func Operators_f32x4_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_F32x4_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(F32x4_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_f32x4_replace_lane = Operators_f32x4_replace_lane_1
 
-var Operators_f32x4_eq = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Eq)))
-var Operators_f32x4_ne = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Ne)))
-var Operators_f32x4_lt = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Lt)))
-var Operators_f32x4_le = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Le)))
-var Operators_f32x4_gt = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Gt)))
-var Operators_f32x4_ge = Operators_VecCompare_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Ge)))
-var Operators_f32x4_abs = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Abs)))
-var Operators_f32x4_neg = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Neg)))
-var Operators_f32x4_sqrt = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Sqrt)))
-var Operators_f32x4_ceil = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Ceil)))
-var Operators_f32x4_floor = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Floor)))
-var Operators_f32x4_trunc = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Trunc)))
-var Operators_f32x4_nearest = Operators_VecUnary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Nearest)))
-var Operators_f32x4_add = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Add)))
-var Operators_f32x4_sub = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Sub)))
-var Operators_f32x4_mul = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Mul)))
-var Operators_f32x4_div = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Div)))
-var Operators_f32x4_min = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Min)))
-var Operators_f32x4_max = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Max)))
-var Operators_f32x4_pmin = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Pmin)))
-var Operators_f32x4_pmax = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _Pmax)))
-var Operators_f32x4_demote_f64x2_zero = Operators_VecConvert_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _DemoteZeroF64x2)))
-var Operators_f32x4_convert_i32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _ConvertSI32x4)))
-var Operators_f32x4_convert_i32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _ConvertUI32x4)))
-var Operators_f64x2_splat = Operators_VecSplat_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Splat)))
+var Operators_f32x4_eq = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Eq)))
+var Operators_f32x4_ne = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Ne)))
+var Operators_f32x4_lt = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Lt)))
+var Operators_f32x4_le = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Le)))
+var Operators_f32x4_gt = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Gt)))
+var Operators_f32x4_ge = Ast_VecCompare_1(V128_1(F32x4_1( /*V128Op.*/ _Ge)))
+var Operators_f32x4_abs = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Abs)))
+var Operators_f32x4_neg = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Neg)))
+var Operators_f32x4_sqrt = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Sqrt)))
+var Operators_f32x4_ceil = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Ceil)))
+var Operators_f32x4_floor = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Floor)))
+var Operators_f32x4_trunc = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Trunc)))
+var Operators_f32x4_nearest = Ast_VecUnary_1(V128_1(F32x4_1( /*V128Op.*/ _Nearest)))
+var Operators_f32x4_add = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Add)))
+var Operators_f32x4_sub = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Sub)))
+var Operators_f32x4_mul = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Mul)))
+var Operators_f32x4_div = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Div)))
+var Operators_f32x4_min = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Min)))
+var Operators_f32x4_max = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Max)))
+var Operators_f32x4_pmin = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Pmin)))
+var Operators_f32x4_pmax = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _Pmax)))
+var Operators_f32x4_demote_f64x2_zero = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _DemoteZeroF64x2)))
+var Operators_f32x4_convert_i32x4_s = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _ConvertSI32x4)))
+var Operators_f32x4_convert_i32x4_u = Ast_VecConvert_1(V128_1(F32x4_1( /*V128Op.*/ _ConvertUI32x4)))
+var Operators_f64x2_splat = Ast_VecSplat_1(V128_1(F64x2_1( /*V128Op.*/ _Splat)))
 
 func Operators_f64x2_extract_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecExtract_1(Operators_V128_1(Operators_F64x2_1(Operators_V128Op_Extract_1(struct {
+	__tmp1 := Ast_VecExtract_1(V128_1(F64x2_1(V128Op_Extract_1(struct {
 		F0 OInt
 		F1 any /* 'a */
 	}{_i, TODO /* unknown expression type unit */}))))
@@ -6084,56 +6084,56 @@ func Operators_f64x2_extract_lane_1(_i OInt) OAst_instr_ {
 var Operators_f64x2_extract_lane = Operators_f64x2_extract_lane_1
 
 func Operators_f64x2_replace_lane_1(_i OInt) OAst_instr_ {
-	__tmp1 := Operators_VecReplace_1(Operators_V128_1(Operators_F64x2_1(Operators_V128Op_Replace_1(_i))))
+	__tmp1 := Ast_VecReplace_1(V128_1(F64x2_1(V128Op_Replace_1(_i))))
 	return __tmp1
 }
 
 var Operators_f64x2_replace_lane = Operators_f64x2_replace_lane_1
 
-var Operators_f64x2_eq = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Eq)))
-var Operators_f64x2_ne = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Ne)))
-var Operators_f64x2_lt = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Lt)))
-var Operators_f64x2_le = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Le)))
-var Operators_f64x2_gt = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Gt)))
-var Operators_f64x2_ge = Operators_VecCompare_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Ge)))
-var Operators_f64x2_neg = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Neg)))
-var Operators_f64x2_sqrt = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Sqrt)))
-var Operators_f64x2_ceil = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Ceil)))
-var Operators_f64x2_floor = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Floor)))
-var Operators_f64x2_trunc = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Trunc)))
-var Operators_f64x2_nearest = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Nearest)))
-var Operators_f64x2_add = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Add)))
-var Operators_f64x2_sub = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Sub)))
-var Operators_f64x2_mul = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Mul)))
-var Operators_f64x2_div = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Div)))
-var Operators_f64x2_min = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Min)))
-var Operators_f64x2_max = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Max)))
-var Operators_f64x2_abs = Operators_VecUnary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Abs)))
-var Operators_f64x2_pmin = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Pmin)))
-var Operators_f64x2_pmax = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _Pmax)))
-var Operators_f64x2_promote_low_f32x4 = Operators_VecConvert_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _PromoteLowF32x4)))
-var Operators_f64x2_convert_low_i32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _ConvertSI32x4)))
-var Operators_f64x2_convert_low_i32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _ConvertUI32x4)))
-var Operators_i8x16_relaxed_swizzle = Operators_VecBinary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _RelaxedSwizzle)))
-var Operators_i8x16_relaxed_laneselect = Operators_VecTernary_1(Operators_V128_1(Operators_I8x16_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i16x8_relaxed_q15mulr_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _RelaxedQ15MulRS)))
-var Operators_i16x8_relaxed_laneselect = Operators_VecTernary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i32x4_relaxed_trunc_f32x4_s = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedTruncSF32x4)))
-var Operators_i32x4_relaxed_trunc_f32x4_u = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedTruncUF32x4)))
-var Operators_i32x4_relaxed_trunc_f64x2_s_zero = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedTruncSZeroF64x2)))
-var Operators_i32x4_relaxed_trunc_f64x2_u_zero = Operators_VecConvert_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedTruncUZeroF64x2)))
-var Operators_i32x4_relaxed_laneselect = Operators_VecTernary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_i64x2_relaxed_laneselect = Operators_VecTernary_1(Operators_V128_1(Operators_I64x2_1( /*V128Op.*/ _RelaxedLaneselect)))
-var Operators_f32x4_relaxed_madd = Operators_VecTernary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _RelaxedMadd)))
-var Operators_f32x4_relaxed_nmadd = Operators_VecTernary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _RelaxedNmadd)))
-var Operators_f32x4_relaxed_min = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _RelaxedMin)))
-var Operators_f32x4_relaxed_max = Operators_VecBinary_1(Operators_V128_1(Operators_F32x4_1( /*V128Op.*/ _RelaxedMax)))
-var Operators_f64x2_relaxed_madd = Operators_VecTernary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _RelaxedMadd)))
-var Operators_f64x2_relaxed_nmadd = Operators_VecTernary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _RelaxedNmadd)))
-var Operators_f64x2_relaxed_min = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _RelaxedMin)))
-var Operators_f64x2_relaxed_max = Operators_VecBinary_1(Operators_V128_1(Operators_F64x2_1( /*V128Op.*/ _RelaxedMax)))
-var Operators_i16x8_relaxed_dot_i8x16_i7x16_s = Operators_VecBinary_1(Operators_V128_1(Operators_I16x8_1( /*V128Op.*/ _RelaxedDot)))
-var Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s = Operators_VecTernary_1(Operators_V128_1(Operators_I32x4_1( /*V128Op.*/ _RelaxedDotAccum)))
+var Operators_f64x2_eq = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Eq)))
+var Operators_f64x2_ne = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Ne)))
+var Operators_f64x2_lt = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Lt)))
+var Operators_f64x2_le = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Le)))
+var Operators_f64x2_gt = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Gt)))
+var Operators_f64x2_ge = Ast_VecCompare_1(V128_1(F64x2_1( /*V128Op.*/ _Ge)))
+var Operators_f64x2_neg = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Neg)))
+var Operators_f64x2_sqrt = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Sqrt)))
+var Operators_f64x2_ceil = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Ceil)))
+var Operators_f64x2_floor = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Floor)))
+var Operators_f64x2_trunc = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Trunc)))
+var Operators_f64x2_nearest = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Nearest)))
+var Operators_f64x2_add = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Add)))
+var Operators_f64x2_sub = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Sub)))
+var Operators_f64x2_mul = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Mul)))
+var Operators_f64x2_div = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Div)))
+var Operators_f64x2_min = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Min)))
+var Operators_f64x2_max = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Max)))
+var Operators_f64x2_abs = Ast_VecUnary_1(V128_1(F64x2_1( /*V128Op.*/ _Abs)))
+var Operators_f64x2_pmin = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Pmin)))
+var Operators_f64x2_pmax = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _Pmax)))
+var Operators_f64x2_promote_low_f32x4 = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _PromoteLowF32x4)))
+var Operators_f64x2_convert_low_i32x4_s = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _ConvertSI32x4)))
+var Operators_f64x2_convert_low_i32x4_u = Ast_VecConvert_1(V128_1(F64x2_1( /*V128Op.*/ _ConvertUI32x4)))
+var Operators_i8x16_relaxed_swizzle = Ast_VecBinary_1(V128_1(I8x16_1( /*V128Op.*/ _RelaxedSwizzle)))
+var Operators_i8x16_relaxed_laneselect = Ast_VecTernary_1(V128_1(I8x16_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i16x8_relaxed_q15mulr_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedQ15MulRS)))
+var Operators_i16x8_relaxed_laneselect = Ast_VecTernary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i32x4_relaxed_trunc_f32x4_s = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSF32x4)))
+var Operators_i32x4_relaxed_trunc_f32x4_u = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUF32x4)))
+var Operators_i32x4_relaxed_trunc_f64x2_s_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncSZeroF64x2)))
+var Operators_i32x4_relaxed_trunc_f64x2_u_zero = Ast_VecConvert_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedTruncUZeroF64x2)))
+var Operators_i32x4_relaxed_laneselect = Ast_VecTernary_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_i64x2_relaxed_laneselect = Ast_VecTernary_1(V128_1(I64x2_1( /*V128Op.*/ _RelaxedLaneselect)))
+var Operators_f32x4_relaxed_madd = Ast_VecTernary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMadd)))
+var Operators_f32x4_relaxed_nmadd = Ast_VecTernary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedNmadd)))
+var Operators_f32x4_relaxed_min = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMin)))
+var Operators_f32x4_relaxed_max = Ast_VecBinary_1(V128_1(F32x4_1( /*V128Op.*/ _RelaxedMax)))
+var Operators_f64x2_relaxed_madd = Ast_VecTernary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMadd)))
+var Operators_f64x2_relaxed_nmadd = Ast_VecTernary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedNmadd)))
+var Operators_f64x2_relaxed_min = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMin)))
+var Operators_f64x2_relaxed_max = Ast_VecBinary_1(V128_1(F64x2_1( /*V128Op.*/ _RelaxedMax)))
+var Operators_i16x8_relaxed_dot_i8x16_i7x16_s = Ast_VecBinary_1(V128_1(I16x8_1( /*V128Op.*/ _RelaxedDot)))
+var Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s = Ast_VecTernary_1(V128_1(I32x4_1( /*V128Op.*/ _RelaxedDotAccum)))
 
 type ODecode_stream struct {
 	name  string
@@ -6155,16 +6155,16 @@ func Decode_bit_1(_i OInt) func(_n OInt) bool {
 var Decode_bit = Decode_bit_2
 
 func Decode_byte_1(_s ODecode_stream) OInt {
-	__tmp1 := Decode_get_1(_s)
+	__tmp1 := get_1(_s)
 	return __tmp1
 }
 
 var Decode_byte = Decode_byte_1
 
 func Decode_word16_1(_s ODecode_stream) OInt {
-	__tmp1 := Decode_byte_1(_s)
+	__tmp1 := byte_1(_s)
 	_lo := __tmp1
-	__tmp4 := Decode_byte_1(_s)
+	__tmp4 := byte_1(_s)
 	_hi := __tmp4
 	__tmp7 := _operatorPlus_2(_operatorlsl_2(_hi, 8), _lo)
 	return __tmp7
@@ -6173,42 +6173,42 @@ func Decode_word16_1(_s ODecode_stream) OInt {
 var Decode_word16 = Decode_word16_1
 
 func Decode_word32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Decode_Int32_of_int_1(Decode_word16_1(_s))
+	__tmp1 := Int32_of_int_1(word16_1(_s))
 	_lo := __tmp1
-	__tmp5 := Decode_Int32_of_int_1(Decode_word16_1(_s))
+	__tmp5 := Int32_of_int_1(word16_1(_s))
 	_hi := __tmp5
-	__tmp9 := Int32_add_2(_lo, Int32_shift_left_2(_hi, 16))
+	__tmp9 := add_2(_lo, shift_left_2(_hi, 16))
 	return __tmp9
 }
 
 var Decode_word32 = Decode_word32_1
 
 func Decode_word64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := Decode_I64_convert_extend_i32_u_1(Decode_word32_1(_s))
+	__tmp1 := I64_convert_extend_i32_u_1(word32_1(_s))
 	_lo := __tmp1
-	__tmp5 := Decode_I64_convert_extend_i32_u_1(Decode_word32_1(_s))
+	__tmp5 := I64_convert_extend_i32_u_1(word32_1(_s))
 	_hi := __tmp5
-	__tmp9 := Int64_add_2(_lo, Int64_shift_left_2(_hi, 32))
+	__tmp9 := add_2(_lo, shift_left_2(_hi, 32))
 	return __tmp9
 }
 
 var Decode_word64 = Decode_word64_1
 
 func Decode_uN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := Decode_require_4(_operatorGt_2(_n, 0), _s, Decode_pos_1(_s), "integer representation too long")
+	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, Source_pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := Decode_byte_1(_s)
+	__tmp7 := byte_1(_s)
 	_b := __tmp7
-	__tmp10 := Decode_require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "integer too large")
+	__tmp10 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(Source_pos_1(_s), 1), "integer too large")
 	_ = __tmp10
-	__tmp23 := Decode_Int64_of_int_1(_operatorland_2(_b, 0x7f))
+	__tmp23 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp23
 	var __tmp27 OInt64
 	if _operatorEq_2(_operatorland_2(_b, 0x80), 0) {
 		__tmp31 := _x
 		__tmp27 = __tmp31
 	} else {
-		__tmp32 := Int64_logor_2(_x, Int64_shift_left_2(Int64_uN_2(_operatorMinus_2(_n, 7), _s), 7))
+		__tmp32 := logor_2(_x, shift_left_2(uN_2(_operatorMinus_2(_n, 7), _s), 7))
 		__tmp27 = __tmp32
 	}
 	return __tmp27
@@ -6224,15 +6224,15 @@ func Decode_uN_1(_n OInt) func(_s ODecode_stream) OInt64 {
 var Decode_uN = Decode_uN_2
 
 func Decode_sN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := Decode_require_4(_operatorGt_2(_n, 0), _s, Decode_pos_1(_s), "integer representation too long")
+	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, Source_pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := Decode_byte_1(_s)
+	__tmp7 := byte_1(_s)
 	_b := __tmp7
 	__tmp10 := _operatorland_2(_operatorlsl_2(-(1), _operatorMinus_2(_n, 1)), 0x7f)
 	_mask := __tmp10
-	__tmp15 := Decode_require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "integer too large")
+	__tmp15 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(Source_pos_1(_s), 1), "integer too large")
 	_ = __tmp15
-	__tmp33 := Decode_Int64_of_int_1(_operatorland_2(_b, 0x7f))
+	__tmp33 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp33
 	var __tmp37 OInt64
 	if _operatorEq_2(_operatorland_2(_b, 0x80), 0) {
@@ -6241,12 +6241,12 @@ func Decode_sN_2(_n OInt, _s ODecode_stream) OInt64 {
 			__tmp45 := _x
 			__tmp41 = __tmp45
 		} else {
-			__tmp46 := Int64_logor_2(_x, Int64_logxor_2(-(1), 0x7f))
+			__tmp46 := logor_2(_x, logxor_2(-(1), 0x7f))
 			__tmp41 = __tmp46
 		}
 		__tmp37 = __tmp41
 	} else {
-		__tmp49 := Int64_logor_2(_x, Int64_shift_left_2(Int64_sN_2(_operatorMinus_2(_n, 7), _s), 7))
+		__tmp49 := logor_2(_x, shift_left_2(sN_2(_operatorMinus_2(_n, 7), _s), 7))
 		__tmp37 = __tmp49
 	}
 	return __tmp37
@@ -6262,79 +6262,79 @@ func Decode_sN_1(_n OInt) func(_s ODecode_stream) OInt64 {
 var Decode_sN = Decode_sN_2
 
 func Decode_u32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Decode_Int64_to_int32_1(Decode_uN_2(32, _s))
+	__tmp1 := Int64_to_int32_1(uN_2(32, _s))
 	return __tmp1
 }
 
 var Decode_u32 = Decode_u32_1
 
 func Decode_u64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := Decode_uN_2(64, _s)
+	__tmp1 := uN_2(64, _s)
 	return __tmp1
 }
 
 var Decode_u64 = Decode_u64_1
 
 func Decode_s7_1(_s ODecode_stream) OInt {
-	__tmp1 := Decode_Int64_to_int_1(Decode_sN_2(7, _s))
+	__tmp1 := Int64_to_int_1(sN_2(7, _s))
 	return __tmp1
 }
 
 var Decode_s7 = Decode_s7_1
 
 func Decode_s32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Decode_Int64_to_int32_1(Decode_sN_2(32, _s))
+	__tmp1 := Int64_to_int32_1(sN_2(32, _s))
 	return __tmp1
 }
 
 var Decode_s32 = Decode_s32_1
 
 func Decode_s33_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Decode_I32_convert_wrap_i64_1(Decode_sN_2(33, _s))
+	__tmp1 := I32_convert_wrap_i64_1(sN_2(33, _s))
 	return __tmp1
 }
 
 var Decode_s33 = Decode_s33_1
 
 func Decode_s64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := Decode_sN_2(64, _s)
+	__tmp1 := sN_2(64, _s)
 	return __tmp1
 }
 
 var Decode_s64 = Decode_s64_1
 
 func Decode_f32_1(_s ODecode_stream) float32 {
-	__tmp1 := Decode_F32_of_bits_1(Decode_word32_1(_s))
+	__tmp1 := F32_of_bits_1(word32_1(_s))
 	return __tmp1
 }
 
 var Decode_f32 = Decode_f32_1
 
 func Decode_f64_1(_s ODecode_stream) float64 {
-	__tmp1 := Decode_F64_of_bits_1(Decode_word64_1(_s))
+	__tmp1 := F64_of_bits_1(word64_1(_s))
 	return __tmp1
 }
 
 var Decode_f64 = Decode_f64_1
 
 func Decode_v128_1(_s ODecode_stream) V128 {
-	__tmp1 := Decode_V128_of_bits_1(Decode_get_string_2(16, _s))
+	__tmp1 := V128_of_bits_1(get_string_2(16, _s))
 	return __tmp1
 }
 
 var Decode_v128 = Decode_v128_1
 
 func Decode_len32_1(_s ODecode_stream) OInt {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
-	__tmp4 := Decode_u32_1(_s)
+	__tmp4 := u32_1(_s)
 	_n := __tmp4
 	var __tmp7 OInt
-	if Decode_I32_le_u_2(_n, Decode_Int32_of_int_1(_operatorMinus_2(Decode_len_1(_s), _pos))) {
-		__tmp15 := Decode_Int32_to_int_1(_n)
+	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(len_1(_s), _pos))) {
+		__tmp15 := Int32_to_int_1(_n)
 		__tmp7 = __tmp15
 	} else {
-		__tmp17 := Decode_error_3(_s, _pos, "length out of bounds")
+		__tmp17 := error_3(_s, _pos, "length out of bounds")
 		__tmp7 = __tmp17
 	}
 	return __tmp7
@@ -6343,23 +6343,23 @@ func Decode_len32_1(_s ODecode_stream) OInt {
 var Decode_len32 = Decode_len32_1
 
 func Decode_string_1(_s ODecode_stream) string {
-	__tmp1 := Decode_len32_1(_s)
+	__tmp1 := len32_1(_s)
 	_n := __tmp1
-	__tmp4 := Decode_get_string_2(_n, _s)
+	__tmp4 := get_string_2(_n, _s)
 	return __tmp4
 }
 
 var Decode_string = Decode_string_1
 
 func Decode_zero_1(_s ODecode_stream) Ounit {
-	__tmp1 := Decode_expect_3(0x00, _s, "zero byte expected")
+	__tmp1 := expect_3(0x00, _s, "zero byte expected")
 	return __tmp1
 }
 
 var Decode_zero = Decode_zero_1
 
 func Decode_var_1(_s ODecode_stream) OTypes_local_idx {
-	__tmp1 := Decode_u32_1(_s)
+	__tmp1 := u32_1(_s)
 	return __tmp1
 }
 
@@ -6367,7 +6367,7 @@ var Decode_var = Decode_var_1
 
 func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 	var __tmp1 OTypes_mut
-	__tmp2 := Decode_byte_1(_s)
+	__tmp2 := byte_1(_s)
 	if __tmp2 == 0 {
 		__tmp5 := _Cons
 		__tmp1 = __tmp5
@@ -6376,7 +6376,7 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 		__tmp1 = __tmp7
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp11 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed mutability")
+		__tmp11 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed mutability")
 		__tmp1 = __tmp11
 	}
 	return __tmp1
@@ -6385,17 +6385,17 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 var Decode_mutability = Decode_mutability_1
 
 func Decode_var_type_2(_var func(ODecode_stream) OTypes_local_idx, _s ODecode_stream) OTypes_var {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
 	var __tmp4 OTypes_var
-	__tmp5 := Decode_var_1(_s)
+	__tmp5 := Types_var_1(_s)
 	if _i := __tmp5; _operatorGte_2(_i, 0) {
 		_ = _i
-		__tmp12 := Decode_StatX_1(_i)
+		__tmp12 := Types_StatX_1(_i)
 		__tmp4 = __tmp12
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp16 := Decode_error_3(_s, _pos, "malformed type index")
+		__tmp16 := error_3(_s, _pos, "malformed type index")
 		__tmp4 = __tmp16
 	}
 	return __tmp4
@@ -6411,7 +6411,7 @@ var Decode_var_type = Decode_var_type_2
 
 func Decode_num_type_1(_s ODecode_stream) OTypes_num_type {
 	var __tmp1 OTypes_num_type
-	__tmp2 := Decode_s7_1(_s)
+	__tmp2 := s7_1(_s)
 	if __tmp2 == -0x01 {
 		__tmp5 := _I32T
 		__tmp1 = __tmp5
@@ -6426,7 +6426,7 @@ func Decode_num_type_1(_s ODecode_stream) OTypes_num_type {
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp15 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed number type")
+		__tmp15 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed number type")
 		__tmp1 = __tmp15
 	}
 	return __tmp1
@@ -6436,13 +6436,13 @@ var Decode_num_type = Decode_num_type_1
 
 func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 	var __tmp1 OTypes_vec_type
-	__tmp2 := Decode_s7_1(_s)
+	__tmp2 := s7_1(_s)
 	if __tmp2 == -0x05 {
 		__tmp5 := _V128T
 		__tmp1 = __tmp5
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp9 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed vector type")
+		__tmp9 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed vector type")
 		__tmp1 = __tmp9
 	}
 	return __tmp1
@@ -6451,14 +6451,14 @@ func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 var Decode_vec_type = Decode_vec_type_1
 
 func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
-	__tmp4 := Decode_either_2([]func(ODecode_stream) OTypes_heap_type{func(_s ODecode_stream) OTypes_heap_type {
-		__tmp5 := Decode_VarHT_1(Decode_var_type_2(_s33, _s))
+	__tmp4 := either_2([]func(ODecode_stream) OTypes_heap_type{func(_s ODecode_stream) OTypes_heap_type {
+		__tmp5 := Types_VarHT_1(var_type_2(_s33, _s))
 		return __tmp5
 	}, func(_s ODecode_stream) OTypes_heap_type {
 		var __tmp9 OTypes_heap_type
-		__tmp10 := Decode_s7_1(_s)
+		__tmp10 := s7_1(_s)
 		if __tmp10 == -0x0c {
 			__tmp13 := _NoExnHT
 			__tmp9 = __tmp13
@@ -6497,7 +6497,7 @@ func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
 			__tmp9 = __tmp35
 		} else if __ := __tmp10; true {
 			_ = __
-			__tmp39 := Decode_error_3(_s, _pos, "malformed heap type")
+			__tmp39 := error_3(_s, _pos, "malformed heap type")
 			__tmp9 = __tmp39
 		}
 		return __tmp9
@@ -6511,13 +6511,13 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 	F0 OTypes_null
 	F1 OTypes_heap_type
 } {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
 	var __tmp4 struct {
 		F0 OTypes_null
 		F1 OTypes_heap_type
 	}
-	__tmp5 := Decode_s7_1(_s)
+	__tmp5 := s7_1(_s)
 	if __tmp5 == -0x0c {
 		__tmp8 := struct {
 			F0 OTypes_null
@@ -6594,17 +6594,17 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 		__tmp68 := struct {
 			F0 OTypes_null
 			F1 OTypes_heap_type
-		}{_NoNull, Decode_heap_type_1(_s)}
+		}{_NoNull, Types_heap_type_1(_s)}
 		__tmp4 = __tmp68
 	} else if __tmp5 == -0x1d {
 		__tmp73 := struct {
 			F0 OTypes_null
 			F1 OTypes_heap_type
-		}{_Null, Decode_heap_type_1(_s)}
+		}{_Null, Types_heap_type_1(_s)}
 		__tmp4 = __tmp73
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp80 := Decode_error_3(_s, _pos, "malformed reference type")
+		__tmp80 := error_3(_s, _pos, "malformed reference type")
 		__tmp4 = __tmp80
 	}
 	return __tmp4
@@ -6613,14 +6613,14 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 var Decode_ref_type = Decode_ref_type_1
 
 func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
-	__tmp1 := Decode_either_2([]func(ODecode_stream) OTypes_val_type{func(_s ODecode_stream) OTypes_val_type {
-		__tmp2 := Decode_NumT_1(Decode_num_type_1(_s))
+	__tmp1 := either_2([]func(ODecode_stream) OTypes_val_type{func(_s ODecode_stream) OTypes_val_type {
+		__tmp2 := Types_NumT_1(Types_num_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_val_type {
-		__tmp5 := Decode_VecT_1(Decode_vec_type_1(_s))
+		__tmp5 := Types_VecT_1(Types_vec_type_1(_s))
 		return __tmp5
 	}, func(_s ODecode_stream) OTypes_val_type {
-		__tmp8 := Decode_RefT_1(Decode_ref_type_1(_s))
+		__tmp8 := Types_RefT_1(Types_ref_type_1(_s))
 		return __tmp8
 	}}, _s)
 	return __tmp1
@@ -6629,17 +6629,17 @@ func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
 var Decode_val_type = Decode_val_type_1
 
 func Decode_result_type_1(_s ODecode_stream) []OTypes_val_type {
-	__tmp1 := Decode_vec_2(_val_type, _s)
+	__tmp1 := vec_2(_val_type, _s)
 	return __tmp1
 }
 
 var Decode_result_type = Decode_result_type_1
 
 func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
 	var __tmp4 OPack_pack_size
-	__tmp5 := Decode_s7_1(_s)
+	__tmp5 := s7_1(_s)
 	if __tmp5 == -0x08 {
 		__tmp8 := /*Pack.*/ _Pack8
 		__tmp4 = __tmp8
@@ -6648,7 +6648,7 @@ func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
 		__tmp4 = __tmp10
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp14 := Decode_error_3(_s, _pos, "malformed storage type")
+		__tmp14 := error_3(_s, _pos, "malformed storage type")
 		__tmp4 = __tmp14
 	}
 	return __tmp4
@@ -6657,11 +6657,11 @@ func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
 var Decode_pack_type = Decode_pack_type_1
 
 func Decode_storage_type_1(_s ODecode_stream) OTypes_storage_type {
-	__tmp1 := Decode_either_2([]func(ODecode_stream) OTypes_storage_type{func(_s ODecode_stream) OTypes_storage_type {
-		__tmp2 := Decode_ValStorageT_1(Decode_val_type_1(_s))
+	__tmp1 := either_2([]func(ODecode_stream) OTypes_storage_type{func(_s ODecode_stream) OTypes_storage_type {
+		__tmp2 := Types_ValStorageT_1(Types_val_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_storage_type {
-		__tmp5 := Decode_PackStorageT_1(Decode_pack_type_1(_s))
+		__tmp5 := Types_PackStorageT_1(pack_type_1(_s))
 		return __tmp5
 	}}, _s)
 	return __tmp1
@@ -6670,11 +6670,11 @@ func Decode_storage_type_1(_s ODecode_stream) OTypes_storage_type {
 var Decode_storage_type = Decode_storage_type_1
 
 func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
-	__tmp1 := Decode_storage_type_1(_s)
+	__tmp1 := Types_storage_type_1(_s)
 	_t := __tmp1
-	__tmp4 := Decode_mutability_1(_s)
+	__tmp4 := mutability_1(_s)
 	_mut := __tmp4
-	__tmp7 := Decode_FieldT_1(struct {
+	__tmp7 := Types_FieldT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_storage_type
 	}{_mut, _t})
@@ -6684,25 +6684,25 @@ func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
 var Decode_field_type = Decode_field_type_1
 
 func Decode_struct_type_1(_s ODecode_stream) OTypes_struct_type {
-	__tmp1 := Decode_StructT_1(Decode_vec_2(_field_type, _s))
+	__tmp1 := Types_StructT_1(vec_2(_field_type, _s))
 	return __tmp1
 }
 
 var Decode_struct_type = Decode_struct_type_1
 
 func Decode_array_type_1(_s ODecode_stream) OTypes_array_type {
-	__tmp1 := Decode_ArrayT_1(Decode_field_type_1(_s))
+	__tmp1 := Types_ArrayT_1(Types_field_type_1(_s))
 	return __tmp1
 }
 
 var Decode_array_type = Decode_array_type_1
 
 func Decode_func_type_1(_s ODecode_stream) OTypes_func_type {
-	__tmp1 := Decode_result_type_1(_s)
+	__tmp1 := Types_result_type_1(_s)
 	_ts1 := __tmp1
-	__tmp4 := Decode_result_type_1(_s)
+	__tmp4 := Types_result_type_1(_s)
 	_ts2 := __tmp4
-	__tmp7 := Decode_FuncT_1(struct {
+	__tmp7 := Types_FuncT_1(struct {
 		F0 OTypes_result_type
 		F1 OTypes_result_type
 	}{_ts1, _ts2})
@@ -6713,19 +6713,19 @@ var Decode_func_type = Decode_func_type_1
 
 func Decode_str_type_1(_s ODecode_stream) OTypes_str_type {
 	var __tmp1 OTypes_str_type
-	__tmp2 := Decode_s7_1(_s)
+	__tmp2 := s7_1(_s)
 	if __tmp2 == -0x20 {
-		__tmp5 := Decode_DefFuncT_1(Decode_func_type_1(_s))
+		__tmp5 := Types_DefFuncT_1(Types_func_type_1(_s))
 		__tmp1 = __tmp5
 	} else if __tmp2 == -0x21 {
-		__tmp8 := Decode_DefStructT_1(Decode_struct_type_1(_s))
+		__tmp8 := Types_DefStructT_1(Types_struct_type_1(_s))
 		__tmp1 = __tmp8
 	} else if __tmp2 == -0x22 {
-		__tmp11 := Decode_DefArrayT_1(Decode_array_type_1(_s))
+		__tmp11 := Types_DefArrayT_1(Types_array_type_1(_s))
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp16 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed definition type")
+		__tmp16 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed definition type")
 		__tmp1 = __tmp16
 	}
 	return __tmp1
@@ -6735,44 +6735,44 @@ var Decode_str_type = Decode_str_type_1
 
 func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 	var __tmp1 OTypes_sub_type
-	__tmp2 := Decode_peek_1(_s)
+	__tmp2 := peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x30), 0x7f))) {
-		__tmp9 := Decode_skip_2(1, _s)
+		__tmp9 := skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := Decode_vec_2(Decode_var_type_1(_u32), _s)
+		__tmp11 := vec_2(var_type_1(_u32), _s)
 		_xs := __tmp11
-		__tmp16 := Decode_SubT_1(struct {
+		__tmp16 := Types_SubT_1(struct {
 			F0 OTypes_final
 			F1 []OTypes_heap_type
 			F2 OTypes_str_type
-		}{_NoFinal, Decode_List_map_2(func(_x OTypes_var) OTypes_heap_type {
-			__tmp21 := Decode_VarHT_1(_x)
+		}{_NoFinal, List_map_2(func(_x OTypes_var) OTypes_heap_type {
+			__tmp21 := Types_VarHT_1(_x)
 			return __tmp21
-		}, _xs), Decode_str_type_1(_s)})
+		}, _xs), Types_str_type_1(_s)})
 
 		__tmp1 = __tmp16
 	} else if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x31), 0x7f))) {
-		__tmp30 := Decode_skip_2(1, _s)
+		__tmp30 := skip_2(1, _s)
 		_ = __tmp30
-		__tmp32 := Decode_vec_2(Decode_var_type_1(_u32), _s)
+		__tmp32 := vec_2(var_type_1(_u32), _s)
 		_xs := __tmp32
-		__tmp37 := Decode_SubT_1(struct {
+		__tmp37 := Types_SubT_1(struct {
 			F0 OTypes_final
 			F1 []OTypes_heap_type
 			F2 OTypes_str_type
-		}{_Final, Decode_List_map_2(func(_x OTypes_var) OTypes_heap_type {
-			__tmp42 := Decode_VarHT_1(_x)
+		}{_Final, List_map_2(func(_x OTypes_var) OTypes_heap_type {
+			__tmp42 := Types_VarHT_1(_x)
 			return __tmp42
-		}, _xs), Decode_str_type_1(_s)})
+		}, _xs), Types_str_type_1(_s)})
 
 		__tmp1 = __tmp37
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp49 := Decode_SubT_1(struct {
+		__tmp49 := Types_SubT_1(struct {
 			F0 OTypes_final
 			F1 []OTypes_heap_type
 			F2 OTypes_str_type
-		}{_Final, []OTypes_heap_type{}, Decode_str_type_1(_s)})
+		}{_Final, []OTypes_heap_type{}, Types_str_type_1(_s)})
 		__tmp1 = __tmp49
 	}
 	return __tmp1
@@ -6782,16 +6782,16 @@ var Decode_sub_type = Decode_sub_type_1
 
 func Decode_rec_type_1(_s ODecode_stream) OTypes_rec_type {
 	var __tmp1 OTypes_rec_type
-	__tmp2 := Decode_peek_1(_s)
+	__tmp2 := peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x32), 0x7f))) {
-		__tmp9 := Decode_skip_2(1, _s)
+		__tmp9 := skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := Decode_RecT_1(Decode_vec_2(_sub_type, _s))
+		__tmp11 := Types_RecT_1(vec_2(_sub_type, _s))
 
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp17 := Decode_RecT_1([]OTypes_sub_type{Decode_sub_type_1(_s)})
+		__tmp17 := Types_RecT_1([]OTypes_sub_type{Types_sub_type_1(_s)})
 		__tmp1 = __tmp17
 	}
 	return __tmp1
@@ -6803,9 +6803,9 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 	F0 OTypes_addr_type
 	F1 OTypes_limits
 } {
-	__tmp1 := Decode_byte_1(_s)
+	__tmp1 := byte_1(_s)
 	_flags := __tmp1
-	__tmp4 := Decode_require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed limits flags")
+	__tmp4 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed limits flags")
 	_ = __tmp4
 	__tmp12 := _operatorEq_2(_operatorland_2(_flags, 1), 1)
 	_has_max := __tmp12
@@ -6818,9 +6818,9 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 		__tmp16 = __tmp22
 	}
 	_at := __tmp16
-	__tmp25 := Decode_uN_1(_s)
+	__tmp25 := uN_1(_s)
 	_min := __tmp25
-	__tmp28 := Decode_opt_3(_uN, _has_max, _s)
+	__tmp28 := opt_3(_uN, _has_max, _s)
 	_max := __tmp28
 	return struct {
 		F0 OTypes_addr_type
@@ -6842,11 +6842,11 @@ func Decode_limits_1(_uN func(ODecode_stream) OInt64) func(_s ODecode_stream) st
 var Decode_limits = Decode_limits_2
 
 func Decode_table_type_1(_s ODecode_stream) OTypes_table_type {
-	__tmp1 := Decode_ref_type_1(_s)
+	__tmp1 := Types_ref_type_1(_s)
 	_t := __tmp1
-	__tmp4 := Decode_limits_2(_u64, _s)
+	__tmp4 := Types_limits_2(_u64, _s)
 	_at, _lim := __unpack_Types_addr_type___Types_limits(__tmp4)
-	__tmp9 := Decode_TableT_1(struct {
+	__tmp9 := Types_TableT_1(struct {
 		F0 OTypes_addr_type
 		F1 OTypes_limits
 		F2 OTypes_ref_type
@@ -6857,11 +6857,11 @@ func Decode_table_type_1(_s ODecode_stream) OTypes_table_type {
 var Decode_table_type = Decode_table_type_1
 
 func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
-	__tmp1 := Decode_val_type_1(_s)
+	__tmp1 := Types_val_type_1(_s)
 	_t := __tmp1
-	__tmp4 := Decode_mutability_1(_s)
+	__tmp4 := mutability_1(_s)
 	_mut := __tmp4
-	__tmp7 := Decode_GlobalT_1(struct {
+	__tmp7 := Types_GlobalT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_val_type
 	}{_mut, _t})
@@ -6871,9 +6871,9 @@ func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
 var Decode_global_type = Decode_global_type_1
 
 func Decode_tag_type_1(_s ODecode_stream) TODO /* Types.local_idx phrase (kind 3) */ {
-	__tmp1 := Decode_zero_1(_s)
+	__tmp1 := zero_1(_s)
 	_ = __tmp1
-	__tmp3 := Decode_at_2(_var, _s)
+	__tmp3 := at_2(_var, _s)
 	return __tmp3
 
 }
@@ -6881,14 +6881,14 @@ func Decode_tag_type_1(_s ODecode_stream) TODO /* Types.local_idx phrase (kind 3
 var Decode_tag_type = Decode_tag_type_1
 
 func Decode_op_1(_s ODecode_stream) OInt {
-	__tmp1 := Decode_byte_1(_s)
+	__tmp1 := byte_1(_s)
 	return __tmp1
 }
 
 var Decode_op = Decode_op_1
 
 func Decode_end__1(_s ODecode_stream) Ounit {
-	__tmp1 := Decode_expect_3(0x0b, _s, "END opcode expected")
+	__tmp1 := expect_3(0x0b, _s, "END opcode expected")
 	return __tmp1
 }
 
@@ -6899,26 +6899,26 @@ func Decode_memop_1(_s ODecode_stream) struct {
 	F1 OInt
 	F2 OInt64
 } {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
-	__tmp4 := Decode_u32_1(_s)
+	__tmp4 := u32_1(_s)
 	_flags := __tmp4
-	__tmp7 := Decode_require_4(Decode_I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
+	__tmp7 := require_4(I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
-	__tmp12 := _operatorNotEq_2(Decode_Int32_logand_2(_flags, 0x40), 0)
+	__tmp12 := _operatorNotEq_2(Int32_logand_2(_flags, 0x40), 0)
 	_has_var := __tmp12
 	var __tmp16 TODO /* Types.local_idx phrase (kind 3) */
 	if _has_var {
-		__tmp18 := Decode_at_2(_var, _s)
+		__tmp18 := at_2(_var, _s)
 		__tmp16 = __tmp18
 	} else {
 		__tmp21 := _operatorAtAt_2(0, _no_region)
 		__tmp16 = __tmp21
 	}
 	_x := __tmp16
-	__tmp24 := Int32_to_int_1(Int32_logand_2(_flags, 0x3f))
+	__tmp24 := to_int_1(logand_2(_flags, 0x3f))
 	_align := __tmp24
-	__tmp28 := Decode_u64_1(_s)
+	__tmp28 := u64_1(_s)
 	_offset := __tmp28
 	return struct {
 		F0 TODO /* Types.local_idx phrase (kind 3) */
@@ -6931,20 +6931,20 @@ func Decode_memop_1(_s ODecode_stream) struct {
 var Decode_memop = Decode_memop_1
 
 func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
-	__tmp1 := Decode_either_2([]func(ODecode_stream) OAst_block_type{func(_s ODecode_stream) OAst_block_type {
-		__tmp2 := Decode_VarBlockType_1(Decode_at_2(func(_s ODecode_stream) OTypes_local_idx {
-			__tmp4 := Decode_as_stat_var_1(Decode_var_type_2(_s33, _s))
+	__tmp1 := either_2([]func(ODecode_stream) OAst_block_type{func(_s ODecode_stream) OAst_block_type {
+		__tmp2 := Ast_VarBlockType_1(at_2(func(_s ODecode_stream) OTypes_local_idx {
+			__tmp4 := as_stat_var_1(var_type_2(_s33, _s))
 			return __tmp4
 		}, _s))
 		return __tmp2
 	}, func(_s ODecode_stream) OAst_block_type {
-		__tmp9 := Decode_expect_3(0x40, _s, "")
+		__tmp9 := expect_3(0x40, _s, "")
 		_ = __tmp9
-		__tmp11 := Decode_ValBlockType_1(_None)
+		__tmp11 := Ast_ValBlockType_1(_None)
 		return __tmp11
 
 	}, func(_s ODecode_stream) OAst_block_type {
-		__tmp14 := Decode_ValBlockType_1(Decode_Some_1(Decode_val_type_1(_s)))
+		__tmp14 := Ast_ValBlockType_1(Some_1(Types_val_type_1(_s)))
 		return __tmp14
 	}}, _s)
 	return __tmp1
@@ -6956,9 +6956,9 @@ func Decode_local_1(_s ODecode_stream) struct {
 	F0 OTypes_local_idx
 	F1 TODO /* Ast.local' phrase (kind 3) */
 } {
-	__tmp1 := Decode_u32_1(_s)
+	__tmp1 := u32_1(_s)
 	_n := __tmp1
-	__tmp4 := Decode_at_2(_val_type, _s)
+	__tmp4 := at_2(_val_type, _s)
 	_t := __tmp4
 	return struct {
 		F0 OTypes_local_idx
@@ -6969,10 +6969,10 @@ func Decode_local_1(_s ODecode_stream) struct {
 var Decode_local = Decode_local_1
 
 func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
-	__tmp1 := Decode_pos_1(_s)
+	__tmp1 := Source_pos_1(_s)
 	_pos := __tmp1
 	var __tmp4 OAst_instr_
-	__tmp5 := Decode_op_1(_s)
+	__tmp5 := op_1(_s)
 	if __tmp5 == 0x00 {
 		__tmp8 := _unreachable
 		__tmp4 = __tmp8
@@ -6980,297 +6980,297 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp9 := _nop
 		__tmp4 = __tmp9
 	} else if __tmp5 == 0x02 {
-		__tmp10 := Decode_block_type_1(_s)
+		__tmp10 := Ast_block_type_1(_s)
 		_bt := __tmp10
-		__tmp13 := Decode_instr_block_1(_s)
+		__tmp13 := instr_block_1(_s)
 		_es_ := __tmp13
-		__tmp16 := Decode_end__1(_s)
+		__tmp16 := end__1(_s)
 		_ = __tmp16
-		__tmp18 := Decode_block_2(_bt, _es_)
+		__tmp18 := block_2(_bt, _es_)
 
 		__tmp4 = __tmp18
 	} else if __tmp5 == 0x03 {
-		__tmp21 := Decode_block_type_1(_s)
+		__tmp21 := Ast_block_type_1(_s)
 		_bt := __tmp21
-		__tmp24 := Decode_instr_block_1(_s)
+		__tmp24 := instr_block_1(_s)
 		_es_ := __tmp24
-		__tmp27 := Decode_end__1(_s)
+		__tmp27 := end__1(_s)
 		_ = __tmp27
-		__tmp29 := Decode_loop_2(_bt, _es_)
+		__tmp29 := loop_2(_bt, _es_)
 
 		__tmp4 = __tmp29
 	} else if __tmp5 == 0x04 {
-		__tmp32 := Decode_block_type_1(_s)
+		__tmp32 := Ast_block_type_1(_s)
 		_bt := __tmp32
-		__tmp35 := Decode_instr_block_1(_s)
+		__tmp35 := instr_block_1(_s)
 		_es1 := __tmp35
 		var __tmp38 OAst_instr_
-		if _operatorEq_2(Decode_peek_1(_s), Decode_Some_1(0x05)) {
-			__tmp43 := Decode_expect_3(0x05, _s, "ELSE or END opcode expected")
+		if _operatorEq_2(peek_1(_s), Some_1(0x05)) {
+			__tmp43 := expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
-			__tmp45 := Decode_instr_block_1(_s)
+			__tmp45 := instr_block_1(_s)
 			_es2 := __tmp45
-			__tmp48 := Decode_end__1(_s)
+			__tmp48 := end__1(_s)
 			_ = __tmp48
-			__tmp50 := Decode_if__3(_bt, _es1, _es2)
+			__tmp50 := if__3(_bt, _es1, _es2)
 
 			__tmp38 = __tmp50
 		} else {
-			__tmp54 := Decode_end__1(_s)
+			__tmp54 := end__1(_s)
 			_ = __tmp54
-			__tmp56 := Decode_if__3(_bt, _es1, []OAst_instr{})
+			__tmp56 := if__3(_bt, _es1, []OAst_instr{})
 
 			__tmp38 = __tmp56
 		}
 		__tmp4 = __tmp38
 	} else if __tmp5 == 0x05 {
-		__tmp59 := Decode_error_3(_s, _pos, "misplaced ELSE opcode")
+		__tmp59 := error_3(_s, _pos, "misplaced ELSE opcode")
 		__tmp4 = __tmp59
 	} else if __tmp5 == 0x06 || __tmp5 == 0x07 {
 		_b := __tmp5
-		__tmp63 := Decode_illegal_3(_s, _pos, _b)
+		__tmp63 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp63
 	} else if __tmp5 == 0x08 {
-		__tmp67 := Decode_throw_1(Decode_at_2(_var, _s))
+		__tmp67 := throw_1(at_2(_var, _s))
 		__tmp4 = __tmp67
 	} else if __tmp5 == 0x09 {
 		_b := __tmp5
-		__tmp72 := Decode_illegal_3(_s, _pos, _b)
+		__tmp72 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp72
 	} else if __tmp5 == 0x0a {
 		__tmp76 := _throw_ref
 		__tmp4 = __tmp76
 	} else if __tmp5 == 0x0b {
-		__tmp77 := Decode_error_3(_s, _pos, "misplaced END opcode")
+		__tmp77 := error_3(_s, _pos, "misplaced END opcode")
 		__tmp4 = __tmp77
 	} else if __tmp5 == 0x0c {
-		__tmp80 := Decode_br_1(Decode_at_2(_var, _s))
+		__tmp80 := br_1(at_2(_var, _s))
 		__tmp4 = __tmp80
 	} else if __tmp5 == 0x0d {
-		__tmp84 := Decode_br_if_1(Decode_at_2(_var, _s))
+		__tmp84 := br_if_1(at_2(_var, _s))
 		__tmp4 = __tmp84
 	} else if __tmp5 == 0x0e {
-		__tmp88 := Decode_vec_2(Decode_at_1(_var), _s)
+		__tmp88 := Ast_vec_2(at_1(_var), _s)
 		_xs := __tmp88
-		__tmp93 := Decode_at_2(_var, _s)
+		__tmp93 := at_2(_var, _s)
 		_x := __tmp93
-		__tmp97 := Decode_br_table_2(_xs, _x)
+		__tmp97 := br_table_2(_xs, _x)
 		__tmp4 = __tmp97
 	} else if __tmp5 == 0x0f {
 		__tmp100 := _return
 		__tmp4 = __tmp100
 	} else if __tmp5 == 0x10 {
-		__tmp101 := Decode_call_1(Decode_at_2(_var, _s))
+		__tmp101 := call_1(at_2(_var, _s))
 		__tmp4 = __tmp101
 	} else if __tmp5 == 0x11 {
-		__tmp105 := Decode_at_2(_var, _s)
+		__tmp105 := at_2(_var, _s)
 		_y := __tmp105
-		__tmp109 := Decode_at_2(_var, _s)
+		__tmp109 := at_2(_var, _s)
 		_x := __tmp109
-		__tmp113 := Decode_call_indirect_2(_x, _y)
+		__tmp113 := call_indirect_2(_x, _y)
 		__tmp4 = __tmp113
 	} else if __tmp5 == 0x12 {
-		__tmp116 := Decode_return_call_1(Decode_at_2(_var, _s))
+		__tmp116 := return_call_1(at_2(_var, _s))
 		__tmp4 = __tmp116
 	} else if __tmp5 == 0x13 {
-		__tmp120 := Decode_at_2(_var, _s)
+		__tmp120 := at_2(_var, _s)
 		_y := __tmp120
-		__tmp124 := Decode_at_2(_var, _s)
+		__tmp124 := at_2(_var, _s)
 		_x := __tmp124
-		__tmp128 := Decode_return_call_indirect_2(_x, _y)
+		__tmp128 := return_call_indirect_2(_x, _y)
 		__tmp4 = __tmp128
 	} else if __tmp5 == 0x14 {
-		__tmp131 := Decode_call_ref_1(Decode_at_2(_var, _s))
+		__tmp131 := call_ref_1(at_2(_var, _s))
 		__tmp4 = __tmp131
 	} else if __tmp5 == 0x15 {
-		__tmp135 := Decode_return_call_ref_1(Decode_at_2(_var, _s))
+		__tmp135 := return_call_ref_1(at_2(_var, _s))
 		__tmp4 = __tmp135
 	} else if __tmp5 == 0x16 || __tmp5 == 0x17 || __tmp5 == 0x18 || __tmp5 == 0x19 {
 		_b := __tmp5
-		__tmp140 := Decode_illegal_3(_s, _pos, _b)
+		__tmp140 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp140
 	} else if __tmp5 == 0x1a {
 		__tmp144 := _drop
 		__tmp4 = __tmp144
 	} else if __tmp5 == 0x1b {
-		__tmp145 := Decode_select_1(_None)
+		__tmp145 := select_1(_None)
 		__tmp4 = __tmp145
 	} else if __tmp5 == 0x1c {
-		__tmp148 := Decode_select_1(Decode_Some_1(Decode_vec_2(_val_type, _s)))
+		__tmp148 := select_1(Some_1(Ast_vec_2(_val_type, _s)))
 		__tmp4 = __tmp148
 	} else if __tmp5 == 0x1d || __tmp5 == 0x1e {
 		_b := __tmp5
-		__tmp154 := Decode_illegal_3(_s, _pos, _b)
+		__tmp154 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp154
 	} else if __tmp5 == 0x1f {
-		__tmp158 := Decode_block_type_1(_s)
+		__tmp158 := Ast_block_type_1(_s)
 		_bt := __tmp158
-		__tmp161 := Decode_vec_2(Decode_at_1(_catch), _s)
+		__tmp161 := Ast_vec_2(at_1(_catch), _s)
 		_cs := __tmp161
-		__tmp166 := Decode_instr_block_1(_s)
+		__tmp166 := instr_block_1(_s)
 		_es := __tmp166
-		__tmp169 := Decode_end__1(_s)
+		__tmp169 := end__1(_s)
 		_ = __tmp169
-		__tmp171 := Decode_try_table_3(_bt, _cs, _es)
+		__tmp171 := try_table_3(_bt, _cs, _es)
 
 		__tmp4 = __tmp171
 	} else if __tmp5 == 0x20 {
-		__tmp175 := Decode_local_get_1(Decode_at_2(_var, _s))
+		__tmp175 := local_get_1(at_2(_var, _s))
 		__tmp4 = __tmp175
 	} else if __tmp5 == 0x21 {
-		__tmp179 := Decode_local_set_1(Decode_at_2(_var, _s))
+		__tmp179 := local_set_1(at_2(_var, _s))
 		__tmp4 = __tmp179
 	} else if __tmp5 == 0x22 {
-		__tmp183 := Decode_local_tee_1(Decode_at_2(_var, _s))
+		__tmp183 := local_tee_1(at_2(_var, _s))
 		__tmp4 = __tmp183
 	} else if __tmp5 == 0x23 {
-		__tmp187 := Decode_global_get_1(Decode_at_2(_var, _s))
+		__tmp187 := global_get_1(at_2(_var, _s))
 		__tmp4 = __tmp187
 	} else if __tmp5 == 0x24 {
-		__tmp191 := Decode_global_set_1(Decode_at_2(_var, _s))
+		__tmp191 := global_set_1(at_2(_var, _s))
 		__tmp4 = __tmp191
 	} else if __tmp5 == 0x25 {
-		__tmp195 := Decode_table_get_1(Decode_at_2(_var, _s))
+		__tmp195 := table_get_1(at_2(_var, _s))
 		__tmp4 = __tmp195
 	} else if __tmp5 == 0x26 {
-		__tmp199 := Decode_table_set_1(Decode_at_2(_var, _s))
+		__tmp199 := table_set_1(at_2(_var, _s))
 		__tmp4 = __tmp199
 	} else if __tmp5 == 0x27 {
 		_b := __tmp5
-		__tmp204 := Decode_illegal_3(_s, _pos, _b)
+		__tmp204 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp204
 	} else if __tmp5 == 0x28 {
-		__tmp208 := Decode_memop_1(_s)
+		__tmp208 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp208)
-		__tmp213 := Decode_i32_load_3(_x, _a, _o)
+		__tmp213 := i32_load_3(_x, _a, _o)
 		__tmp4 = __tmp213
 	} else if __tmp5 == 0x29 {
-		__tmp217 := Decode_memop_1(_s)
+		__tmp217 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp217)
-		__tmp222 := Decode_i64_load_3(_x, _a, _o)
+		__tmp222 := i64_load_3(_x, _a, _o)
 		__tmp4 = __tmp222
 	} else if __tmp5 == 0x2a {
-		__tmp226 := Decode_memop_1(_s)
+		__tmp226 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp226)
-		__tmp231 := Decode_f32_load_3(_x, _a, _o)
+		__tmp231 := f32_load_3(_x, _a, _o)
 		__tmp4 = __tmp231
 	} else if __tmp5 == 0x2b {
-		__tmp235 := Decode_memop_1(_s)
+		__tmp235 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp235)
-		__tmp240 := Decode_f64_load_3(_x, _a, _o)
+		__tmp240 := f64_load_3(_x, _a, _o)
 		__tmp4 = __tmp240
 	} else if __tmp5 == 0x2c {
-		__tmp244 := Decode_memop_1(_s)
+		__tmp244 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp244)
-		__tmp249 := Decode_i32_load8_s_3(_x, _a, _o)
+		__tmp249 := i32_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp249
 	} else if __tmp5 == 0x2d {
-		__tmp253 := Decode_memop_1(_s)
+		__tmp253 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp253)
-		__tmp258 := Decode_i32_load8_u_3(_x, _a, _o)
+		__tmp258 := i32_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp258
 	} else if __tmp5 == 0x2e {
-		__tmp262 := Decode_memop_1(_s)
+		__tmp262 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp262)
-		__tmp267 := Decode_i32_load16_s_3(_x, _a, _o)
+		__tmp267 := i32_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp267
 	} else if __tmp5 == 0x2f {
-		__tmp271 := Decode_memop_1(_s)
+		__tmp271 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp271)
-		__tmp276 := Decode_i32_load16_u_3(_x, _a, _o)
+		__tmp276 := i32_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp276
 	} else if __tmp5 == 0x30 {
-		__tmp280 := Decode_memop_1(_s)
+		__tmp280 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp280)
-		__tmp285 := Decode_i64_load8_s_3(_x, _a, _o)
+		__tmp285 := i64_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp285
 	} else if __tmp5 == 0x31 {
-		__tmp289 := Decode_memop_1(_s)
+		__tmp289 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp289)
-		__tmp294 := Decode_i64_load8_u_3(_x, _a, _o)
+		__tmp294 := i64_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp294
 	} else if __tmp5 == 0x32 {
-		__tmp298 := Decode_memop_1(_s)
+		__tmp298 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp298)
-		__tmp303 := Decode_i64_load16_s_3(_x, _a, _o)
+		__tmp303 := i64_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp303
 	} else if __tmp5 == 0x33 {
-		__tmp307 := Decode_memop_1(_s)
+		__tmp307 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp307)
-		__tmp312 := Decode_i64_load16_u_3(_x, _a, _o)
+		__tmp312 := i64_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp312
 	} else if __tmp5 == 0x34 {
-		__tmp316 := Decode_memop_1(_s)
+		__tmp316 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp316)
-		__tmp321 := Decode_i64_load32_s_3(_x, _a, _o)
+		__tmp321 := i64_load32_s_3(_x, _a, _o)
 		__tmp4 = __tmp321
 	} else if __tmp5 == 0x35 {
-		__tmp325 := Decode_memop_1(_s)
+		__tmp325 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp325)
-		__tmp330 := Decode_i64_load32_u_3(_x, _a, _o)
+		__tmp330 := i64_load32_u_3(_x, _a, _o)
 		__tmp4 = __tmp330
 	} else if __tmp5 == 0x36 {
-		__tmp334 := Decode_memop_1(_s)
+		__tmp334 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp334)
-		__tmp339 := Decode_i32_store_3(_x, _a, _o)
+		__tmp339 := i32_store_3(_x, _a, _o)
 		__tmp4 = __tmp339
 	} else if __tmp5 == 0x37 {
-		__tmp343 := Decode_memop_1(_s)
+		__tmp343 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp343)
-		__tmp348 := Decode_i64_store_3(_x, _a, _o)
+		__tmp348 := i64_store_3(_x, _a, _o)
 		__tmp4 = __tmp348
 	} else if __tmp5 == 0x38 {
-		__tmp352 := Decode_memop_1(_s)
+		__tmp352 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp352)
-		__tmp357 := Decode_f32_store_3(_x, _a, _o)
+		__tmp357 := f32_store_3(_x, _a, _o)
 		__tmp4 = __tmp357
 	} else if __tmp5 == 0x39 {
-		__tmp361 := Decode_memop_1(_s)
+		__tmp361 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp361)
-		__tmp366 := Decode_f64_store_3(_x, _a, _o)
+		__tmp366 := f64_store_3(_x, _a, _o)
 		__tmp4 = __tmp366
 	} else if __tmp5 == 0x3a {
-		__tmp370 := Decode_memop_1(_s)
+		__tmp370 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp370)
-		__tmp375 := Decode_i32_store8_3(_x, _a, _o)
+		__tmp375 := i32_store8_3(_x, _a, _o)
 		__tmp4 = __tmp375
 	} else if __tmp5 == 0x3b {
-		__tmp379 := Decode_memop_1(_s)
+		__tmp379 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp379)
-		__tmp384 := Decode_i32_store16_3(_x, _a, _o)
+		__tmp384 := i32_store16_3(_x, _a, _o)
 		__tmp4 = __tmp384
 	} else if __tmp5 == 0x3c {
-		__tmp388 := Decode_memop_1(_s)
+		__tmp388 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp388)
-		__tmp393 := Decode_i64_store8_3(_x, _a, _o)
+		__tmp393 := i64_store8_3(_x, _a, _o)
 		__tmp4 = __tmp393
 	} else if __tmp5 == 0x3d {
-		__tmp397 := Decode_memop_1(_s)
+		__tmp397 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp397)
-		__tmp402 := Decode_i64_store16_3(_x, _a, _o)
+		__tmp402 := i64_store16_3(_x, _a, _o)
 		__tmp4 = __tmp402
 	} else if __tmp5 == 0x3e {
-		__tmp406 := Decode_memop_1(_s)
+		__tmp406 := Ast_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp406)
-		__tmp411 := Decode_i64_store32_3(_x, _a, _o)
+		__tmp411 := i64_store32_3(_x, _a, _o)
 		__tmp4 = __tmp411
 	} else if __tmp5 == 0x3f {
-		__tmp415 := Decode_memory_size_1(Decode_at_2(_var, _s))
+		__tmp415 := memory_size_1(at_2(_var, _s))
 		__tmp4 = __tmp415
 	} else if __tmp5 == 0x40 {
-		__tmp419 := Decode_memory_grow_1(Decode_at_2(_var, _s))
+		__tmp419 := memory_grow_1(at_2(_var, _s))
 		__tmp4 = __tmp419
 	} else if __tmp5 == 0x41 {
-		__tmp423 := Decode_i32_const_1(Decode_at_2(_s32, _s))
+		__tmp423 := i32_const_1(at_2(_s32, _s))
 		__tmp4 = __tmp423
 	} else if __tmp5 == 0x42 {
-		__tmp427 := Decode_i64_const_1(Decode_at_2(_s64, _s))
+		__tmp427 := i64_const_1(at_2(_s64, _s))
 		__tmp4 = __tmp427
 	} else if __tmp5 == 0x43 {
-		__tmp431 := Decode_f32_const_1(Decode_at_2(_f32, _s))
+		__tmp431 := f32_const_1(at_2(_f32, _s))
 		__tmp4 = __tmp431
 	} else if __tmp5 == 0x44 {
-		__tmp435 := Decode_f64_const_1(Decode_at_2(_f64, _s))
+		__tmp435 := f64_const_1(at_2(_f64, _s))
 		__tmp4 = __tmp435
 	} else if __tmp5 == 0x45 {
 		__tmp439 := _i32_eqz
@@ -7658,16 +7658,16 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp566
 	} else if __tmp5 == 0xc5 || __tmp5 == 0xc6 || __tmp5 == 0xc7 || __tmp5 == 0xc8 || __tmp5 == 0xc9 || __tmp5 == 0xca || __tmp5 == 0xcb || __tmp5 == 0xcc || __tmp5 == 0xcd || __tmp5 == 0xce || __tmp5 == 0xcf {
 		_b := __tmp5
-		__tmp568 := Decode_illegal_3(_s, _pos, _b)
+		__tmp568 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp568
 	} else if __tmp5 == 0xd0 {
-		__tmp572 := Decode_ref_null_1(Decode_heap_type_1(_s))
+		__tmp572 := ref_null_1(Types_heap_type_1(_s))
 		__tmp4 = __tmp572
 	} else if __tmp5 == 0xd1 {
 		__tmp575 := _ref_is_null
 		__tmp4 = __tmp575
 	} else if __tmp5 == 0xd2 {
-		__tmp576 := Decode_ref_func_1(Decode_at_2(_var, _s))
+		__tmp576 := ref_func_1(at_2(_var, _s))
 		__tmp4 = __tmp576
 	} else if __tmp5 == 0xd3 {
 		__tmp580 := _ref_eq
@@ -7676,153 +7676,153 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp581 := _ref_as_non_null
 		__tmp4 = __tmp581
 	} else if __tmp5 == 0xd5 {
-		__tmp582 := Decode_br_on_null_1(Decode_at_2(_var, _s))
+		__tmp582 := br_on_null_1(at_2(_var, _s))
 		__tmp4 = __tmp582
 	} else if __tmp5 == 0xd6 {
-		__tmp586 := Decode_br_on_non_null_1(Decode_at_2(_var, _s))
+		__tmp586 := br_on_non_null_1(at_2(_var, _s))
 		__tmp4 = __tmp586
 	} else if __tmp5 == 0xfb {
 		_b := __tmp5
 		var __tmp591 OAst_instr_
-		__tmp592 := Decode_u32_1(_s)
+		__tmp592 := u32_1(_s)
 		if __tmp592 == 0x00 {
-			__tmp595 := Decode_struct_new_1(Decode_at_2(_var, _s))
+			__tmp595 := struct_new_1(at_2(_var, _s))
 			__tmp591 = __tmp595
 		} else if __tmp592 == 0x01 {
-			__tmp599 := Decode_struct_new_default_1(Decode_at_2(_var, _s))
+			__tmp599 := struct_new_default_1(at_2(_var, _s))
 			__tmp591 = __tmp599
 		} else if __tmp592 == 0x02 {
-			__tmp603 := Decode_at_2(_var, _s)
+			__tmp603 := at_2(_var, _s)
 			_x := __tmp603
-			__tmp607 := Decode_at_2(_var, _s)
+			__tmp607 := at_2(_var, _s)
 			_y := __tmp607
-			__tmp611 := Decode_struct_get_2(_x, _y)
+			__tmp611 := struct_get_2(_x, _y)
 			__tmp591 = __tmp611
 		} else if __tmp592 == 0x03 {
-			__tmp614 := Decode_at_2(_var, _s)
+			__tmp614 := at_2(_var, _s)
 			_x := __tmp614
-			__tmp618 := Decode_at_2(_var, _s)
+			__tmp618 := at_2(_var, _s)
 			_y := __tmp618
-			__tmp622 := Decode_struct_get_s_2(_x, _y)
+			__tmp622 := struct_get_s_2(_x, _y)
 			__tmp591 = __tmp622
 		} else if __tmp592 == 0x04 {
-			__tmp625 := Decode_at_2(_var, _s)
+			__tmp625 := at_2(_var, _s)
 			_x := __tmp625
-			__tmp629 := Decode_at_2(_var, _s)
+			__tmp629 := at_2(_var, _s)
 			_y := __tmp629
-			__tmp633 := Decode_struct_get_u_2(_x, _y)
+			__tmp633 := struct_get_u_2(_x, _y)
 			__tmp591 = __tmp633
 		} else if __tmp592 == 0x05 {
-			__tmp636 := Decode_at_2(_var, _s)
+			__tmp636 := at_2(_var, _s)
 			_x := __tmp636
-			__tmp640 := Decode_at_2(_var, _s)
+			__tmp640 := at_2(_var, _s)
 			_y := __tmp640
-			__tmp644 := Decode_struct_set_2(_x, _y)
+			__tmp644 := struct_set_2(_x, _y)
 			__tmp591 = __tmp644
 		} else if __tmp592 == 0x06 {
-			__tmp647 := Decode_array_new_1(Decode_at_2(_var, _s))
+			__tmp647 := array_new_1(at_2(_var, _s))
 			__tmp591 = __tmp647
 		} else if __tmp592 == 0x07 {
-			__tmp651 := Decode_array_new_default_1(Decode_at_2(_var, _s))
+			__tmp651 := array_new_default_1(at_2(_var, _s))
 			__tmp591 = __tmp651
 		} else if __tmp592 == 0x08 {
-			__tmp655 := Decode_at_2(_var, _s)
+			__tmp655 := at_2(_var, _s)
 			_x := __tmp655
-			__tmp659 := Decode_u32_1(_s)
+			__tmp659 := u32_1(_s)
 			_n := __tmp659
-			__tmp662 := Decode_array_new_fixed_2(_x, _n)
+			__tmp662 := array_new_fixed_2(_x, _n)
 			__tmp591 = __tmp662
 		} else if __tmp592 == 0x09 {
-			__tmp665 := Decode_at_2(_var, _s)
+			__tmp665 := at_2(_var, _s)
 			_x := __tmp665
-			__tmp669 := Decode_at_2(_var, _s)
+			__tmp669 := at_2(_var, _s)
 			_y := __tmp669
-			__tmp673 := Decode_array_new_data_2(_x, _y)
+			__tmp673 := array_new_data_2(_x, _y)
 			__tmp591 = __tmp673
 		} else if __tmp592 == 0x0a {
-			__tmp676 := Decode_at_2(_var, _s)
+			__tmp676 := at_2(_var, _s)
 			_x := __tmp676
-			__tmp680 := Decode_at_2(_var, _s)
+			__tmp680 := at_2(_var, _s)
 			_y := __tmp680
-			__tmp684 := Decode_array_new_elem_2(_x, _y)
+			__tmp684 := array_new_elem_2(_x, _y)
 			__tmp591 = __tmp684
 		} else if __tmp592 == 0x0b {
-			__tmp687 := Decode_array_get_1(Decode_at_2(_var, _s))
+			__tmp687 := array_get_1(at_2(_var, _s))
 			__tmp591 = __tmp687
 		} else if __tmp592 == 0x0c {
-			__tmp691 := Decode_array_get_s_1(Decode_at_2(_var, _s))
+			__tmp691 := array_get_s_1(at_2(_var, _s))
 			__tmp591 = __tmp691
 		} else if __tmp592 == 0x0d {
-			__tmp695 := Decode_array_get_u_1(Decode_at_2(_var, _s))
+			__tmp695 := array_get_u_1(at_2(_var, _s))
 			__tmp591 = __tmp695
 		} else if __tmp592 == 0x0e {
-			__tmp699 := Decode_array_set_1(Decode_at_2(_var, _s))
+			__tmp699 := array_set_1(at_2(_var, _s))
 			__tmp591 = __tmp699
 		} else if __tmp592 == 0x0f {
 			__tmp703 := _array_len
 			__tmp591 = __tmp703
 		} else if __tmp592 == 0x10 {
-			__tmp704 := Decode_array_fill_1(Decode_at_2(_var, _s))
+			__tmp704 := array_fill_1(at_2(_var, _s))
 			__tmp591 = __tmp704
 		} else if __tmp592 == 0x11 {
-			__tmp708 := Decode_at_2(_var, _s)
+			__tmp708 := at_2(_var, _s)
 			_x := __tmp708
-			__tmp712 := Decode_at_2(_var, _s)
+			__tmp712 := at_2(_var, _s)
 			_y := __tmp712
-			__tmp716 := Decode_array_copy_2(_x, _y)
+			__tmp716 := array_copy_2(_x, _y)
 			__tmp591 = __tmp716
 		} else if __tmp592 == 0x12 {
-			__tmp719 := Decode_at_2(_var, _s)
+			__tmp719 := at_2(_var, _s)
 			_x := __tmp719
-			__tmp723 := Decode_at_2(_var, _s)
+			__tmp723 := at_2(_var, _s)
 			_y := __tmp723
-			__tmp727 := Decode_array_init_data_2(_x, _y)
+			__tmp727 := array_init_data_2(_x, _y)
 			__tmp591 = __tmp727
 		} else if __tmp592 == 0x13 {
-			__tmp730 := Decode_at_2(_var, _s)
+			__tmp730 := at_2(_var, _s)
 			_x := __tmp730
-			__tmp734 := Decode_at_2(_var, _s)
+			__tmp734 := at_2(_var, _s)
 			_y := __tmp734
-			__tmp738 := Decode_array_init_elem_2(_x, _y)
+			__tmp738 := array_init_elem_2(_x, _y)
 			__tmp591 = __tmp738
 		} else if __tmp592 == 0x14 {
-			__tmp741 := Decode_ref_test_1(struct {
+			__tmp741 := ref_test_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{_NoNull, Decode_heap_type_1(_s)})
+			}{_NoNull, Types_heap_type_1(_s)})
 			__tmp591 = __tmp741
 		} else if __tmp592 == 0x15 {
-			__tmp747 := Decode_ref_test_1(struct {
+			__tmp747 := ref_test_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{_Null, Decode_heap_type_1(_s)})
+			}{_Null, Types_heap_type_1(_s)})
 			__tmp591 = __tmp747
 		} else if __tmp592 == 0x16 {
-			__tmp753 := Decode_ref_cast_1(struct {
+			__tmp753 := ref_cast_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{_NoNull, Decode_heap_type_1(_s)})
+			}{_NoNull, Types_heap_type_1(_s)})
 			__tmp591 = __tmp753
 		} else if __tmp592 == 0x17 {
-			__tmp759 := Decode_ref_cast_1(struct {
+			__tmp759 := ref_cast_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{_Null, Decode_heap_type_1(_s)})
+			}{_Null, Types_heap_type_1(_s)})
 			__tmp591 = __tmp759
 		} else if __tmp592 == 0x18 || __tmp592 == 0x19 {
 			_opcode := __tmp592
-			__tmp766 := Decode_byte_1(_s)
+			__tmp766 := byte_1(_s)
 			_flags := __tmp766
-			__tmp769 := Decode_require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
+			__tmp769 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp769
-			__tmp776 := Decode_at_2(_var, _s)
+			__tmp776 := at_2(_var, _s)
 			_x := __tmp776
 			__tmp780 := struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
 			}{func() OTypes_null {
 				var __tmp781 OTypes_null
-				if Decode_bit_2(0, _flags) {
+				if bit_2(0, _flags) {
 					__tmp784 := _Null
 					__tmp781 = __tmp784
 				} else {
@@ -7830,14 +7830,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 					__tmp781 = __tmp786
 				}
 				return __tmp781
-			}(), Decode_heap_type_1(_s)}
+			}(), Types_heap_type_1(_s)}
 			_rt1 := __tmp780
 			__tmp791 := struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
 			}{func() OTypes_null {
 				var __tmp792 OTypes_null
-				if Decode_bit_2(1, _flags) {
+				if bit_2(1, _flags) {
 					__tmp795 := _Null
 					__tmp792 = __tmp795
 				} else {
@@ -7845,9 +7845,9 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 					__tmp792 = __tmp797
 				}
 				return __tmp792
-			}(), Decode_heap_type_1(_s)}
+			}(), Types_heap_type_1(_s)}
 			_rt2 := __tmp791
-			__tmp802 := Decode__if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
+			__tmp802 := _if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
 
 			__tmp591 = __tmp802
 		} else if __tmp592 == 0x1a {
@@ -7867,14 +7867,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp591 = __tmp810
 		} else if _n := __tmp592; true {
 			_ = _n
-			__tmp813 := Decode_illegal2_4(_s, _pos, _b, _n)
+			__tmp813 := illegal2_4(_s, _pos, _b, _n)
 			__tmp591 = __tmp813
 		}
 		__tmp4 = __tmp591
 	} else if __tmp5 == 0xfc {
 		_b := __tmp5
 		var __tmp819 OAst_instr_
-		__tmp820 := Decode_u32_1(_s)
+		__tmp820 := u32_1(_s)
 		if __tmp820 == 0x00 {
 			__tmp823 := _i32_trunc_sat_f32_s
 			__tmp819 = __tmp823
@@ -7900,126 +7900,126 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp830 := _i64_trunc_sat_f64_u
 			__tmp819 = __tmp830
 		} else if __tmp820 == 0x08 {
-			__tmp831 := Decode_at_2(_var, _s)
+			__tmp831 := at_2(_var, _s)
 			_y := __tmp831
-			__tmp835 := Decode_at_2(_var, _s)
+			__tmp835 := at_2(_var, _s)
 			_x := __tmp835
-			__tmp839 := Decode_memory_init_2(_x, _y)
+			__tmp839 := memory_init_2(_x, _y)
 			__tmp819 = __tmp839
 		} else if __tmp820 == 0x09 {
-			__tmp842 := Decode_data_drop_1(Decode_at_2(_var, _s))
+			__tmp842 := data_drop_1(at_2(_var, _s))
 			__tmp819 = __tmp842
 		} else if __tmp820 == 0x0a {
-			__tmp846 := Decode_at_2(_var, _s)
+			__tmp846 := at_2(_var, _s)
 			_x := __tmp846
-			__tmp850 := Decode_at_2(_var, _s)
+			__tmp850 := at_2(_var, _s)
 			_y := __tmp850
-			__tmp854 := Decode_memory_copy_2(_x, _y)
+			__tmp854 := memory_copy_2(_x, _y)
 			__tmp819 = __tmp854
 		} else if __tmp820 == 0x0b {
-			__tmp857 := Decode_memory_fill_1(Decode_at_2(_var, _s))
+			__tmp857 := memory_fill_1(at_2(_var, _s))
 			__tmp819 = __tmp857
 		} else if __tmp820 == 0x0c {
-			__tmp861 := Decode_at_2(_var, _s)
+			__tmp861 := at_2(_var, _s)
 			_y := __tmp861
-			__tmp865 := Decode_at_2(_var, _s)
+			__tmp865 := at_2(_var, _s)
 			_x := __tmp865
-			__tmp869 := Decode_table_init_2(_x, _y)
+			__tmp869 := table_init_2(_x, _y)
 			__tmp819 = __tmp869
 		} else if __tmp820 == 0x0d {
-			__tmp872 := Decode_elem_drop_1(Decode_at_2(_var, _s))
+			__tmp872 := elem_drop_1(at_2(_var, _s))
 			__tmp819 = __tmp872
 		} else if __tmp820 == 0x0e {
-			__tmp876 := Decode_at_2(_var, _s)
+			__tmp876 := at_2(_var, _s)
 			_x := __tmp876
-			__tmp880 := Decode_at_2(_var, _s)
+			__tmp880 := at_2(_var, _s)
 			_y := __tmp880
-			__tmp884 := Decode_table_copy_2(_x, _y)
+			__tmp884 := table_copy_2(_x, _y)
 			__tmp819 = __tmp884
 		} else if __tmp820 == 0x0f {
-			__tmp887 := Decode_table_grow_1(Decode_at_2(_var, _s))
+			__tmp887 := table_grow_1(at_2(_var, _s))
 			__tmp819 = __tmp887
 		} else if __tmp820 == 0x10 {
-			__tmp891 := Decode_table_size_1(Decode_at_2(_var, _s))
+			__tmp891 := table_size_1(at_2(_var, _s))
 			__tmp819 = __tmp891
 		} else if __tmp820 == 0x11 {
-			__tmp895 := Decode_table_fill_1(Decode_at_2(_var, _s))
+			__tmp895 := table_fill_1(at_2(_var, _s))
 			__tmp819 = __tmp895
 		} else if _n := __tmp820; true {
 			_ = _n
-			__tmp901 := Decode_illegal2_4(_s, _pos, _b, _n)
+			__tmp901 := illegal2_4(_s, _pos, _b, _n)
 			__tmp819 = __tmp901
 		}
 		__tmp4 = __tmp819
 	} else if __tmp5 == 0xfd {
 		var __tmp906 OAst_instr_
-		__tmp907 := Decode_u32_1(_s)
+		__tmp907 := u32_1(_s)
 		if __tmp907 == 0x00 {
-			__tmp910 := Decode_memop_1(_s)
+			__tmp910 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp910)
-			__tmp915 := Decode_v128_load_3(_x, _a, _o)
+			__tmp915 := v128_load_3(_x, _a, _o)
 			__tmp906 = __tmp915
 		} else if __tmp907 == 0x01 {
-			__tmp919 := Decode_memop_1(_s)
+			__tmp919 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp919)
-			__tmp924 := Decode_v128_load8x8_s_3(_x, _a, _o)
+			__tmp924 := v128_load8x8_s_3(_x, _a, _o)
 			__tmp906 = __tmp924
 		} else if __tmp907 == 0x02 {
-			__tmp928 := Decode_memop_1(_s)
+			__tmp928 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp928)
-			__tmp933 := Decode_v128_load8x8_u_3(_x, _a, _o)
+			__tmp933 := v128_load8x8_u_3(_x, _a, _o)
 			__tmp906 = __tmp933
 		} else if __tmp907 == 0x03 {
-			__tmp937 := Decode_memop_1(_s)
+			__tmp937 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp937)
-			__tmp942 := Decode_v128_load16x4_s_3(_x, _a, _o)
+			__tmp942 := v128_load16x4_s_3(_x, _a, _o)
 			__tmp906 = __tmp942
 		} else if __tmp907 == 0x04 {
-			__tmp946 := Decode_memop_1(_s)
+			__tmp946 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp946)
-			__tmp951 := Decode_v128_load16x4_u_3(_x, _a, _o)
+			__tmp951 := v128_load16x4_u_3(_x, _a, _o)
 			__tmp906 = __tmp951
 		} else if __tmp907 == 0x05 {
-			__tmp955 := Decode_memop_1(_s)
+			__tmp955 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp955)
-			__tmp960 := Decode_v128_load32x2_s_3(_x, _a, _o)
+			__tmp960 := v128_load32x2_s_3(_x, _a, _o)
 			__tmp906 = __tmp960
 		} else if __tmp907 == 0x06 {
-			__tmp964 := Decode_memop_1(_s)
+			__tmp964 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp964)
-			__tmp969 := Decode_v128_load32x2_u_3(_x, _a, _o)
+			__tmp969 := v128_load32x2_u_3(_x, _a, _o)
 			__tmp906 = __tmp969
 		} else if __tmp907 == 0x07 {
-			__tmp973 := Decode_memop_1(_s)
+			__tmp973 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp973)
-			__tmp978 := Decode_v128_load8_splat_3(_x, _a, _o)
+			__tmp978 := v128_load8_splat_3(_x, _a, _o)
 			__tmp906 = __tmp978
 		} else if __tmp907 == 0x08 {
-			__tmp982 := Decode_memop_1(_s)
+			__tmp982 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp982)
-			__tmp987 := Decode_v128_load16_splat_3(_x, _a, _o)
+			__tmp987 := v128_load16_splat_3(_x, _a, _o)
 			__tmp906 = __tmp987
 		} else if __tmp907 == 0x09 {
-			__tmp991 := Decode_memop_1(_s)
+			__tmp991 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp991)
-			__tmp996 := Decode_v128_load32_splat_3(_x, _a, _o)
+			__tmp996 := v128_load32_splat_3(_x, _a, _o)
 			__tmp906 = __tmp996
 		} else if __tmp907 == 0x0a {
-			__tmp1000 := Decode_memop_1(_s)
+			__tmp1000 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1000)
-			__tmp1005 := Decode_v128_load64_splat_3(_x, _a, _o)
+			__tmp1005 := v128_load64_splat_3(_x, _a, _o)
 			__tmp906 = __tmp1005
 		} else if __tmp907 == 0x0b {
-			__tmp1009 := Decode_memop_1(_s)
+			__tmp1009 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1009)
-			__tmp1014 := Decode_v128_store_3(_x, _a, _o)
+			__tmp1014 := v128_store_3(_x, _a, _o)
 			__tmp906 = __tmp1014
 		} else if __tmp907 == 0x0c {
-			__tmp1018 := Decode_v128_const_1(Decode_at_2(_v128, _s))
+			__tmp1018 := v128_const_1(at_2(_v128, _s))
 			__tmp906 = __tmp1018
 		} else if __tmp907 == 0x0d {
-			__tmp1022 := Decode_i8x16_shuffle_1(Decode_List_init_2(16, func(__ OInt) OInt {
-				__tmp1024 := Decode_byte_1(_s)
+			__tmp1022 := i8x16_shuffle_1(List_init_2(16, func(__ OInt) OInt {
+				__tmp1024 := byte_1(_s)
 				return __tmp1024
 			}))
 			__tmp906 = __tmp1022
@@ -8045,74 +8045,74 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp1032 := _f64x2_splat
 			__tmp906 = __tmp1032
 		} else if __tmp907 == 0x15 {
-			__tmp1033 := Decode_byte_1(_s)
+			__tmp1033 := byte_1(_s)
 			_i := __tmp1033
-			__tmp1036 := Decode_i8x16_extract_lane_s_1(_i)
+			__tmp1036 := i8x16_extract_lane_s_1(_i)
 			__tmp906 = __tmp1036
 		} else if __tmp907 == 0x16 {
-			__tmp1038 := Decode_byte_1(_s)
+			__tmp1038 := byte_1(_s)
 			_i := __tmp1038
-			__tmp1041 := Decode_i8x16_extract_lane_u_1(_i)
+			__tmp1041 := i8x16_extract_lane_u_1(_i)
 			__tmp906 = __tmp1041
 		} else if __tmp907 == 0x17 {
-			__tmp1043 := Decode_byte_1(_s)
+			__tmp1043 := byte_1(_s)
 			_i := __tmp1043
-			__tmp1046 := Decode_i8x16_replace_lane_1(_i)
+			__tmp1046 := i8x16_replace_lane_1(_i)
 			__tmp906 = __tmp1046
 		} else if __tmp907 == 0x18 {
-			__tmp1048 := Decode_byte_1(_s)
+			__tmp1048 := byte_1(_s)
 			_i := __tmp1048
-			__tmp1051 := Decode_i16x8_extract_lane_s_1(_i)
+			__tmp1051 := i16x8_extract_lane_s_1(_i)
 			__tmp906 = __tmp1051
 		} else if __tmp907 == 0x19 {
-			__tmp1053 := Decode_byte_1(_s)
+			__tmp1053 := byte_1(_s)
 			_i := __tmp1053
-			__tmp1056 := Decode_i16x8_extract_lane_u_1(_i)
+			__tmp1056 := i16x8_extract_lane_u_1(_i)
 			__tmp906 = __tmp1056
 		} else if __tmp907 == 0x1a {
-			__tmp1058 := Decode_byte_1(_s)
+			__tmp1058 := byte_1(_s)
 			_i := __tmp1058
-			__tmp1061 := Decode_i16x8_replace_lane_1(_i)
+			__tmp1061 := i16x8_replace_lane_1(_i)
 			__tmp906 = __tmp1061
 		} else if __tmp907 == 0x1b {
-			__tmp1063 := Decode_byte_1(_s)
+			__tmp1063 := byte_1(_s)
 			_i := __tmp1063
-			__tmp1066 := Decode_i32x4_extract_lane_1(_i)
+			__tmp1066 := i32x4_extract_lane_1(_i)
 			__tmp906 = __tmp1066
 		} else if __tmp907 == 0x1c {
-			__tmp1068 := Decode_byte_1(_s)
+			__tmp1068 := byte_1(_s)
 			_i := __tmp1068
-			__tmp1071 := Decode_i32x4_replace_lane_1(_i)
+			__tmp1071 := i32x4_replace_lane_1(_i)
 			__tmp906 = __tmp1071
 		} else if __tmp907 == 0x1d {
-			__tmp1073 := Decode_byte_1(_s)
+			__tmp1073 := byte_1(_s)
 			_i := __tmp1073
-			__tmp1076 := Decode_i64x2_extract_lane_1(_i)
+			__tmp1076 := i64x2_extract_lane_1(_i)
 			__tmp906 = __tmp1076
 		} else if __tmp907 == 0x1e {
-			__tmp1078 := Decode_byte_1(_s)
+			__tmp1078 := byte_1(_s)
 			_i := __tmp1078
-			__tmp1081 := Decode_i64x2_replace_lane_1(_i)
+			__tmp1081 := i64x2_replace_lane_1(_i)
 			__tmp906 = __tmp1081
 		} else if __tmp907 == 0x1f {
-			__tmp1083 := Decode_byte_1(_s)
+			__tmp1083 := byte_1(_s)
 			_i := __tmp1083
-			__tmp1086 := Decode_f32x4_extract_lane_1(_i)
+			__tmp1086 := f32x4_extract_lane_1(_i)
 			__tmp906 = __tmp1086
 		} else if __tmp907 == 0x20 {
-			__tmp1088 := Decode_byte_1(_s)
+			__tmp1088 := byte_1(_s)
 			_i := __tmp1088
-			__tmp1091 := Decode_f32x4_replace_lane_1(_i)
+			__tmp1091 := f32x4_replace_lane_1(_i)
 			__tmp906 = __tmp1091
 		} else if __tmp907 == 0x21 {
-			__tmp1093 := Decode_byte_1(_s)
+			__tmp1093 := byte_1(_s)
 			_i := __tmp1093
-			__tmp1096 := Decode_f64x2_extract_lane_1(_i)
+			__tmp1096 := f64x2_extract_lane_1(_i)
 			__tmp906 = __tmp1096
 		} else if __tmp907 == 0x22 {
-			__tmp1098 := Decode_byte_1(_s)
+			__tmp1098 := byte_1(_s)
 			_i := __tmp1098
-			__tmp1101 := Decode_f64x2_replace_lane_1(_i)
+			__tmp1101 := f64x2_replace_lane_1(_i)
 			__tmp906 = __tmp1101
 		} else if __tmp907 == 0x23 {
 			__tmp1103 := _i8x16_eq
@@ -8262,70 +8262,70 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp1151 := _v128_any_true
 			__tmp906 = __tmp1151
 		} else if __tmp907 == 0x54 {
-			__tmp1152 := Decode_memop_1(_s)
+			__tmp1152 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1152)
-			__tmp1157 := Decode_byte_1(_s)
+			__tmp1157 := byte_1(_s)
 			_lane := __tmp1157
-			__tmp1160 := Decode_v128_load8_lane_4(_x, _a, _o, _lane)
+			__tmp1160 := v128_load8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1160
 		} else if __tmp907 == 0x55 {
-			__tmp1165 := Decode_memop_1(_s)
+			__tmp1165 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1165)
-			__tmp1170 := Decode_byte_1(_s)
+			__tmp1170 := byte_1(_s)
 			_lane := __tmp1170
-			__tmp1173 := Decode_v128_load16_lane_4(_x, _a, _o, _lane)
+			__tmp1173 := v128_load16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1173
 		} else if __tmp907 == 0x56 {
-			__tmp1178 := Decode_memop_1(_s)
+			__tmp1178 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1178)
-			__tmp1183 := Decode_byte_1(_s)
+			__tmp1183 := byte_1(_s)
 			_lane := __tmp1183
-			__tmp1186 := Decode_v128_load32_lane_4(_x, _a, _o, _lane)
+			__tmp1186 := v128_load32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1186
 		} else if __tmp907 == 0x57 {
-			__tmp1191 := Decode_memop_1(_s)
+			__tmp1191 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1191)
-			__tmp1196 := Decode_byte_1(_s)
+			__tmp1196 := byte_1(_s)
 			_lane := __tmp1196
-			__tmp1199 := Decode_v128_load64_lane_4(_x, _a, _o, _lane)
+			__tmp1199 := v128_load64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1199
 		} else if __tmp907 == 0x58 {
-			__tmp1204 := Decode_memop_1(_s)
+			__tmp1204 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1204)
-			__tmp1209 := Decode_byte_1(_s)
+			__tmp1209 := byte_1(_s)
 			_lane := __tmp1209
-			__tmp1212 := Decode_v128_store8_lane_4(_x, _a, _o, _lane)
+			__tmp1212 := v128_store8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1212
 		} else if __tmp907 == 0x59 {
-			__tmp1217 := Decode_memop_1(_s)
+			__tmp1217 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1217)
-			__tmp1222 := Decode_byte_1(_s)
+			__tmp1222 := byte_1(_s)
 			_lane := __tmp1222
-			__tmp1225 := Decode_v128_store16_lane_4(_x, _a, _o, _lane)
+			__tmp1225 := v128_store16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1225
 		} else if __tmp907 == 0x5a {
-			__tmp1230 := Decode_memop_1(_s)
+			__tmp1230 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1230)
-			__tmp1235 := Decode_byte_1(_s)
+			__tmp1235 := byte_1(_s)
 			_lane := __tmp1235
-			__tmp1238 := Decode_v128_store32_lane_4(_x, _a, _o, _lane)
+			__tmp1238 := v128_store32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1238
 		} else if __tmp907 == 0x5b {
-			__tmp1243 := Decode_memop_1(_s)
+			__tmp1243 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1243)
-			__tmp1248 := Decode_byte_1(_s)
+			__tmp1248 := byte_1(_s)
 			_lane := __tmp1248
-			__tmp1251 := Decode_v128_store64_lane_4(_x, _a, _o, _lane)
+			__tmp1251 := v128_store64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1251
 		} else if __tmp907 == 0x5c {
-			__tmp1256 := Decode_memop_1(_s)
+			__tmp1256 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1256)
-			__tmp1261 := Decode_v128_load32_zero_3(_x, _a, _o)
+			__tmp1261 := v128_load32_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1261
 		} else if __tmp907 == 0x5d {
-			__tmp1265 := Decode_memop_1(_s)
+			__tmp1265 := Ast_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1265)
-			__tmp1270 := Decode_v128_load64_zero_3(_x, _a, _o)
+			__tmp1270 := v128_load64_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1270
 		} else if __tmp907 == 0x5e {
 			__tmp1274 := _f32x4_demote_f64x2_zero
@@ -8509,7 +8509,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1333
 		} else if __tmp907 == 0x9a {
 			_n := __tmp907
-			__tmp1335 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1335 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1335
 		} else if __tmp907 == 0x9b {
 			__tmp1340 := _i16x8_avgr_u
@@ -8534,7 +8534,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1346
 		} else if __tmp907 == 0xa2 {
 			_n := __tmp907
-			__tmp1348 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1348 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1348
 		} else if __tmp907 == 0xa3 {
 			__tmp1353 := _i32x4_all_true
@@ -8544,7 +8544,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1354
 		} else if __tmp907 == 0xa5 || __tmp907 == 0xa6 {
 			_n := __tmp907
-			__tmp1356 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1356 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1356
 		} else if __tmp907 == 0xa7 {
 			__tmp1361 := _i32x4_extend_low_i16x8_s
@@ -8572,14 +8572,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1368
 		} else if __tmp907 == 0xaf || __tmp907 == 0xb0 {
 			_n := __tmp907
-			__tmp1370 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1370 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1370
 		} else if __tmp907 == 0xb1 {
 			__tmp1375 := _i32x4_sub
 			__tmp906 = __tmp1375
 		} else if __tmp907 == 0xb2 || __tmp907 == 0xb3 || __tmp907 == 0xb4 {
 			_n := __tmp907
-			__tmp1377 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1377 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1377
 		} else if __tmp907 == 0xb5 {
 			__tmp1382 := _i32x4_mul
@@ -8619,7 +8619,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1393
 		} else if __tmp907 == 0xc2 {
 			_n := __tmp907
-			__tmp1395 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1395 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1395
 		} else if __tmp907 == 0xc3 {
 			__tmp1400 := _i64x2_all_true
@@ -8629,7 +8629,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1401
 		} else if __tmp907 == 0xc5 || __tmp907 == 0xc6 {
 			_n := __tmp907
-			__tmp1403 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1403 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1403
 		} else if __tmp907 == 0xc7 {
 			__tmp1408 := _i64x2_extend_low_i32x4_s
@@ -8657,14 +8657,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1415
 		} else if __tmp907 == 0xcf || __tmp907 == 0xd0 {
 			_n := __tmp907
-			__tmp1417 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1417 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1417
 		} else if __tmp907 == 0xd1 {
 			__tmp1422 := _i64x2_sub
 			__tmp906 = __tmp1422
 		} else if __tmp907 == 0xd2 || __tmp907 == 0xd3 || __tmp907 == 0xd4 {
 			_n := __tmp907
-			__tmp1424 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1424 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1424
 		} else if __tmp907 == 0xd5 {
 			__tmp1429 := _i64x2_mul
@@ -8707,7 +8707,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1441
 		} else if __tmp907 == 0xe2 {
 			_n := __tmp907
-			__tmp1443 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1443 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1443
 		} else if __tmp907 == 0xe3 {
 			__tmp1448 := _f32x4_sqrt
@@ -8855,13 +8855,13 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp906 = __tmp1495
 		} else if _n := __tmp907; true {
 			_ = _n
-			__tmp1498 := Decode_illegal_3(_s, _pos, Decode_I32_to_int_u_1(_n))
+			__tmp1498 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1498
 		}
 		__tmp4 = __tmp906
 	} else if _b := __tmp5; true {
 		_ = _b
-		__tmp1505 := Decode_illegal_3(_s, _pos, _b)
+		__tmp1505 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp1505
 	}
 	return __tmp4
