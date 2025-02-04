@@ -548,7 +548,7 @@ func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module
 
 		w("const(\n")
 		for i, variant := range t {
-			w("%s", variantKindName(def.Modules, variant.Name))
+			w("%s", variantKindName(def.Modules, def.Name, variant.Name))
 			if i == 0 {
 				w(" %s = iota + 1", kindName)
 			}
@@ -570,19 +570,19 @@ func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module
 
 		for _, variant := range t {
 			if variant.Type == nil {
-				w("var %s %s = Simple%s{%s}\n", varName(def.Modules, variant.Name), tn, tn, variantKindName(def.Modules, variant.Name))
+				w("var %s %s = Simple%s{%s}\n", variantName(def.Modules, def.Name, variant.Name), tn, tn, variantKindName(def.Modules, def.Name, variant.Name))
 			} else {
-				variantTypeName := tn + "_" + variant.Name
-				w("type %s%s struct {\n", variantTypeName, typeParams)
+				w("type %s%s struct {\n", variantTypeName(def.Modules, def.Name, variant.Name), typeParams)
 				w("  V %s\n", ocaml2go(*variant.Type, currentModule))
 				w("}\n")
 
-				w("func (t %s%s) Kind() %s {\n", variantTypeName, typeParamsBare, kindName)
-				w("  return %s\n", variantKindName(def.Modules, variant.Name))
+				w("func (t %s%s) Kind() %s {\n", variantTypeName(def.Modules, def.Name, variant.Name), typeParamsBare, kindName)
+				w("  return %s\n", variantKindName(def.Modules, def.Name, variant.Name))
 				w("}\n")
 
+				// TODO: This func name needs to include the type name, as do all the uses of it :/
 				w("func %s%s(v %s) %s%s {\n", funcName(def.Modules, variant.Name, 1), typeParams, ocaml2go(*variant.Type, currentModule), tn, typeParamsBare)
-				w("  return %s%s{v}\n", variantTypeName, typeParamsBare)
+				w("  return %s%s{v}\n", variantTypeName(def.Modules, def.Name, variant.Name), typeParamsBare)
 				w("}\n")
 			}
 		}
@@ -699,13 +699,14 @@ func (p *ocamlParse) parseModuleDef(def *tree_sitter.Node, f File, currentModule
 				// We need to parse the thing in the current context, including opened defs
 				// from the outer module, but we also need functions to be generated with the
 				// right name. So we cheat.
-				phonyModule := modules[p.s(name)].Clone()
-				for name, def := range currentModule.TypeDefs {
-					phonyModule.TypeDefs[name] = def
-				}
-				for name, def := range currentModule.ValueDefs {
-					phonyModule.ValueDefs[name] = def
-				}
+				// phonyModule := modules[p.s(name)].Clone()
+				// for name, def := range currentModule.TypeDefs {
+				// 	phonyModule.TypeDefs[name] = def
+				// }
+				// for name, def := range currentModule.ValueDefs {
+				// 	phonyModule.ValueDefs[name] = def
+				// }
+				phonyModule := modules[p.s(name)]
 				p.parseTypeDef(&def, f, phonyModule)
 			default:
 				w("// Ignoring %s in module definition\n", def.GrammarName())
@@ -764,8 +765,16 @@ func typeName(modulePath []string, name string) string {
 	return "O" + camelName(modulePath, name)
 }
 
-func variantKindName(modulePath []string, name string) string {
-	return "K" + camelName(modulePath, name)
+func variantName(modulePath []string, typeName, name string) string {
+	return "_" + camelName(modulePath, typeName+"_"+name)
+}
+
+func variantKindName(modulePath []string, typeName, name string) string {
+	return "K" + camelName(modulePath, typeName+"_"+name)
+}
+
+func variantTypeName(modulePath []string, typeName, name string) string {
+	return "O" + camelName(modulePath, typeName+"_"+name)
 }
 
 func fieldName(name string) string {

@@ -8,8 +8,8 @@ type OTypes_name = string
 type OTypes_null_kind int
 
 const (
-	KTypes_NoNull OTypes_null_kind = iota + 1
-	KTypes_Null
+	KTypes_null_NoNull OTypes_null_kind = iota + 1
+	KTypes_null_Null
 )
 
 type OTypes_null interface {
@@ -24,14 +24,14 @@ func (t SimpleOTypes_null) Kind() OTypes_null_kind {
 	return t.kind
 }
 
-var Types_NoNull OTypes_null = SimpleOTypes_null{KTypes_NoNull}
-var Types_Null OTypes_null = SimpleOTypes_null{KTypes_Null}
+var _Types_null_NoNull OTypes_null = SimpleOTypes_null{KTypes_null_NoNull}
+var _Types_null_Null OTypes_null = SimpleOTypes_null{KTypes_null_Null}
 
 type OTypes_mut_kind int
 
 const (
-	KTypes_Cons OTypes_mut_kind = iota + 1
-	KTypes_Var
+	KTypes_mut_Cons OTypes_mut_kind = iota + 1
+	KTypes_mut_Var
 )
 
 type OTypes_mut interface {
@@ -46,14 +46,14 @@ func (t SimpleOTypes_mut) Kind() OTypes_mut_kind {
 	return t.kind
 }
 
-var Types_Cons OTypes_mut = SimpleOTypes_mut{KTypes_Cons}
-var Types_Var OTypes_mut = SimpleOTypes_mut{KTypes_Var}
+var _Types_mut_Cons OTypes_mut = SimpleOTypes_mut{KTypes_mut_Cons}
+var _Types_mut_Var OTypes_mut = SimpleOTypes_mut{KTypes_mut_Var}
 
 type OTypes_init_kind int
 
 const (
-	KTypes_Set OTypes_init_kind = iota + 1
-	KTypes_Unset
+	KTypes_init_Set OTypes_init_kind = iota + 1
+	KTypes_init_Unset
 )
 
 type OTypes_init interface {
@@ -68,14 +68,14 @@ func (t SimpleOTypes_init) Kind() OTypes_init_kind {
 	return t.kind
 }
 
-var Types_Set OTypes_init = SimpleOTypes_init{KTypes_Set}
-var Types_Unset OTypes_init = SimpleOTypes_init{KTypes_Unset}
+var _Types_init_Set OTypes_init = SimpleOTypes_init{KTypes_init_Set}
+var _Types_init_Unset OTypes_init = SimpleOTypes_init{KTypes_init_Unset}
 
 type OTypes_final_kind int
 
 const (
-	KTypes_NoFinal OTypes_final_kind = iota + 1
-	KTypes_Final
+	KTypes_final_NoFinal OTypes_final_kind = iota + 1
+	KTypes_final_Final
 )
 
 type OTypes_final interface {
@@ -90,8 +90,8 @@ func (t SimpleOTypes_final) Kind() OTypes_final_kind {
 	return t.kind
 }
 
-var Types_NoFinal OTypes_final = SimpleOTypes_final{KTypes_NoFinal}
-var Types_Final OTypes_final = SimpleOTypes_final{KTypes_Final}
+var _Types_final_NoFinal OTypes_final = SimpleOTypes_final{KTypes_final_NoFinal}
+var _Types_final_Final OTypes_final = SimpleOTypes_final{KTypes_final_Final}
 
 type OTypes_limits struct {
 	min OInt64
@@ -101,8 +101,8 @@ type OTypes_limits struct {
 type OTypes_var_kind int
 
 const (
-	KTypes_StatX OTypes_var_kind = iota + 1
-	KTypes_RecX
+	KTypes_var_StatX OTypes_var_kind = iota + 1
+	KTypes_var_RecX
 )
 
 type OTypes_var interface {
@@ -122,7 +122,7 @@ type OTypes_var_StatX struct {
 }
 
 func (t OTypes_var_StatX) Kind() OTypes_var_kind {
-	return KTypes_StatX
+	return KTypes_var_StatX
 }
 func Types_StatX_1(v OTypes_type_idx) OTypes_var {
 	return OTypes_var_StatX{v}
@@ -133,7 +133,7 @@ type OTypes_var_RecX struct {
 }
 
 func (t OTypes_var_RecX) Kind() OTypes_var_kind {
-	return KTypes_RecX
+	return KTypes_var_RecX
 }
 func Types_RecX_1(v OInt32) OTypes_var {
 	return OTypes_var_RecX{v}
@@ -142,8 +142,8 @@ func Types_RecX_1(v OInt32) OTypes_var {
 type OTypes_addr_type_kind int
 
 const (
-	KTypes_I32AT OTypes_addr_type_kind = iota + 1
-	KTypes_I64AT
+	KTypes_addr_type_I32AT OTypes_addr_type_kind = iota + 1
+	KTypes_addr_type_I64AT
 )
 
 type OTypes_addr_type interface {
@@ -158,16 +158,16 @@ func (t SimpleOTypes_addr_type) Kind() OTypes_addr_type_kind {
 	return t.kind
 }
 
-var Types_I32AT OTypes_addr_type = SimpleOTypes_addr_type{KTypes_I32AT}
-var Types_I64AT OTypes_addr_type = SimpleOTypes_addr_type{KTypes_I64AT}
+var _Types_addr_type_I32AT OTypes_addr_type = SimpleOTypes_addr_type{KTypes_addr_type_I32AT}
+var _Types_addr_type_I64AT OTypes_addr_type = SimpleOTypes_addr_type{KTypes_addr_type_I64AT}
 
 type OTypes_num_type_kind int
 
 const (
-	KTypes_I32T OTypes_num_type_kind = iota + 1
-	KTypes_I64T
-	KTypes_F32T
-	KTypes_F64T
+	KTypes_num_type_I32T OTypes_num_type_kind = iota + 1
+	KTypes_num_type_I64T
+	KTypes_num_type_F32T
+	KTypes_num_type_F64T
 )
 
 type OTypes_num_type interface {
@@ -182,15 +182,15 @@ func (t SimpleOTypes_num_type) Kind() OTypes_num_type_kind {
 	return t.kind
 }
 
-var Types_I32T OTypes_num_type = SimpleOTypes_num_type{KTypes_I32T}
-var Types_I64T OTypes_num_type = SimpleOTypes_num_type{KTypes_I64T}
-var Types_F32T OTypes_num_type = SimpleOTypes_num_type{KTypes_F32T}
-var Types_F64T OTypes_num_type = SimpleOTypes_num_type{KTypes_F64T}
+var _Types_num_type_I32T OTypes_num_type = SimpleOTypes_num_type{KTypes_num_type_I32T}
+var _Types_num_type_I64T OTypes_num_type = SimpleOTypes_num_type{KTypes_num_type_I64T}
+var _Types_num_type_F32T OTypes_num_type = SimpleOTypes_num_type{KTypes_num_type_F32T}
+var _Types_num_type_F64T OTypes_num_type = SimpleOTypes_num_type{KTypes_num_type_F64T}
 
 type OTypes_vec_type_kind int
 
 const (
-	KTypes_V128T OTypes_vec_type_kind = iota + 1
+	KTypes_vec_type_V128T OTypes_vec_type_kind = iota + 1
 )
 
 type OTypes_vec_type interface {
@@ -205,26 +205,26 @@ func (t SimpleOTypes_vec_type) Kind() OTypes_vec_type_kind {
 	return t.kind
 }
 
-var Types_V128T OTypes_vec_type = SimpleOTypes_vec_type{KTypes_V128T}
+var _Types_vec_type_V128T OTypes_vec_type = SimpleOTypes_vec_type{KTypes_vec_type_V128T}
 
 type OTypes_heap_type_kind int
 
 const (
-	KTypes_AnyHT OTypes_heap_type_kind = iota + 1
-	KTypes_NoneHT
-	KTypes_EqHT
-	KTypes_I31HT
-	KTypes_StructHT
-	KTypes_ArrayHT
-	KTypes_FuncHT
-	KTypes_NoFuncHT
-	KTypes_ExnHT
-	KTypes_NoExnHT
-	KTypes_ExternHT
-	KTypes_NoExternHT
-	KTypes_VarHT
-	KTypes_DefHT
-	KTypes_BotHT
+	KTypes_heap_type_AnyHT OTypes_heap_type_kind = iota + 1
+	KTypes_heap_type_NoneHT
+	KTypes_heap_type_EqHT
+	KTypes_heap_type_I31HT
+	KTypes_heap_type_StructHT
+	KTypes_heap_type_ArrayHT
+	KTypes_heap_type_FuncHT
+	KTypes_heap_type_NoFuncHT
+	KTypes_heap_type_ExnHT
+	KTypes_heap_type_NoExnHT
+	KTypes_heap_type_ExternHT
+	KTypes_heap_type_NoExternHT
+	KTypes_heap_type_VarHT
+	KTypes_heap_type_DefHT
+	KTypes_heap_type_BotHT
 )
 
 type OTypes_heap_type interface {
@@ -239,25 +239,25 @@ func (t SimpleOTypes_heap_type) Kind() OTypes_heap_type_kind {
 	return t.kind
 }
 
-var Types_AnyHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_AnyHT}
-var Types_NoneHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_NoneHT}
-var Types_EqHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_EqHT}
-var Types_I31HT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_I31HT}
-var Types_StructHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_StructHT}
-var Types_ArrayHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_ArrayHT}
-var Types_FuncHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_FuncHT}
-var Types_NoFuncHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_NoFuncHT}
-var Types_ExnHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_ExnHT}
-var Types_NoExnHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_NoExnHT}
-var Types_ExternHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_ExternHT}
-var Types_NoExternHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_NoExternHT}
+var _Types_heap_type_AnyHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_AnyHT}
+var _Types_heap_type_NoneHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_NoneHT}
+var _Types_heap_type_EqHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_EqHT}
+var _Types_heap_type_I31HT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_I31HT}
+var _Types_heap_type_StructHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_StructHT}
+var _Types_heap_type_ArrayHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_ArrayHT}
+var _Types_heap_type_FuncHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_FuncHT}
+var _Types_heap_type_NoFuncHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_NoFuncHT}
+var _Types_heap_type_ExnHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_ExnHT}
+var _Types_heap_type_NoExnHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_NoExnHT}
+var _Types_heap_type_ExternHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_ExternHT}
+var _Types_heap_type_NoExternHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_NoExternHT}
 
 type OTypes_heap_type_VarHT struct {
 	V OTypes_var
 }
 
 func (t OTypes_heap_type_VarHT) Kind() OTypes_heap_type_kind {
-	return KTypes_VarHT
+	return KTypes_heap_type_VarHT
 }
 func Types_VarHT_1(v OTypes_var) OTypes_heap_type {
 	return OTypes_heap_type_VarHT{v}
@@ -268,13 +268,13 @@ type OTypes_heap_type_DefHT struct {
 }
 
 func (t OTypes_heap_type_DefHT) Kind() OTypes_heap_type_kind {
-	return KTypes_DefHT
+	return KTypes_heap_type_DefHT
 }
 func Types_DefHT_1(v OTypes_def_type) OTypes_heap_type {
 	return OTypes_heap_type_DefHT{v}
 }
 
-var Types_BotHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_BotHT}
+var _Types_heap_type_BotHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_heap_type_BotHT}
 
 type OTypes_ref_type struct {
 	F0 OTypes_null
@@ -284,10 +284,10 @@ type OTypes_ref_type struct {
 type OTypes_val_type_kind int
 
 const (
-	KTypes_NumT OTypes_val_type_kind = iota + 1
-	KTypes_VecT
-	KTypes_RefT
-	KTypes_BotT
+	KTypes_val_type_NumT OTypes_val_type_kind = iota + 1
+	KTypes_val_type_VecT
+	KTypes_val_type_RefT
+	KTypes_val_type_BotT
 )
 
 type OTypes_val_type interface {
@@ -307,7 +307,7 @@ type OTypes_val_type_NumT struct {
 }
 
 func (t OTypes_val_type_NumT) Kind() OTypes_val_type_kind {
-	return KTypes_NumT
+	return KTypes_val_type_NumT
 }
 func Types_NumT_1(v OTypes_num_type) OTypes_val_type {
 	return OTypes_val_type_NumT{v}
@@ -318,7 +318,7 @@ type OTypes_val_type_VecT struct {
 }
 
 func (t OTypes_val_type_VecT) Kind() OTypes_val_type_kind {
-	return KTypes_VecT
+	return KTypes_val_type_VecT
 }
 func Types_VecT_1(v OTypes_vec_type) OTypes_val_type {
 	return OTypes_val_type_VecT{v}
@@ -329,20 +329,20 @@ type OTypes_val_type_RefT struct {
 }
 
 func (t OTypes_val_type_RefT) Kind() OTypes_val_type_kind {
-	return KTypes_RefT
+	return KTypes_val_type_RefT
 }
 func Types_RefT_1(v OTypes_ref_type) OTypes_val_type {
 	return OTypes_val_type_RefT{v}
 }
 
-var Types_BotT OTypes_val_type = SimpleOTypes_val_type{KTypes_BotT}
+var _Types_val_type_BotT OTypes_val_type = SimpleOTypes_val_type{KTypes_val_type_BotT}
 
 type OTypes_result_type = []OTypes_val_type
 
 type OTypes_instr_type_kind int
 
 const (
-	KTypes_InstrT OTypes_instr_type_kind = iota + 1
+	KTypes_instr_type_InstrT OTypes_instr_type_kind = iota + 1
 )
 
 type OTypes_instr_type interface {
@@ -366,7 +366,7 @@ type OTypes_instr_type_InstrT struct {
 }
 
 func (t OTypes_instr_type_InstrT) Kind() OTypes_instr_type_kind {
-	return KTypes_InstrT
+	return KTypes_instr_type_InstrT
 }
 func Types_InstrT_1(v struct {
 	F0 OTypes_result_type
@@ -379,8 +379,8 @@ func Types_InstrT_1(v struct {
 type OTypes_storage_type_kind int
 
 const (
-	KTypes_ValStorageT OTypes_storage_type_kind = iota + 1
-	KTypes_PackStorageT
+	KTypes_storage_type_ValStorageT OTypes_storage_type_kind = iota + 1
+	KTypes_storage_type_PackStorageT
 )
 
 type OTypes_storage_type interface {
@@ -400,7 +400,7 @@ type OTypes_storage_type_ValStorageT struct {
 }
 
 func (t OTypes_storage_type_ValStorageT) Kind() OTypes_storage_type_kind {
-	return KTypes_ValStorageT
+	return KTypes_storage_type_ValStorageT
 }
 func Types_ValStorageT_1(v OTypes_val_type) OTypes_storage_type {
 	return OTypes_storage_type_ValStorageT{v}
@@ -411,7 +411,7 @@ type OTypes_storage_type_PackStorageT struct {
 }
 
 func (t OTypes_storage_type_PackStorageT) Kind() OTypes_storage_type_kind {
-	return KTypes_PackStorageT
+	return KTypes_storage_type_PackStorageT
 }
 func Types_PackStorageT_1(v OPack_pack_size) OTypes_storage_type {
 	return OTypes_storage_type_PackStorageT{v}
@@ -420,7 +420,7 @@ func Types_PackStorageT_1(v OPack_pack_size) OTypes_storage_type {
 type OTypes_field_type_kind int
 
 const (
-	KTypes_FieldT OTypes_field_type_kind = iota + 1
+	KTypes_field_type_FieldT OTypes_field_type_kind = iota + 1
 )
 
 type OTypes_field_type interface {
@@ -443,7 +443,7 @@ type OTypes_field_type_FieldT struct {
 }
 
 func (t OTypes_field_type_FieldT) Kind() OTypes_field_type_kind {
-	return KTypes_FieldT
+	return KTypes_field_type_FieldT
 }
 func Types_FieldT_1(v struct {
 	F0 OTypes_mut
@@ -455,7 +455,7 @@ func Types_FieldT_1(v struct {
 type OTypes_struct_type_kind int
 
 const (
-	KTypes_StructT OTypes_struct_type_kind = iota + 1
+	KTypes_struct_type_StructT OTypes_struct_type_kind = iota + 1
 )
 
 type OTypes_struct_type interface {
@@ -475,7 +475,7 @@ type OTypes_struct_type_StructT struct {
 }
 
 func (t OTypes_struct_type_StructT) Kind() OTypes_struct_type_kind {
-	return KTypes_StructT
+	return KTypes_struct_type_StructT
 }
 func Types_StructT_1(v []OTypes_field_type) OTypes_struct_type {
 	return OTypes_struct_type_StructT{v}
@@ -484,7 +484,7 @@ func Types_StructT_1(v []OTypes_field_type) OTypes_struct_type {
 type OTypes_array_type_kind int
 
 const (
-	KTypes_ArrayT OTypes_array_type_kind = iota + 1
+	KTypes_array_type_ArrayT OTypes_array_type_kind = iota + 1
 )
 
 type OTypes_array_type interface {
@@ -504,7 +504,7 @@ type OTypes_array_type_ArrayT struct {
 }
 
 func (t OTypes_array_type_ArrayT) Kind() OTypes_array_type_kind {
-	return KTypes_ArrayT
+	return KTypes_array_type_ArrayT
 }
 func Types_ArrayT_1(v OTypes_field_type) OTypes_array_type {
 	return OTypes_array_type_ArrayT{v}
@@ -513,7 +513,7 @@ func Types_ArrayT_1(v OTypes_field_type) OTypes_array_type {
 type OTypes_func_type_kind int
 
 const (
-	KTypes_FuncT OTypes_func_type_kind = iota + 1
+	KTypes_func_type_FuncT OTypes_func_type_kind = iota + 1
 )
 
 type OTypes_func_type interface {
@@ -536,7 +536,7 @@ type OTypes_func_type_FuncT struct {
 }
 
 func (t OTypes_func_type_FuncT) Kind() OTypes_func_type_kind {
-	return KTypes_FuncT
+	return KTypes_func_type_FuncT
 }
 func Types_FuncT_1(v struct {
 	F0 OTypes_result_type
@@ -548,9 +548,9 @@ func Types_FuncT_1(v struct {
 type OTypes_str_type_kind int
 
 const (
-	KTypes_DefStructT OTypes_str_type_kind = iota + 1
-	KTypes_DefArrayT
-	KTypes_DefFuncT
+	KTypes_str_type_DefStructT OTypes_str_type_kind = iota + 1
+	KTypes_str_type_DefArrayT
+	KTypes_str_type_DefFuncT
 )
 
 type OTypes_str_type interface {
@@ -570,7 +570,7 @@ type OTypes_str_type_DefStructT struct {
 }
 
 func (t OTypes_str_type_DefStructT) Kind() OTypes_str_type_kind {
-	return KTypes_DefStructT
+	return KTypes_str_type_DefStructT
 }
 func Types_DefStructT_1(v OTypes_struct_type) OTypes_str_type {
 	return OTypes_str_type_DefStructT{v}
@@ -581,7 +581,7 @@ type OTypes_str_type_DefArrayT struct {
 }
 
 func (t OTypes_str_type_DefArrayT) Kind() OTypes_str_type_kind {
-	return KTypes_DefArrayT
+	return KTypes_str_type_DefArrayT
 }
 func Types_DefArrayT_1(v OTypes_array_type) OTypes_str_type {
 	return OTypes_str_type_DefArrayT{v}
@@ -592,7 +592,7 @@ type OTypes_str_type_DefFuncT struct {
 }
 
 func (t OTypes_str_type_DefFuncT) Kind() OTypes_str_type_kind {
-	return KTypes_DefFuncT
+	return KTypes_str_type_DefFuncT
 }
 func Types_DefFuncT_1(v OTypes_func_type) OTypes_str_type {
 	return OTypes_str_type_DefFuncT{v}
@@ -601,7 +601,7 @@ func Types_DefFuncT_1(v OTypes_func_type) OTypes_str_type {
 type OTypes_sub_type_kind int
 
 const (
-	KTypes_SubT OTypes_sub_type_kind = iota + 1
+	KTypes_sub_type_SubT OTypes_sub_type_kind = iota + 1
 )
 
 type OTypes_sub_type interface {
@@ -625,7 +625,7 @@ type OTypes_sub_type_SubT struct {
 }
 
 func (t OTypes_sub_type_SubT) Kind() OTypes_sub_type_kind {
-	return KTypes_SubT
+	return KTypes_sub_type_SubT
 }
 func Types_SubT_1(v struct {
 	F0 OTypes_final
@@ -638,7 +638,7 @@ func Types_SubT_1(v struct {
 type OTypes_rec_type_kind int
 
 const (
-	KTypes_RecT OTypes_rec_type_kind = iota + 1
+	KTypes_rec_type_RecT OTypes_rec_type_kind = iota + 1
 )
 
 type OTypes_rec_type interface {
@@ -658,7 +658,7 @@ type OTypes_rec_type_RecT struct {
 }
 
 func (t OTypes_rec_type_RecT) Kind() OTypes_rec_type_kind {
-	return KTypes_RecT
+	return KTypes_rec_type_RecT
 }
 func Types_RecT_1(v []OTypes_sub_type) OTypes_rec_type {
 	return OTypes_rec_type_RecT{v}
@@ -667,7 +667,7 @@ func Types_RecT_1(v []OTypes_sub_type) OTypes_rec_type {
 type OTypes_def_type_kind int
 
 const (
-	KTypes_DefT OTypes_def_type_kind = iota + 1
+	KTypes_def_type_DefT OTypes_def_type_kind = iota + 1
 )
 
 type OTypes_def_type interface {
@@ -690,7 +690,7 @@ type OTypes_def_type_DefT struct {
 }
 
 func (t OTypes_def_type_DefT) Kind() OTypes_def_type_kind {
-	return KTypes_DefT
+	return KTypes_def_type_DefT
 }
 func Types_DefT_1(v struct {
 	F0 OTypes_rec_type
@@ -702,7 +702,7 @@ func Types_DefT_1(v struct {
 type OTypes_table_type_kind int
 
 const (
-	KTypes_TableT OTypes_table_type_kind = iota + 1
+	KTypes_table_type_TableT OTypes_table_type_kind = iota + 1
 )
 
 type OTypes_table_type interface {
@@ -726,7 +726,7 @@ type OTypes_table_type_TableT struct {
 }
 
 func (t OTypes_table_type_TableT) Kind() OTypes_table_type_kind {
-	return KTypes_TableT
+	return KTypes_table_type_TableT
 }
 func Types_TableT_1(v struct {
 	F0 OTypes_addr_type
@@ -739,7 +739,7 @@ func Types_TableT_1(v struct {
 type OTypes_memory_type_kind int
 
 const (
-	KTypes_MemoryT OTypes_memory_type_kind = iota + 1
+	KTypes_memory_type_MemoryT OTypes_memory_type_kind = iota + 1
 )
 
 type OTypes_memory_type interface {
@@ -762,7 +762,7 @@ type OTypes_memory_type_MemoryT struct {
 }
 
 func (t OTypes_memory_type_MemoryT) Kind() OTypes_memory_type_kind {
-	return KTypes_MemoryT
+	return KTypes_memory_type_MemoryT
 }
 func Types_MemoryT_1(v struct {
 	F0 OTypes_addr_type
@@ -774,7 +774,7 @@ func Types_MemoryT_1(v struct {
 type OTypes_global_type_kind int
 
 const (
-	KTypes_GlobalT OTypes_global_type_kind = iota + 1
+	KTypes_global_type_GlobalT OTypes_global_type_kind = iota + 1
 )
 
 type OTypes_global_type interface {
@@ -797,7 +797,7 @@ type OTypes_global_type_GlobalT struct {
 }
 
 func (t OTypes_global_type_GlobalT) Kind() OTypes_global_type_kind {
-	return KTypes_GlobalT
+	return KTypes_global_type_GlobalT
 }
 func Types_GlobalT_1(v struct {
 	F0 OTypes_mut
@@ -809,7 +809,7 @@ func Types_GlobalT_1(v struct {
 type OTypes_tag_type_kind int
 
 const (
-	KTypes_TagT OTypes_tag_type_kind = iota + 1
+	KTypes_tag_type_TagT OTypes_tag_type_kind = iota + 1
 )
 
 type OTypes_tag_type interface {
@@ -829,7 +829,7 @@ type OTypes_tag_type_TagT struct {
 }
 
 func (t OTypes_tag_type_TagT) Kind() OTypes_tag_type_kind {
-	return KTypes_TagT
+	return KTypes_tag_type_TagT
 }
 func Types_TagT_1(v OTypes_def_type) OTypes_tag_type {
 	return OTypes_tag_type_TagT{v}
@@ -838,7 +838,7 @@ func Types_TagT_1(v OTypes_def_type) OTypes_tag_type {
 type OTypes_local_type_kind int
 
 const (
-	KTypes_LocalT OTypes_local_type_kind = iota + 1
+	KTypes_local_type_LocalT OTypes_local_type_kind = iota + 1
 )
 
 type OTypes_local_type interface {
@@ -861,7 +861,7 @@ type OTypes_local_type_LocalT struct {
 }
 
 func (t OTypes_local_type_LocalT) Kind() OTypes_local_type_kind {
-	return KTypes_LocalT
+	return KTypes_local_type_LocalT
 }
 func Types_LocalT_1(v struct {
 	F0 OTypes_init
@@ -873,11 +873,11 @@ func Types_LocalT_1(v struct {
 type OTypes_extern_type_kind int
 
 const (
-	KTypes_ExternFuncT OTypes_extern_type_kind = iota + 1
-	KTypes_ExternTableT
-	KTypes_ExternMemoryT
-	KTypes_ExternGlobalT
-	KTypes_ExternTagT
+	KTypes_extern_type_ExternFuncT OTypes_extern_type_kind = iota + 1
+	KTypes_extern_type_ExternTableT
+	KTypes_extern_type_ExternMemoryT
+	KTypes_extern_type_ExternGlobalT
+	KTypes_extern_type_ExternTagT
 )
 
 type OTypes_extern_type interface {
@@ -897,7 +897,7 @@ type OTypes_extern_type_ExternFuncT struct {
 }
 
 func (t OTypes_extern_type_ExternFuncT) Kind() OTypes_extern_type_kind {
-	return KTypes_ExternFuncT
+	return KTypes_extern_type_ExternFuncT
 }
 func Types_ExternFuncT_1(v OTypes_def_type) OTypes_extern_type {
 	return OTypes_extern_type_ExternFuncT{v}
@@ -908,7 +908,7 @@ type OTypes_extern_type_ExternTableT struct {
 }
 
 func (t OTypes_extern_type_ExternTableT) Kind() OTypes_extern_type_kind {
-	return KTypes_ExternTableT
+	return KTypes_extern_type_ExternTableT
 }
 func Types_ExternTableT_1(v OTypes_table_type) OTypes_extern_type {
 	return OTypes_extern_type_ExternTableT{v}
@@ -919,7 +919,7 @@ type OTypes_extern_type_ExternMemoryT struct {
 }
 
 func (t OTypes_extern_type_ExternMemoryT) Kind() OTypes_extern_type_kind {
-	return KTypes_ExternMemoryT
+	return KTypes_extern_type_ExternMemoryT
 }
 func Types_ExternMemoryT_1(v OTypes_memory_type) OTypes_extern_type {
 	return OTypes_extern_type_ExternMemoryT{v}
@@ -930,7 +930,7 @@ type OTypes_extern_type_ExternGlobalT struct {
 }
 
 func (t OTypes_extern_type_ExternGlobalT) Kind() OTypes_extern_type_kind {
-	return KTypes_ExternGlobalT
+	return KTypes_extern_type_ExternGlobalT
 }
 func Types_ExternGlobalT_1(v OTypes_global_type) OTypes_extern_type {
 	return OTypes_extern_type_ExternGlobalT{v}
@@ -941,7 +941,7 @@ type OTypes_extern_type_ExternTagT struct {
 }
 
 func (t OTypes_extern_type_ExternTagT) Kind() OTypes_extern_type_kind {
-	return KTypes_ExternTagT
+	return KTypes_extern_type_ExternTagT
 }
 func Types_ExternTagT_1(v OTypes_tag_type) OTypes_extern_type {
 	return OTypes_extern_type_ExternTagT{v}
@@ -950,7 +950,7 @@ func Types_ExternTagT_1(v OTypes_tag_type) OTypes_extern_type {
 type OTypes_export_type_kind int
 
 const (
-	KTypes_ExportT OTypes_export_type_kind = iota + 1
+	KTypes_export_type_ExportT OTypes_export_type_kind = iota + 1
 )
 
 type OTypes_export_type interface {
@@ -973,7 +973,7 @@ type OTypes_export_type_ExportT struct {
 }
 
 func (t OTypes_export_type_ExportT) Kind() OTypes_export_type_kind {
-	return KTypes_ExportT
+	return KTypes_export_type_ExportT
 }
 func Types_ExportT_1(v struct {
 	F0 OTypes_extern_type
@@ -985,7 +985,7 @@ func Types_ExportT_1(v struct {
 type OTypes_import_type_kind int
 
 const (
-	KTypes_ImportT OTypes_import_type_kind = iota + 1
+	KTypes_import_type_ImportT OTypes_import_type_kind = iota + 1
 )
 
 type OTypes_import_type interface {
@@ -1009,7 +1009,7 @@ type OTypes_import_type_ImportT struct {
 }
 
 func (t OTypes_import_type_ImportT) Kind() OTypes_import_type_kind {
-	return KTypes_ImportT
+	return KTypes_import_type_ImportT
 }
 func Types_ImportT_1(v struct {
 	F0 OTypes_extern_type
@@ -1022,7 +1022,7 @@ func Types_ImportT_1(v struct {
 type OTypes_module_type_kind int
 
 const (
-	KTypes_ModuleT OTypes_module_type_kind = iota + 1
+	KTypes_module_type_ModuleT OTypes_module_type_kind = iota + 1
 )
 
 type OTypes_module_type interface {
@@ -1045,7 +1045,7 @@ type OTypes_module_type_ModuleT struct {
 }
 
 func (t OTypes_module_type_ModuleT) Kind() OTypes_module_type_kind {
-	return KTypes_ModuleT
+	return KTypes_module_type_ModuleT
 }
 func Types_ModuleT_1(v struct {
 	F0 []OTypes_import_type
@@ -1059,10 +1059,10 @@ type OTypes_subst = func(OTypes_var) OTypes_heap_type
 type OValue_op_kind int
 
 const (
-	KValue_I32 OValue_op_kind = iota + 1
-	KValue_I64
-	KValue_F32
-	KValue_F64
+	KValue_op_I32 OValue_op_kind = iota + 1
+	KValue_op_I64
+	KValue_op_F32
+	KValue_op_F64
 )
 
 type OValue_op[T_i32 any, T_i64 any, T_f32 any, T_f64 any] interface {
@@ -1082,7 +1082,7 @@ type OValue_op_I32[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
 }
 
 func (t OValue_op_I32[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
-	return KValue_I32
+	return KValue_op_I32
 }
 func Value_I32_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_i32) OValue_op[T_i32, T_i64, T_f32, T_f64] {
 	return OValue_op_I32[T_i32, T_i64, T_f32, T_f64]{v}
@@ -1093,7 +1093,7 @@ type OValue_op_I64[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
 }
 
 func (t OValue_op_I64[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
-	return KValue_I64
+	return KValue_op_I64
 }
 func Value_I64_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_i64) OValue_op[T_i32, T_i64, T_f32, T_f64] {
 	return OValue_op_I64[T_i32, T_i64, T_f32, T_f64]{v}
@@ -1104,7 +1104,7 @@ type OValue_op_F32[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
 }
 
 func (t OValue_op_F32[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
-	return KValue_F32
+	return KValue_op_F32
 }
 func Value_F32_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_f32) OValue_op[T_i32, T_i64, T_f32, T_f64] {
 	return OValue_op_F32[T_i32, T_i64, T_f32, T_f64]{v}
@@ -1115,7 +1115,7 @@ type OValue_op_F64[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
 }
 
 func (t OValue_op_F64[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
-	return KValue_F64
+	return KValue_op_F64
 }
 func Value_F64_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_f64) OValue_op[T_i32, T_i64, T_f32, T_f64] {
 	return OValue_op_F64[T_i32, T_i64, T_f32, T_f64]{v}
@@ -1124,7 +1124,7 @@ func Value_F64_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_f64) OValue_op[
 type OValue_vecop_kind int
 
 const (
-	KValue_V128 OValue_vecop_kind = iota + 1
+	KValue_vecop_V128 OValue_vecop_kind = iota + 1
 )
 
 type OValue_vecop[T_v128 any] interface {
@@ -1144,7 +1144,7 @@ type OValue_vecop_V128[T_v128 any] struct {
 }
 
 func (t OValue_vecop_V128[T_v128]) Kind() OValue_vecop_kind {
-	return KValue_V128
+	return KValue_vecop_V128
 }
 func Value_V128_1[T_v128 any](v T_v128) OValue_vecop[T_v128] {
 	return OValue_vecop_V128[T_v128]{v}
@@ -1156,9 +1156,9 @@ type OValue_vec = OValue_vecop[V128]
 type OValue_value_kind int
 
 const (
-	KValue_Num OValue_value_kind = iota + 1
-	KValue_Vec
-	KValue_Ref
+	KValue_value_Num OValue_value_kind = iota + 1
+	KValue_value_Vec
+	KValue_value_Ref
 )
 
 type OValue_value interface {
@@ -1178,7 +1178,7 @@ type OValue_value_Num struct {
 }
 
 func (t OValue_value_Num) Kind() OValue_value_kind {
-	return KValue_Num
+	return KValue_value_Num
 }
 func Value_Num_1(v OValue_num) OValue_value {
 	return OValue_value_Num{v}
@@ -1189,7 +1189,7 @@ type OValue_value_Vec struct {
 }
 
 func (t OValue_value_Vec) Kind() OValue_value_kind {
-	return KValue_Vec
+	return KValue_value_Vec
 }
 func Value_Vec_1(v OValue_vec) OValue_value {
 	return OValue_value_Vec{v}
@@ -1200,7 +1200,7 @@ type OValue_value_Ref struct {
 }
 
 func (t OValue_value_Ref) Kind() OValue_value_kind {
-	return KValue_Ref
+	return KValue_value_Ref
 }
 func Value_Ref_1(v OValue_ref_) OValue_value {
 	return OValue_value_Ref{v}
@@ -1218,10 +1218,10 @@ type OValue_address = OI64_t
 type OPack_pack_size_kind int
 
 const (
-	KPack_Pack8 OPack_pack_size_kind = iota + 1
-	KPack_Pack16
-	KPack_Pack32
-	KPack_Pack64
+	KPack_pack_size_Pack8 OPack_pack_size_kind = iota + 1
+	KPack_pack_size_Pack16
+	KPack_pack_size_Pack32
+	KPack_pack_size_Pack64
 )
 
 type OPack_pack_size interface {
@@ -1236,16 +1236,16 @@ func (t SimpleOPack_pack_size) Kind() OPack_pack_size_kind {
 	return t.kind
 }
 
-var Pack_Pack8 OPack_pack_size = SimpleOPack_pack_size{KPack_Pack8}
-var Pack_Pack16 OPack_pack_size = SimpleOPack_pack_size{KPack_Pack16}
-var Pack_Pack32 OPack_pack_size = SimpleOPack_pack_size{KPack_Pack32}
-var Pack_Pack64 OPack_pack_size = SimpleOPack_pack_size{KPack_Pack64}
+var _Pack_pack_size_Pack8 OPack_pack_size = SimpleOPack_pack_size{KPack_pack_size_Pack8}
+var _Pack_pack_size_Pack16 OPack_pack_size = SimpleOPack_pack_size{KPack_pack_size_Pack16}
+var _Pack_pack_size_Pack32 OPack_pack_size = SimpleOPack_pack_size{KPack_pack_size_Pack32}
+var _Pack_pack_size_Pack64 OPack_pack_size = SimpleOPack_pack_size{KPack_pack_size_Pack64}
 
 type OPack_extension_kind int
 
 const (
-	KPack_SX OPack_extension_kind = iota + 1
-	KPack_ZX
+	KPack_extension_SX OPack_extension_kind = iota + 1
+	KPack_extension_ZX
 )
 
 type OPack_extension interface {
@@ -1260,15 +1260,15 @@ func (t SimpleOPack_extension) Kind() OPack_extension_kind {
 	return t.kind
 }
 
-var Pack_SX OPack_extension = SimpleOPack_extension{KPack_SX}
-var Pack_ZX OPack_extension = SimpleOPack_extension{KPack_ZX}
+var _Pack_extension_SX OPack_extension = SimpleOPack_extension{KPack_extension_SX}
+var _Pack_extension_ZX OPack_extension = SimpleOPack_extension{KPack_extension_ZX}
 
 type OPack_pack_shape_kind int
 
 const (
-	KPack_Pack8x8 OPack_pack_shape_kind = iota + 1
-	KPack_Pack16x4
-	KPack_Pack32x2
+	KPack_pack_shape_Pack8x8 OPack_pack_shape_kind = iota + 1
+	KPack_pack_shape_Pack16x4
+	KPack_pack_shape_Pack32x2
 )
 
 type OPack_pack_shape interface {
@@ -1283,16 +1283,16 @@ func (t SimpleOPack_pack_shape) Kind() OPack_pack_shape_kind {
 	return t.kind
 }
 
-var Pack_Pack8x8 OPack_pack_shape = SimpleOPack_pack_shape{KPack_Pack8x8}
-var Pack_Pack16x4 OPack_pack_shape = SimpleOPack_pack_shape{KPack_Pack16x4}
-var Pack_Pack32x2 OPack_pack_shape = SimpleOPack_pack_shape{KPack_Pack32x2}
+var _Pack_pack_shape_Pack8x8 OPack_pack_shape = SimpleOPack_pack_shape{KPack_pack_shape_Pack8x8}
+var _Pack_pack_shape_Pack16x4 OPack_pack_shape = SimpleOPack_pack_shape{KPack_pack_shape_Pack16x4}
+var _Pack_pack_shape_Pack32x2 OPack_pack_shape = SimpleOPack_pack_shape{KPack_pack_shape_Pack32x2}
 
 type OPack_vec_extension_kind int
 
 const (
-	KPack_ExtLane OPack_vec_extension_kind = iota + 1
-	KPack_ExtSplat
-	KPack_ExtZero
+	KPack_vec_extension_ExtLane OPack_vec_extension_kind = iota + 1
+	KPack_vec_extension_ExtSplat
+	KPack_vec_extension_ExtZero
 )
 
 type OPack_vec_extension interface {
@@ -1315,7 +1315,7 @@ type OPack_vec_extension_ExtLane struct {
 }
 
 func (t OPack_vec_extension_ExtLane) Kind() OPack_vec_extension_kind {
-	return KPack_ExtLane
+	return KPack_vec_extension_ExtLane
 }
 func Pack_ExtLane_1(v struct {
 	F0 OPack_pack_shape
@@ -1324,8 +1324,8 @@ func Pack_ExtLane_1(v struct {
 	return OPack_vec_extension_ExtLane{v}
 }
 
-var Pack_ExtSplat OPack_vec_extension = SimpleOPack_vec_extension{KPack_ExtSplat}
-var Pack_ExtZero OPack_vec_extension = SimpleOPack_vec_extension{KPack_ExtZero}
+var _Pack_vec_extension_ExtSplat OPack_vec_extension = SimpleOPack_vec_extension{KPack_vec_extension_ExtSplat}
+var _Pack_vec_extension_ExtZero OPack_vec_extension = SimpleOPack_vec_extension{KPack_vec_extension_ExtZero}
 
 type OSource_pos struct {
 	file   string
@@ -1343,21 +1343,337 @@ type OSource_phrase[T_a any] struct {
 
 var Source_no_pos = nil    /* TODO: record_expression */
 var Source_no_region = nil /* TODO: record_expression */
-type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
-type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
-type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
-type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
-type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
-type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
-type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
-type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
-type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
-type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
+
+type OAst_IntOp_unop_kind int
+
+const (
+	KAst_IntOp_unop_Clz OAst_IntOp_unop_kind = iota + 1
+	KAst_IntOp_unop_Ctz
+	KAst_IntOp_unop_Popcnt
+	KAst_IntOp_unop_ExtendS
+)
+
+type OAst_IntOp_unop interface {
+	Kind() OAst_IntOp_unop_kind
+}
+
+type SimpleOAst_IntOp_unop struct {
+	kind OAst_IntOp_unop_kind
+}
+
+func (t SimpleOAst_IntOp_unop) Kind() OAst_IntOp_unop_kind {
+	return t.kind
+}
+
+var _Ast_IntOp_unop_Clz OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_unop_Clz}
+var _Ast_IntOp_unop_Ctz OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_unop_Ctz}
+var _Ast_IntOp_unop_Popcnt OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_unop_Popcnt}
+
+type OAst_IntOp_unop_ExtendS struct {
+	V OAst_IntOp_pack_size
+}
+
+func (t OAst_IntOp_unop_ExtendS) Kind() OAst_IntOp_unop_kind {
+	return KAst_IntOp_unop_ExtendS
+}
+func Ast_IntOp_ExtendS_1(v OAst_IntOp_pack_size) OAst_IntOp_unop {
+	return OAst_IntOp_unop_ExtendS{v}
+}
+
+type OAst_IntOp_binop_kind int
+
+const (
+	KAst_IntOp_binop_Add OAst_IntOp_binop_kind = iota + 1
+	KAst_IntOp_binop_Sub
+	KAst_IntOp_binop_Mul
+	KAst_IntOp_binop_DivS
+	KAst_IntOp_binop_DivU
+	KAst_IntOp_binop_RemS
+	KAst_IntOp_binop_RemU
+	KAst_IntOp_binop_And
+	KAst_IntOp_binop_Or
+	KAst_IntOp_binop_Xor
+	KAst_IntOp_binop_Shl
+	KAst_IntOp_binop_ShrS
+	KAst_IntOp_binop_ShrU
+	KAst_IntOp_binop_Rotl
+	KAst_IntOp_binop_Rotr
+)
+
+type OAst_IntOp_binop interface {
+	Kind() OAst_IntOp_binop_kind
+}
+
+type SimpleOAst_IntOp_binop struct {
+	kind OAst_IntOp_binop_kind
+}
+
+func (t SimpleOAst_IntOp_binop) Kind() OAst_IntOp_binop_kind {
+	return t.kind
+}
+
+var _Ast_IntOp_binop_Add OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Add}
+var _Ast_IntOp_binop_Sub OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Sub}
+var _Ast_IntOp_binop_Mul OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Mul}
+var _Ast_IntOp_binop_DivS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_DivS}
+var _Ast_IntOp_binop_DivU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_DivU}
+var _Ast_IntOp_binop_RemS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_RemS}
+var _Ast_IntOp_binop_RemU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_RemU}
+var _Ast_IntOp_binop_And OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_And}
+var _Ast_IntOp_binop_Or OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Or}
+var _Ast_IntOp_binop_Xor OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Xor}
+var _Ast_IntOp_binop_Shl OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Shl}
+var _Ast_IntOp_binop_ShrS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_ShrS}
+var _Ast_IntOp_binop_ShrU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_ShrU}
+var _Ast_IntOp_binop_Rotl OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Rotl}
+var _Ast_IntOp_binop_Rotr OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_binop_Rotr}
+
+type OAst_IntOp_testop_kind int
+
+const (
+	KAst_IntOp_testop_Eqz OAst_IntOp_testop_kind = iota + 1
+)
+
+type OAst_IntOp_testop interface {
+	Kind() OAst_IntOp_testop_kind
+}
+
+type SimpleOAst_IntOp_testop struct {
+	kind OAst_IntOp_testop_kind
+}
+
+func (t SimpleOAst_IntOp_testop) Kind() OAst_IntOp_testop_kind {
+	return t.kind
+}
+
+var _Ast_IntOp_testop_Eqz OAst_IntOp_testop = SimpleOAst_IntOp_testop{KAst_IntOp_testop_Eqz}
+
+type OAst_IntOp_relop_kind int
+
+const (
+	KAst_IntOp_relop_Eq OAst_IntOp_relop_kind = iota + 1
+	KAst_IntOp_relop_Ne
+	KAst_IntOp_relop_LtS
+	KAst_IntOp_relop_LtU
+	KAst_IntOp_relop_GtS
+	KAst_IntOp_relop_GtU
+	KAst_IntOp_relop_LeS
+	KAst_IntOp_relop_LeU
+	KAst_IntOp_relop_GeS
+	KAst_IntOp_relop_GeU
+)
+
+type OAst_IntOp_relop interface {
+	Kind() OAst_IntOp_relop_kind
+}
+
+type SimpleOAst_IntOp_relop struct {
+	kind OAst_IntOp_relop_kind
+}
+
+func (t SimpleOAst_IntOp_relop) Kind() OAst_IntOp_relop_kind {
+	return t.kind
+}
+
+var _Ast_IntOp_relop_Eq OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_Eq}
+var _Ast_IntOp_relop_Ne OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_Ne}
+var _Ast_IntOp_relop_LtS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_LtS}
+var _Ast_IntOp_relop_LtU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_LtU}
+var _Ast_IntOp_relop_GtS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_GtS}
+var _Ast_IntOp_relop_GtU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_GtU}
+var _Ast_IntOp_relop_LeS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_LeS}
+var _Ast_IntOp_relop_LeU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_LeU}
+var _Ast_IntOp_relop_GeS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_GeS}
+var _Ast_IntOp_relop_GeU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_relop_GeU}
+
+type OAst_IntOp_cvtop_kind int
+
+const (
+	KAst_IntOp_cvtop_ExtendSI32 OAst_IntOp_cvtop_kind = iota + 1
+	KAst_IntOp_cvtop_ExtendUI32
+	KAst_IntOp_cvtop_WrapI64
+	KAst_IntOp_cvtop_TruncSF32
+	KAst_IntOp_cvtop_TruncUF32
+	KAst_IntOp_cvtop_TruncSF64
+	KAst_IntOp_cvtop_TruncUF64
+	KAst_IntOp_cvtop_TruncSatSF32
+	KAst_IntOp_cvtop_TruncSatUF32
+	KAst_IntOp_cvtop_TruncSatSF64
+	KAst_IntOp_cvtop_TruncSatUF64
+	KAst_IntOp_cvtop_ReinterpretFloat
+)
+
+type OAst_IntOp_cvtop interface {
+	Kind() OAst_IntOp_cvtop_kind
+}
+
+type SimpleOAst_IntOp_cvtop struct {
+	kind OAst_IntOp_cvtop_kind
+}
+
+func (t SimpleOAst_IntOp_cvtop) Kind() OAst_IntOp_cvtop_kind {
+	return t.kind
+}
+
+var _Ast_IntOp_cvtop_ExtendSI32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_ExtendSI32}
+var _Ast_IntOp_cvtop_ExtendUI32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_ExtendUI32}
+var _Ast_IntOp_cvtop_WrapI64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_WrapI64}
+var _Ast_IntOp_cvtop_TruncSF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSF32}
+var _Ast_IntOp_cvtop_TruncUF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncUF32}
+var _Ast_IntOp_cvtop_TruncSF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSF64}
+var _Ast_IntOp_cvtop_TruncUF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncUF64}
+var _Ast_IntOp_cvtop_TruncSatSF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSatSF32}
+var _Ast_IntOp_cvtop_TruncSatUF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSatUF32}
+var _Ast_IntOp_cvtop_TruncSatSF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSatSF64}
+var _Ast_IntOp_cvtop_TruncSatUF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_TruncSatUF64}
+var _Ast_IntOp_cvtop_ReinterpretFloat OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_cvtop_ReinterpretFloat}
+
+type OAst_FloatOp_unop_kind int
+
+const (
+	KAst_FloatOp_unop_Neg OAst_FloatOp_unop_kind = iota + 1
+	KAst_FloatOp_unop_Abs
+	KAst_FloatOp_unop_Ceil
+	KAst_FloatOp_unop_Floor
+	KAst_FloatOp_unop_Trunc
+	KAst_FloatOp_unop_Nearest
+	KAst_FloatOp_unop_Sqrt
+)
+
+type OAst_FloatOp_unop interface {
+	Kind() OAst_FloatOp_unop_kind
+}
+
+type SimpleOAst_FloatOp_unop struct {
+	kind OAst_FloatOp_unop_kind
+}
+
+func (t SimpleOAst_FloatOp_unop) Kind() OAst_FloatOp_unop_kind {
+	return t.kind
+}
+
+var _Ast_FloatOp_unop_Neg OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Neg}
+var _Ast_FloatOp_unop_Abs OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Abs}
+var _Ast_FloatOp_unop_Ceil OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Ceil}
+var _Ast_FloatOp_unop_Floor OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Floor}
+var _Ast_FloatOp_unop_Trunc OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Trunc}
+var _Ast_FloatOp_unop_Nearest OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Nearest}
+var _Ast_FloatOp_unop_Sqrt OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_unop_Sqrt}
+
+type OAst_FloatOp_binop_kind int
+
+const (
+	KAst_FloatOp_binop_Add OAst_FloatOp_binop_kind = iota + 1
+	KAst_FloatOp_binop_Sub
+	KAst_FloatOp_binop_Mul
+	KAst_FloatOp_binop_Div
+	KAst_FloatOp_binop_Min
+	KAst_FloatOp_binop_Max
+	KAst_FloatOp_binop_CopySign
+)
+
+type OAst_FloatOp_binop interface {
+	Kind() OAst_FloatOp_binop_kind
+}
+
+type SimpleOAst_FloatOp_binop struct {
+	kind OAst_FloatOp_binop_kind
+}
+
+func (t SimpleOAst_FloatOp_binop) Kind() OAst_FloatOp_binop_kind {
+	return t.kind
+}
+
+var _Ast_FloatOp_binop_Add OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Add}
+var _Ast_FloatOp_binop_Sub OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Sub}
+var _Ast_FloatOp_binop_Mul OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Mul}
+var _Ast_FloatOp_binop_Div OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Div}
+var _Ast_FloatOp_binop_Min OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Min}
+var _Ast_FloatOp_binop_Max OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_Max}
+var _Ast_FloatOp_binop_CopySign OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_binop_CopySign}
+
+type OAst_FloatOp_testop_kind int
+
+const ()
+
+type OAst_FloatOp_testop interface {
+	Kind() OAst_FloatOp_testop_kind
+}
+
+type SimpleOAst_FloatOp_testop struct {
+	kind OAst_FloatOp_testop_kind
+}
+
+func (t SimpleOAst_FloatOp_testop) Kind() OAst_FloatOp_testop_kind {
+	return t.kind
+}
+
+type OAst_FloatOp_relop_kind int
+
+const (
+	KAst_FloatOp_relop_Eq OAst_FloatOp_relop_kind = iota + 1
+	KAst_FloatOp_relop_Ne
+	KAst_FloatOp_relop_Lt
+	KAst_FloatOp_relop_Gt
+	KAst_FloatOp_relop_Le
+	KAst_FloatOp_relop_Ge
+)
+
+type OAst_FloatOp_relop interface {
+	Kind() OAst_FloatOp_relop_kind
+}
+
+type SimpleOAst_FloatOp_relop struct {
+	kind OAst_FloatOp_relop_kind
+}
+
+func (t SimpleOAst_FloatOp_relop) Kind() OAst_FloatOp_relop_kind {
+	return t.kind
+}
+
+var _Ast_FloatOp_relop_Eq OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Eq}
+var _Ast_FloatOp_relop_Ne OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Ne}
+var _Ast_FloatOp_relop_Lt OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Lt}
+var _Ast_FloatOp_relop_Gt OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Gt}
+var _Ast_FloatOp_relop_Le OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Le}
+var _Ast_FloatOp_relop_Ge OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_relop_Ge}
+
+type OAst_FloatOp_cvtop_kind int
+
+const (
+	KAst_FloatOp_cvtop_ConvertSI32 OAst_FloatOp_cvtop_kind = iota + 1
+	KAst_FloatOp_cvtop_ConvertUI32
+	KAst_FloatOp_cvtop_ConvertSI64
+	KAst_FloatOp_cvtop_ConvertUI64
+	KAst_FloatOp_cvtop_PromoteF32
+	KAst_FloatOp_cvtop_DemoteF64
+	KAst_FloatOp_cvtop_ReinterpretInt
+)
+
+type OAst_FloatOp_cvtop interface {
+	Kind() OAst_FloatOp_cvtop_kind
+}
+
+type SimpleOAst_FloatOp_cvtop struct {
+	kind OAst_FloatOp_cvtop_kind
+}
+
+func (t SimpleOAst_FloatOp_cvtop) Kind() OAst_FloatOp_cvtop_kind {
+	return t.kind
+}
+
+var _Ast_FloatOp_cvtop_ConvertSI32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_ConvertSI32}
+var _Ast_FloatOp_cvtop_ConvertUI32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_ConvertUI32}
+var _Ast_FloatOp_cvtop_ConvertSI64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_ConvertSI64}
+var _Ast_FloatOp_cvtop_ConvertUI64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_ConvertUI64}
+var _Ast_FloatOp_cvtop_PromoteF32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_PromoteF32}
+var _Ast_FloatOp_cvtop_DemoteF64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_DemoteF64}
+var _Ast_FloatOp_cvtop_ReinterpretInt OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_cvtop_ReinterpretInt}
 
 type OAst_V128Op_itestop_kind int
 
 const (
-	KAst_V128Op_AllTrue OAst_V128Op_itestop_kind = iota + 1
+	KAst_V128Op_itestop_AllTrue OAst_V128Op_itestop_kind = iota + 1
 )
 
 type OAst_V128Op_itestop interface {
@@ -1372,14 +1688,14 @@ func (t SimpleOAst_V128Op_itestop) Kind() OAst_V128Op_itestop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_AllTrue OAst_V128Op_itestop = SimpleOAst_V128Op_itestop{KAst_V128Op_AllTrue}
+var _Ast_V128Op_itestop_AllTrue OAst_V128Op_itestop = SimpleOAst_V128Op_itestop{KAst_V128Op_itestop_AllTrue}
 
 type OAst_V128Op_iunop_kind int
 
 const (
-	KAst_V128Op_Abs OAst_V128Op_iunop_kind = iota + 1
-	KAst_V128Op_Neg
-	KAst_V128Op_Popcnt
+	KAst_V128Op_iunop_Abs OAst_V128Op_iunop_kind = iota + 1
+	KAst_V128Op_iunop_Neg
+	KAst_V128Op_iunop_Popcnt
 )
 
 type OAst_V128Op_iunop interface {
@@ -1394,20 +1710,20 @@ func (t SimpleOAst_V128Op_iunop) Kind() OAst_V128Op_iunop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Abs OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_Abs}
-var Ast_V128Op_Neg OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_Neg}
-var Ast_V128Op_Popcnt OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_Popcnt}
+var _Ast_V128Op_iunop_Abs OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_iunop_Abs}
+var _Ast_V128Op_iunop_Neg OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_iunop_Neg}
+var _Ast_V128Op_iunop_Popcnt OAst_V128Op_iunop = SimpleOAst_V128Op_iunop{KAst_V128Op_iunop_Popcnt}
 
 type OAst_V128Op_funop_kind int
 
 const (
-	KAst_V128Op_Abs OAst_V128Op_funop_kind = iota + 1
-	KAst_V128Op_Neg
-	KAst_V128Op_Sqrt
-	KAst_V128Op_Ceil
-	KAst_V128Op_Floor
-	KAst_V128Op_Trunc
-	KAst_V128Op_Nearest
+	KAst_V128Op_funop_Abs OAst_V128Op_funop_kind = iota + 1
+	KAst_V128Op_funop_Neg
+	KAst_V128Op_funop_Sqrt
+	KAst_V128Op_funop_Ceil
+	KAst_V128Op_funop_Floor
+	KAst_V128Op_funop_Trunc
+	KAst_V128Op_funop_Nearest
 )
 
 type OAst_V128Op_funop interface {
@@ -1422,42 +1738,42 @@ func (t SimpleOAst_V128Op_funop) Kind() OAst_V128Op_funop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Abs OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Abs}
-var Ast_V128Op_Neg OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Neg}
-var Ast_V128Op_Sqrt OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Sqrt}
-var Ast_V128Op_Ceil OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Ceil}
-var Ast_V128Op_Floor OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Floor}
-var Ast_V128Op_Trunc OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Trunc}
-var Ast_V128Op_Nearest OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_Nearest}
+var _Ast_V128Op_funop_Abs OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Abs}
+var _Ast_V128Op_funop_Neg OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Neg}
+var _Ast_V128Op_funop_Sqrt OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Sqrt}
+var _Ast_V128Op_funop_Ceil OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Ceil}
+var _Ast_V128Op_funop_Floor OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Floor}
+var _Ast_V128Op_funop_Trunc OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Trunc}
+var _Ast_V128Op_funop_Nearest OAst_V128Op_funop = SimpleOAst_V128Op_funop{KAst_V128Op_funop_Nearest}
 
 type OAst_V128Op_ibinop_kind int
 
 const (
-	KAst_V128Op_Add OAst_V128Op_ibinop_kind = iota + 1
-	KAst_V128Op_Sub
-	KAst_V128Op_Mul
-	KAst_V128Op_MinS
-	KAst_V128Op_MinU
-	KAst_V128Op_MaxS
-	KAst_V128Op_MaxU
-	KAst_V128Op_AvgrU
-	KAst_V128Op_AddSatS
-	KAst_V128Op_AddSatU
-	KAst_V128Op_SubSatS
-	KAst_V128Op_SubSatU
-	KAst_V128Op_DotS
-	KAst_V128Op_Q15MulRSatS
-	KAst_V128Op_ExtMulLowS
-	KAst_V128Op_ExtMulHighS
-	KAst_V128Op_ExtMulLowU
-	KAst_V128Op_ExtMulHighU
-	KAst_V128Op_Swizzle
-	KAst_V128Op_Shuffle
-	KAst_V128Op_NarrowS
-	KAst_V128Op_NarrowU
-	KAst_V128Op_RelaxedSwizzle
-	KAst_V128Op_RelaxedQ15MulRS
-	KAst_V128Op_RelaxedDot
+	KAst_V128Op_ibinop_Add OAst_V128Op_ibinop_kind = iota + 1
+	KAst_V128Op_ibinop_Sub
+	KAst_V128Op_ibinop_Mul
+	KAst_V128Op_ibinop_MinS
+	KAst_V128Op_ibinop_MinU
+	KAst_V128Op_ibinop_MaxS
+	KAst_V128Op_ibinop_MaxU
+	KAst_V128Op_ibinop_AvgrU
+	KAst_V128Op_ibinop_AddSatS
+	KAst_V128Op_ibinop_AddSatU
+	KAst_V128Op_ibinop_SubSatS
+	KAst_V128Op_ibinop_SubSatU
+	KAst_V128Op_ibinop_DotS
+	KAst_V128Op_ibinop_Q15MulRSatS
+	KAst_V128Op_ibinop_ExtMulLowS
+	KAst_V128Op_ibinop_ExtMulHighS
+	KAst_V128Op_ibinop_ExtMulLowU
+	KAst_V128Op_ibinop_ExtMulHighU
+	KAst_V128Op_ibinop_Swizzle
+	KAst_V128Op_ibinop_Shuffle
+	KAst_V128Op_ibinop_NarrowS
+	KAst_V128Op_ibinop_NarrowU
+	KAst_V128Op_ibinop_RelaxedSwizzle
+	KAst_V128Op_ibinop_RelaxedQ15MulRS
+	KAst_V128Op_ibinop_RelaxedDot
 )
 
 type OAst_V128Op_ibinop interface {
@@ -1472,56 +1788,56 @@ func (t SimpleOAst_V128Op_ibinop) Kind() OAst_V128Op_ibinop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Add OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_Add}
-var Ast_V128Op_Sub OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_Sub}
-var Ast_V128Op_Mul OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_Mul}
-var Ast_V128Op_MinS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_MinS}
-var Ast_V128Op_MinU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_MinU}
-var Ast_V128Op_MaxS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_MaxS}
-var Ast_V128Op_MaxU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_MaxU}
-var Ast_V128Op_AvgrU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_AvgrU}
-var Ast_V128Op_AddSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_AddSatS}
-var Ast_V128Op_AddSatU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_AddSatU}
-var Ast_V128Op_SubSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_SubSatS}
-var Ast_V128Op_SubSatU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_SubSatU}
-var Ast_V128Op_DotS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_DotS}
-var Ast_V128Op_Q15MulRSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_Q15MulRSatS}
-var Ast_V128Op_ExtMulLowS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ExtMulLowS}
-var Ast_V128Op_ExtMulHighS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ExtMulHighS}
-var Ast_V128Op_ExtMulLowU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ExtMulLowU}
-var Ast_V128Op_ExtMulHighU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ExtMulHighU}
-var Ast_V128Op_Swizzle OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_Swizzle}
+var _Ast_V128Op_ibinop_Add OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_Add}
+var _Ast_V128Op_ibinop_Sub OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_Sub}
+var _Ast_V128Op_ibinop_Mul OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_Mul}
+var _Ast_V128Op_ibinop_MinS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_MinS}
+var _Ast_V128Op_ibinop_MinU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_MinU}
+var _Ast_V128Op_ibinop_MaxS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_MaxS}
+var _Ast_V128Op_ibinop_MaxU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_MaxU}
+var _Ast_V128Op_ibinop_AvgrU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_AvgrU}
+var _Ast_V128Op_ibinop_AddSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_AddSatS}
+var _Ast_V128Op_ibinop_AddSatU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_AddSatU}
+var _Ast_V128Op_ibinop_SubSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_SubSatS}
+var _Ast_V128Op_ibinop_SubSatU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_SubSatU}
+var _Ast_V128Op_ibinop_DotS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_DotS}
+var _Ast_V128Op_ibinop_Q15MulRSatS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_Q15MulRSatS}
+var _Ast_V128Op_ibinop_ExtMulLowS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_ExtMulLowS}
+var _Ast_V128Op_ibinop_ExtMulHighS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_ExtMulHighS}
+var _Ast_V128Op_ibinop_ExtMulLowU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_ExtMulLowU}
+var _Ast_V128Op_ibinop_ExtMulHighU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_ExtMulHighU}
+var _Ast_V128Op_ibinop_Swizzle OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_Swizzle}
 
 type OAst_V128Op_ibinop_Shuffle struct {
 	V []OInt
 }
 
 func (t OAst_V128Op_ibinop_Shuffle) Kind() OAst_V128Op_ibinop_kind {
-	return KAst_V128Op_Shuffle
+	return KAst_V128Op_ibinop_Shuffle
 }
 func Ast_V128Op_Shuffle_1(v []OInt) OAst_V128Op_ibinop {
 	return OAst_V128Op_ibinop_Shuffle{v}
 }
 
-var Ast_V128Op_NarrowS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_NarrowS}
-var Ast_V128Op_NarrowU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_NarrowU}
-var Ast_V128Op_RelaxedSwizzle OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_RelaxedSwizzle}
-var Ast_V128Op_RelaxedQ15MulRS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_RelaxedQ15MulRS}
-var Ast_V128Op_RelaxedDot OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_RelaxedDot}
+var _Ast_V128Op_ibinop_NarrowS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_NarrowS}
+var _Ast_V128Op_ibinop_NarrowU OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_NarrowU}
+var _Ast_V128Op_ibinop_RelaxedSwizzle OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_RelaxedSwizzle}
+var _Ast_V128Op_ibinop_RelaxedQ15MulRS OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_RelaxedQ15MulRS}
+var _Ast_V128Op_ibinop_RelaxedDot OAst_V128Op_ibinop = SimpleOAst_V128Op_ibinop{KAst_V128Op_ibinop_RelaxedDot}
 
 type OAst_V128Op_fbinop_kind int
 
 const (
-	KAst_V128Op_Add OAst_V128Op_fbinop_kind = iota + 1
-	KAst_V128Op_Sub
-	KAst_V128Op_Mul
-	KAst_V128Op_Div
-	KAst_V128Op_Min
-	KAst_V128Op_Max
-	KAst_V128Op_Pmin
-	KAst_V128Op_Pmax
-	KAst_V128Op_RelaxedMin
-	KAst_V128Op_RelaxedMax
+	KAst_V128Op_fbinop_Add OAst_V128Op_fbinop_kind = iota + 1
+	KAst_V128Op_fbinop_Sub
+	KAst_V128Op_fbinop_Mul
+	KAst_V128Op_fbinop_Div
+	KAst_V128Op_fbinop_Min
+	KAst_V128Op_fbinop_Max
+	KAst_V128Op_fbinop_Pmin
+	KAst_V128Op_fbinop_Pmax
+	KAst_V128Op_fbinop_RelaxedMin
+	KAst_V128Op_fbinop_RelaxedMax
 )
 
 type OAst_V128Op_fbinop interface {
@@ -1536,22 +1852,22 @@ func (t SimpleOAst_V128Op_fbinop) Kind() OAst_V128Op_fbinop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Add OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Add}
-var Ast_V128Op_Sub OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Sub}
-var Ast_V128Op_Mul OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Mul}
-var Ast_V128Op_Div OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Div}
-var Ast_V128Op_Min OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Min}
-var Ast_V128Op_Max OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Max}
-var Ast_V128Op_Pmin OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Pmin}
-var Ast_V128Op_Pmax OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_Pmax}
-var Ast_V128Op_RelaxedMin OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_RelaxedMin}
-var Ast_V128Op_RelaxedMax OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_RelaxedMax}
+var _Ast_V128Op_fbinop_Add OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Add}
+var _Ast_V128Op_fbinop_Sub OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Sub}
+var _Ast_V128Op_fbinop_Mul OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Mul}
+var _Ast_V128Op_fbinop_Div OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Div}
+var _Ast_V128Op_fbinop_Min OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Min}
+var _Ast_V128Op_fbinop_Max OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Max}
+var _Ast_V128Op_fbinop_Pmin OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Pmin}
+var _Ast_V128Op_fbinop_Pmax OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_Pmax}
+var _Ast_V128Op_fbinop_RelaxedMin OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_RelaxedMin}
+var _Ast_V128Op_fbinop_RelaxedMax OAst_V128Op_fbinop = SimpleOAst_V128Op_fbinop{KAst_V128Op_fbinop_RelaxedMax}
 
 type OAst_V128Op_iternop_kind int
 
 const (
-	KAst_V128Op_RelaxedLaneselect OAst_V128Op_iternop_kind = iota + 1
-	KAst_V128Op_RelaxedDotAccum
+	KAst_V128Op_iternop_RelaxedLaneselect OAst_V128Op_iternop_kind = iota + 1
+	KAst_V128Op_iternop_RelaxedDotAccum
 )
 
 type OAst_V128Op_iternop interface {
@@ -1566,14 +1882,14 @@ func (t SimpleOAst_V128Op_iternop) Kind() OAst_V128Op_iternop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_RelaxedLaneselect OAst_V128Op_iternop = SimpleOAst_V128Op_iternop{KAst_V128Op_RelaxedLaneselect}
-var Ast_V128Op_RelaxedDotAccum OAst_V128Op_iternop = SimpleOAst_V128Op_iternop{KAst_V128Op_RelaxedDotAccum}
+var _Ast_V128Op_iternop_RelaxedLaneselect OAst_V128Op_iternop = SimpleOAst_V128Op_iternop{KAst_V128Op_iternop_RelaxedLaneselect}
+var _Ast_V128Op_iternop_RelaxedDotAccum OAst_V128Op_iternop = SimpleOAst_V128Op_iternop{KAst_V128Op_iternop_RelaxedDotAccum}
 
 type OAst_V128Op_fternop_kind int
 
 const (
-	KAst_V128Op_RelaxedMadd OAst_V128Op_fternop_kind = iota + 1
-	KAst_V128Op_RelaxedNmadd
+	KAst_V128Op_fternop_RelaxedMadd OAst_V128Op_fternop_kind = iota + 1
+	KAst_V128Op_fternop_RelaxedNmadd
 )
 
 type OAst_V128Op_fternop interface {
@@ -1588,22 +1904,22 @@ func (t SimpleOAst_V128Op_fternop) Kind() OAst_V128Op_fternop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_RelaxedMadd OAst_V128Op_fternop = SimpleOAst_V128Op_fternop{KAst_V128Op_RelaxedMadd}
-var Ast_V128Op_RelaxedNmadd OAst_V128Op_fternop = SimpleOAst_V128Op_fternop{KAst_V128Op_RelaxedNmadd}
+var _Ast_V128Op_fternop_RelaxedMadd OAst_V128Op_fternop = SimpleOAst_V128Op_fternop{KAst_V128Op_fternop_RelaxedMadd}
+var _Ast_V128Op_fternop_RelaxedNmadd OAst_V128Op_fternop = SimpleOAst_V128Op_fternop{KAst_V128Op_fternop_RelaxedNmadd}
 
 type OAst_V128Op_irelop_kind int
 
 const (
-	KAst_V128Op_Eq OAst_V128Op_irelop_kind = iota + 1
-	KAst_V128Op_Ne
-	KAst_V128Op_LtS
-	KAst_V128Op_LtU
-	KAst_V128Op_LeS
-	KAst_V128Op_LeU
-	KAst_V128Op_GtS
-	KAst_V128Op_GtU
-	KAst_V128Op_GeS
-	KAst_V128Op_GeU
+	KAst_V128Op_irelop_Eq OAst_V128Op_irelop_kind = iota + 1
+	KAst_V128Op_irelop_Ne
+	KAst_V128Op_irelop_LtS
+	KAst_V128Op_irelop_LtU
+	KAst_V128Op_irelop_LeS
+	KAst_V128Op_irelop_LeU
+	KAst_V128Op_irelop_GtS
+	KAst_V128Op_irelop_GtU
+	KAst_V128Op_irelop_GeS
+	KAst_V128Op_irelop_GeU
 )
 
 type OAst_V128Op_irelop interface {
@@ -1618,26 +1934,26 @@ func (t SimpleOAst_V128Op_irelop) Kind() OAst_V128Op_irelop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Eq OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_Eq}
-var Ast_V128Op_Ne OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_Ne}
-var Ast_V128Op_LtS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_LtS}
-var Ast_V128Op_LtU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_LtU}
-var Ast_V128Op_LeS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_LeS}
-var Ast_V128Op_LeU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_LeU}
-var Ast_V128Op_GtS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_GtS}
-var Ast_V128Op_GtU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_GtU}
-var Ast_V128Op_GeS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_GeS}
-var Ast_V128Op_GeU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_GeU}
+var _Ast_V128Op_irelop_Eq OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_Eq}
+var _Ast_V128Op_irelop_Ne OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_Ne}
+var _Ast_V128Op_irelop_LtS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_LtS}
+var _Ast_V128Op_irelop_LtU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_LtU}
+var _Ast_V128Op_irelop_LeS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_LeS}
+var _Ast_V128Op_irelop_LeU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_LeU}
+var _Ast_V128Op_irelop_GtS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_GtS}
+var _Ast_V128Op_irelop_GtU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_GtU}
+var _Ast_V128Op_irelop_GeS OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_GeS}
+var _Ast_V128Op_irelop_GeU OAst_V128Op_irelop = SimpleOAst_V128Op_irelop{KAst_V128Op_irelop_GeU}
 
 type OAst_V128Op_frelop_kind int
 
 const (
-	KAst_V128Op_Eq OAst_V128Op_frelop_kind = iota + 1
-	KAst_V128Op_Ne
-	KAst_V128Op_Lt
-	KAst_V128Op_Le
-	KAst_V128Op_Gt
-	KAst_V128Op_Ge
+	KAst_V128Op_frelop_Eq OAst_V128Op_frelop_kind = iota + 1
+	KAst_V128Op_frelop_Ne
+	KAst_V128Op_frelop_Lt
+	KAst_V128Op_frelop_Le
+	KAst_V128Op_frelop_Gt
+	KAst_V128Op_frelop_Ge
 )
 
 type OAst_V128Op_frelop interface {
@@ -1652,30 +1968,30 @@ func (t SimpleOAst_V128Op_frelop) Kind() OAst_V128Op_frelop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Eq OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Eq}
-var Ast_V128Op_Ne OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Ne}
-var Ast_V128Op_Lt OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Lt}
-var Ast_V128Op_Le OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Le}
-var Ast_V128Op_Gt OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Gt}
-var Ast_V128Op_Ge OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_Ge}
+var _Ast_V128Op_frelop_Eq OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Eq}
+var _Ast_V128Op_frelop_Ne OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Ne}
+var _Ast_V128Op_frelop_Lt OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Lt}
+var _Ast_V128Op_frelop_Le OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Le}
+var _Ast_V128Op_frelop_Gt OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Gt}
+var _Ast_V128Op_frelop_Ge OAst_V128Op_frelop = SimpleOAst_V128Op_frelop{KAst_V128Op_frelop_Ge}
 
 type OAst_V128Op_icvtop_kind int
 
 const (
-	KAst_V128Op_ExtendLowS OAst_V128Op_icvtop_kind = iota + 1
-	KAst_V128Op_ExtendLowU
-	KAst_V128Op_ExtendHighS
-	KAst_V128Op_ExtendHighU
-	KAst_V128Op_ExtAddPairwiseS
-	KAst_V128Op_ExtAddPairwiseU
-	KAst_V128Op_TruncSatSF32x4
-	KAst_V128Op_TruncSatUF32x4
-	KAst_V128Op_TruncSatSZeroF64x2
-	KAst_V128Op_TruncSatUZeroF64x2
-	KAst_V128Op_RelaxedTruncSF32x4
-	KAst_V128Op_RelaxedTruncUF32x4
-	KAst_V128Op_RelaxedTruncSZeroF64x2
-	KAst_V128Op_RelaxedTruncUZeroF64x2
+	KAst_V128Op_icvtop_ExtendLowS OAst_V128Op_icvtop_kind = iota + 1
+	KAst_V128Op_icvtop_ExtendLowU
+	KAst_V128Op_icvtop_ExtendHighS
+	KAst_V128Op_icvtop_ExtendHighU
+	KAst_V128Op_icvtop_ExtAddPairwiseS
+	KAst_V128Op_icvtop_ExtAddPairwiseU
+	KAst_V128Op_icvtop_TruncSatSF32x4
+	KAst_V128Op_icvtop_TruncSatUF32x4
+	KAst_V128Op_icvtop_TruncSatSZeroF64x2
+	KAst_V128Op_icvtop_TruncSatUZeroF64x2
+	KAst_V128Op_icvtop_RelaxedTruncSF32x4
+	KAst_V128Op_icvtop_RelaxedTruncUF32x4
+	KAst_V128Op_icvtop_RelaxedTruncSZeroF64x2
+	KAst_V128Op_icvtop_RelaxedTruncUZeroF64x2
 )
 
 type OAst_V128Op_icvtop interface {
@@ -1690,28 +2006,28 @@ func (t SimpleOAst_V128Op_icvtop) Kind() OAst_V128Op_icvtop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_ExtendLowS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtendLowS}
-var Ast_V128Op_ExtendLowU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtendLowU}
-var Ast_V128Op_ExtendHighS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtendHighS}
-var Ast_V128Op_ExtendHighU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtendHighU}
-var Ast_V128Op_ExtAddPairwiseS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtAddPairwiseS}
-var Ast_V128Op_ExtAddPairwiseU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_ExtAddPairwiseU}
-var Ast_V128Op_TruncSatSF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_TruncSatSF32x4}
-var Ast_V128Op_TruncSatUF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_TruncSatUF32x4}
-var Ast_V128Op_TruncSatSZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_TruncSatSZeroF64x2}
-var Ast_V128Op_TruncSatUZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_TruncSatUZeroF64x2}
-var Ast_V128Op_RelaxedTruncSF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_RelaxedTruncSF32x4}
-var Ast_V128Op_RelaxedTruncUF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_RelaxedTruncUF32x4}
-var Ast_V128Op_RelaxedTruncSZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_RelaxedTruncSZeroF64x2}
-var Ast_V128Op_RelaxedTruncUZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_RelaxedTruncUZeroF64x2}
+var _Ast_V128Op_icvtop_ExtendLowS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtendLowS}
+var _Ast_V128Op_icvtop_ExtendLowU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtendLowU}
+var _Ast_V128Op_icvtop_ExtendHighS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtendHighS}
+var _Ast_V128Op_icvtop_ExtendHighU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtendHighU}
+var _Ast_V128Op_icvtop_ExtAddPairwiseS OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtAddPairwiseS}
+var _Ast_V128Op_icvtop_ExtAddPairwiseU OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_ExtAddPairwiseU}
+var _Ast_V128Op_icvtop_TruncSatSF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_TruncSatSF32x4}
+var _Ast_V128Op_icvtop_TruncSatUF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_TruncSatUF32x4}
+var _Ast_V128Op_icvtop_TruncSatSZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_TruncSatSZeroF64x2}
+var _Ast_V128Op_icvtop_TruncSatUZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_TruncSatUZeroF64x2}
+var _Ast_V128Op_icvtop_RelaxedTruncSF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_RelaxedTruncSF32x4}
+var _Ast_V128Op_icvtop_RelaxedTruncUF32x4 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_RelaxedTruncUF32x4}
+var _Ast_V128Op_icvtop_RelaxedTruncSZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_RelaxedTruncSZeroF64x2}
+var _Ast_V128Op_icvtop_RelaxedTruncUZeroF64x2 OAst_V128Op_icvtop = SimpleOAst_V128Op_icvtop{KAst_V128Op_icvtop_RelaxedTruncUZeroF64x2}
 
 type OAst_V128Op_fcvtop_kind int
 
 const (
-	KAst_V128Op_DemoteZeroF64x2 OAst_V128Op_fcvtop_kind = iota + 1
-	KAst_V128Op_PromoteLowF32x4
-	KAst_V128Op_ConvertSI32x4
-	KAst_V128Op_ConvertUI32x4
+	KAst_V128Op_fcvtop_DemoteZeroF64x2 OAst_V128Op_fcvtop_kind = iota + 1
+	KAst_V128Op_fcvtop_PromoteLowF32x4
+	KAst_V128Op_fcvtop_ConvertSI32x4
+	KAst_V128Op_fcvtop_ConvertUI32x4
 )
 
 type OAst_V128Op_fcvtop interface {
@@ -1726,17 +2042,17 @@ func (t SimpleOAst_V128Op_fcvtop) Kind() OAst_V128Op_fcvtop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_DemoteZeroF64x2 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_DemoteZeroF64x2}
-var Ast_V128Op_PromoteLowF32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_PromoteLowF32x4}
-var Ast_V128Op_ConvertSI32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_ConvertSI32x4}
-var Ast_V128Op_ConvertUI32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_ConvertUI32x4}
+var _Ast_V128Op_fcvtop_DemoteZeroF64x2 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_fcvtop_DemoteZeroF64x2}
+var _Ast_V128Op_fcvtop_PromoteLowF32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_fcvtop_PromoteLowF32x4}
+var _Ast_V128Op_fcvtop_ConvertSI32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_fcvtop_ConvertSI32x4}
+var _Ast_V128Op_fcvtop_ConvertUI32x4 OAst_V128Op_fcvtop = SimpleOAst_V128Op_fcvtop{KAst_V128Op_fcvtop_ConvertUI32x4}
 
 type OAst_V128Op_ishiftop_kind int
 
 const (
-	KAst_V128Op_Shl OAst_V128Op_ishiftop_kind = iota + 1
-	KAst_V128Op_ShrS
-	KAst_V128Op_ShrU
+	KAst_V128Op_ishiftop_Shl OAst_V128Op_ishiftop_kind = iota + 1
+	KAst_V128Op_ishiftop_ShrS
+	KAst_V128Op_ishiftop_ShrU
 )
 
 type OAst_V128Op_ishiftop interface {
@@ -1751,14 +2067,14 @@ func (t SimpleOAst_V128Op_ishiftop) Kind() OAst_V128Op_ishiftop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Shl OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_Shl}
-var Ast_V128Op_ShrS OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_ShrS}
-var Ast_V128Op_ShrU OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_ShrU}
+var _Ast_V128Op_ishiftop_Shl OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_ishiftop_Shl}
+var _Ast_V128Op_ishiftop_ShrS OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_ishiftop_ShrS}
+var _Ast_V128Op_ishiftop_ShrU OAst_V128Op_ishiftop = SimpleOAst_V128Op_ishiftop{KAst_V128Op_ishiftop_ShrU}
 
 type OAst_V128Op_ibitmaskop_kind int
 
 const (
-	KAst_V128Op_Bitmask OAst_V128Op_ibitmaskop_kind = iota + 1
+	KAst_V128Op_ibitmaskop_Bitmask OAst_V128Op_ibitmaskop_kind = iota + 1
 )
 
 type OAst_V128Op_ibitmaskop interface {
@@ -1773,12 +2089,12 @@ func (t SimpleOAst_V128Op_ibitmaskop) Kind() OAst_V128Op_ibitmaskop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Bitmask OAst_V128Op_ibitmaskop = SimpleOAst_V128Op_ibitmaskop{KAst_V128Op_Bitmask}
+var _Ast_V128Op_ibitmaskop_Bitmask OAst_V128Op_ibitmaskop = SimpleOAst_V128Op_ibitmaskop{KAst_V128Op_ibitmaskop_Bitmask}
 
 type OAst_V128Op_vtestop_kind int
 
 const (
-	KAst_V128Op_AnyTrue OAst_V128Op_vtestop_kind = iota + 1
+	KAst_V128Op_vtestop_AnyTrue OAst_V128Op_vtestop_kind = iota + 1
 )
 
 type OAst_V128Op_vtestop interface {
@@ -1793,12 +2109,12 @@ func (t SimpleOAst_V128Op_vtestop) Kind() OAst_V128Op_vtestop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_AnyTrue OAst_V128Op_vtestop = SimpleOAst_V128Op_vtestop{KAst_V128Op_AnyTrue}
+var _Ast_V128Op_vtestop_AnyTrue OAst_V128Op_vtestop = SimpleOAst_V128Op_vtestop{KAst_V128Op_vtestop_AnyTrue}
 
 type OAst_V128Op_vunop_kind int
 
 const (
-	KAst_V128Op_Not OAst_V128Op_vunop_kind = iota + 1
+	KAst_V128Op_vunop_Not OAst_V128Op_vunop_kind = iota + 1
 )
 
 type OAst_V128Op_vunop interface {
@@ -1813,15 +2129,15 @@ func (t SimpleOAst_V128Op_vunop) Kind() OAst_V128Op_vunop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Not OAst_V128Op_vunop = SimpleOAst_V128Op_vunop{KAst_V128Op_Not}
+var _Ast_V128Op_vunop_Not OAst_V128Op_vunop = SimpleOAst_V128Op_vunop{KAst_V128Op_vunop_Not}
 
 type OAst_V128Op_vbinop_kind int
 
 const (
-	KAst_V128Op_And OAst_V128Op_vbinop_kind = iota + 1
-	KAst_V128Op_Or
-	KAst_V128Op_Xor
-	KAst_V128Op_AndNot
+	KAst_V128Op_vbinop_And OAst_V128Op_vbinop_kind = iota + 1
+	KAst_V128Op_vbinop_Or
+	KAst_V128Op_vbinop_Xor
+	KAst_V128Op_vbinop_AndNot
 )
 
 type OAst_V128Op_vbinop interface {
@@ -1836,15 +2152,15 @@ func (t SimpleOAst_V128Op_vbinop) Kind() OAst_V128Op_vbinop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_And OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_And}
-var Ast_V128Op_Or OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_Or}
-var Ast_V128Op_Xor OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_Xor}
-var Ast_V128Op_AndNot OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_AndNot}
+var _Ast_V128Op_vbinop_And OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_vbinop_And}
+var _Ast_V128Op_vbinop_Or OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_vbinop_Or}
+var _Ast_V128Op_vbinop_Xor OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_vbinop_Xor}
+var _Ast_V128Op_vbinop_AndNot OAst_V128Op_vbinop = SimpleOAst_V128Op_vbinop{KAst_V128Op_vbinop_AndNot}
 
 type OAst_V128Op_vternop_kind int
 
 const (
-	KAst_V128Op_Bitselect OAst_V128Op_vternop_kind = iota + 1
+	KAst_V128Op_vternop_Bitselect OAst_V128Op_vternop_kind = iota + 1
 )
 
 type OAst_V128Op_vternop interface {
@@ -1859,21 +2175,21 @@ func (t SimpleOAst_V128Op_vternop) Kind() OAst_V128Op_vternop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Bitselect OAst_V128Op_vternop = SimpleOAst_V128Op_vternop{KAst_V128Op_Bitselect}
+var _Ast_V128Op_vternop_Bitselect OAst_V128Op_vternop = SimpleOAst_V128Op_vternop{KAst_V128Op_vternop_Bitselect}
 
-type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
-type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
-type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
+type OAst_V128Op_testop = OV128_laneop
+type OAst_V128Op_unop = OV128_laneop
+type OAst_V128Op_binop = OV128_laneop
 type OAst_V128Op_ternop = OV128_laneop
-type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
-type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
+type OAst_V128Op_relop = OV128_laneop
+type OAst_V128Op_cvtop = OV128_laneop
 type OAst_V128Op_shiftop = OV128_laneop
 type OAst_V128Op_bitmaskop = OV128_laneop
 
 type OAst_V128Op_nsplatop_kind int
 
 const (
-	KAst_V128Op_Splat OAst_V128Op_nsplatop_kind = iota + 1
+	KAst_V128Op_nsplatop_Splat OAst_V128Op_nsplatop_kind = iota + 1
 )
 
 type OAst_V128Op_nsplatop interface {
@@ -1888,12 +2204,12 @@ func (t SimpleOAst_V128Op_nsplatop) Kind() OAst_V128Op_nsplatop_kind {
 	return t.kind
 }
 
-var Ast_V128Op_Splat OAst_V128Op_nsplatop = SimpleOAst_V128Op_nsplatop{KAst_V128Op_Splat}
+var _Ast_V128Op_nsplatop_Splat OAst_V128Op_nsplatop = SimpleOAst_V128Op_nsplatop{KAst_V128Op_nsplatop_Splat}
 
 type OAst_V128Op_nextractop_kind int
 
 const (
-	KAst_V128Op_Extract OAst_V128Op_nextractop_kind = iota + 1
+	KAst_V128Op_nextractop_Extract OAst_V128Op_nextractop_kind = iota + 1
 )
 
 type OAst_V128Op_nextractop[T_a any] interface {
@@ -1916,7 +2232,7 @@ type OAst_V128Op_nextractop_Extract[T_a any] struct {
 }
 
 func (t OAst_V128Op_nextractop_Extract[T_a]) Kind() OAst_V128Op_nextractop_kind {
-	return KAst_V128Op_Extract
+	return KAst_V128Op_nextractop_Extract
 }
 func Ast_V128Op_Extract_1[T_a any](v struct {
 	F0 OInt
@@ -1928,7 +2244,7 @@ func Ast_V128Op_Extract_1[T_a any](v struct {
 type OAst_V128Op_nreplaceop_kind int
 
 const (
-	KAst_V128Op_Replace OAst_V128Op_nreplaceop_kind = iota + 1
+	KAst_V128Op_nreplaceop_Replace OAst_V128Op_nreplaceop_kind = iota + 1
 )
 
 type OAst_V128Op_nreplaceop interface {
@@ -1948,7 +2264,7 @@ type OAst_V128Op_nreplaceop_Replace struct {
 }
 
 func (t OAst_V128Op_nreplaceop_Replace) Kind() OAst_V128Op_nreplaceop_kind {
-	return KAst_V128Op_Replace
+	return KAst_V128Op_nreplaceop_Replace
 }
 func Ast_V128Op_Replace_1(v OInt) OAst_V128Op_nreplaceop {
 	return OAst_V128Op_nreplaceop_Replace{v}
@@ -1998,8 +2314,8 @@ type OAst_vec_laneop = OAst_memop[OTypes_vec_type, OPack_pack_size]
 type OAst_initop_kind int
 
 const (
-	KAst_Explicit OAst_initop_kind = iota + 1
-	KAst_Implicit
+	KAst_initop_Explicit OAst_initop_kind = iota + 1
+	KAst_initop_Implicit
 )
 
 type OAst_initop interface {
@@ -2014,14 +2330,14 @@ func (t SimpleOAst_initop) Kind() OAst_initop_kind {
 	return t.kind
 }
 
-var Ast_Explicit OAst_initop = SimpleOAst_initop{KAst_Explicit}
-var Ast_Implicit OAst_initop = SimpleOAst_initop{KAst_Implicit}
+var _Ast_initop_Explicit OAst_initop = SimpleOAst_initop{KAst_initop_Explicit}
+var _Ast_initop_Implicit OAst_initop = SimpleOAst_initop{KAst_initop_Implicit}
 
 type OAst_externop_kind int
 
 const (
-	KAst_Internalize OAst_externop_kind = iota + 1
-	KAst_Externalize
+	KAst_externop_Internalize OAst_externop_kind = iota + 1
+	KAst_externop_Externalize
 )
 
 type OAst_externop interface {
@@ -2036,8 +2352,8 @@ func (t SimpleOAst_externop) Kind() OAst_externop_kind {
 	return t.kind
 }
 
-var Ast_Internalize OAst_externop = SimpleOAst_externop{KAst_Internalize}
-var Ast_Externalize OAst_externop = SimpleOAst_externop{KAst_Externalize}
+var _Ast_externop_Internalize OAst_externop = SimpleOAst_externop{KAst_externop_Internalize}
+var _Ast_externop_Externalize OAst_externop = SimpleOAst_externop{KAst_externop_Externalize}
 
 type OAst_idx = OSource_phrase[OInt32]
 type OAst_num = OSource_phrase[OValue_num]
@@ -2047,8 +2363,8 @@ type OAst_name = string
 type OAst_block_type_kind int
 
 const (
-	KAst_VarBlockType OAst_block_type_kind = iota + 1
-	KAst_ValBlockType
+	KAst_block_type_VarBlockType OAst_block_type_kind = iota + 1
+	KAst_block_type_ValBlockType
 )
 
 type OAst_block_type interface {
@@ -2068,7 +2384,7 @@ type OAst_block_type_VarBlockType struct {
 }
 
 func (t OAst_block_type_VarBlockType) Kind() OAst_block_type_kind {
-	return KAst_VarBlockType
+	return KAst_block_type_VarBlockType
 }
 func Ast_VarBlockType_1(v OAst_idx) OAst_block_type {
 	return OAst_block_type_VarBlockType{v}
@@ -2079,7 +2395,7 @@ type OAst_block_type_ValBlockType struct {
 }
 
 func (t OAst_block_type_ValBlockType) Kind() OAst_block_type_kind {
-	return KAst_ValBlockType
+	return KAst_block_type_ValBlockType
 }
 func Ast_ValBlockType_1(v *OTypes_val_type) OAst_block_type {
 	return OAst_block_type_ValBlockType{v}
@@ -2090,101 +2406,101 @@ type OAst_instr = OSource_phrase[OAst_instr_]
 type OAst_instr__kind int
 
 const (
-	KAst_Unreachable OAst_instr__kind = iota + 1
-	KAst_Nop
-	KAst_Drop
-	KAst_Select
-	KAst_Block
-	KAst_Loop
-	KAst_If
-	KAst_Br
-	KAst_BrIf
-	KAst_BrTable
-	KAst_BrOnNull
-	KAst_BrOnNonNull
-	KAst_BrOnCast
-	KAst_BrOnCastFail
-	KAst_Return
-	KAst_Call
-	KAst_CallRef
-	KAst_CallIndirect
-	KAst_ReturnCall
-	KAst_ReturnCallRef
-	KAst_ReturnCallIndirect
-	KAst_Throw
-	KAst_ThrowRef
-	KAst_TryTable
-	KAst_LocalGet
-	KAst_LocalSet
-	KAst_LocalTee
-	KAst_GlobalGet
-	KAst_GlobalSet
-	KAst_TableGet
-	KAst_TableSet
-	KAst_TableSize
-	KAst_TableGrow
-	KAst_TableFill
-	KAst_TableCopy
-	KAst_TableInit
-	KAst_ElemDrop
-	KAst_Load
-	KAst_Store
-	KAst_VecLoad
-	KAst_VecStore
-	KAst_VecLoadLane
-	KAst_VecStoreLane
-	KAst_MemorySize
-	KAst_MemoryGrow
-	KAst_MemoryFill
-	KAst_MemoryCopy
-	KAst_MemoryInit
-	KAst_DataDrop
-	KAst_Const
-	KAst_Test
-	KAst_Compare
-	KAst_Unary
-	KAst_Binary
-	KAst_Convert
-	KAst_RefNull
-	KAst_RefFunc
-	KAst_RefIsNull
-	KAst_RefAsNonNull
-	KAst_RefTest
-	KAst_RefCast
-	KAst_RefEq
-	KAst_RefI31
-	KAst_I31Get
-	KAst_StructNew
-	KAst_StructGet
-	KAst_StructSet
-	KAst_ArrayNew
-	KAst_ArrayNewFixed
-	KAst_ArrayNewElem
-	KAst_ArrayNewData
-	KAst_ArrayGet
-	KAst_ArraySet
-	KAst_ArrayLen
-	KAst_ArrayCopy
-	KAst_ArrayFill
-	KAst_ArrayInitData
-	KAst_ArrayInitElem
-	KAst_ExternConvert
-	KAst_VecConst
-	KAst_VecTest
-	KAst_VecCompare
-	KAst_VecUnary
-	KAst_VecBinary
-	KAst_VecTernary
-	KAst_VecConvert
-	KAst_VecShift
-	KAst_VecBitmask
-	KAst_VecTestBits
-	KAst_VecUnaryBits
-	KAst_VecBinaryBits
-	KAst_VecTernaryBits
-	KAst_VecSplat
-	KAst_VecExtract
-	KAst_VecReplace
+	KAst_instr__Unreachable OAst_instr__kind = iota + 1
+	KAst_instr__Nop
+	KAst_instr__Drop
+	KAst_instr__Select
+	KAst_instr__Block
+	KAst_instr__Loop
+	KAst_instr__If
+	KAst_instr__Br
+	KAst_instr__BrIf
+	KAst_instr__BrTable
+	KAst_instr__BrOnNull
+	KAst_instr__BrOnNonNull
+	KAst_instr__BrOnCast
+	KAst_instr__BrOnCastFail
+	KAst_instr__Return
+	KAst_instr__Call
+	KAst_instr__CallRef
+	KAst_instr__CallIndirect
+	KAst_instr__ReturnCall
+	KAst_instr__ReturnCallRef
+	KAst_instr__ReturnCallIndirect
+	KAst_instr__Throw
+	KAst_instr__ThrowRef
+	KAst_instr__TryTable
+	KAst_instr__LocalGet
+	KAst_instr__LocalSet
+	KAst_instr__LocalTee
+	KAst_instr__GlobalGet
+	KAst_instr__GlobalSet
+	KAst_instr__TableGet
+	KAst_instr__TableSet
+	KAst_instr__TableSize
+	KAst_instr__TableGrow
+	KAst_instr__TableFill
+	KAst_instr__TableCopy
+	KAst_instr__TableInit
+	KAst_instr__ElemDrop
+	KAst_instr__Load
+	KAst_instr__Store
+	KAst_instr__VecLoad
+	KAst_instr__VecStore
+	KAst_instr__VecLoadLane
+	KAst_instr__VecStoreLane
+	KAst_instr__MemorySize
+	KAst_instr__MemoryGrow
+	KAst_instr__MemoryFill
+	KAst_instr__MemoryCopy
+	KAst_instr__MemoryInit
+	KAst_instr__DataDrop
+	KAst_instr__Const
+	KAst_instr__Test
+	KAst_instr__Compare
+	KAst_instr__Unary
+	KAst_instr__Binary
+	KAst_instr__Convert
+	KAst_instr__RefNull
+	KAst_instr__RefFunc
+	KAst_instr__RefIsNull
+	KAst_instr__RefAsNonNull
+	KAst_instr__RefTest
+	KAst_instr__RefCast
+	KAst_instr__RefEq
+	KAst_instr__RefI31
+	KAst_instr__I31Get
+	KAst_instr__StructNew
+	KAst_instr__StructGet
+	KAst_instr__StructSet
+	KAst_instr__ArrayNew
+	KAst_instr__ArrayNewFixed
+	KAst_instr__ArrayNewElem
+	KAst_instr__ArrayNewData
+	KAst_instr__ArrayGet
+	KAst_instr__ArraySet
+	KAst_instr__ArrayLen
+	KAst_instr__ArrayCopy
+	KAst_instr__ArrayFill
+	KAst_instr__ArrayInitData
+	KAst_instr__ArrayInitElem
+	KAst_instr__ExternConvert
+	KAst_instr__VecConst
+	KAst_instr__VecTest
+	KAst_instr__VecCompare
+	KAst_instr__VecUnary
+	KAst_instr__VecBinary
+	KAst_instr__VecTernary
+	KAst_instr__VecConvert
+	KAst_instr__VecShift
+	KAst_instr__VecBitmask
+	KAst_instr__VecTestBits
+	KAst_instr__VecUnaryBits
+	KAst_instr__VecBinaryBits
+	KAst_instr__VecTernaryBits
+	KAst_instr__VecSplat
+	KAst_instr__VecExtract
+	KAst_instr__VecReplace
 )
 
 type OAst_instr_ interface {
@@ -2199,16 +2515,16 @@ func (t SimpleOAst_instr_) Kind() OAst_instr__kind {
 	return t.kind
 }
 
-var Ast_Unreachable OAst_instr_ = SimpleOAst_instr_{KAst_Unreachable}
-var Ast_Nop OAst_instr_ = SimpleOAst_instr_{KAst_Nop}
-var Ast_Drop OAst_instr_ = SimpleOAst_instr_{KAst_Drop}
+var _Ast_instr__Unreachable OAst_instr_ = SimpleOAst_instr_{KAst_instr__Unreachable}
+var _Ast_instr__Nop OAst_instr_ = SimpleOAst_instr_{KAst_instr__Nop}
+var _Ast_instr__Drop OAst_instr_ = SimpleOAst_instr_{KAst_instr__Drop}
 
 type OAst_instr__Select struct {
 	V *[]OTypes_val_type
 }
 
 func (t OAst_instr__Select) Kind() OAst_instr__kind {
-	return KAst_Select
+	return KAst_instr__Select
 }
 func Ast_Select_1(v *[]OTypes_val_type) OAst_instr_ {
 	return OAst_instr__Select{v}
@@ -2222,7 +2538,7 @@ type OAst_instr__Block struct {
 }
 
 func (t OAst_instr__Block) Kind() OAst_instr__kind {
-	return KAst_Block
+	return KAst_instr__Block
 }
 func Ast_Block_1(v struct {
 	F0 OAst_block_type
@@ -2239,7 +2555,7 @@ type OAst_instr__Loop struct {
 }
 
 func (t OAst_instr__Loop) Kind() OAst_instr__kind {
-	return KAst_Loop
+	return KAst_instr__Loop
 }
 func Ast_Loop_1(v struct {
 	F0 OAst_block_type
@@ -2257,7 +2573,7 @@ type OAst_instr__If struct {
 }
 
 func (t OAst_instr__If) Kind() OAst_instr__kind {
-	return KAst_If
+	return KAst_instr__If
 }
 func Ast_If_1(v struct {
 	F0 OAst_block_type
@@ -2272,7 +2588,7 @@ type OAst_instr__Br struct {
 }
 
 func (t OAst_instr__Br) Kind() OAst_instr__kind {
-	return KAst_Br
+	return KAst_instr__Br
 }
 func Ast_Br_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__Br{v}
@@ -2283,7 +2599,7 @@ type OAst_instr__BrIf struct {
 }
 
 func (t OAst_instr__BrIf) Kind() OAst_instr__kind {
-	return KAst_BrIf
+	return KAst_instr__BrIf
 }
 func Ast_BrIf_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__BrIf{v}
@@ -2297,7 +2613,7 @@ type OAst_instr__BrTable struct {
 }
 
 func (t OAst_instr__BrTable) Kind() OAst_instr__kind {
-	return KAst_BrTable
+	return KAst_instr__BrTable
 }
 func Ast_BrTable_1(v struct {
 	F0 []OAst_idx
@@ -2311,7 +2627,7 @@ type OAst_instr__BrOnNull struct {
 }
 
 func (t OAst_instr__BrOnNull) Kind() OAst_instr__kind {
-	return KAst_BrOnNull
+	return KAst_instr__BrOnNull
 }
 func Ast_BrOnNull_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__BrOnNull{v}
@@ -2322,7 +2638,7 @@ type OAst_instr__BrOnNonNull struct {
 }
 
 func (t OAst_instr__BrOnNonNull) Kind() OAst_instr__kind {
-	return KAst_BrOnNonNull
+	return KAst_instr__BrOnNonNull
 }
 func Ast_BrOnNonNull_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__BrOnNonNull{v}
@@ -2337,7 +2653,7 @@ type OAst_instr__BrOnCast struct {
 }
 
 func (t OAst_instr__BrOnCast) Kind() OAst_instr__kind {
-	return KAst_BrOnCast
+	return KAst_instr__BrOnCast
 }
 func Ast_BrOnCast_1(v struct {
 	F0 OAst_idx
@@ -2356,7 +2672,7 @@ type OAst_instr__BrOnCastFail struct {
 }
 
 func (t OAst_instr__BrOnCastFail) Kind() OAst_instr__kind {
-	return KAst_BrOnCastFail
+	return KAst_instr__BrOnCastFail
 }
 func Ast_BrOnCastFail_1(v struct {
 	F0 OAst_idx
@@ -2366,14 +2682,14 @@ func Ast_BrOnCastFail_1(v struct {
 	return OAst_instr__BrOnCastFail{v}
 }
 
-var Ast_Return OAst_instr_ = SimpleOAst_instr_{KAst_Return}
+var _Ast_instr__Return OAst_instr_ = SimpleOAst_instr_{KAst_instr__Return}
 
 type OAst_instr__Call struct {
 	V OAst_idx
 }
 
 func (t OAst_instr__Call) Kind() OAst_instr__kind {
-	return KAst_Call
+	return KAst_instr__Call
 }
 func Ast_Call_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__Call{v}
@@ -2384,7 +2700,7 @@ type OAst_instr__CallRef struct {
 }
 
 func (t OAst_instr__CallRef) Kind() OAst_instr__kind {
-	return KAst_CallRef
+	return KAst_instr__CallRef
 }
 func Ast_CallRef_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__CallRef{v}
@@ -2398,7 +2714,7 @@ type OAst_instr__CallIndirect struct {
 }
 
 func (t OAst_instr__CallIndirect) Kind() OAst_instr__kind {
-	return KAst_CallIndirect
+	return KAst_instr__CallIndirect
 }
 func Ast_CallIndirect_1(v struct {
 	F0 OAst_idx
@@ -2412,7 +2728,7 @@ type OAst_instr__ReturnCall struct {
 }
 
 func (t OAst_instr__ReturnCall) Kind() OAst_instr__kind {
-	return KAst_ReturnCall
+	return KAst_instr__ReturnCall
 }
 func Ast_ReturnCall_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__ReturnCall{v}
@@ -2423,7 +2739,7 @@ type OAst_instr__ReturnCallRef struct {
 }
 
 func (t OAst_instr__ReturnCallRef) Kind() OAst_instr__kind {
-	return KAst_ReturnCallRef
+	return KAst_instr__ReturnCallRef
 }
 func Ast_ReturnCallRef_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__ReturnCallRef{v}
@@ -2437,7 +2753,7 @@ type OAst_instr__ReturnCallIndirect struct {
 }
 
 func (t OAst_instr__ReturnCallIndirect) Kind() OAst_instr__kind {
-	return KAst_ReturnCallIndirect
+	return KAst_instr__ReturnCallIndirect
 }
 func Ast_ReturnCallIndirect_1(v struct {
 	F0 OAst_idx
@@ -2451,13 +2767,13 @@ type OAst_instr__Throw struct {
 }
 
 func (t OAst_instr__Throw) Kind() OAst_instr__kind {
-	return KAst_Throw
+	return KAst_instr__Throw
 }
 func Ast_Throw_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__Throw{v}
 }
 
-var Ast_ThrowRef OAst_instr_ = SimpleOAst_instr_{KAst_ThrowRef}
+var _Ast_instr__ThrowRef OAst_instr_ = SimpleOAst_instr_{KAst_instr__ThrowRef}
 
 type OAst_instr__TryTable struct {
 	V struct {
@@ -2468,7 +2784,7 @@ type OAst_instr__TryTable struct {
 }
 
 func (t OAst_instr__TryTable) Kind() OAst_instr__kind {
-	return KAst_TryTable
+	return KAst_instr__TryTable
 }
 func Ast_TryTable_1(v struct {
 	F0 OAst_block_type
@@ -2483,7 +2799,7 @@ type OAst_instr__LocalGet struct {
 }
 
 func (t OAst_instr__LocalGet) Kind() OAst_instr__kind {
-	return KAst_LocalGet
+	return KAst_instr__LocalGet
 }
 func Ast_LocalGet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__LocalGet{v}
@@ -2494,7 +2810,7 @@ type OAst_instr__LocalSet struct {
 }
 
 func (t OAst_instr__LocalSet) Kind() OAst_instr__kind {
-	return KAst_LocalSet
+	return KAst_instr__LocalSet
 }
 func Ast_LocalSet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__LocalSet{v}
@@ -2505,7 +2821,7 @@ type OAst_instr__LocalTee struct {
 }
 
 func (t OAst_instr__LocalTee) Kind() OAst_instr__kind {
-	return KAst_LocalTee
+	return KAst_instr__LocalTee
 }
 func Ast_LocalTee_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__LocalTee{v}
@@ -2516,7 +2832,7 @@ type OAst_instr__GlobalGet struct {
 }
 
 func (t OAst_instr__GlobalGet) Kind() OAst_instr__kind {
-	return KAst_GlobalGet
+	return KAst_instr__GlobalGet
 }
 func Ast_GlobalGet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__GlobalGet{v}
@@ -2527,7 +2843,7 @@ type OAst_instr__GlobalSet struct {
 }
 
 func (t OAst_instr__GlobalSet) Kind() OAst_instr__kind {
-	return KAst_GlobalSet
+	return KAst_instr__GlobalSet
 }
 func Ast_GlobalSet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__GlobalSet{v}
@@ -2538,7 +2854,7 @@ type OAst_instr__TableGet struct {
 }
 
 func (t OAst_instr__TableGet) Kind() OAst_instr__kind {
-	return KAst_TableGet
+	return KAst_instr__TableGet
 }
 func Ast_TableGet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__TableGet{v}
@@ -2549,7 +2865,7 @@ type OAst_instr__TableSet struct {
 }
 
 func (t OAst_instr__TableSet) Kind() OAst_instr__kind {
-	return KAst_TableSet
+	return KAst_instr__TableSet
 }
 func Ast_TableSet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__TableSet{v}
@@ -2560,7 +2876,7 @@ type OAst_instr__TableSize struct {
 }
 
 func (t OAst_instr__TableSize) Kind() OAst_instr__kind {
-	return KAst_TableSize
+	return KAst_instr__TableSize
 }
 func Ast_TableSize_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__TableSize{v}
@@ -2571,7 +2887,7 @@ type OAst_instr__TableGrow struct {
 }
 
 func (t OAst_instr__TableGrow) Kind() OAst_instr__kind {
-	return KAst_TableGrow
+	return KAst_instr__TableGrow
 }
 func Ast_TableGrow_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__TableGrow{v}
@@ -2582,7 +2898,7 @@ type OAst_instr__TableFill struct {
 }
 
 func (t OAst_instr__TableFill) Kind() OAst_instr__kind {
-	return KAst_TableFill
+	return KAst_instr__TableFill
 }
 func Ast_TableFill_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__TableFill{v}
@@ -2596,7 +2912,7 @@ type OAst_instr__TableCopy struct {
 }
 
 func (t OAst_instr__TableCopy) Kind() OAst_instr__kind {
-	return KAst_TableCopy
+	return KAst_instr__TableCopy
 }
 func Ast_TableCopy_1(v struct {
 	F0 OAst_idx
@@ -2613,7 +2929,7 @@ type OAst_instr__TableInit struct {
 }
 
 func (t OAst_instr__TableInit) Kind() OAst_instr__kind {
-	return KAst_TableInit
+	return KAst_instr__TableInit
 }
 func Ast_TableInit_1(v struct {
 	F0 OAst_idx
@@ -2627,7 +2943,7 @@ type OAst_instr__ElemDrop struct {
 }
 
 func (t OAst_instr__ElemDrop) Kind() OAst_instr__kind {
-	return KAst_ElemDrop
+	return KAst_instr__ElemDrop
 }
 func Ast_ElemDrop_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__ElemDrop{v}
@@ -2641,7 +2957,7 @@ type OAst_instr__Load struct {
 }
 
 func (t OAst_instr__Load) Kind() OAst_instr__kind {
-	return KAst_Load
+	return KAst_instr__Load
 }
 func Ast_Load_1(v struct {
 	F0 OAst_idx
@@ -2658,7 +2974,7 @@ type OAst_instr__Store struct {
 }
 
 func (t OAst_instr__Store) Kind() OAst_instr__kind {
-	return KAst_Store
+	return KAst_instr__Store
 }
 func Ast_Store_1(v struct {
 	F0 OAst_idx
@@ -2675,7 +2991,7 @@ type OAst_instr__VecLoad struct {
 }
 
 func (t OAst_instr__VecLoad) Kind() OAst_instr__kind {
-	return KAst_VecLoad
+	return KAst_instr__VecLoad
 }
 func Ast_VecLoad_1(v struct {
 	F0 OAst_idx
@@ -2692,7 +3008,7 @@ type OAst_instr__VecStore struct {
 }
 
 func (t OAst_instr__VecStore) Kind() OAst_instr__kind {
-	return KAst_VecStore
+	return KAst_instr__VecStore
 }
 func Ast_VecStore_1(v struct {
 	F0 OAst_idx
@@ -2710,7 +3026,7 @@ type OAst_instr__VecLoadLane struct {
 }
 
 func (t OAst_instr__VecLoadLane) Kind() OAst_instr__kind {
-	return KAst_VecLoadLane
+	return KAst_instr__VecLoadLane
 }
 func Ast_VecLoadLane_1(v struct {
 	F0 OAst_idx
@@ -2729,7 +3045,7 @@ type OAst_instr__VecStoreLane struct {
 }
 
 func (t OAst_instr__VecStoreLane) Kind() OAst_instr__kind {
-	return KAst_VecStoreLane
+	return KAst_instr__VecStoreLane
 }
 func Ast_VecStoreLane_1(v struct {
 	F0 OAst_idx
@@ -2744,7 +3060,7 @@ type OAst_instr__MemorySize struct {
 }
 
 func (t OAst_instr__MemorySize) Kind() OAst_instr__kind {
-	return KAst_MemorySize
+	return KAst_instr__MemorySize
 }
 func Ast_MemorySize_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__MemorySize{v}
@@ -2755,7 +3071,7 @@ type OAst_instr__MemoryGrow struct {
 }
 
 func (t OAst_instr__MemoryGrow) Kind() OAst_instr__kind {
-	return KAst_MemoryGrow
+	return KAst_instr__MemoryGrow
 }
 func Ast_MemoryGrow_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__MemoryGrow{v}
@@ -2766,7 +3082,7 @@ type OAst_instr__MemoryFill struct {
 }
 
 func (t OAst_instr__MemoryFill) Kind() OAst_instr__kind {
-	return KAst_MemoryFill
+	return KAst_instr__MemoryFill
 }
 func Ast_MemoryFill_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__MemoryFill{v}
@@ -2780,7 +3096,7 @@ type OAst_instr__MemoryCopy struct {
 }
 
 func (t OAst_instr__MemoryCopy) Kind() OAst_instr__kind {
-	return KAst_MemoryCopy
+	return KAst_instr__MemoryCopy
 }
 func Ast_MemoryCopy_1(v struct {
 	F0 OAst_idx
@@ -2797,7 +3113,7 @@ type OAst_instr__MemoryInit struct {
 }
 
 func (t OAst_instr__MemoryInit) Kind() OAst_instr__kind {
-	return KAst_MemoryInit
+	return KAst_instr__MemoryInit
 }
 func Ast_MemoryInit_1(v struct {
 	F0 OAst_idx
@@ -2811,7 +3127,7 @@ type OAst_instr__DataDrop struct {
 }
 
 func (t OAst_instr__DataDrop) Kind() OAst_instr__kind {
-	return KAst_DataDrop
+	return KAst_instr__DataDrop
 }
 func Ast_DataDrop_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__DataDrop{v}
@@ -2822,7 +3138,7 @@ type OAst_instr__Const struct {
 }
 
 func (t OAst_instr__Const) Kind() OAst_instr__kind {
-	return KAst_Const
+	return KAst_instr__Const
 }
 func Ast_Const_1(v OAst_num) OAst_instr_ {
 	return OAst_instr__Const{v}
@@ -2833,7 +3149,7 @@ type OAst_instr__Test struct {
 }
 
 func (t OAst_instr__Test) Kind() OAst_instr__kind {
-	return KAst_Test
+	return KAst_instr__Test
 }
 func Ast_Test_1(v OAst_testop) OAst_instr_ {
 	return OAst_instr__Test{v}
@@ -2844,7 +3160,7 @@ type OAst_instr__Compare struct {
 }
 
 func (t OAst_instr__Compare) Kind() OAst_instr__kind {
-	return KAst_Compare
+	return KAst_instr__Compare
 }
 func Ast_Compare_1(v OAst_relop) OAst_instr_ {
 	return OAst_instr__Compare{v}
@@ -2855,7 +3171,7 @@ type OAst_instr__Unary struct {
 }
 
 func (t OAst_instr__Unary) Kind() OAst_instr__kind {
-	return KAst_Unary
+	return KAst_instr__Unary
 }
 func Ast_Unary_1(v OAst_unop) OAst_instr_ {
 	return OAst_instr__Unary{v}
@@ -2866,7 +3182,7 @@ type OAst_instr__Binary struct {
 }
 
 func (t OAst_instr__Binary) Kind() OAst_instr__kind {
-	return KAst_Binary
+	return KAst_instr__Binary
 }
 func Ast_Binary_1(v OAst_binop) OAst_instr_ {
 	return OAst_instr__Binary{v}
@@ -2877,7 +3193,7 @@ type OAst_instr__Convert struct {
 }
 
 func (t OAst_instr__Convert) Kind() OAst_instr__kind {
-	return KAst_Convert
+	return KAst_instr__Convert
 }
 func Ast_Convert_1(v OAst_cvtop) OAst_instr_ {
 	return OAst_instr__Convert{v}
@@ -2888,7 +3204,7 @@ type OAst_instr__RefNull struct {
 }
 
 func (t OAst_instr__RefNull) Kind() OAst_instr__kind {
-	return KAst_RefNull
+	return KAst_instr__RefNull
 }
 func Ast_RefNull_1(v OTypes_heap_type) OAst_instr_ {
 	return OAst_instr__RefNull{v}
@@ -2899,21 +3215,21 @@ type OAst_instr__RefFunc struct {
 }
 
 func (t OAst_instr__RefFunc) Kind() OAst_instr__kind {
-	return KAst_RefFunc
+	return KAst_instr__RefFunc
 }
 func Ast_RefFunc_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__RefFunc{v}
 }
 
-var Ast_RefIsNull OAst_instr_ = SimpleOAst_instr_{KAst_RefIsNull}
-var Ast_RefAsNonNull OAst_instr_ = SimpleOAst_instr_{KAst_RefAsNonNull}
+var _Ast_instr__RefIsNull OAst_instr_ = SimpleOAst_instr_{KAst_instr__RefIsNull}
+var _Ast_instr__RefAsNonNull OAst_instr_ = SimpleOAst_instr_{KAst_instr__RefAsNonNull}
 
 type OAst_instr__RefTest struct {
 	V OTypes_ref_type
 }
 
 func (t OAst_instr__RefTest) Kind() OAst_instr__kind {
-	return KAst_RefTest
+	return KAst_instr__RefTest
 }
 func Ast_RefTest_1(v OTypes_ref_type) OAst_instr_ {
 	return OAst_instr__RefTest{v}
@@ -2924,21 +3240,21 @@ type OAst_instr__RefCast struct {
 }
 
 func (t OAst_instr__RefCast) Kind() OAst_instr__kind {
-	return KAst_RefCast
+	return KAst_instr__RefCast
 }
 func Ast_RefCast_1(v OTypes_ref_type) OAst_instr_ {
 	return OAst_instr__RefCast{v}
 }
 
-var Ast_RefEq OAst_instr_ = SimpleOAst_instr_{KAst_RefEq}
-var Ast_RefI31 OAst_instr_ = SimpleOAst_instr_{KAst_RefI31}
+var _Ast_instr__RefEq OAst_instr_ = SimpleOAst_instr_{KAst_instr__RefEq}
+var _Ast_instr__RefI31 OAst_instr_ = SimpleOAst_instr_{KAst_instr__RefI31}
 
 type OAst_instr__I31Get struct {
 	V OPack_extension
 }
 
 func (t OAst_instr__I31Get) Kind() OAst_instr__kind {
-	return KAst_I31Get
+	return KAst_instr__I31Get
 }
 func Ast_I31Get_1(v OPack_extension) OAst_instr_ {
 	return OAst_instr__I31Get{v}
@@ -2952,7 +3268,7 @@ type OAst_instr__StructNew struct {
 }
 
 func (t OAst_instr__StructNew) Kind() OAst_instr__kind {
-	return KAst_StructNew
+	return KAst_instr__StructNew
 }
 func Ast_StructNew_1(v struct {
 	F0 OAst_idx
@@ -2970,7 +3286,7 @@ type OAst_instr__StructGet struct {
 }
 
 func (t OAst_instr__StructGet) Kind() OAst_instr__kind {
-	return KAst_StructGet
+	return KAst_instr__StructGet
 }
 func Ast_StructGet_1(v struct {
 	F0 OAst_idx
@@ -2988,7 +3304,7 @@ type OAst_instr__StructSet struct {
 }
 
 func (t OAst_instr__StructSet) Kind() OAst_instr__kind {
-	return KAst_StructSet
+	return KAst_instr__StructSet
 }
 func Ast_StructSet_1(v struct {
 	F0 OAst_idx
@@ -3005,7 +3321,7 @@ type OAst_instr__ArrayNew struct {
 }
 
 func (t OAst_instr__ArrayNew) Kind() OAst_instr__kind {
-	return KAst_ArrayNew
+	return KAst_instr__ArrayNew
 }
 func Ast_ArrayNew_1(v struct {
 	F0 OAst_idx
@@ -3022,7 +3338,7 @@ type OAst_instr__ArrayNewFixed struct {
 }
 
 func (t OAst_instr__ArrayNewFixed) Kind() OAst_instr__kind {
-	return KAst_ArrayNewFixed
+	return KAst_instr__ArrayNewFixed
 }
 func Ast_ArrayNewFixed_1(v struct {
 	F0 OAst_idx
@@ -3039,7 +3355,7 @@ type OAst_instr__ArrayNewElem struct {
 }
 
 func (t OAst_instr__ArrayNewElem) Kind() OAst_instr__kind {
-	return KAst_ArrayNewElem
+	return KAst_instr__ArrayNewElem
 }
 func Ast_ArrayNewElem_1(v struct {
 	F0 OAst_idx
@@ -3056,7 +3372,7 @@ type OAst_instr__ArrayNewData struct {
 }
 
 func (t OAst_instr__ArrayNewData) Kind() OAst_instr__kind {
-	return KAst_ArrayNewData
+	return KAst_instr__ArrayNewData
 }
 func Ast_ArrayNewData_1(v struct {
 	F0 OAst_idx
@@ -3073,7 +3389,7 @@ type OAst_instr__ArrayGet struct {
 }
 
 func (t OAst_instr__ArrayGet) Kind() OAst_instr__kind {
-	return KAst_ArrayGet
+	return KAst_instr__ArrayGet
 }
 func Ast_ArrayGet_1(v struct {
 	F0 OAst_idx
@@ -3087,13 +3403,13 @@ type OAst_instr__ArraySet struct {
 }
 
 func (t OAst_instr__ArraySet) Kind() OAst_instr__kind {
-	return KAst_ArraySet
+	return KAst_instr__ArraySet
 }
 func Ast_ArraySet_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__ArraySet{v}
 }
 
-var Ast_ArrayLen OAst_instr_ = SimpleOAst_instr_{KAst_ArrayLen}
+var _Ast_instr__ArrayLen OAst_instr_ = SimpleOAst_instr_{KAst_instr__ArrayLen}
 
 type OAst_instr__ArrayCopy struct {
 	V struct {
@@ -3103,7 +3419,7 @@ type OAst_instr__ArrayCopy struct {
 }
 
 func (t OAst_instr__ArrayCopy) Kind() OAst_instr__kind {
-	return KAst_ArrayCopy
+	return KAst_instr__ArrayCopy
 }
 func Ast_ArrayCopy_1(v struct {
 	F0 OAst_idx
@@ -3117,7 +3433,7 @@ type OAst_instr__ArrayFill struct {
 }
 
 func (t OAst_instr__ArrayFill) Kind() OAst_instr__kind {
-	return KAst_ArrayFill
+	return KAst_instr__ArrayFill
 }
 func Ast_ArrayFill_1(v OAst_idx) OAst_instr_ {
 	return OAst_instr__ArrayFill{v}
@@ -3131,7 +3447,7 @@ type OAst_instr__ArrayInitData struct {
 }
 
 func (t OAst_instr__ArrayInitData) Kind() OAst_instr__kind {
-	return KAst_ArrayInitData
+	return KAst_instr__ArrayInitData
 }
 func Ast_ArrayInitData_1(v struct {
 	F0 OAst_idx
@@ -3148,7 +3464,7 @@ type OAst_instr__ArrayInitElem struct {
 }
 
 func (t OAst_instr__ArrayInitElem) Kind() OAst_instr__kind {
-	return KAst_ArrayInitElem
+	return KAst_instr__ArrayInitElem
 }
 func Ast_ArrayInitElem_1(v struct {
 	F0 OAst_idx
@@ -3162,7 +3478,7 @@ type OAst_instr__ExternConvert struct {
 }
 
 func (t OAst_instr__ExternConvert) Kind() OAst_instr__kind {
-	return KAst_ExternConvert
+	return KAst_instr__ExternConvert
 }
 func Ast_ExternConvert_1(v OAst_externop) OAst_instr_ {
 	return OAst_instr__ExternConvert{v}
@@ -3173,7 +3489,7 @@ type OAst_instr__VecConst struct {
 }
 
 func (t OAst_instr__VecConst) Kind() OAst_instr__kind {
-	return KAst_VecConst
+	return KAst_instr__VecConst
 }
 func Ast_VecConst_1(v OAst_vec) OAst_instr_ {
 	return OAst_instr__VecConst{v}
@@ -3184,7 +3500,7 @@ type OAst_instr__VecTest struct {
 }
 
 func (t OAst_instr__VecTest) Kind() OAst_instr__kind {
-	return KAst_VecTest
+	return KAst_instr__VecTest
 }
 func Ast_VecTest_1(v OAst_vec_testop) OAst_instr_ {
 	return OAst_instr__VecTest{v}
@@ -3195,7 +3511,7 @@ type OAst_instr__VecCompare struct {
 }
 
 func (t OAst_instr__VecCompare) Kind() OAst_instr__kind {
-	return KAst_VecCompare
+	return KAst_instr__VecCompare
 }
 func Ast_VecCompare_1(v OAst_vec_relop) OAst_instr_ {
 	return OAst_instr__VecCompare{v}
@@ -3206,7 +3522,7 @@ type OAst_instr__VecUnary struct {
 }
 
 func (t OAst_instr__VecUnary) Kind() OAst_instr__kind {
-	return KAst_VecUnary
+	return KAst_instr__VecUnary
 }
 func Ast_VecUnary_1(v OAst_vec_unop) OAst_instr_ {
 	return OAst_instr__VecUnary{v}
@@ -3217,7 +3533,7 @@ type OAst_instr__VecBinary struct {
 }
 
 func (t OAst_instr__VecBinary) Kind() OAst_instr__kind {
-	return KAst_VecBinary
+	return KAst_instr__VecBinary
 }
 func Ast_VecBinary_1(v OAst_vec_binop) OAst_instr_ {
 	return OAst_instr__VecBinary{v}
@@ -3228,7 +3544,7 @@ type OAst_instr__VecTernary struct {
 }
 
 func (t OAst_instr__VecTernary) Kind() OAst_instr__kind {
-	return KAst_VecTernary
+	return KAst_instr__VecTernary
 }
 func Ast_VecTernary_1(v OAst_vec_ternop) OAst_instr_ {
 	return OAst_instr__VecTernary{v}
@@ -3239,7 +3555,7 @@ type OAst_instr__VecConvert struct {
 }
 
 func (t OAst_instr__VecConvert) Kind() OAst_instr__kind {
-	return KAst_VecConvert
+	return KAst_instr__VecConvert
 }
 func Ast_VecConvert_1(v OAst_vec_cvtop) OAst_instr_ {
 	return OAst_instr__VecConvert{v}
@@ -3250,7 +3566,7 @@ type OAst_instr__VecShift struct {
 }
 
 func (t OAst_instr__VecShift) Kind() OAst_instr__kind {
-	return KAst_VecShift
+	return KAst_instr__VecShift
 }
 func Ast_VecShift_1(v OAst_vec_shiftop) OAst_instr_ {
 	return OAst_instr__VecShift{v}
@@ -3261,7 +3577,7 @@ type OAst_instr__VecBitmask struct {
 }
 
 func (t OAst_instr__VecBitmask) Kind() OAst_instr__kind {
-	return KAst_VecBitmask
+	return KAst_instr__VecBitmask
 }
 func Ast_VecBitmask_1(v OAst_vec_bitmaskop) OAst_instr_ {
 	return OAst_instr__VecBitmask{v}
@@ -3272,7 +3588,7 @@ type OAst_instr__VecTestBits struct {
 }
 
 func (t OAst_instr__VecTestBits) Kind() OAst_instr__kind {
-	return KAst_VecTestBits
+	return KAst_instr__VecTestBits
 }
 func Ast_VecTestBits_1(v OAst_vec_vtestop) OAst_instr_ {
 	return OAst_instr__VecTestBits{v}
@@ -3283,7 +3599,7 @@ type OAst_instr__VecUnaryBits struct {
 }
 
 func (t OAst_instr__VecUnaryBits) Kind() OAst_instr__kind {
-	return KAst_VecUnaryBits
+	return KAst_instr__VecUnaryBits
 }
 func Ast_VecUnaryBits_1(v OAst_vec_vunop) OAst_instr_ {
 	return OAst_instr__VecUnaryBits{v}
@@ -3294,7 +3610,7 @@ type OAst_instr__VecBinaryBits struct {
 }
 
 func (t OAst_instr__VecBinaryBits) Kind() OAst_instr__kind {
-	return KAst_VecBinaryBits
+	return KAst_instr__VecBinaryBits
 }
 func Ast_VecBinaryBits_1(v OAst_vec_vbinop) OAst_instr_ {
 	return OAst_instr__VecBinaryBits{v}
@@ -3305,7 +3621,7 @@ type OAst_instr__VecTernaryBits struct {
 }
 
 func (t OAst_instr__VecTernaryBits) Kind() OAst_instr__kind {
-	return KAst_VecTernaryBits
+	return KAst_instr__VecTernaryBits
 }
 func Ast_VecTernaryBits_1(v OAst_vec_vternop) OAst_instr_ {
 	return OAst_instr__VecTernaryBits{v}
@@ -3316,7 +3632,7 @@ type OAst_instr__VecSplat struct {
 }
 
 func (t OAst_instr__VecSplat) Kind() OAst_instr__kind {
-	return KAst_VecSplat
+	return KAst_instr__VecSplat
 }
 func Ast_VecSplat_1(v OAst_vec_splatop) OAst_instr_ {
 	return OAst_instr__VecSplat{v}
@@ -3327,7 +3643,7 @@ type OAst_instr__VecExtract struct {
 }
 
 func (t OAst_instr__VecExtract) Kind() OAst_instr__kind {
-	return KAst_VecExtract
+	return KAst_instr__VecExtract
 }
 func Ast_VecExtract_1(v OAst_vec_extractop) OAst_instr_ {
 	return OAst_instr__VecExtract{v}
@@ -3338,7 +3654,7 @@ type OAst_instr__VecReplace struct {
 }
 
 func (t OAst_instr__VecReplace) Kind() OAst_instr__kind {
-	return KAst_VecReplace
+	return KAst_instr__VecReplace
 }
 func Ast_VecReplace_1(v OAst_vec_replaceop) OAst_instr_ {
 	return OAst_instr__VecReplace{v}
@@ -3349,10 +3665,10 @@ type OAst_catch = OSource_phrase[OAst_catch_]
 type OAst_catch__kind int
 
 const (
-	KAst_Catch OAst_catch__kind = iota + 1
-	KAst_CatchRef
-	KAst_CatchAll
-	KAst_CatchAllRef
+	KAst_catch__Catch OAst_catch__kind = iota + 1
+	KAst_catch__CatchRef
+	KAst_catch__CatchAll
+	KAst_catch__CatchAllRef
 )
 
 type OAst_catch_ interface {
@@ -3375,7 +3691,7 @@ type OAst_catch__Catch struct {
 }
 
 func (t OAst_catch__Catch) Kind() OAst_catch__kind {
-	return KAst_Catch
+	return KAst_catch__Catch
 }
 func Ast_Catch_1(v struct {
 	F0 OAst_idx
@@ -3392,7 +3708,7 @@ type OAst_catch__CatchRef struct {
 }
 
 func (t OAst_catch__CatchRef) Kind() OAst_catch__kind {
-	return KAst_CatchRef
+	return KAst_catch__CatchRef
 }
 func Ast_CatchRef_1(v struct {
 	F0 OAst_idx
@@ -3406,7 +3722,7 @@ type OAst_catch__CatchAll struct {
 }
 
 func (t OAst_catch__CatchAll) Kind() OAst_catch__kind {
-	return KAst_CatchAll
+	return KAst_catch__CatchAll
 }
 func Ast_CatchAll_1(v OAst_idx) OAst_catch_ {
 	return OAst_catch__CatchAll{v}
@@ -3417,7 +3733,7 @@ type OAst_catch__CatchAllRef struct {
 }
 
 func (t OAst_catch__CatchAllRef) Kind() OAst_catch__kind {
-	return KAst_CatchAllRef
+	return KAst_catch__CatchAllRef
 }
 func Ast_CatchAllRef_1(v OAst_idx) OAst_catch_ {
 	return OAst_catch__CatchAllRef{v}
@@ -3457,9 +3773,9 @@ type OAst_segment_mode = OSource_phrase[OAst_segment_mode_]
 type OAst_segment_mode__kind int
 
 const (
-	KAst_Passive OAst_segment_mode__kind = iota + 1
-	KAst_Active
-	KAst_Declarative
+	KAst_segment_mode__Passive OAst_segment_mode__kind = iota + 1
+	KAst_segment_mode__Active
+	KAst_segment_mode__Declarative
 )
 
 type OAst_segment_mode_ interface {
@@ -3474,7 +3790,7 @@ func (t SimpleOAst_segment_mode_) Kind() OAst_segment_mode__kind {
 	return t.kind
 }
 
-var Ast_Passive OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_Passive}
+var _Ast_segment_mode__Passive OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_segment_mode__Passive}
 
 type OAst_segment_mode__Active struct {
 	V struct {
@@ -3484,7 +3800,7 @@ type OAst_segment_mode__Active struct {
 }
 
 func (t OAst_segment_mode__Active) Kind() OAst_segment_mode__kind {
-	return KAst_Active
+	return KAst_segment_mode__Active
 }
 func Ast_Active_1(v struct {
 	index  OAst_idx
@@ -3493,7 +3809,7 @@ func Ast_Active_1(v struct {
 	return OAst_segment_mode__Active{v}
 }
 
-var Ast_Declarative OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_Declarative}
+var _Ast_segment_mode__Declarative OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_segment_mode__Declarative}
 
 type OAst_elem_segment = OSource_phrase[OAst_elem_segment_]
 type OAst_elem_segment_ struct {
@@ -3512,11 +3828,11 @@ type OAst_export_desc = OSource_phrase[OAst_export_desc_]
 type OAst_export_desc__kind int
 
 const (
-	KAst_FuncExport OAst_export_desc__kind = iota + 1
-	KAst_TableExport
-	KAst_MemoryExport
-	KAst_GlobalExport
-	KAst_TagExport
+	KAst_export_desc__FuncExport OAst_export_desc__kind = iota + 1
+	KAst_export_desc__TableExport
+	KAst_export_desc__MemoryExport
+	KAst_export_desc__GlobalExport
+	KAst_export_desc__TagExport
 )
 
 type OAst_export_desc_ interface {
@@ -3536,7 +3852,7 @@ type OAst_export_desc__FuncExport struct {
 }
 
 func (t OAst_export_desc__FuncExport) Kind() OAst_export_desc__kind {
-	return KAst_FuncExport
+	return KAst_export_desc__FuncExport
 }
 func Ast_FuncExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__FuncExport{v}
@@ -3547,7 +3863,7 @@ type OAst_export_desc__TableExport struct {
 }
 
 func (t OAst_export_desc__TableExport) Kind() OAst_export_desc__kind {
-	return KAst_TableExport
+	return KAst_export_desc__TableExport
 }
 func Ast_TableExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__TableExport{v}
@@ -3558,7 +3874,7 @@ type OAst_export_desc__MemoryExport struct {
 }
 
 func (t OAst_export_desc__MemoryExport) Kind() OAst_export_desc__kind {
-	return KAst_MemoryExport
+	return KAst_export_desc__MemoryExport
 }
 func Ast_MemoryExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__MemoryExport{v}
@@ -3569,7 +3885,7 @@ type OAst_export_desc__GlobalExport struct {
 }
 
 func (t OAst_export_desc__GlobalExport) Kind() OAst_export_desc__kind {
-	return KAst_GlobalExport
+	return KAst_export_desc__GlobalExport
 }
 func Ast_GlobalExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__GlobalExport{v}
@@ -3580,7 +3896,7 @@ type OAst_export_desc__TagExport struct {
 }
 
 func (t OAst_export_desc__TagExport) Kind() OAst_export_desc__kind {
-	return KAst_TagExport
+	return KAst_export_desc__TagExport
 }
 func Ast_TagExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__TagExport{v}
@@ -3596,11 +3912,11 @@ type OAst_import_desc = OSource_phrase[OAst_import_desc_]
 type OAst_import_desc__kind int
 
 const (
-	KAst_FuncImport OAst_import_desc__kind = iota + 1
-	KAst_TableImport
-	KAst_MemoryImport
-	KAst_GlobalImport
-	KAst_TagImport
+	KAst_import_desc__FuncImport OAst_import_desc__kind = iota + 1
+	KAst_import_desc__TableImport
+	KAst_import_desc__MemoryImport
+	KAst_import_desc__GlobalImport
+	KAst_import_desc__TagImport
 )
 
 type OAst_import_desc_ interface {
@@ -3620,7 +3936,7 @@ type OAst_import_desc__FuncImport struct {
 }
 
 func (t OAst_import_desc__FuncImport) Kind() OAst_import_desc__kind {
-	return KAst_FuncImport
+	return KAst_import_desc__FuncImport
 }
 func Ast_FuncImport_1(v OAst_idx) OAst_import_desc_ {
 	return OAst_import_desc__FuncImport{v}
@@ -3631,7 +3947,7 @@ type OAst_import_desc__TableImport struct {
 }
 
 func (t OAst_import_desc__TableImport) Kind() OAst_import_desc__kind {
-	return KAst_TableImport
+	return KAst_import_desc__TableImport
 }
 func Ast_TableImport_1(v OTypes_table_type) OAst_import_desc_ {
 	return OAst_import_desc__TableImport{v}
@@ -3642,7 +3958,7 @@ type OAst_import_desc__MemoryImport struct {
 }
 
 func (t OAst_import_desc__MemoryImport) Kind() OAst_import_desc__kind {
-	return KAst_MemoryImport
+	return KAst_import_desc__MemoryImport
 }
 func Ast_MemoryImport_1(v OTypes_memory_type) OAst_import_desc_ {
 	return OAst_import_desc__MemoryImport{v}
@@ -3653,7 +3969,7 @@ type OAst_import_desc__GlobalImport struct {
 }
 
 func (t OAst_import_desc__GlobalImport) Kind() OAst_import_desc__kind {
-	return KAst_GlobalImport
+	return KAst_import_desc__GlobalImport
 }
 func Ast_GlobalImport_1(v OTypes_global_type) OAst_import_desc_ {
 	return OAst_import_desc__GlobalImport{v}
@@ -3664,7 +3980,7 @@ type OAst_import_desc__TagImport struct {
 }
 
 func (t OAst_import_desc__TagImport) Kind() OAst_import_desc__kind {
-	return KAst_TagImport
+	return KAst_import_desc__TagImport
 }
 func Ast_TagImport_1(v OAst_idx) OAst_import_desc_ {
 	return OAst_import_desc__TagImport{v}
