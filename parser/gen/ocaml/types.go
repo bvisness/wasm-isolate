@@ -27,6 +27,7 @@ func NewModule(namespace []string, name string) *Module {
 	m := &Module{
 		ParentModules: namespace,
 		Name:          name,
+		ValueDefs:     map[string]Def{},
 	}
 	m.TypeDefs = map[string]Def{
 		"bool":   Def{m.Namespace(), Primitive("bool")},
@@ -38,12 +39,33 @@ func NewModule(namespace []string, name string) *Module {
 		"list":   Def{m.Namespace(), Primitive("list")},
 		"option": Def{m.Namespace(), Primitive("option")},
 	}
-	m.ValueDefs = map[string]Def{}
 	return m
 }
 
-func (m Module) Namespace() []string {
+func (m Module) Clone() *Module {
+	res := &Module{
+		ParentModules: m.ParentModules,
+		Name:          m.Name,
+		TypeDefs:      map[string]Def{},
+		ValueDefs:     map[string]Def{},
+	}
+	for name, def := range m.TypeDefs {
+		res.TypeDefs[name] = def
+	}
+	for name, def := range m.ValueDefs {
+		res.ValueDefs[name] = def
+	}
+	return res
+}
+
+func (m Module) Namespace() Namespace {
 	return append(m.ParentModules, m.Name)
+}
+
+type Namespace []string
+
+func (n Namespace) String() string {
+	return strings.Join(n, ".")
 }
 
 type Def struct {
@@ -235,7 +257,7 @@ func ParseType(t string, currentModule *Module) Type {
 	defer tree.Close()
 
 	if tree.RootNode().HasError() {
-		panic(fmt.Sprintf("type has error: %s", t))
+		panic(fmt.Sprintf("type has error: \"%s\" %s", t, tree.RootNode().ToSexp()))
 	}
 
 	return parseTypeNode(tree.RootNode(), t, currentModule)

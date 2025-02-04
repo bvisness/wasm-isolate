@@ -1209,11 +1209,11 @@ func Value_Ref_1(v OValue_ref_) OValue_value {
 type OValue_t = OValue_value
 type OValue_address = OI64_t
 
-// TODO: Unknown type for definition of type_of_ref': ref_ -> Types.heap_type ref
+// TODO: Unknown type for definition of type_of_ref': Value.ref_ -> Types.heap_type ref
 
-// TODO: Unknown type for definition of eq_ref': ref_ -> ref_ -> bool ref
+// TODO: Unknown type for definition of eq_ref': Value.ref_ -> Value.ref_ -> bool ref
 
-// TODO: Unknown type for definition of string_of_ref': ref_ -> string ref
+// TODO: Unknown type for definition of string_of_ref': Value.ref_ -> string ref
 
 type OPack_pack_size_kind int
 
@@ -1339,332 +1339,16 @@ type OSource_region struct {
 
 var Source_no_pos = nil    /* TODO: record_expression */
 var Source_no_region = nil /* TODO: record_expression */
-
-type OAst_IntOp_unop_kind int
-
-const (
-	KAst_IntOp_Clz OAst_IntOp_unop_kind = iota + 1
-	KAst_IntOp_Ctz
-	KAst_IntOp_Popcnt
-	KAst_IntOp_ExtendS
-)
-
-type OAst_IntOp_unop interface {
-	Kind() OAst_IntOp_unop_kind
-}
-
-type SimpleOAst_IntOp_unop struct {
-	kind OAst_IntOp_unop_kind
-}
-
-func (t SimpleOAst_IntOp_unop) Kind() OAst_IntOp_unop_kind {
-	return t.kind
-}
-
-var Ast_IntOp_Clz OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_Clz}
-var Ast_IntOp_Ctz OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_Ctz}
-var Ast_IntOp_Popcnt OAst_IntOp_unop = SimpleOAst_IntOp_unop{KAst_IntOp_Popcnt}
-
-type OAst_IntOp_unop_ExtendS struct {
-	V OPack_pack_size
-}
-
-func (t OAst_IntOp_unop_ExtendS) Kind() OAst_IntOp_unop_kind {
-	return KAst_IntOp_ExtendS
-}
-func Ast_IntOp_ExtendS_1(v OPack_pack_size) OAst_IntOp_unop {
-	return OAst_IntOp_unop_ExtendS{v}
-}
-
-type OAst_IntOp_binop_kind int
-
-const (
-	KAst_IntOp_Add OAst_IntOp_binop_kind = iota + 1
-	KAst_IntOp_Sub
-	KAst_IntOp_Mul
-	KAst_IntOp_DivS
-	KAst_IntOp_DivU
-	KAst_IntOp_RemS
-	KAst_IntOp_RemU
-	KAst_IntOp_And
-	KAst_IntOp_Or
-	KAst_IntOp_Xor
-	KAst_IntOp_Shl
-	KAst_IntOp_ShrS
-	KAst_IntOp_ShrU
-	KAst_IntOp_Rotl
-	KAst_IntOp_Rotr
-)
-
-type OAst_IntOp_binop interface {
-	Kind() OAst_IntOp_binop_kind
-}
-
-type SimpleOAst_IntOp_binop struct {
-	kind OAst_IntOp_binop_kind
-}
-
-func (t SimpleOAst_IntOp_binop) Kind() OAst_IntOp_binop_kind {
-	return t.kind
-}
-
-var Ast_IntOp_Add OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Add}
-var Ast_IntOp_Sub OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Sub}
-var Ast_IntOp_Mul OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Mul}
-var Ast_IntOp_DivS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_DivS}
-var Ast_IntOp_DivU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_DivU}
-var Ast_IntOp_RemS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_RemS}
-var Ast_IntOp_RemU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_RemU}
-var Ast_IntOp_And OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_And}
-var Ast_IntOp_Or OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Or}
-var Ast_IntOp_Xor OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Xor}
-var Ast_IntOp_Shl OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Shl}
-var Ast_IntOp_ShrS OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_ShrS}
-var Ast_IntOp_ShrU OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_ShrU}
-var Ast_IntOp_Rotl OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Rotl}
-var Ast_IntOp_Rotr OAst_IntOp_binop = SimpleOAst_IntOp_binop{KAst_IntOp_Rotr}
-
-type OAst_IntOp_testop_kind int
-
-const (
-	KAst_IntOp_Eqz OAst_IntOp_testop_kind = iota + 1
-)
-
-type OAst_IntOp_testop interface {
-	Kind() OAst_IntOp_testop_kind
-}
-
-type SimpleOAst_IntOp_testop struct {
-	kind OAst_IntOp_testop_kind
-}
-
-func (t SimpleOAst_IntOp_testop) Kind() OAst_IntOp_testop_kind {
-	return t.kind
-}
-
-var Ast_IntOp_Eqz OAst_IntOp_testop = SimpleOAst_IntOp_testop{KAst_IntOp_Eqz}
-
-type OAst_IntOp_relop_kind int
-
-const (
-	KAst_IntOp_Eq OAst_IntOp_relop_kind = iota + 1
-	KAst_IntOp_Ne
-	KAst_IntOp_LtS
-	KAst_IntOp_LtU
-	KAst_IntOp_GtS
-	KAst_IntOp_GtU
-	KAst_IntOp_LeS
-	KAst_IntOp_LeU
-	KAst_IntOp_GeS
-	KAst_IntOp_GeU
-)
-
-type OAst_IntOp_relop interface {
-	Kind() OAst_IntOp_relop_kind
-}
-
-type SimpleOAst_IntOp_relop struct {
-	kind OAst_IntOp_relop_kind
-}
-
-func (t SimpleOAst_IntOp_relop) Kind() OAst_IntOp_relop_kind {
-	return t.kind
-}
-
-var Ast_IntOp_Eq OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_Eq}
-var Ast_IntOp_Ne OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_Ne}
-var Ast_IntOp_LtS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_LtS}
-var Ast_IntOp_LtU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_LtU}
-var Ast_IntOp_GtS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_GtS}
-var Ast_IntOp_GtU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_GtU}
-var Ast_IntOp_LeS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_LeS}
-var Ast_IntOp_LeU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_LeU}
-var Ast_IntOp_GeS OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_GeS}
-var Ast_IntOp_GeU OAst_IntOp_relop = SimpleOAst_IntOp_relop{KAst_IntOp_GeU}
-
-type OAst_IntOp_cvtop_kind int
-
-const (
-	KAst_IntOp_ExtendSI32 OAst_IntOp_cvtop_kind = iota + 1
-	KAst_IntOp_ExtendUI32
-	KAst_IntOp_WrapI64
-	KAst_IntOp_TruncSF32
-	KAst_IntOp_TruncUF32
-	KAst_IntOp_TruncSF64
-	KAst_IntOp_TruncUF64
-	KAst_IntOp_TruncSatSF32
-	KAst_IntOp_TruncSatUF32
-	KAst_IntOp_TruncSatSF64
-	KAst_IntOp_TruncSatUF64
-	KAst_IntOp_ReinterpretFloat
-)
-
-type OAst_IntOp_cvtop interface {
-	Kind() OAst_IntOp_cvtop_kind
-}
-
-type SimpleOAst_IntOp_cvtop struct {
-	kind OAst_IntOp_cvtop_kind
-}
-
-func (t SimpleOAst_IntOp_cvtop) Kind() OAst_IntOp_cvtop_kind {
-	return t.kind
-}
-
-var Ast_IntOp_ExtendSI32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_ExtendSI32}
-var Ast_IntOp_ExtendUI32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_ExtendUI32}
-var Ast_IntOp_WrapI64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_WrapI64}
-var Ast_IntOp_TruncSF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSF32}
-var Ast_IntOp_TruncUF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncUF32}
-var Ast_IntOp_TruncSF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSF64}
-var Ast_IntOp_TruncUF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncUF64}
-var Ast_IntOp_TruncSatSF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSatSF32}
-var Ast_IntOp_TruncSatUF32 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSatUF32}
-var Ast_IntOp_TruncSatSF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSatSF64}
-var Ast_IntOp_TruncSatUF64 OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_TruncSatUF64}
-var Ast_IntOp_ReinterpretFloat OAst_IntOp_cvtop = SimpleOAst_IntOp_cvtop{KAst_IntOp_ReinterpretFloat}
-
-type OAst_FloatOp_unop_kind int
-
-const (
-	KAst_FloatOp_Neg OAst_FloatOp_unop_kind = iota + 1
-	KAst_FloatOp_Abs
-	KAst_FloatOp_Ceil
-	KAst_FloatOp_Floor
-	KAst_FloatOp_Trunc
-	KAst_FloatOp_Nearest
-	KAst_FloatOp_Sqrt
-)
-
-type OAst_FloatOp_unop interface {
-	Kind() OAst_FloatOp_unop_kind
-}
-
-type SimpleOAst_FloatOp_unop struct {
-	kind OAst_FloatOp_unop_kind
-}
-
-func (t SimpleOAst_FloatOp_unop) Kind() OAst_FloatOp_unop_kind {
-	return t.kind
-}
-
-var Ast_FloatOp_Neg OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Neg}
-var Ast_FloatOp_Abs OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Abs}
-var Ast_FloatOp_Ceil OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Ceil}
-var Ast_FloatOp_Floor OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Floor}
-var Ast_FloatOp_Trunc OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Trunc}
-var Ast_FloatOp_Nearest OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Nearest}
-var Ast_FloatOp_Sqrt OAst_FloatOp_unop = SimpleOAst_FloatOp_unop{KAst_FloatOp_Sqrt}
-
-type OAst_FloatOp_binop_kind int
-
-const (
-	KAst_FloatOp_Add OAst_FloatOp_binop_kind = iota + 1
-	KAst_FloatOp_Sub
-	KAst_FloatOp_Mul
-	KAst_FloatOp_Div
-	KAst_FloatOp_Min
-	KAst_FloatOp_Max
-	KAst_FloatOp_CopySign
-)
-
-type OAst_FloatOp_binop interface {
-	Kind() OAst_FloatOp_binop_kind
-}
-
-type SimpleOAst_FloatOp_binop struct {
-	kind OAst_FloatOp_binop_kind
-}
-
-func (t SimpleOAst_FloatOp_binop) Kind() OAst_FloatOp_binop_kind {
-	return t.kind
-}
-
-var Ast_FloatOp_Add OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Add}
-var Ast_FloatOp_Sub OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Sub}
-var Ast_FloatOp_Mul OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Mul}
-var Ast_FloatOp_Div OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Div}
-var Ast_FloatOp_Min OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Min}
-var Ast_FloatOp_Max OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_Max}
-var Ast_FloatOp_CopySign OAst_FloatOp_binop = SimpleOAst_FloatOp_binop{KAst_FloatOp_CopySign}
-
-type OAst_FloatOp_testop_kind int
-
-const ()
-
-type OAst_FloatOp_testop interface {
-	Kind() OAst_FloatOp_testop_kind
-}
-
-type SimpleOAst_FloatOp_testop struct {
-	kind OAst_FloatOp_testop_kind
-}
-
-func (t SimpleOAst_FloatOp_testop) Kind() OAst_FloatOp_testop_kind {
-	return t.kind
-}
-
-type OAst_FloatOp_relop_kind int
-
-const (
-	KAst_FloatOp_Eq OAst_FloatOp_relop_kind = iota + 1
-	KAst_FloatOp_Ne
-	KAst_FloatOp_Lt
-	KAst_FloatOp_Gt
-	KAst_FloatOp_Le
-	KAst_FloatOp_Ge
-)
-
-type OAst_FloatOp_relop interface {
-	Kind() OAst_FloatOp_relop_kind
-}
-
-type SimpleOAst_FloatOp_relop struct {
-	kind OAst_FloatOp_relop_kind
-}
-
-func (t SimpleOAst_FloatOp_relop) Kind() OAst_FloatOp_relop_kind {
-	return t.kind
-}
-
-var Ast_FloatOp_Eq OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Eq}
-var Ast_FloatOp_Ne OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Ne}
-var Ast_FloatOp_Lt OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Lt}
-var Ast_FloatOp_Gt OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Gt}
-var Ast_FloatOp_Le OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Le}
-var Ast_FloatOp_Ge OAst_FloatOp_relop = SimpleOAst_FloatOp_relop{KAst_FloatOp_Ge}
-
-type OAst_FloatOp_cvtop_kind int
-
-const (
-	KAst_FloatOp_ConvertSI32 OAst_FloatOp_cvtop_kind = iota + 1
-	KAst_FloatOp_ConvertUI32
-	KAst_FloatOp_ConvertSI64
-	KAst_FloatOp_ConvertUI64
-	KAst_FloatOp_PromoteF32
-	KAst_FloatOp_DemoteF64
-	KAst_FloatOp_ReinterpretInt
-)
-
-type OAst_FloatOp_cvtop interface {
-	Kind() OAst_FloatOp_cvtop_kind
-}
-
-type SimpleOAst_FloatOp_cvtop struct {
-	kind OAst_FloatOp_cvtop_kind
-}
-
-func (t SimpleOAst_FloatOp_cvtop) Kind() OAst_FloatOp_cvtop_kind {
-	return t.kind
-}
-
-var Ast_FloatOp_ConvertSI32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_ConvertSI32}
-var Ast_FloatOp_ConvertUI32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_ConvertUI32}
-var Ast_FloatOp_ConvertSI64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_ConvertSI64}
-var Ast_FloatOp_ConvertUI64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_ConvertUI64}
-var Ast_FloatOp_PromoteF32 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_PromoteF32}
-var Ast_FloatOp_DemoteF64 OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_DemoteF64}
-var Ast_FloatOp_ReinterpretInt OAst_FloatOp_cvtop = SimpleOAst_FloatOp_cvtop{KAst_FloatOp_ReinterpretInt}
+type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
+type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
+type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
+type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
+type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
+type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
+type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
+type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
+type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
+type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
 
 type OAst_V128Op_itestop_kind int
 
@@ -2173,12 +1857,12 @@ func (t SimpleOAst_V128Op_vternop) Kind() OAst_V128Op_vternop_kind {
 
 var Ast_V128Op_Bitselect OAst_V128Op_vternop = SimpleOAst_V128Op_vternop{KAst_V128Op_Bitselect}
 
-type OAst_V128Op_testop = OV128_laneop
-type OAst_V128Op_unop = OV128_laneop
-type OAst_V128Op_binop = OV128_laneop
+type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
+type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
+type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
 type OAst_V128Op_ternop = OV128_laneop
-type OAst_V128Op_relop = OV128_laneop
-type OAst_V128Op_cvtop = OV128_laneop
+type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
+type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
 type OAst_V128Op_shiftop = OV128_laneop
 type OAst_V128Op_bitmaskop = OV128_laneop
 
@@ -2351,9 +2035,9 @@ func (t SimpleOAst_externop) Kind() OAst_externop_kind {
 var Ast_Internalize OAst_externop = SimpleOAst_externop{KAst_Internalize}
 var Ast_Externalize OAst_externop = SimpleOAst_externop{KAst_Externalize}
 
-type OAst_idx = OSource_phrase
-type OAst_num = OSource_phrase
-type OAst_vec = OSource_phrase
+type OAst_idx = OSource_phrase[OInt32]
+type OAst_num = OSource_phrase[OValue_num]
+type OAst_vec = OSource_phrase[OValue_vec]
 type OAst_name = string
 
 type OAst_block_type_kind int
@@ -2397,7 +2081,7 @@ func Ast_ValBlockType_1(v *OTypes_val_type) OAst_block_type {
 	return OAst_block_type_ValBlockType{v}
 }
 
-type OAst_instr = OSource_phrase
+type OAst_instr = OSource_phrase[OAst_instr_]
 
 type OAst_instr__kind int
 
@@ -3656,7 +3340,7 @@ func Ast_VecReplace_1(v OAst_vec_replaceop) OAst_instr_ {
 	return OAst_instr__VecReplace{v}
 }
 
-type OAst_catch = OSource_phrase
+type OAst_catch = OSource_phrase[OAst_catch_]
 
 type OAst_catch__kind int
 
@@ -3735,36 +3419,36 @@ func Ast_CatchAllRef_1(v OAst_idx) OAst_catch_ {
 	return OAst_catch__CatchAllRef{v}
 }
 
-type OAst_const = OSource_phrase
-type OAst_local = OSource_phrase
+type OAst_const = OSource_phrase[[]OAst_instr]
+type OAst_local = OSource_phrase[OAst_local_]
 type OAst_local_ struct {
 	ltype OTypes_val_type
 }
-type OAst_global = OSource_phrase
+type OAst_global = OSource_phrase[OAst_global_]
 type OAst_global_ struct {
 	gtype OTypes_global_type
 	ginit OAst_const
 }
-type OAst_func = OSource_phrase
+type OAst_func = OSource_phrase[OAst_func_]
 type OAst_func_ struct {
 	ftype  OAst_idx
 	locals []OAst_local
 	body   []OAst_instr
 }
-type OAst_table = OSource_phrase
+type OAst_table = OSource_phrase[OAst_table_]
 type OAst_table_ struct {
 	ttype OTypes_table_type
 	tinit OAst_const
 }
-type OAst_memory = OSource_phrase
+type OAst_memory = OSource_phrase[OAst_memory_]
 type OAst_memory_ struct {
 	mtype OTypes_memory_type
 }
-type OAst_tag = OSource_phrase
+type OAst_tag = OSource_phrase[OAst_tag_]
 type OAst_tag_ struct {
 	tgtype OAst_idx
 }
-type OAst_segment_mode = OSource_phrase
+type OAst_segment_mode = OSource_phrase[OAst_segment_mode_]
 
 type OAst_segment_mode__kind int
 
@@ -3807,19 +3491,19 @@ func Ast_Active_1(v struct {
 
 var Ast_Declarative OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_Declarative}
 
-type OAst_elem_segment = OSource_phrase
+type OAst_elem_segment = OSource_phrase[OAst_elem_segment_]
 type OAst_elem_segment_ struct {
 	etype OTypes_ref_type
 	einit []OAst_const
 	emode OAst_segment_mode
 }
-type OAst_data_segment = OSource_phrase
+type OAst_data_segment = OSource_phrase[OAst_data_segment_]
 type OAst_data_segment_ struct {
 	dinit string
 	dmode OAst_segment_mode
 }
-type OAst_type_ = OSource_phrase
-type OAst_export_desc = OSource_phrase
+type OAst_type_ = OSource_phrase[OTypes_rec_type]
+type OAst_export_desc = OSource_phrase[OAst_export_desc_]
 
 type OAst_export_desc__kind int
 
@@ -3898,12 +3582,12 @@ func Ast_TagExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__TagExport{v}
 }
 
-type OAst_export = OSource_phrase
+type OAst_export = OSource_phrase[OAst_export_]
 type OAst_export_ struct {
 	name  OAst_name
 	edesc OAst_export_desc
 }
-type OAst_import_desc = OSource_phrase
+type OAst_import_desc = OSource_phrase[OAst_import_desc_]
 
 type OAst_import_desc__kind int
 
@@ -3982,17 +3666,17 @@ func Ast_TagImport_1(v OAst_idx) OAst_import_desc_ {
 	return OAst_import_desc__TagImport{v}
 }
 
-type OAst_import = OSource_phrase
+type OAst_import = OSource_phrase[OAst_import_]
 type OAst_import_ struct {
 	module_name OAst_name
 	item_name   OAst_name
 	idesc       OAst_import_desc
 }
-type OAst_start = OSource_phrase
+type OAst_start = OSource_phrase[OAst_start_]
 type OAst_start_ struct {
 	sfunc OAst_idx
 }
-type OAst_module_ = OSource_phrase
+type OAst_module_ = OSource_phrase[OAst_module__]
 type OAst_module__ struct {
 	types    []OAst_type_
 	globals  []OAst_global
@@ -4008,35 +3692,35 @@ type OAst_module__ struct {
 }
 
 var Ast_empty_module = nil /* TODO: record_expression */
-func Operators_i32_const_1(_n Ophrase) OAst_instr_ {
+func Operators_i32_const_1(_n OSource_phrase[OTypes_type_idx]) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i32_const = Operators_i32_const_1
 
-func Operators_i64_const_1(_n Ophrase) OAst_instr_ {
+func Operators_i64_const_1(_n OSource_phrase[OValue_address]) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i64_const = Operators_i64_const_1
 
-func Operators_f32_const_1(_n Ophrase) OAst_instr_ {
+func Operators_f32_const_1(_n OSource_phrase[OValue_t]) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f32_const = Operators_f32_const_1
 
-func Operators_f64_const_1(_n Ophrase) OAst_instr_ {
+func Operators_f64_const_1(_n OSource_phrase[OValue_t]) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f64_const = Operators_f64_const_1
 
-func Operators_v128_const_1(_n Ophrase) OAst_instr_ {
+func Operators_v128_const_1(_n OSource_phrase[OValue_t]) OAst_instr_ {
 	__tmp1 := Ast_VecConst_1(_operatorAtAt_2(Value_V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
@@ -4057,7 +3741,7 @@ func Operators_ref_func_1(_x OAst_idx) OAst_instr_ {
 
 var Operators_ref_func = Operators_ref_func_1
 
-func Operators_at_const_0() func(OTypes_addr_type) func(Ophrase) OAst_instr_ {
+func Operators_at_const_0() func(OTypes_addr_type) func(OSource_phrase[OValue_address]) OAst_instr_ {
 	TODO /* unknown expression type function_expression */
 }
 
@@ -6358,7 +6042,7 @@ func Decode_bit_1(_i OInt) func(_n OInt) bool {
 var Decode_bit = Decode_bit_2
 
 func Decode_byte_1(_s ODecode_stream) OInt {
-	__tmp1 := get_1(_s)
+	__tmp1 := Decode_get_1(_s)
 	return __tmp1
 }
 
@@ -6398,11 +6082,11 @@ func Decode_word64_1(_s ODecode_stream) OInt64 {
 var Decode_word64 = Decode_word64_1
 
 func Decode_uN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, pos_1(_s), "integer representation too long")
+	__tmp1 := Decode_require_4(_operatorGt_2(_n, 0), _s, Decode_pos_1(_s), "integer representation too long")
 	_ = __tmp1
 	__tmp7 := Decode_byte_1(_s)
 	_b := __tmp7
-	__tmp10 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(pos_1(_s), 1), "integer too large")
+	__tmp10 := Decode_require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "integer too large")
 	_ = __tmp10
 	__tmp23 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp23
@@ -6427,13 +6111,13 @@ func Decode_uN_1(_n OInt) func(_s ODecode_stream) OInt64 {
 var Decode_uN = Decode_uN_2
 
 func Decode_sN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, pos_1(_s), "integer representation too long")
+	__tmp1 := Decode_require_4(_operatorGt_2(_n, 0), _s, Decode_pos_1(_s), "integer representation too long")
 	_ = __tmp1
 	__tmp7 := Decode_byte_1(_s)
 	_b := __tmp7
 	__tmp10 := _operatorland_2(_operatorlsl_2(-(1), _operatorMinus_2(_n, 1)), 0x7f)
 	_mask := __tmp10
-	__tmp15 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(pos_1(_s), 1), "integer too large")
+	__tmp15 := Decode_require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "integer too large")
 	_ = __tmp15
 	__tmp33 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp33
@@ -6506,38 +6190,38 @@ func Decode_s64_1(_s ODecode_stream) OInt64 {
 
 var Decode_s64 = Decode_s64_1
 
-func Decode_f32_1(_s ODecode_stream) OF32_t {
+func Decode_f32_1(_s ODecode_stream) OValue_t {
 	__tmp1 := F32_of_bits_1(Decode_word32_1(_s))
 	return __tmp1
 }
 
 var Decode_f32 = Decode_f32_1
 
-func Decode_f64_1(_s ODecode_stream) OF64_t {
+func Decode_f64_1(_s ODecode_stream) OValue_t {
 	__tmp1 := F64_of_bits_1(Decode_word64_1(_s))
 	return __tmp1
 }
 
 var Decode_f64 = Decode_f64_1
 
-func Decode_v128_1(_s ODecode_stream) V128 {
-	__tmp1 := V128_of_bits_1(get_string_2(16, _s))
+func Decode_v128_1(_s ODecode_stream) OValue_t {
+	__tmp1 := V128_of_bits_1(Decode_get_string_2(16, _s))
 	return __tmp1
 }
 
 var Decode_v128 = Decode_v128_1
 
 func Decode_len32_1(_s ODecode_stream) OInt {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	__tmp4 := Decode_u32_1(_s)
 	_n := __tmp4
 	var __tmp7 OInt
-	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(len_1(_s), _pos))) {
+	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(Decode_len_1(_s), _pos))) {
 		__tmp15 := Int32_to_int_1(_n)
 		__tmp7 = __tmp15
 	} else {
-		__tmp17 := error_3(_s, _pos, "length out of bounds")
+		__tmp17 := Decode_error_3(_s, _pos, "length out of bounds")
 		__tmp7 = __tmp17
 	}
 	return __tmp7
@@ -6548,14 +6232,14 @@ var Decode_len32 = Decode_len32_1
 func Decode_string_1(_s ODecode_stream) string {
 	__tmp1 := Decode_len32_1(_s)
 	_n := __tmp1
-	__tmp4 := get_string_2(_n, _s)
+	__tmp4 := Decode_get_string_2(_n, _s)
 	return __tmp4
 }
 
 var Decode_string = Decode_string_1
 
 func Decode_zero_1(_s ODecode_stream) Ounit {
-	__tmp1 := expect_3(0x00, _s, "zero byte expected")
+	__tmp1 := Decode_expect_3(0x00, _s, "zero byte expected")
 	return __tmp1
 }
 
@@ -6579,7 +6263,7 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 		__tmp1 = __tmp7
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp11 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed mutability")
+		__tmp11 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed mutability")
 		__tmp1 = __tmp11
 	}
 	return __tmp1
@@ -6588,8 +6272,8 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 var Decode_mutability = Decode_mutability_1
 
 func Decode_var_type_2(_var func(ODecode_stream) OTypes_local_idx, _s ODecode_stream) OTypes_var {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	var __tmp4 OTypes_var
 	__tmp5 := var_1(_s)
 	if _i := __tmp5; _operatorGte_2(_i, 0) {
@@ -6598,7 +6282,7 @@ func Decode_var_type_2(_var func(ODecode_stream) OTypes_local_idx, _s ODecode_st
 		__tmp4 = __tmp12
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp16 := error_3(_s, _pos, "malformed type index")
+		__tmp16 := Decode_error_3(_s, _pos, "malformed type index")
 		__tmp4 = __tmp16
 	}
 	return __tmp4
@@ -6629,7 +6313,7 @@ func Decode_num_type_1(_s ODecode_stream) OTypes_num_type {
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp15 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed number type")
+		__tmp15 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed number type")
 		__tmp1 = __tmp15
 	}
 	return __tmp1
@@ -6645,7 +6329,7 @@ func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 		__tmp1 = __tmp5
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp9 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed vector type")
+		__tmp9 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed vector type")
 		__tmp1 = __tmp9
 	}
 	return __tmp1
@@ -6654,9 +6338,9 @@ func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 var Decode_vec_type = Decode_vec_type_1
 
 func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
-	__tmp4 := either_2([]func(ODecode_stream) OTypes_heap_type{func(_s ODecode_stream) OTypes_heap_type {
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
+	__tmp4 := Decode_either_2([]func(ODecode_stream) OTypes_heap_type{func(_s ODecode_stream) OTypes_heap_type {
 		__tmp5 := Types_VarHT_1(Decode_var_type_2(Decode_s33, _s))
 		return __tmp5
 	}, func(_s ODecode_stream) OTypes_heap_type {
@@ -6700,7 +6384,7 @@ func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
 			__tmp9 = __tmp35
 		} else if __ := __tmp10; true {
 			_ = __
-			__tmp39 := error_3(_s, _pos, "malformed heap type")
+			__tmp39 := Decode_error_3(_s, _pos, "malformed heap type")
 			__tmp9 = __tmp39
 		}
 		return __tmp9
@@ -6714,8 +6398,8 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 	F0 OTypes_null
 	F1 OTypes_heap_type
 } {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	var __tmp4 struct {
 		F0 OTypes_null
 		F1 OTypes_heap_type
@@ -6807,7 +6491,7 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 		__tmp4 = __tmp73
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp80 := error_3(_s, _pos, "malformed reference type")
+		__tmp80 := Decode_error_3(_s, _pos, "malformed reference type")
 		__tmp4 = __tmp80
 	}
 	return __tmp4
@@ -6816,7 +6500,7 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 var Decode_ref_type = Decode_ref_type_1
 
 func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
-	__tmp1 := either_2([]func(ODecode_stream) OTypes_val_type{func(_s ODecode_stream) OTypes_val_type {
+	__tmp1 := Decode_either_2([]func(ODecode_stream) OTypes_val_type{func(_s ODecode_stream) OTypes_val_type {
 		__tmp2 := Types_NumT_1(Decode_num_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_val_type {
@@ -6832,26 +6516,26 @@ func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
 var Decode_val_type = Decode_val_type_1
 
 func Decode_result_type_1(_s ODecode_stream) []OTypes_val_type {
-	__tmp1 := vec_2(Decode_val_type, _s)
+	__tmp1 := Decode_vec_2(Decode_val_type, _s)
 	return __tmp1
 }
 
 var Decode_result_type = Decode_result_type_1
 
 func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	var __tmp4 OPack_pack_size
 	__tmp5 := Decode_s7_1(_s)
 	if __tmp5 == -0x08 {
-		__tmp8 := /*Pack.*/ _Pack8
+		__tmp8 := /*Pack.*/ Pack_Pack8
 		__tmp4 = __tmp8
 	} else if __tmp5 == -0x09 {
-		__tmp10 := /*Pack.*/ _Pack16
+		__tmp10 := /*Pack.*/ Pack_Pack16
 		__tmp4 = __tmp10
 	} else if __ := __tmp5; true {
 		_ = __
-		__tmp14 := error_3(_s, _pos, "malformed storage type")
+		__tmp14 := Decode_error_3(_s, _pos, "malformed storage type")
 		__tmp4 = __tmp14
 	}
 	return __tmp4
@@ -6860,7 +6544,7 @@ func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
 var Decode_pack_type = Decode_pack_type_1
 
 func Decode_storage_type_1(_s ODecode_stream) OTypes_storage_type {
-	__tmp1 := either_2([]func(ODecode_stream) OTypes_storage_type{func(_s ODecode_stream) OTypes_storage_type {
+	__tmp1 := Decode_either_2([]func(ODecode_stream) OTypes_storage_type{func(_s ODecode_stream) OTypes_storage_type {
 		__tmp2 := Types_ValStorageT_1(Decode_val_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_storage_type {
@@ -6887,7 +6571,7 @@ func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
 var Decode_field_type = Decode_field_type_1
 
 func Decode_struct_type_1(_s ODecode_stream) OTypes_struct_type {
-	__tmp1 := Types_StructT_1(vec_2(Decode_field_type, _s))
+	__tmp1 := Types_StructT_1(Decode_vec_2(Decode_field_type, _s))
 	return __tmp1
 }
 
@@ -6928,7 +6612,7 @@ func Decode_str_type_1(_s ODecode_stream) OTypes_str_type {
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp16 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed definition type")
+		__tmp16 := Decode_error_3(_s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed definition type")
 		__tmp1 = __tmp16
 	}
 	return __tmp1
@@ -6938,11 +6622,11 @@ var Decode_str_type = Decode_str_type_1
 
 func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 	var __tmp1 OTypes_sub_type
-	__tmp2 := peek_1(_s)
+	__tmp2 := Decode_peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x30), 0x7f))) {
-		__tmp9 := skip_2(1, _s)
+		__tmp9 := Decode_skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := vec_2(Decode_var_type_1(Decode_u32), _s)
+		__tmp11 := Decode_vec_2(Decode_var_type_1(Decode_u32), _s)
 		_xs := __tmp11
 		__tmp16 := Types_SubT_1(struct {
 			F0 OTypes_final
@@ -6955,9 +6639,9 @@ func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 
 		__tmp1 = __tmp16
 	} else if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x31), 0x7f))) {
-		__tmp30 := skip_2(1, _s)
+		__tmp30 := Decode_skip_2(1, _s)
 		_ = __tmp30
-		__tmp32 := vec_2(Decode_var_type_1(Decode_u32), _s)
+		__tmp32 := Decode_vec_2(Decode_var_type_1(Decode_u32), _s)
 		_xs := __tmp32
 		__tmp37 := Types_SubT_1(struct {
 			F0 OTypes_final
@@ -6985,11 +6669,11 @@ var Decode_sub_type = Decode_sub_type_1
 
 func Decode_rec_type_1(_s ODecode_stream) OTypes_rec_type {
 	var __tmp1 OTypes_rec_type
-	__tmp2 := peek_1(_s)
+	__tmp2 := Decode_peek_1(_s)
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x32), 0x7f))) {
-		__tmp9 := skip_2(1, _s)
+		__tmp9 := Decode_skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := Types_RecT_1(vec_2(Decode_sub_type, _s))
+		__tmp11 := Types_RecT_1(Decode_vec_2(Decode_sub_type, _s))
 
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
@@ -7008,7 +6692,7 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 } {
 	__tmp1 := Decode_byte_1(_s)
 	_flags := __tmp1
-	__tmp4 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(pos_1(_s), 1), "malformed limits flags")
+	__tmp4 := Decode_require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(Decode_pos_1(_s), 1), "malformed limits flags")
 	_ = __tmp4
 	__tmp12 := _operatorEq_2(_operatorland_2(_flags, 1), 1)
 	_has_max := __tmp12
@@ -7020,10 +6704,10 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 		__tmp22 := Types_I32AT
 		__tmp16 = __tmp22
 	}
-	_at := __tmp16
+	Source_at := __tmp16
 	__tmp25 := uN_1(_s)
 	_min := __tmp25
-	__tmp28 := opt_3(_uN, _has_max, _s)
+	__tmp28 := Decode_opt_3(_uN, _has_max, _s)
 	_max := __tmp28
 	return struct {
 		F0 OTypes_addr_type
@@ -7048,7 +6732,7 @@ func Decode_table_type_1(_s ODecode_stream) OTypes_table_type {
 	__tmp1 := Decode_ref_type_1(_s)
 	_t := __tmp1
 	__tmp4 := Decode_limits_2(Decode_u64, _s)
-	_at, _lim := __unpack_Types_addr_type___Types_limits(__tmp4)
+	Source_at, _lim := __unpack_Types_addr_type___Types_limits(__tmp4)
 	__tmp9 := Types_TableT_1(struct {
 		F0 OTypes_addr_type
 		F1 OTypes_limits
@@ -7073,10 +6757,10 @@ func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
 
 var Decode_global_type = Decode_global_type_1
 
-func Decode_tag_type_1(_s ODecode_stream) Ophrase {
+func Decode_tag_type_1(_s ODecode_stream) OSource_phrase[OTypes_local_idx] {
 	__tmp1 := Decode_zero_1(_s)
 	_ = __tmp1
-	__tmp3 := at_2(Decode_var, _s)
+	__tmp3 := Source_at_2(Decode_var, _s)
 	return __tmp3
 
 }
@@ -7091,31 +6775,31 @@ func Decode_op_1(_s ODecode_stream) OInt {
 var Decode_op = Decode_op_1
 
 func Decode_end__1(_s ODecode_stream) Ounit {
-	__tmp1 := expect_3(0x0b, _s, "END opcode expected")
+	__tmp1 := Decode_expect_3(0x0b, _s, "END opcode expected")
 	return __tmp1
 }
 
 var Decode_end_ = Decode_end__1
 
 func Decode_memop_1(_s ODecode_stream) struct {
-	F0 Ophrase
+	F0 OSource_phrase[OTypes_local_idx]
 	F1 OInt
 	F2 OInt64
 } {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	__tmp4 := Decode_u32_1(_s)
 	_flags := __tmp4
-	__tmp7 := require_4(I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
+	__tmp7 := Decode_require_4(I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
 	__tmp12 := _operatorNotEq_2(Int32_logand_2(_flags, 0x40), 0)
 	_has_var := __tmp12
-	var __tmp16 Ophrase
+	var __tmp16 OSource_phrase[OTypes_local_idx]
 	if _has_var {
-		__tmp18 := at_2(Decode_var, _s)
+		__tmp18 := Source_at_2(Decode_var, _s)
 		__tmp16 = __tmp18
 	} else {
-		__tmp21 := _operatorAtAt_2(0, _no_region)
+		__tmp21 := _operatorAtAt_2(0, Source_no_region)
 		__tmp16 = __tmp21
 	}
 	_x := __tmp16
@@ -7124,7 +6808,7 @@ func Decode_memop_1(_s ODecode_stream) struct {
 	__tmp28 := Decode_u64_1(_s)
 	_offset := __tmp28
 	return struct {
-		F0 Ophrase
+		F0 OSource_phrase[OTypes_local_idx]
 		F1 OInt
 		F2 OInt64
 	}{_x, _align, _offset}
@@ -7134,14 +6818,14 @@ func Decode_memop_1(_s ODecode_stream) struct {
 var Decode_memop = Decode_memop_1
 
 func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
-	__tmp1 := either_2([]func(ODecode_stream) OAst_block_type{func(_s ODecode_stream) OAst_block_type {
-		__tmp2 := Ast_VarBlockType_1(at_2(func(_s ODecode_stream) OTypes_local_idx {
-			__tmp4 := as_stat_var_1(Decode_var_type_2(Decode_s33, _s))
+	__tmp1 := Decode_either_2([]func(ODecode_stream) OAst_block_type{func(_s ODecode_stream) OAst_block_type {
+		__tmp2 := Ast_VarBlockType_1(Source_at_2(func(_s ODecode_stream) OTypes_local_idx {
+			__tmp4 := Types_as_stat_var_1(Decode_var_type_2(Decode_s33, _s))
 			return __tmp4
 		}, _s))
 		return __tmp2
 	}, func(_s ODecode_stream) OAst_block_type {
-		__tmp9 := expect_3(0x40, _s, "")
+		__tmp9 := Decode_expect_3(0x40, _s, "")
 		_ = __tmp9
 		__tmp11 := Ast_ValBlockType_1(nil)
 		return __tmp11
@@ -7157,35 +6841,35 @@ var Decode_block_type = Decode_block_type_1
 
 func Decode_local_1(_s ODecode_stream) struct {
 	F0 OTypes_local_idx
-	F1 Ophrase
+	F1 OSource_phrase[OAst_local_]
 } {
 	__tmp1 := Decode_u32_1(_s)
 	_n := __tmp1
-	__tmp4 := at_2(Decode_val_type, _s)
+	__tmp4 := Source_at_2(Decode_val_type, _s)
 	_t := __tmp4
 	return struct {
 		F0 OTypes_local_idx
-		F1 Ophrase
+		F1 OSource_phrase[OAst_local_]
 	}{_n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)}
 }
 
 var Decode_local = Decode_local_1
 
 func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
-	__tmp1 := pos_1(_s)
-	_pos := __tmp1
+	__tmp1 := Decode_pos_1(_s)
+	Decode_pos := __tmp1
 	var __tmp4 OAst_instr_
 	__tmp5 := Decode_op_1(_s)
 	if __tmp5 == 0x00 {
-		__tmp8 := _unreachable
+		__tmp8 := Operators_unreachable
 		__tmp4 = __tmp8
 	} else if __tmp5 == 0x01 {
-		__tmp9 := _nop
+		__tmp9 := Operators_nop
 		__tmp4 = __tmp9
 	} else if __tmp5 == 0x02 {
 		__tmp10 := Decode_block_type_1(_s)
 		_bt := __tmp10
-		__tmp13 := instr_block_1(_s)
+		__tmp13 := Decode_instr_block_1(_s)
 		_es_ := __tmp13
 		__tmp16 := Decode_end__1(_s)
 		_ = __tmp16
@@ -7195,7 +6879,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 	} else if __tmp5 == 0x03 {
 		__tmp21 := Decode_block_type_1(_s)
 		_bt := __tmp21
-		__tmp24 := instr_block_1(_s)
+		__tmp24 := Decode_instr_block_1(_s)
 		_es_ := __tmp24
 		__tmp27 := Decode_end__1(_s)
 		_ = __tmp27
@@ -7205,13 +6889,13 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 	} else if __tmp5 == 0x04 {
 		__tmp32 := Decode_block_type_1(_s)
 		_bt := __tmp32
-		__tmp35 := instr_block_1(_s)
+		__tmp35 := Decode_instr_block_1(_s)
 		_es1 := __tmp35
 		var __tmp38 OAst_instr_
-		if _operatorEq_2(peek_1(_s), Some_1(0x05)) {
-			__tmp43 := expect_3(0x05, _s, "ELSE or END opcode expected")
+		if _operatorEq_2(Decode_peek_1(_s), Some_1(0x05)) {
+			__tmp43 := Decode_expect_3(0x05, _s, "ELSE or END opcode expected")
 			_ = __tmp43
-			__tmp45 := instr_block_1(_s)
+			__tmp45 := Decode_instr_block_1(_s)
 			_es2 := __tmp45
 			__tmp48 := Decode_end__1(_s)
 			_ = __tmp48
@@ -7227,90 +6911,90 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		}
 		__tmp4 = __tmp38
 	} else if __tmp5 == 0x05 {
-		__tmp59 := error_3(_s, _pos, "misplaced ELSE opcode")
+		__tmp59 := Decode_error_3(_s, _pos, "misplaced ELSE opcode")
 		__tmp4 = __tmp59
 	} else if __tmp5 == 0x06 || __tmp5 == 0x07 {
 		_b := __tmp5
-		__tmp63 := illegal_3(_s, _pos, _b)
+		__tmp63 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp63
 	} else if __tmp5 == 0x08 {
-		__tmp67 := Operators_throw_1(at_2(Decode_var, _s))
+		__tmp67 := Operators_throw_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp67
 	} else if __tmp5 == 0x09 {
 		_b := __tmp5
-		__tmp72 := illegal_3(_s, _pos, _b)
+		__tmp72 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp72
 	} else if __tmp5 == 0x0a {
-		__tmp76 := _throw_ref
+		__tmp76 := Operators_throw_ref
 		__tmp4 = __tmp76
 	} else if __tmp5 == 0x0b {
-		__tmp77 := error_3(_s, _pos, "misplaced END opcode")
+		__tmp77 := Decode_error_3(_s, _pos, "misplaced END opcode")
 		__tmp4 = __tmp77
 	} else if __tmp5 == 0x0c {
-		__tmp80 := Operators_br_1(at_2(Decode_var, _s))
+		__tmp80 := Operators_br_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp80
 	} else if __tmp5 == 0x0d {
-		__tmp84 := Operators_br_if_1(at_2(Decode_var, _s))
+		__tmp84 := Operators_br_if_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp84
 	} else if __tmp5 == 0x0e {
-		__tmp88 := vec_2(at_1(Decode_var), _s)
+		__tmp88 := Decode_vec_2(Source_at_1(Decode_var), _s)
 		_xs := __tmp88
-		__tmp93 := at_2(Decode_var, _s)
+		__tmp93 := Source_at_2(Decode_var, _s)
 		_x := __tmp93
 		__tmp97 := Operators_br_table_2(_xs, _x)
 		__tmp4 = __tmp97
 	} else if __tmp5 == 0x0f {
-		__tmp100 := _return
+		__tmp100 := Operators_return
 		__tmp4 = __tmp100
 	} else if __tmp5 == 0x10 {
-		__tmp101 := Operators_call_1(at_2(Decode_var, _s))
+		__tmp101 := Operators_call_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp101
 	} else if __tmp5 == 0x11 {
-		__tmp105 := at_2(Decode_var, _s)
+		__tmp105 := Source_at_2(Decode_var, _s)
 		_y := __tmp105
-		__tmp109 := at_2(Decode_var, _s)
+		__tmp109 := Source_at_2(Decode_var, _s)
 		_x := __tmp109
 		__tmp113 := Operators_call_indirect_2(_x, _y)
 		__tmp4 = __tmp113
 	} else if __tmp5 == 0x12 {
-		__tmp116 := Operators_return_call_1(at_2(Decode_var, _s))
+		__tmp116 := Operators_return_call_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp116
 	} else if __tmp5 == 0x13 {
-		__tmp120 := at_2(Decode_var, _s)
+		__tmp120 := Source_at_2(Decode_var, _s)
 		_y := __tmp120
-		__tmp124 := at_2(Decode_var, _s)
+		__tmp124 := Source_at_2(Decode_var, _s)
 		_x := __tmp124
 		__tmp128 := Operators_return_call_indirect_2(_x, _y)
 		__tmp4 = __tmp128
 	} else if __tmp5 == 0x14 {
-		__tmp131 := Operators_call_ref_1(at_2(Decode_var, _s))
+		__tmp131 := Operators_call_ref_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp131
 	} else if __tmp5 == 0x15 {
-		__tmp135 := Operators_return_call_ref_1(at_2(Decode_var, _s))
+		__tmp135 := Operators_return_call_ref_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp135
 	} else if __tmp5 == 0x16 || __tmp5 == 0x17 || __tmp5 == 0x18 || __tmp5 == 0x19 {
 		_b := __tmp5
-		__tmp140 := illegal_3(_s, _pos, _b)
+		__tmp140 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp140
 	} else if __tmp5 == 0x1a {
-		__tmp144 := _drop
+		__tmp144 := Operators_drop
 		__tmp4 = __tmp144
 	} else if __tmp5 == 0x1b {
 		__tmp145 := Operators_select_1(nil)
 		__tmp4 = __tmp145
 	} else if __tmp5 == 0x1c {
-		__tmp148 := Operators_select_1(Some_1(vec_2(Decode_val_type, _s)))
+		__tmp148 := Operators_select_1(Some_1(Decode_vec_2(Decode_val_type, _s)))
 		__tmp4 = __tmp148
 	} else if __tmp5 == 0x1d || __tmp5 == 0x1e {
 		_b := __tmp5
-		__tmp154 := illegal_3(_s, _pos, _b)
+		__tmp154 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp154
 	} else if __tmp5 == 0x1f {
 		__tmp158 := Decode_block_type_1(_s)
 		_bt := __tmp158
-		__tmp161 := vec_2(at_1(Operators_catch), _s)
+		__tmp161 := Decode_vec_2(Source_at_1(Decode_catch), _s)
 		_cs := __tmp161
-		__tmp166 := instr_block_1(_s)
+		__tmp166 := Decode_instr_block_1(_s)
 		_es := __tmp166
 		__tmp169 := Decode_end__1(_s)
 		_ = __tmp169
@@ -7318,673 +7002,673 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 
 		__tmp4 = __tmp171
 	} else if __tmp5 == 0x20 {
-		__tmp175 := Operators_local_get_1(at_2(Decode_var, _s))
+		__tmp175 := Operators_local_get_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp175
 	} else if __tmp5 == 0x21 {
-		__tmp179 := Operators_local_set_1(at_2(Decode_var, _s))
+		__tmp179 := Operators_local_set_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp179
 	} else if __tmp5 == 0x22 {
-		__tmp183 := Operators_local_tee_1(at_2(Decode_var, _s))
+		__tmp183 := Operators_local_tee_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp183
 	} else if __tmp5 == 0x23 {
-		__tmp187 := Operators_global_get_1(at_2(Decode_var, _s))
+		__tmp187 := Operators_global_get_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp187
 	} else if __tmp5 == 0x24 {
-		__tmp191 := Operators_global_set_1(at_2(Decode_var, _s))
+		__tmp191 := Operators_global_set_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp191
 	} else if __tmp5 == 0x25 {
-		__tmp195 := Operators_table_get_1(at_2(Decode_var, _s))
+		__tmp195 := Operators_table_get_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp195
 	} else if __tmp5 == 0x26 {
-		__tmp199 := Operators_table_set_1(at_2(Decode_var, _s))
+		__tmp199 := Operators_table_set_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp199
 	} else if __tmp5 == 0x27 {
 		_b := __tmp5
-		__tmp204 := illegal_3(_s, _pos, _b)
+		__tmp204 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp204
 	} else if __tmp5 == 0x28 {
 		__tmp208 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp208)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp208)
 		__tmp213 := Operators_i32_load_3(_x, _a, _o)
 		__tmp4 = __tmp213
 	} else if __tmp5 == 0x29 {
 		__tmp217 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp217)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp217)
 		__tmp222 := Operators_i64_load_3(_x, _a, _o)
 		__tmp4 = __tmp222
 	} else if __tmp5 == 0x2a {
 		__tmp226 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp226)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp226)
 		__tmp231 := Operators_f32_load_3(_x, _a, _o)
 		__tmp4 = __tmp231
 	} else if __tmp5 == 0x2b {
 		__tmp235 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp235)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp235)
 		__tmp240 := Operators_f64_load_3(_x, _a, _o)
 		__tmp4 = __tmp240
 	} else if __tmp5 == 0x2c {
 		__tmp244 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp244)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp244)
 		__tmp249 := Operators_i32_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp249
 	} else if __tmp5 == 0x2d {
 		__tmp253 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp253)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp253)
 		__tmp258 := Operators_i32_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp258
 	} else if __tmp5 == 0x2e {
 		__tmp262 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp262)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp262)
 		__tmp267 := Operators_i32_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp267
 	} else if __tmp5 == 0x2f {
 		__tmp271 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp271)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp271)
 		__tmp276 := Operators_i32_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp276
 	} else if __tmp5 == 0x30 {
 		__tmp280 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp280)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp280)
 		__tmp285 := Operators_i64_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp285
 	} else if __tmp5 == 0x31 {
 		__tmp289 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp289)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp289)
 		__tmp294 := Operators_i64_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp294
 	} else if __tmp5 == 0x32 {
 		__tmp298 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp298)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp298)
 		__tmp303 := Operators_i64_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp303
 	} else if __tmp5 == 0x33 {
 		__tmp307 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp307)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp307)
 		__tmp312 := Operators_i64_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp312
 	} else if __tmp5 == 0x34 {
 		__tmp316 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp316)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp316)
 		__tmp321 := Operators_i64_load32_s_3(_x, _a, _o)
 		__tmp4 = __tmp321
 	} else if __tmp5 == 0x35 {
 		__tmp325 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp325)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp325)
 		__tmp330 := Operators_i64_load32_u_3(_x, _a, _o)
 		__tmp4 = __tmp330
 	} else if __tmp5 == 0x36 {
 		__tmp334 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp334)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp334)
 		__tmp339 := Operators_i32_store_3(_x, _a, _o)
 		__tmp4 = __tmp339
 	} else if __tmp5 == 0x37 {
 		__tmp343 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp343)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp343)
 		__tmp348 := Operators_i64_store_3(_x, _a, _o)
 		__tmp4 = __tmp348
 	} else if __tmp5 == 0x38 {
 		__tmp352 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp352)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp352)
 		__tmp357 := Operators_f32_store_3(_x, _a, _o)
 		__tmp4 = __tmp357
 	} else if __tmp5 == 0x39 {
 		__tmp361 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp361)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp361)
 		__tmp366 := Operators_f64_store_3(_x, _a, _o)
 		__tmp4 = __tmp366
 	} else if __tmp5 == 0x3a {
 		__tmp370 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp370)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp370)
 		__tmp375 := Operators_i32_store8_3(_x, _a, _o)
 		__tmp4 = __tmp375
 	} else if __tmp5 == 0x3b {
 		__tmp379 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp379)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp379)
 		__tmp384 := Operators_i32_store16_3(_x, _a, _o)
 		__tmp4 = __tmp384
 	} else if __tmp5 == 0x3c {
 		__tmp388 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp388)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp388)
 		__tmp393 := Operators_i64_store8_3(_x, _a, _o)
 		__tmp4 = __tmp393
 	} else if __tmp5 == 0x3d {
 		__tmp397 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp397)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp397)
 		__tmp402 := Operators_i64_store16_3(_x, _a, _o)
 		__tmp4 = __tmp402
 	} else if __tmp5 == 0x3e {
 		__tmp406 := Decode_memop_1(_s)
-		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp406)
+		_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp406)
 		__tmp411 := Operators_i64_store32_3(_x, _a, _o)
 		__tmp4 = __tmp411
 	} else if __tmp5 == 0x3f {
-		__tmp415 := Operators_memory_size_1(at_2(Decode_var, _s))
+		__tmp415 := Operators_memory_size_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp415
 	} else if __tmp5 == 0x40 {
-		__tmp419 := Operators_memory_grow_1(at_2(Decode_var, _s))
+		__tmp419 := Operators_memory_grow_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp419
 	} else if __tmp5 == 0x41 {
-		__tmp423 := Operators_i32_const_1(at_2(Decode_s32, _s))
+		__tmp423 := Operators_i32_const_1(Source_at_2(Decode_s32, _s))
 		__tmp4 = __tmp423
 	} else if __tmp5 == 0x42 {
-		__tmp427 := Operators_i64_const_1(at_2(Decode_s64, _s))
+		__tmp427 := Operators_i64_const_1(Source_at_2(Decode_s64, _s))
 		__tmp4 = __tmp427
 	} else if __tmp5 == 0x43 {
-		__tmp431 := Operators_f32_const_1(at_2(Decode_f32, _s))
+		__tmp431 := Operators_f32_const_1(Source_at_2(Decode_f32, _s))
 		__tmp4 = __tmp431
 	} else if __tmp5 == 0x44 {
-		__tmp435 := Operators_f64_const_1(at_2(Decode_f64, _s))
+		__tmp435 := Operators_f64_const_1(Source_at_2(Decode_f64, _s))
 		__tmp4 = __tmp435
 	} else if __tmp5 == 0x45 {
-		__tmp439 := _i32_eqz
+		__tmp439 := Operators_i32_eqz
 		__tmp4 = __tmp439
 	} else if __tmp5 == 0x46 {
-		__tmp440 := _i32_eq
+		__tmp440 := Operators_i32_eq
 		__tmp4 = __tmp440
 	} else if __tmp5 == 0x47 {
-		__tmp441 := _i32_ne
+		__tmp441 := Operators_i32_ne
 		__tmp4 = __tmp441
 	} else if __tmp5 == 0x48 {
-		__tmp442 := _i32_lt_s
+		__tmp442 := Operators_i32_lt_s
 		__tmp4 = __tmp442
 	} else if __tmp5 == 0x49 {
-		__tmp443 := _i32_lt_u
+		__tmp443 := Operators_i32_lt_u
 		__tmp4 = __tmp443
 	} else if __tmp5 == 0x4a {
-		__tmp444 := _i32_gt_s
+		__tmp444 := Operators_i32_gt_s
 		__tmp4 = __tmp444
 	} else if __tmp5 == 0x4b {
-		__tmp445 := _i32_gt_u
+		__tmp445 := Operators_i32_gt_u
 		__tmp4 = __tmp445
 	} else if __tmp5 == 0x4c {
-		__tmp446 := _i32_le_s
+		__tmp446 := Operators_i32_le_s
 		__tmp4 = __tmp446
 	} else if __tmp5 == 0x4d {
-		__tmp447 := _i32_le_u
+		__tmp447 := Operators_i32_le_u
 		__tmp4 = __tmp447
 	} else if __tmp5 == 0x4e {
-		__tmp448 := _i32_ge_s
+		__tmp448 := Operators_i32_ge_s
 		__tmp4 = __tmp448
 	} else if __tmp5 == 0x4f {
-		__tmp449 := _i32_ge_u
+		__tmp449 := Operators_i32_ge_u
 		__tmp4 = __tmp449
 	} else if __tmp5 == 0x50 {
-		__tmp450 := _i64_eqz
+		__tmp450 := Operators_i64_eqz
 		__tmp4 = __tmp450
 	} else if __tmp5 == 0x51 {
-		__tmp451 := _i64_eq
+		__tmp451 := Operators_i64_eq
 		__tmp4 = __tmp451
 	} else if __tmp5 == 0x52 {
-		__tmp452 := _i64_ne
+		__tmp452 := Operators_i64_ne
 		__tmp4 = __tmp452
 	} else if __tmp5 == 0x53 {
-		__tmp453 := _i64_lt_s
+		__tmp453 := Operators_i64_lt_s
 		__tmp4 = __tmp453
 	} else if __tmp5 == 0x54 {
-		__tmp454 := _i64_lt_u
+		__tmp454 := Operators_i64_lt_u
 		__tmp4 = __tmp454
 	} else if __tmp5 == 0x55 {
-		__tmp455 := _i64_gt_s
+		__tmp455 := Operators_i64_gt_s
 		__tmp4 = __tmp455
 	} else if __tmp5 == 0x56 {
-		__tmp456 := _i64_gt_u
+		__tmp456 := Operators_i64_gt_u
 		__tmp4 = __tmp456
 	} else if __tmp5 == 0x57 {
-		__tmp457 := _i64_le_s
+		__tmp457 := Operators_i64_le_s
 		__tmp4 = __tmp457
 	} else if __tmp5 == 0x58 {
-		__tmp458 := _i64_le_u
+		__tmp458 := Operators_i64_le_u
 		__tmp4 = __tmp458
 	} else if __tmp5 == 0x59 {
-		__tmp459 := _i64_ge_s
+		__tmp459 := Operators_i64_ge_s
 		__tmp4 = __tmp459
 	} else if __tmp5 == 0x5a {
-		__tmp460 := _i64_ge_u
+		__tmp460 := Operators_i64_ge_u
 		__tmp4 = __tmp460
 	} else if __tmp5 == 0x5b {
-		__tmp461 := _f32_eq
+		__tmp461 := Operators_f32_eq
 		__tmp4 = __tmp461
 	} else if __tmp5 == 0x5c {
-		__tmp462 := _f32_ne
+		__tmp462 := Operators_f32_ne
 		__tmp4 = __tmp462
 	} else if __tmp5 == 0x5d {
-		__tmp463 := _f32_lt
+		__tmp463 := Operators_f32_lt
 		__tmp4 = __tmp463
 	} else if __tmp5 == 0x5e {
-		__tmp464 := _f32_gt
+		__tmp464 := Operators_f32_gt
 		__tmp4 = __tmp464
 	} else if __tmp5 == 0x5f {
-		__tmp465 := _f32_le
+		__tmp465 := Operators_f32_le
 		__tmp4 = __tmp465
 	} else if __tmp5 == 0x60 {
-		__tmp466 := _f32_ge
+		__tmp466 := Operators_f32_ge
 		__tmp4 = __tmp466
 	} else if __tmp5 == 0x61 {
-		__tmp467 := _f64_eq
+		__tmp467 := Operators_f64_eq
 		__tmp4 = __tmp467
 	} else if __tmp5 == 0x62 {
-		__tmp468 := _f64_ne
+		__tmp468 := Operators_f64_ne
 		__tmp4 = __tmp468
 	} else if __tmp5 == 0x63 {
-		__tmp469 := _f64_lt
+		__tmp469 := Operators_f64_lt
 		__tmp4 = __tmp469
 	} else if __tmp5 == 0x64 {
-		__tmp470 := _f64_gt
+		__tmp470 := Operators_f64_gt
 		__tmp4 = __tmp470
 	} else if __tmp5 == 0x65 {
-		__tmp471 := _f64_le
+		__tmp471 := Operators_f64_le
 		__tmp4 = __tmp471
 	} else if __tmp5 == 0x66 {
-		__tmp472 := _f64_ge
+		__tmp472 := Operators_f64_ge
 		__tmp4 = __tmp472
 	} else if __tmp5 == 0x67 {
-		__tmp473 := _i32_clz
+		__tmp473 := Operators_i32_clz
 		__tmp4 = __tmp473
 	} else if __tmp5 == 0x68 {
-		__tmp474 := _i32_ctz
+		__tmp474 := Operators_i32_ctz
 		__tmp4 = __tmp474
 	} else if __tmp5 == 0x69 {
-		__tmp475 := _i32_popcnt
+		__tmp475 := Operators_i32_popcnt
 		__tmp4 = __tmp475
 	} else if __tmp5 == 0x6a {
-		__tmp476 := _i32_add
+		__tmp476 := Operators_i32_add
 		__tmp4 = __tmp476
 	} else if __tmp5 == 0x6b {
-		__tmp477 := _i32_sub
+		__tmp477 := Operators_i32_sub
 		__tmp4 = __tmp477
 	} else if __tmp5 == 0x6c {
-		__tmp478 := _i32_mul
+		__tmp478 := Operators_i32_mul
 		__tmp4 = __tmp478
 	} else if __tmp5 == 0x6d {
-		__tmp479 := _i32_div_s
+		__tmp479 := Operators_i32_div_s
 		__tmp4 = __tmp479
 	} else if __tmp5 == 0x6e {
-		__tmp480 := _i32_div_u
+		__tmp480 := Operators_i32_div_u
 		__tmp4 = __tmp480
 	} else if __tmp5 == 0x6f {
-		__tmp481 := _i32_rem_s
+		__tmp481 := Operators_i32_rem_s
 		__tmp4 = __tmp481
 	} else if __tmp5 == 0x70 {
-		__tmp482 := _i32_rem_u
+		__tmp482 := Operators_i32_rem_u
 		__tmp4 = __tmp482
 	} else if __tmp5 == 0x71 {
-		__tmp483 := _i32_and
+		__tmp483 := Operators_i32_and
 		__tmp4 = __tmp483
 	} else if __tmp5 == 0x72 {
-		__tmp484 := _i32_or
+		__tmp484 := Operators_i32_or
 		__tmp4 = __tmp484
 	} else if __tmp5 == 0x73 {
-		__tmp485 := _i32_xor
+		__tmp485 := Operators_i32_xor
 		__tmp4 = __tmp485
 	} else if __tmp5 == 0x74 {
-		__tmp486 := _i32_shl
+		__tmp486 := Operators_i32_shl
 		__tmp4 = __tmp486
 	} else if __tmp5 == 0x75 {
-		__tmp487 := _i32_shr_s
+		__tmp487 := Operators_i32_shr_s
 		__tmp4 = __tmp487
 	} else if __tmp5 == 0x76 {
-		__tmp488 := _i32_shr_u
+		__tmp488 := Operators_i32_shr_u
 		__tmp4 = __tmp488
 	} else if __tmp5 == 0x77 {
-		__tmp489 := _i32_rotl
+		__tmp489 := Operators_i32_rotl
 		__tmp4 = __tmp489
 	} else if __tmp5 == 0x78 {
-		__tmp490 := _i32_rotr
+		__tmp490 := Operators_i32_rotr
 		__tmp4 = __tmp490
 	} else if __tmp5 == 0x79 {
-		__tmp491 := _i64_clz
+		__tmp491 := Operators_i64_clz
 		__tmp4 = __tmp491
 	} else if __tmp5 == 0x7a {
-		__tmp492 := _i64_ctz
+		__tmp492 := Operators_i64_ctz
 		__tmp4 = __tmp492
 	} else if __tmp5 == 0x7b {
-		__tmp493 := _i64_popcnt
+		__tmp493 := Operators_i64_popcnt
 		__tmp4 = __tmp493
 	} else if __tmp5 == 0x7c {
-		__tmp494 := _i64_add
+		__tmp494 := Operators_i64_add
 		__tmp4 = __tmp494
 	} else if __tmp5 == 0x7d {
-		__tmp495 := _i64_sub
+		__tmp495 := Operators_i64_sub
 		__tmp4 = __tmp495
 	} else if __tmp5 == 0x7e {
-		__tmp496 := _i64_mul
+		__tmp496 := Operators_i64_mul
 		__tmp4 = __tmp496
 	} else if __tmp5 == 0x7f {
-		__tmp497 := _i64_div_s
+		__tmp497 := Operators_i64_div_s
 		__tmp4 = __tmp497
 	} else if __tmp5 == 0x80 {
-		__tmp498 := _i64_div_u
+		__tmp498 := Operators_i64_div_u
 		__tmp4 = __tmp498
 	} else if __tmp5 == 0x81 {
-		__tmp499 := _i64_rem_s
+		__tmp499 := Operators_i64_rem_s
 		__tmp4 = __tmp499
 	} else if __tmp5 == 0x82 {
-		__tmp500 := _i64_rem_u
+		__tmp500 := Operators_i64_rem_u
 		__tmp4 = __tmp500
 	} else if __tmp5 == 0x83 {
-		__tmp501 := _i64_and
+		__tmp501 := Operators_i64_and
 		__tmp4 = __tmp501
 	} else if __tmp5 == 0x84 {
-		__tmp502 := _i64_or
+		__tmp502 := Operators_i64_or
 		__tmp4 = __tmp502
 	} else if __tmp5 == 0x85 {
-		__tmp503 := _i64_xor
+		__tmp503 := Operators_i64_xor
 		__tmp4 = __tmp503
 	} else if __tmp5 == 0x86 {
-		__tmp504 := _i64_shl
+		__tmp504 := Operators_i64_shl
 		__tmp4 = __tmp504
 	} else if __tmp5 == 0x87 {
-		__tmp505 := _i64_shr_s
+		__tmp505 := Operators_i64_shr_s
 		__tmp4 = __tmp505
 	} else if __tmp5 == 0x88 {
-		__tmp506 := _i64_shr_u
+		__tmp506 := Operators_i64_shr_u
 		__tmp4 = __tmp506
 	} else if __tmp5 == 0x89 {
-		__tmp507 := _i64_rotl
+		__tmp507 := Operators_i64_rotl
 		__tmp4 = __tmp507
 	} else if __tmp5 == 0x8a {
-		__tmp508 := _i64_rotr
+		__tmp508 := Operators_i64_rotr
 		__tmp4 = __tmp508
 	} else if __tmp5 == 0x8b {
-		__tmp509 := _f32_abs
+		__tmp509 := Operators_f32_abs
 		__tmp4 = __tmp509
 	} else if __tmp5 == 0x8c {
-		__tmp510 := _f32_neg
+		__tmp510 := Operators_f32_neg
 		__tmp4 = __tmp510
 	} else if __tmp5 == 0x8d {
-		__tmp511 := _f32_ceil
+		__tmp511 := Operators_f32_ceil
 		__tmp4 = __tmp511
 	} else if __tmp5 == 0x8e {
-		__tmp512 := _f32_floor
+		__tmp512 := Operators_f32_floor
 		__tmp4 = __tmp512
 	} else if __tmp5 == 0x8f {
-		__tmp513 := _f32_trunc
+		__tmp513 := Operators_f32_trunc
 		__tmp4 = __tmp513
 	} else if __tmp5 == 0x90 {
-		__tmp514 := _f32_nearest
+		__tmp514 := Operators_f32_nearest
 		__tmp4 = __tmp514
 	} else if __tmp5 == 0x91 {
-		__tmp515 := _f32_sqrt
+		__tmp515 := Operators_f32_sqrt
 		__tmp4 = __tmp515
 	} else if __tmp5 == 0x92 {
-		__tmp516 := _f32_add
+		__tmp516 := Operators_f32_add
 		__tmp4 = __tmp516
 	} else if __tmp5 == 0x93 {
-		__tmp517 := _f32_sub
+		__tmp517 := Operators_f32_sub
 		__tmp4 = __tmp517
 	} else if __tmp5 == 0x94 {
-		__tmp518 := _f32_mul
+		__tmp518 := Operators_f32_mul
 		__tmp4 = __tmp518
 	} else if __tmp5 == 0x95 {
-		__tmp519 := _f32_div
+		__tmp519 := Operators_f32_div
 		__tmp4 = __tmp519
 	} else if __tmp5 == 0x96 {
-		__tmp520 := _f32_min
+		__tmp520 := Operators_f32_min
 		__tmp4 = __tmp520
 	} else if __tmp5 == 0x97 {
-		__tmp521 := _f32_max
+		__tmp521 := Operators_f32_max
 		__tmp4 = __tmp521
 	} else if __tmp5 == 0x98 {
-		__tmp522 := _f32_copysign
+		__tmp522 := Operators_f32_copysign
 		__tmp4 = __tmp522
 	} else if __tmp5 == 0x99 {
-		__tmp523 := _f64_abs
+		__tmp523 := Operators_f64_abs
 		__tmp4 = __tmp523
 	} else if __tmp5 == 0x9a {
-		__tmp524 := _f64_neg
+		__tmp524 := Operators_f64_neg
 		__tmp4 = __tmp524
 	} else if __tmp5 == 0x9b {
-		__tmp525 := _f64_ceil
+		__tmp525 := Operators_f64_ceil
 		__tmp4 = __tmp525
 	} else if __tmp5 == 0x9c {
-		__tmp526 := _f64_floor
+		__tmp526 := Operators_f64_floor
 		__tmp4 = __tmp526
 	} else if __tmp5 == 0x9d {
-		__tmp527 := _f64_trunc
+		__tmp527 := Operators_f64_trunc
 		__tmp4 = __tmp527
 	} else if __tmp5 == 0x9e {
-		__tmp528 := _f64_nearest
+		__tmp528 := Operators_f64_nearest
 		__tmp4 = __tmp528
 	} else if __tmp5 == 0x9f {
-		__tmp529 := _f64_sqrt
+		__tmp529 := Operators_f64_sqrt
 		__tmp4 = __tmp529
 	} else if __tmp5 == 0xa0 {
-		__tmp530 := _f64_add
+		__tmp530 := Operators_f64_add
 		__tmp4 = __tmp530
 	} else if __tmp5 == 0xa1 {
-		__tmp531 := _f64_sub
+		__tmp531 := Operators_f64_sub
 		__tmp4 = __tmp531
 	} else if __tmp5 == 0xa2 {
-		__tmp532 := _f64_mul
+		__tmp532 := Operators_f64_mul
 		__tmp4 = __tmp532
 	} else if __tmp5 == 0xa3 {
-		__tmp533 := _f64_div
+		__tmp533 := Operators_f64_div
 		__tmp4 = __tmp533
 	} else if __tmp5 == 0xa4 {
-		__tmp534 := _f64_min
+		__tmp534 := Operators_f64_min
 		__tmp4 = __tmp534
 	} else if __tmp5 == 0xa5 {
-		__tmp535 := _f64_max
+		__tmp535 := Operators_f64_max
 		__tmp4 = __tmp535
 	} else if __tmp5 == 0xa6 {
-		__tmp536 := _f64_copysign
+		__tmp536 := Operators_f64_copysign
 		__tmp4 = __tmp536
 	} else if __tmp5 == 0xa7 {
-		__tmp537 := _i32_wrap_i64
+		__tmp537 := Operators_i32_wrap_i64
 		__tmp4 = __tmp537
 	} else if __tmp5 == 0xa8 {
-		__tmp538 := _i32_trunc_f32_s
+		__tmp538 := Operators_i32_trunc_f32_s
 		__tmp4 = __tmp538
 	} else if __tmp5 == 0xa9 {
-		__tmp539 := _i32_trunc_f32_u
+		__tmp539 := Operators_i32_trunc_f32_u
 		__tmp4 = __tmp539
 	} else if __tmp5 == 0xaa {
-		__tmp540 := _i32_trunc_f64_s
+		__tmp540 := Operators_i32_trunc_f64_s
 		__tmp4 = __tmp540
 	} else if __tmp5 == 0xab {
-		__tmp541 := _i32_trunc_f64_u
+		__tmp541 := Operators_i32_trunc_f64_u
 		__tmp4 = __tmp541
 	} else if __tmp5 == 0xac {
-		__tmp542 := _i64_extend_i32_s
+		__tmp542 := Operators_i64_extend_i32_s
 		__tmp4 = __tmp542
 	} else if __tmp5 == 0xad {
-		__tmp543 := _i64_extend_i32_u
+		__tmp543 := Operators_i64_extend_i32_u
 		__tmp4 = __tmp543
 	} else if __tmp5 == 0xae {
-		__tmp544 := _i64_trunc_f32_s
+		__tmp544 := Operators_i64_trunc_f32_s
 		__tmp4 = __tmp544
 	} else if __tmp5 == 0xaf {
-		__tmp545 := _i64_trunc_f32_u
+		__tmp545 := Operators_i64_trunc_f32_u
 		__tmp4 = __tmp545
 	} else if __tmp5 == 0xb0 {
-		__tmp546 := _i64_trunc_f64_s
+		__tmp546 := Operators_i64_trunc_f64_s
 		__tmp4 = __tmp546
 	} else if __tmp5 == 0xb1 {
-		__tmp547 := _i64_trunc_f64_u
+		__tmp547 := Operators_i64_trunc_f64_u
 		__tmp4 = __tmp547
 	} else if __tmp5 == 0xb2 {
-		__tmp548 := _f32_convert_i32_s
+		__tmp548 := Operators_f32_convert_i32_s
 		__tmp4 = __tmp548
 	} else if __tmp5 == 0xb3 {
-		__tmp549 := _f32_convert_i32_u
+		__tmp549 := Operators_f32_convert_i32_u
 		__tmp4 = __tmp549
 	} else if __tmp5 == 0xb4 {
-		__tmp550 := _f32_convert_i64_s
+		__tmp550 := Operators_f32_convert_i64_s
 		__tmp4 = __tmp550
 	} else if __tmp5 == 0xb5 {
-		__tmp551 := _f32_convert_i64_u
+		__tmp551 := Operators_f32_convert_i64_u
 		__tmp4 = __tmp551
 	} else if __tmp5 == 0xb6 {
-		__tmp552 := _f32_demote_f64
+		__tmp552 := Operators_f32_demote_f64
 		__tmp4 = __tmp552
 	} else if __tmp5 == 0xb7 {
-		__tmp553 := _f64_convert_i32_s
+		__tmp553 := Operators_f64_convert_i32_s
 		__tmp4 = __tmp553
 	} else if __tmp5 == 0xb8 {
-		__tmp554 := _f64_convert_i32_u
+		__tmp554 := Operators_f64_convert_i32_u
 		__tmp4 = __tmp554
 	} else if __tmp5 == 0xb9 {
-		__tmp555 := _f64_convert_i64_s
+		__tmp555 := Operators_f64_convert_i64_s
 		__tmp4 = __tmp555
 	} else if __tmp5 == 0xba {
-		__tmp556 := _f64_convert_i64_u
+		__tmp556 := Operators_f64_convert_i64_u
 		__tmp4 = __tmp556
 	} else if __tmp5 == 0xbb {
-		__tmp557 := _f64_promote_f32
+		__tmp557 := Operators_f64_promote_f32
 		__tmp4 = __tmp557
 	} else if __tmp5 == 0xbc {
-		__tmp558 := _i32_reinterpret_f32
+		__tmp558 := Operators_i32_reinterpret_f32
 		__tmp4 = __tmp558
 	} else if __tmp5 == 0xbd {
-		__tmp559 := _i64_reinterpret_f64
+		__tmp559 := Operators_i64_reinterpret_f64
 		__tmp4 = __tmp559
 	} else if __tmp5 == 0xbe {
-		__tmp560 := _f32_reinterpret_i32
+		__tmp560 := Operators_f32_reinterpret_i32
 		__tmp4 = __tmp560
 	} else if __tmp5 == 0xbf {
-		__tmp561 := _f64_reinterpret_i64
+		__tmp561 := Operators_f64_reinterpret_i64
 		__tmp4 = __tmp561
 	} else if __tmp5 == 0xc0 {
-		__tmp562 := _i32_extend8_s
+		__tmp562 := Operators_i32_extend8_s
 		__tmp4 = __tmp562
 	} else if __tmp5 == 0xc1 {
-		__tmp563 := _i32_extend16_s
+		__tmp563 := Operators_i32_extend16_s
 		__tmp4 = __tmp563
 	} else if __tmp5 == 0xc2 {
-		__tmp564 := _i64_extend8_s
+		__tmp564 := Operators_i64_extend8_s
 		__tmp4 = __tmp564
 	} else if __tmp5 == 0xc3 {
-		__tmp565 := _i64_extend16_s
+		__tmp565 := Operators_i64_extend16_s
 		__tmp4 = __tmp565
 	} else if __tmp5 == 0xc4 {
-		__tmp566 := _i64_extend32_s
+		__tmp566 := Operators_i64_extend32_s
 		__tmp4 = __tmp566
 	} else if __tmp5 == 0xc5 || __tmp5 == 0xc6 || __tmp5 == 0xc7 || __tmp5 == 0xc8 || __tmp5 == 0xc9 || __tmp5 == 0xca || __tmp5 == 0xcb || __tmp5 == 0xcc || __tmp5 == 0xcd || __tmp5 == 0xce || __tmp5 == 0xcf {
 		_b := __tmp5
-		__tmp568 := illegal_3(_s, _pos, _b)
+		__tmp568 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp568
 	} else if __tmp5 == 0xd0 {
 		__tmp572 := Operators_ref_null_1(Decode_heap_type_1(_s))
 		__tmp4 = __tmp572
 	} else if __tmp5 == 0xd1 {
-		__tmp575 := _ref_is_null
+		__tmp575 := Operators_ref_is_null
 		__tmp4 = __tmp575
 	} else if __tmp5 == 0xd2 {
-		__tmp576 := Operators_ref_func_1(at_2(Decode_var, _s))
+		__tmp576 := Operators_ref_func_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp576
 	} else if __tmp5 == 0xd3 {
-		__tmp580 := _ref_eq
+		__tmp580 := Operators_ref_eq
 		__tmp4 = __tmp580
 	} else if __tmp5 == 0xd4 {
-		__tmp581 := _ref_as_non_null
+		__tmp581 := Operators_ref_as_non_null
 		__tmp4 = __tmp581
 	} else if __tmp5 == 0xd5 {
-		__tmp582 := Operators_br_on_null_1(at_2(Decode_var, _s))
+		__tmp582 := Operators_br_on_null_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp582
 	} else if __tmp5 == 0xd6 {
-		__tmp586 := Operators_br_on_non_null_1(at_2(Decode_var, _s))
+		__tmp586 := Operators_br_on_non_null_1(Source_at_2(Decode_var, _s))
 		__tmp4 = __tmp586
 	} else if __tmp5 == 0xfb {
 		_b := __tmp5
 		var __tmp591 OAst_instr_
 		__tmp592 := Decode_u32_1(_s)
 		if __tmp592 == 0x00 {
-			__tmp595 := Operators_struct_new_1(at_2(Decode_var, _s))
+			__tmp595 := Operators_struct_new_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp595
 		} else if __tmp592 == 0x01 {
-			__tmp599 := Operators_struct_new_default_1(at_2(Decode_var, _s))
+			__tmp599 := Operators_struct_new_default_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp599
 		} else if __tmp592 == 0x02 {
-			__tmp603 := at_2(Decode_var, _s)
+			__tmp603 := Source_at_2(Decode_var, _s)
 			_x := __tmp603
-			__tmp607 := at_2(Decode_var, _s)
+			__tmp607 := Source_at_2(Decode_var, _s)
 			_y := __tmp607
 			__tmp611 := Operators_struct_get_2(_x, _y)
 			__tmp591 = __tmp611
 		} else if __tmp592 == 0x03 {
-			__tmp614 := at_2(Decode_var, _s)
+			__tmp614 := Source_at_2(Decode_var, _s)
 			_x := __tmp614
-			__tmp618 := at_2(Decode_var, _s)
+			__tmp618 := Source_at_2(Decode_var, _s)
 			_y := __tmp618
 			__tmp622 := Operators_struct_get_s_2(_x, _y)
 			__tmp591 = __tmp622
 		} else if __tmp592 == 0x04 {
-			__tmp625 := at_2(Decode_var, _s)
+			__tmp625 := Source_at_2(Decode_var, _s)
 			_x := __tmp625
-			__tmp629 := at_2(Decode_var, _s)
+			__tmp629 := Source_at_2(Decode_var, _s)
 			_y := __tmp629
 			__tmp633 := Operators_struct_get_u_2(_x, _y)
 			__tmp591 = __tmp633
 		} else if __tmp592 == 0x05 {
-			__tmp636 := at_2(Decode_var, _s)
+			__tmp636 := Source_at_2(Decode_var, _s)
 			_x := __tmp636
-			__tmp640 := at_2(Decode_var, _s)
+			__tmp640 := Source_at_2(Decode_var, _s)
 			_y := __tmp640
 			__tmp644 := Operators_struct_set_2(_x, _y)
 			__tmp591 = __tmp644
 		} else if __tmp592 == 0x06 {
-			__tmp647 := Operators_array_new_1(at_2(Decode_var, _s))
+			__tmp647 := Operators_array_new_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp647
 		} else if __tmp592 == 0x07 {
-			__tmp651 := Operators_array_new_default_1(at_2(Decode_var, _s))
+			__tmp651 := Operators_array_new_default_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp651
 		} else if __tmp592 == 0x08 {
-			__tmp655 := at_2(Decode_var, _s)
+			__tmp655 := Source_at_2(Decode_var, _s)
 			_x := __tmp655
 			__tmp659 := Decode_u32_1(_s)
 			_n := __tmp659
 			__tmp662 := Operators_array_new_fixed_2(_x, _n)
 			__tmp591 = __tmp662
 		} else if __tmp592 == 0x09 {
-			__tmp665 := at_2(Decode_var, _s)
+			__tmp665 := Source_at_2(Decode_var, _s)
 			_x := __tmp665
-			__tmp669 := at_2(Decode_var, _s)
+			__tmp669 := Source_at_2(Decode_var, _s)
 			_y := __tmp669
 			__tmp673 := Operators_array_new_data_2(_x, _y)
 			__tmp591 = __tmp673
 		} else if __tmp592 == 0x0a {
-			__tmp676 := at_2(Decode_var, _s)
+			__tmp676 := Source_at_2(Decode_var, _s)
 			_x := __tmp676
-			__tmp680 := at_2(Decode_var, _s)
+			__tmp680 := Source_at_2(Decode_var, _s)
 			_y := __tmp680
 			__tmp684 := Operators_array_new_elem_2(_x, _y)
 			__tmp591 = __tmp684
 		} else if __tmp592 == 0x0b {
-			__tmp687 := Operators_array_get_1(at_2(Decode_var, _s))
+			__tmp687 := Operators_array_get_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp687
 		} else if __tmp592 == 0x0c {
-			__tmp691 := Operators_array_get_s_1(at_2(Decode_var, _s))
+			__tmp691 := Operators_array_get_s_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp691
 		} else if __tmp592 == 0x0d {
-			__tmp695 := Operators_array_get_u_1(at_2(Decode_var, _s))
+			__tmp695 := Operators_array_get_u_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp695
 		} else if __tmp592 == 0x0e {
-			__tmp699 := Operators_array_set_1(at_2(Decode_var, _s))
+			__tmp699 := Operators_array_set_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp699
 		} else if __tmp592 == 0x0f {
-			__tmp703 := _array_len
+			__tmp703 := Operators_array_len
 			__tmp591 = __tmp703
 		} else if __tmp592 == 0x10 {
-			__tmp704 := Operators_array_fill_1(at_2(Decode_var, _s))
+			__tmp704 := Operators_array_fill_1(Source_at_2(Decode_var, _s))
 			__tmp591 = __tmp704
 		} else if __tmp592 == 0x11 {
-			__tmp708 := at_2(Decode_var, _s)
+			__tmp708 := Source_at_2(Decode_var, _s)
 			_x := __tmp708
-			__tmp712 := at_2(Decode_var, _s)
+			__tmp712 := Source_at_2(Decode_var, _s)
 			_y := __tmp712
 			__tmp716 := Operators_array_copy_2(_x, _y)
 			__tmp591 = __tmp716
 		} else if __tmp592 == 0x12 {
-			__tmp719 := at_2(Decode_var, _s)
+			__tmp719 := Source_at_2(Decode_var, _s)
 			_x := __tmp719
-			__tmp723 := at_2(Decode_var, _s)
+			__tmp723 := Source_at_2(Decode_var, _s)
 			_y := __tmp723
 			__tmp727 := Operators_array_init_data_2(_x, _y)
 			__tmp591 = __tmp727
 		} else if __tmp592 == 0x13 {
-			__tmp730 := at_2(Decode_var, _s)
+			__tmp730 := Source_at_2(Decode_var, _s)
 			_x := __tmp730
-			__tmp734 := at_2(Decode_var, _s)
+			__tmp734 := Source_at_2(Decode_var, _s)
 			_y := __tmp734
 			__tmp738 := Operators_array_init_elem_2(_x, _y)
 			__tmp591 = __tmp738
@@ -8016,9 +7700,9 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			_opcode := __tmp592
 			__tmp766 := Decode_byte_1(_s)
 			_flags := __tmp766
-			__tmp769 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
+			__tmp769 := Decode_require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp769
-			__tmp776 := at_2(Decode_var, _s)
+			__tmp776 := Source_at_2(Decode_var, _s)
 			_x := __tmp776
 			__tmp780 := struct {
 				F0 OTypes_null
@@ -8054,23 +7738,23 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 
 			__tmp591 = __tmp802
 		} else if __tmp592 == 0x1a {
-			__tmp806 := _any_convert_extern
+			__tmp806 := Operators_any_convert_extern
 			__tmp591 = __tmp806
 		} else if __tmp592 == 0x1b {
-			__tmp807 := _extern_convert_any
+			__tmp807 := Operators_extern_convert_any
 			__tmp591 = __tmp807
 		} else if __tmp592 == 0x1c {
-			__tmp808 := _ref_i31
+			__tmp808 := Operators_ref_i31
 			__tmp591 = __tmp808
 		} else if __tmp592 == 0x1d {
-			__tmp809 := _i31_get_s
+			__tmp809 := Operators_i31_get_s
 			__tmp591 = __tmp809
 		} else if __tmp592 == 0x1e {
-			__tmp810 := _i31_get_u
+			__tmp810 := Operators_i31_get_u
 			__tmp591 = __tmp810
 		} else if _n := __tmp592; true {
 			_ = _n
-			__tmp813 := illegal2_4(_s, _pos, _b, _n)
+			__tmp813 := Decode_illegal2_4(_s, _pos, _b, _n)
 			__tmp591 = __tmp813
 		}
 		__tmp4 = __tmp591
@@ -8079,78 +7763,78 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		var __tmp819 OAst_instr_
 		__tmp820 := Decode_u32_1(_s)
 		if __tmp820 == 0x00 {
-			__tmp823 := _i32_trunc_sat_f32_s
+			__tmp823 := Operators_i32_trunc_sat_f32_s
 			__tmp819 = __tmp823
 		} else if __tmp820 == 0x01 {
-			__tmp824 := _i32_trunc_sat_f32_u
+			__tmp824 := Operators_i32_trunc_sat_f32_u
 			__tmp819 = __tmp824
 		} else if __tmp820 == 0x02 {
-			__tmp825 := _i32_trunc_sat_f64_s
+			__tmp825 := Operators_i32_trunc_sat_f64_s
 			__tmp819 = __tmp825
 		} else if __tmp820 == 0x03 {
-			__tmp826 := _i32_trunc_sat_f64_u
+			__tmp826 := Operators_i32_trunc_sat_f64_u
 			__tmp819 = __tmp826
 		} else if __tmp820 == 0x04 {
-			__tmp827 := _i64_trunc_sat_f32_s
+			__tmp827 := Operators_i64_trunc_sat_f32_s
 			__tmp819 = __tmp827
 		} else if __tmp820 == 0x05 {
-			__tmp828 := _i64_trunc_sat_f32_u
+			__tmp828 := Operators_i64_trunc_sat_f32_u
 			__tmp819 = __tmp828
 		} else if __tmp820 == 0x06 {
-			__tmp829 := _i64_trunc_sat_f64_s
+			__tmp829 := Operators_i64_trunc_sat_f64_s
 			__tmp819 = __tmp829
 		} else if __tmp820 == 0x07 {
-			__tmp830 := _i64_trunc_sat_f64_u
+			__tmp830 := Operators_i64_trunc_sat_f64_u
 			__tmp819 = __tmp830
 		} else if __tmp820 == 0x08 {
-			__tmp831 := at_2(Decode_var, _s)
+			__tmp831 := Source_at_2(Decode_var, _s)
 			_y := __tmp831
-			__tmp835 := at_2(Decode_var, _s)
+			__tmp835 := Source_at_2(Decode_var, _s)
 			_x := __tmp835
 			__tmp839 := Operators_memory_init_2(_x, _y)
 			__tmp819 = __tmp839
 		} else if __tmp820 == 0x09 {
-			__tmp842 := Operators_data_drop_1(at_2(Decode_var, _s))
+			__tmp842 := Operators_data_drop_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp842
 		} else if __tmp820 == 0x0a {
-			__tmp846 := at_2(Decode_var, _s)
+			__tmp846 := Source_at_2(Decode_var, _s)
 			_x := __tmp846
-			__tmp850 := at_2(Decode_var, _s)
+			__tmp850 := Source_at_2(Decode_var, _s)
 			_y := __tmp850
 			__tmp854 := Operators_memory_copy_2(_x, _y)
 			__tmp819 = __tmp854
 		} else if __tmp820 == 0x0b {
-			__tmp857 := Operators_memory_fill_1(at_2(Decode_var, _s))
+			__tmp857 := Operators_memory_fill_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp857
 		} else if __tmp820 == 0x0c {
-			__tmp861 := at_2(Decode_var, _s)
+			__tmp861 := Source_at_2(Decode_var, _s)
 			_y := __tmp861
-			__tmp865 := at_2(Decode_var, _s)
+			__tmp865 := Source_at_2(Decode_var, _s)
 			_x := __tmp865
 			__tmp869 := Operators_table_init_2(_x, _y)
 			__tmp819 = __tmp869
 		} else if __tmp820 == 0x0d {
-			__tmp872 := Operators_elem_drop_1(at_2(Decode_var, _s))
+			__tmp872 := Operators_elem_drop_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp872
 		} else if __tmp820 == 0x0e {
-			__tmp876 := at_2(Decode_var, _s)
+			__tmp876 := Source_at_2(Decode_var, _s)
 			_x := __tmp876
-			__tmp880 := at_2(Decode_var, _s)
+			__tmp880 := Source_at_2(Decode_var, _s)
 			_y := __tmp880
 			__tmp884 := Operators_table_copy_2(_x, _y)
 			__tmp819 = __tmp884
 		} else if __tmp820 == 0x0f {
-			__tmp887 := Operators_table_grow_1(at_2(Decode_var, _s))
+			__tmp887 := Operators_table_grow_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp887
 		} else if __tmp820 == 0x10 {
-			__tmp891 := Operators_table_size_1(at_2(Decode_var, _s))
+			__tmp891 := Operators_table_size_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp891
 		} else if __tmp820 == 0x11 {
-			__tmp895 := Operators_table_fill_1(at_2(Decode_var, _s))
+			__tmp895 := Operators_table_fill_1(Source_at_2(Decode_var, _s))
 			__tmp819 = __tmp895
 		} else if _n := __tmp820; true {
 			_ = _n
-			__tmp901 := illegal2_4(_s, _pos, _b, _n)
+			__tmp901 := Decode_illegal2_4(_s, _pos, _b, _n)
 			__tmp819 = __tmp901
 		}
 		__tmp4 = __tmp819
@@ -8159,66 +7843,66 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp907 := Decode_u32_1(_s)
 		if __tmp907 == 0x00 {
 			__tmp910 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp910)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp910)
 			__tmp915 := Operators_v128_load_3(_x, _a, _o)
 			__tmp906 = __tmp915
 		} else if __tmp907 == 0x01 {
 			__tmp919 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp919)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp919)
 			__tmp924 := Operators_v128_load8x8_s_3(_x, _a, _o)
 			__tmp906 = __tmp924
 		} else if __tmp907 == 0x02 {
 			__tmp928 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp928)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp928)
 			__tmp933 := Operators_v128_load8x8_u_3(_x, _a, _o)
 			__tmp906 = __tmp933
 		} else if __tmp907 == 0x03 {
 			__tmp937 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp937)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp937)
 			__tmp942 := Operators_v128_load16x4_s_3(_x, _a, _o)
 			__tmp906 = __tmp942
 		} else if __tmp907 == 0x04 {
 			__tmp946 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp946)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp946)
 			__tmp951 := Operators_v128_load16x4_u_3(_x, _a, _o)
 			__tmp906 = __tmp951
 		} else if __tmp907 == 0x05 {
 			__tmp955 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp955)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp955)
 			__tmp960 := Operators_v128_load32x2_s_3(_x, _a, _o)
 			__tmp906 = __tmp960
 		} else if __tmp907 == 0x06 {
 			__tmp964 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp964)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp964)
 			__tmp969 := Operators_v128_load32x2_u_3(_x, _a, _o)
 			__tmp906 = __tmp969
 		} else if __tmp907 == 0x07 {
 			__tmp973 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp973)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp973)
 			__tmp978 := Operators_v128_load8_splat_3(_x, _a, _o)
 			__tmp906 = __tmp978
 		} else if __tmp907 == 0x08 {
 			__tmp982 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp982)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp982)
 			__tmp987 := Operators_v128_load16_splat_3(_x, _a, _o)
 			__tmp906 = __tmp987
 		} else if __tmp907 == 0x09 {
 			__tmp991 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp991)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp991)
 			__tmp996 := Operators_v128_load32_splat_3(_x, _a, _o)
 			__tmp906 = __tmp996
 		} else if __tmp907 == 0x0a {
 			__tmp1000 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1000)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1000)
 			__tmp1005 := Operators_v128_load64_splat_3(_x, _a, _o)
 			__tmp906 = __tmp1005
 		} else if __tmp907 == 0x0b {
 			__tmp1009 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1009)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1009)
 			__tmp1014 := Operators_v128_store_3(_x, _a, _o)
 			__tmp906 = __tmp1014
 		} else if __tmp907 == 0x0c {
-			__tmp1018 := Operators_v128_const_1(at_2(Decode_v128, _s))
+			__tmp1018 := Operators_v128_const_1(Source_at_2(Decode_v128, _s))
 			__tmp906 = __tmp1018
 		} else if __tmp907 == 0x0d {
 			__tmp1022 := Operators_i8x16_shuffle_1(List_init_2(16, func(__ OInt) OInt {
@@ -8227,25 +7911,25 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			}))
 			__tmp906 = __tmp1022
 		} else if __tmp907 == 0x0e {
-			__tmp1026 := _i8x16_swizzle
+			__tmp1026 := Operators_i8x16_swizzle
 			__tmp906 = __tmp1026
 		} else if __tmp907 == 0x0f {
-			__tmp1027 := _i8x16_splat
+			__tmp1027 := Operators_i8x16_splat
 			__tmp906 = __tmp1027
 		} else if __tmp907 == 0x10 {
-			__tmp1028 := _i16x8_splat
+			__tmp1028 := Operators_i16x8_splat
 			__tmp906 = __tmp1028
 		} else if __tmp907 == 0x11 {
-			__tmp1029 := _i32x4_splat
+			__tmp1029 := Operators_i32x4_splat
 			__tmp906 = __tmp1029
 		} else if __tmp907 == 0x12 {
-			__tmp1030 := _i64x2_splat
+			__tmp1030 := Operators_i64x2_splat
 			__tmp906 = __tmp1030
 		} else if __tmp907 == 0x13 {
-			__tmp1031 := _f32x4_splat
+			__tmp1031 := Operators_f32x4_splat
 			__tmp906 = __tmp1031
 		} else if __tmp907 == 0x14 {
-			__tmp1032 := _f64x2_splat
+			__tmp1032 := Operators_f64x2_splat
 			__tmp906 = __tmp1032
 		} else if __tmp907 == 0x15 {
 			__tmp1033 := Decode_byte_1(_s)
@@ -8318,753 +8002,753 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp1101 := Operators_f64x2_replace_lane_1(_i)
 			__tmp906 = __tmp1101
 		} else if __tmp907 == 0x23 {
-			__tmp1103 := _i8x16_eq
+			__tmp1103 := Operators_i8x16_eq
 			__tmp906 = __tmp1103
 		} else if __tmp907 == 0x24 {
-			__tmp1104 := _i8x16_ne
+			__tmp1104 := Operators_i8x16_ne
 			__tmp906 = __tmp1104
 		} else if __tmp907 == 0x25 {
-			__tmp1105 := _i8x16_lt_s
+			__tmp1105 := Operators_i8x16_lt_s
 			__tmp906 = __tmp1105
 		} else if __tmp907 == 0x26 {
-			__tmp1106 := _i8x16_lt_u
+			__tmp1106 := Operators_i8x16_lt_u
 			__tmp906 = __tmp1106
 		} else if __tmp907 == 0x27 {
-			__tmp1107 := _i8x16_gt_s
+			__tmp1107 := Operators_i8x16_gt_s
 			__tmp906 = __tmp1107
 		} else if __tmp907 == 0x28 {
-			__tmp1108 := _i8x16_gt_u
+			__tmp1108 := Operators_i8x16_gt_u
 			__tmp906 = __tmp1108
 		} else if __tmp907 == 0x29 {
-			__tmp1109 := _i8x16_le_s
+			__tmp1109 := Operators_i8x16_le_s
 			__tmp906 = __tmp1109
 		} else if __tmp907 == 0x2a {
-			__tmp1110 := _i8x16_le_u
+			__tmp1110 := Operators_i8x16_le_u
 			__tmp906 = __tmp1110
 		} else if __tmp907 == 0x2b {
-			__tmp1111 := _i8x16_ge_s
+			__tmp1111 := Operators_i8x16_ge_s
 			__tmp906 = __tmp1111
 		} else if __tmp907 == 0x2c {
-			__tmp1112 := _i8x16_ge_u
+			__tmp1112 := Operators_i8x16_ge_u
 			__tmp906 = __tmp1112
 		} else if __tmp907 == 0x2d {
-			__tmp1113 := _i16x8_eq
+			__tmp1113 := Operators_i16x8_eq
 			__tmp906 = __tmp1113
 		} else if __tmp907 == 0x2e {
-			__tmp1114 := _i16x8_ne
+			__tmp1114 := Operators_i16x8_ne
 			__tmp906 = __tmp1114
 		} else if __tmp907 == 0x2f {
-			__tmp1115 := _i16x8_lt_s
+			__tmp1115 := Operators_i16x8_lt_s
 			__tmp906 = __tmp1115
 		} else if __tmp907 == 0x30 {
-			__tmp1116 := _i16x8_lt_u
+			__tmp1116 := Operators_i16x8_lt_u
 			__tmp906 = __tmp1116
 		} else if __tmp907 == 0x31 {
-			__tmp1117 := _i16x8_gt_s
+			__tmp1117 := Operators_i16x8_gt_s
 			__tmp906 = __tmp1117
 		} else if __tmp907 == 0x32 {
-			__tmp1118 := _i16x8_gt_u
+			__tmp1118 := Operators_i16x8_gt_u
 			__tmp906 = __tmp1118
 		} else if __tmp907 == 0x33 {
-			__tmp1119 := _i16x8_le_s
+			__tmp1119 := Operators_i16x8_le_s
 			__tmp906 = __tmp1119
 		} else if __tmp907 == 0x34 {
-			__tmp1120 := _i16x8_le_u
+			__tmp1120 := Operators_i16x8_le_u
 			__tmp906 = __tmp1120
 		} else if __tmp907 == 0x35 {
-			__tmp1121 := _i16x8_ge_s
+			__tmp1121 := Operators_i16x8_ge_s
 			__tmp906 = __tmp1121
 		} else if __tmp907 == 0x36 {
-			__tmp1122 := _i16x8_ge_u
+			__tmp1122 := Operators_i16x8_ge_u
 			__tmp906 = __tmp1122
 		} else if __tmp907 == 0x37 {
-			__tmp1123 := _i32x4_eq
+			__tmp1123 := Operators_i32x4_eq
 			__tmp906 = __tmp1123
 		} else if __tmp907 == 0x38 {
-			__tmp1124 := _i32x4_ne
+			__tmp1124 := Operators_i32x4_ne
 			__tmp906 = __tmp1124
 		} else if __tmp907 == 0x39 {
-			__tmp1125 := _i32x4_lt_s
+			__tmp1125 := Operators_i32x4_lt_s
 			__tmp906 = __tmp1125
 		} else if __tmp907 == 0x3a {
-			__tmp1126 := _i32x4_lt_u
+			__tmp1126 := Operators_i32x4_lt_u
 			__tmp906 = __tmp1126
 		} else if __tmp907 == 0x3b {
-			__tmp1127 := _i32x4_gt_s
+			__tmp1127 := Operators_i32x4_gt_s
 			__tmp906 = __tmp1127
 		} else if __tmp907 == 0x3c {
-			__tmp1128 := _i32x4_gt_u
+			__tmp1128 := Operators_i32x4_gt_u
 			__tmp906 = __tmp1128
 		} else if __tmp907 == 0x3d {
-			__tmp1129 := _i32x4_le_s
+			__tmp1129 := Operators_i32x4_le_s
 			__tmp906 = __tmp1129
 		} else if __tmp907 == 0x3e {
-			__tmp1130 := _i32x4_le_u
+			__tmp1130 := Operators_i32x4_le_u
 			__tmp906 = __tmp1130
 		} else if __tmp907 == 0x3f {
-			__tmp1131 := _i32x4_ge_s
+			__tmp1131 := Operators_i32x4_ge_s
 			__tmp906 = __tmp1131
 		} else if __tmp907 == 0x40 {
-			__tmp1132 := _i32x4_ge_u
+			__tmp1132 := Operators_i32x4_ge_u
 			__tmp906 = __tmp1132
 		} else if __tmp907 == 0x41 {
-			__tmp1133 := _f32x4_eq
+			__tmp1133 := Operators_f32x4_eq
 			__tmp906 = __tmp1133
 		} else if __tmp907 == 0x42 {
-			__tmp1134 := _f32x4_ne
+			__tmp1134 := Operators_f32x4_ne
 			__tmp906 = __tmp1134
 		} else if __tmp907 == 0x43 {
-			__tmp1135 := _f32x4_lt
+			__tmp1135 := Operators_f32x4_lt
 			__tmp906 = __tmp1135
 		} else if __tmp907 == 0x44 {
-			__tmp1136 := _f32x4_gt
+			__tmp1136 := Operators_f32x4_gt
 			__tmp906 = __tmp1136
 		} else if __tmp907 == 0x45 {
-			__tmp1137 := _f32x4_le
+			__tmp1137 := Operators_f32x4_le
 			__tmp906 = __tmp1137
 		} else if __tmp907 == 0x46 {
-			__tmp1138 := _f32x4_ge
+			__tmp1138 := Operators_f32x4_ge
 			__tmp906 = __tmp1138
 		} else if __tmp907 == 0x47 {
-			__tmp1139 := _f64x2_eq
+			__tmp1139 := Operators_f64x2_eq
 			__tmp906 = __tmp1139
 		} else if __tmp907 == 0x48 {
-			__tmp1140 := _f64x2_ne
+			__tmp1140 := Operators_f64x2_ne
 			__tmp906 = __tmp1140
 		} else if __tmp907 == 0x49 {
-			__tmp1141 := _f64x2_lt
+			__tmp1141 := Operators_f64x2_lt
 			__tmp906 = __tmp1141
 		} else if __tmp907 == 0x4a {
-			__tmp1142 := _f64x2_gt
+			__tmp1142 := Operators_f64x2_gt
 			__tmp906 = __tmp1142
 		} else if __tmp907 == 0x4b {
-			__tmp1143 := _f64x2_le
+			__tmp1143 := Operators_f64x2_le
 			__tmp906 = __tmp1143
 		} else if __tmp907 == 0x4c {
-			__tmp1144 := _f64x2_ge
+			__tmp1144 := Operators_f64x2_ge
 			__tmp906 = __tmp1144
 		} else if __tmp907 == 0x4d {
-			__tmp1145 := _v128_not
+			__tmp1145 := Operators_v128_not
 			__tmp906 = __tmp1145
 		} else if __tmp907 == 0x4e {
-			__tmp1146 := _v128_and
+			__tmp1146 := Operators_v128_and
 			__tmp906 = __tmp1146
 		} else if __tmp907 == 0x4f {
-			__tmp1147 := _v128_andnot
+			__tmp1147 := Operators_v128_andnot
 			__tmp906 = __tmp1147
 		} else if __tmp907 == 0x50 {
-			__tmp1148 := _v128_or
+			__tmp1148 := Operators_v128_or
 			__tmp906 = __tmp1148
 		} else if __tmp907 == 0x51 {
-			__tmp1149 := _v128_xor
+			__tmp1149 := Operators_v128_xor
 			__tmp906 = __tmp1149
 		} else if __tmp907 == 0x52 {
-			__tmp1150 := _v128_bitselect
+			__tmp1150 := Operators_v128_bitselect
 			__tmp906 = __tmp1150
 		} else if __tmp907 == 0x53 {
-			__tmp1151 := _v128_any_true
+			__tmp1151 := Operators_v128_any_true
 			__tmp906 = __tmp1151
 		} else if __tmp907 == 0x54 {
 			__tmp1152 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1152)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1152)
 			__tmp1157 := Decode_byte_1(_s)
 			_lane := __tmp1157
 			__tmp1160 := Operators_v128_load8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1160
 		} else if __tmp907 == 0x55 {
 			__tmp1165 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1165)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1165)
 			__tmp1170 := Decode_byte_1(_s)
 			_lane := __tmp1170
 			__tmp1173 := Operators_v128_load16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1173
 		} else if __tmp907 == 0x56 {
 			__tmp1178 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1178)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1178)
 			__tmp1183 := Decode_byte_1(_s)
 			_lane := __tmp1183
 			__tmp1186 := Operators_v128_load32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1186
 		} else if __tmp907 == 0x57 {
 			__tmp1191 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1191)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1191)
 			__tmp1196 := Decode_byte_1(_s)
 			_lane := __tmp1196
 			__tmp1199 := Operators_v128_load64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1199
 		} else if __tmp907 == 0x58 {
 			__tmp1204 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1204)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1204)
 			__tmp1209 := Decode_byte_1(_s)
 			_lane := __tmp1209
 			__tmp1212 := Operators_v128_store8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1212
 		} else if __tmp907 == 0x59 {
 			__tmp1217 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1217)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1217)
 			__tmp1222 := Decode_byte_1(_s)
 			_lane := __tmp1222
 			__tmp1225 := Operators_v128_store16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1225
 		} else if __tmp907 == 0x5a {
 			__tmp1230 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1230)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1230)
 			__tmp1235 := Decode_byte_1(_s)
 			_lane := __tmp1235
 			__tmp1238 := Operators_v128_store32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1238
 		} else if __tmp907 == 0x5b {
 			__tmp1243 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1243)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1243)
 			__tmp1248 := Decode_byte_1(_s)
 			_lane := __tmp1248
 			__tmp1251 := Operators_v128_store64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1251
 		} else if __tmp907 == 0x5c {
 			__tmp1256 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1256)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1256)
 			__tmp1261 := Operators_v128_load32_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1261
 		} else if __tmp907 == 0x5d {
 			__tmp1265 := Decode_memop_1(_s)
-			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1265)
+			_x, _a, _o := __unpack_Types_local_idx_Source_phrase___OInt___OInt64(__tmp1265)
 			__tmp1270 := Operators_v128_load64_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1270
 		} else if __tmp907 == 0x5e {
-			__tmp1274 := _f32x4_demote_f64x2_zero
+			__tmp1274 := Operators_f32x4_demote_f64x2_zero
 			__tmp906 = __tmp1274
 		} else if __tmp907 == 0x5f {
-			__tmp1275 := _f64x2_promote_low_f32x4
+			__tmp1275 := Operators_f64x2_promote_low_f32x4
 			__tmp906 = __tmp1275
 		} else if __tmp907 == 0x60 {
-			__tmp1276 := _i8x16_abs
+			__tmp1276 := Operators_i8x16_abs
 			__tmp906 = __tmp1276
 		} else if __tmp907 == 0x61 {
-			__tmp1277 := _i8x16_neg
+			__tmp1277 := Operators_i8x16_neg
 			__tmp906 = __tmp1277
 		} else if __tmp907 == 0x62 {
-			__tmp1278 := _i8x16_popcnt
+			__tmp1278 := Operators_i8x16_popcnt
 			__tmp906 = __tmp1278
 		} else if __tmp907 == 0x63 {
-			__tmp1279 := _i8x16_all_true
+			__tmp1279 := Operators_i8x16_all_true
 			__tmp906 = __tmp1279
 		} else if __tmp907 == 0x64 {
-			__tmp1280 := _i8x16_bitmask
+			__tmp1280 := Operators_i8x16_bitmask
 			__tmp906 = __tmp1280
 		} else if __tmp907 == 0x65 {
-			__tmp1281 := _i8x16_narrow_i16x8_s
+			__tmp1281 := Operators_i8x16_narrow_i16x8_s
 			__tmp906 = __tmp1281
 		} else if __tmp907 == 0x66 {
-			__tmp1282 := _i8x16_narrow_i16x8_u
+			__tmp1282 := Operators_i8x16_narrow_i16x8_u
 			__tmp906 = __tmp1282
 		} else if __tmp907 == 0x67 {
-			__tmp1283 := _f32x4_ceil
+			__tmp1283 := Operators_f32x4_ceil
 			__tmp906 = __tmp1283
 		} else if __tmp907 == 0x68 {
-			__tmp1284 := _f32x4_floor
+			__tmp1284 := Operators_f32x4_floor
 			__tmp906 = __tmp1284
 		} else if __tmp907 == 0x69 {
-			__tmp1285 := _f32x4_trunc
+			__tmp1285 := Operators_f32x4_trunc
 			__tmp906 = __tmp1285
 		} else if __tmp907 == 0x6a {
-			__tmp1286 := _f32x4_nearest
+			__tmp1286 := Operators_f32x4_nearest
 			__tmp906 = __tmp1286
 		} else if __tmp907 == 0x6b {
-			__tmp1287 := _i8x16_shl
+			__tmp1287 := Operators_i8x16_shl
 			__tmp906 = __tmp1287
 		} else if __tmp907 == 0x6c {
-			__tmp1288 := _i8x16_shr_s
+			__tmp1288 := Operators_i8x16_shr_s
 			__tmp906 = __tmp1288
 		} else if __tmp907 == 0x6d {
-			__tmp1289 := _i8x16_shr_u
+			__tmp1289 := Operators_i8x16_shr_u
 			__tmp906 = __tmp1289
 		} else if __tmp907 == 0x6e {
-			__tmp1290 := _i8x16_add
+			__tmp1290 := Operators_i8x16_add
 			__tmp906 = __tmp1290
 		} else if __tmp907 == 0x6f {
-			__tmp1291 := _i8x16_add_sat_s
+			__tmp1291 := Operators_i8x16_add_sat_s
 			__tmp906 = __tmp1291
 		} else if __tmp907 == 0x70 {
-			__tmp1292 := _i8x16_add_sat_u
+			__tmp1292 := Operators_i8x16_add_sat_u
 			__tmp906 = __tmp1292
 		} else if __tmp907 == 0x71 {
-			__tmp1293 := _i8x16_sub
+			__tmp1293 := Operators_i8x16_sub
 			__tmp906 = __tmp1293
 		} else if __tmp907 == 0x72 {
-			__tmp1294 := _i8x16_sub_sat_s
+			__tmp1294 := Operators_i8x16_sub_sat_s
 			__tmp906 = __tmp1294
 		} else if __tmp907 == 0x73 {
-			__tmp1295 := _i8x16_sub_sat_u
+			__tmp1295 := Operators_i8x16_sub_sat_u
 			__tmp906 = __tmp1295
 		} else if __tmp907 == 0x74 {
-			__tmp1296 := _f64x2_ceil
+			__tmp1296 := Operators_f64x2_ceil
 			__tmp906 = __tmp1296
 		} else if __tmp907 == 0x75 {
-			__tmp1297 := _f64x2_floor
+			__tmp1297 := Operators_f64x2_floor
 			__tmp906 = __tmp1297
 		} else if __tmp907 == 0x76 {
-			__tmp1298 := _i8x16_min_s
+			__tmp1298 := Operators_i8x16_min_s
 			__tmp906 = __tmp1298
 		} else if __tmp907 == 0x77 {
-			__tmp1299 := _i8x16_min_u
+			__tmp1299 := Operators_i8x16_min_u
 			__tmp906 = __tmp1299
 		} else if __tmp907 == 0x78 {
-			__tmp1300 := _i8x16_max_s
+			__tmp1300 := Operators_i8x16_max_s
 			__tmp906 = __tmp1300
 		} else if __tmp907 == 0x79 {
-			__tmp1301 := _i8x16_max_u
+			__tmp1301 := Operators_i8x16_max_u
 			__tmp906 = __tmp1301
 		} else if __tmp907 == 0x7a {
-			__tmp1302 := _f64x2_trunc
+			__tmp1302 := Operators_f64x2_trunc
 			__tmp906 = __tmp1302
 		} else if __tmp907 == 0x7b {
-			__tmp1303 := _i8x16_avgr_u
+			__tmp1303 := Operators_i8x16_avgr_u
 			__tmp906 = __tmp1303
 		} else if __tmp907 == 0x7c {
-			__tmp1304 := _i16x8_extadd_pairwise_i8x16_s
+			__tmp1304 := Operators_i16x8_extadd_pairwise_i8x16_s
 			__tmp906 = __tmp1304
 		} else if __tmp907 == 0x7d {
-			__tmp1305 := _i16x8_extadd_pairwise_i8x16_u
+			__tmp1305 := Operators_i16x8_extadd_pairwise_i8x16_u
 			__tmp906 = __tmp1305
 		} else if __tmp907 == 0x7e {
-			__tmp1306 := _i32x4_extadd_pairwise_i16x8_s
+			__tmp1306 := Operators_i32x4_extadd_pairwise_i16x8_s
 			__tmp906 = __tmp1306
 		} else if __tmp907 == 0x7f {
-			__tmp1307 := _i32x4_extadd_pairwise_i16x8_u
+			__tmp1307 := Operators_i32x4_extadd_pairwise_i16x8_u
 			__tmp906 = __tmp1307
 		} else if __tmp907 == 0x80 {
-			__tmp1308 := _i16x8_abs
+			__tmp1308 := Operators_i16x8_abs
 			__tmp906 = __tmp1308
 		} else if __tmp907 == 0x81 {
-			__tmp1309 := _i16x8_neg
+			__tmp1309 := Operators_i16x8_neg
 			__tmp906 = __tmp1309
 		} else if __tmp907 == 0x82 {
-			__tmp1310 := _i16x8_q15mulr_sat_s
+			__tmp1310 := Operators_i16x8_q15mulr_sat_s
 			__tmp906 = __tmp1310
 		} else if __tmp907 == 0x83 {
-			__tmp1311 := _i16x8_all_true
+			__tmp1311 := Operators_i16x8_all_true
 			__tmp906 = __tmp1311
 		} else if __tmp907 == 0x84 {
-			__tmp1312 := _i16x8_bitmask
+			__tmp1312 := Operators_i16x8_bitmask
 			__tmp906 = __tmp1312
 		} else if __tmp907 == 0x85 {
-			__tmp1313 := _i16x8_narrow_i32x4_s
+			__tmp1313 := Operators_i16x8_narrow_i32x4_s
 			__tmp906 = __tmp1313
 		} else if __tmp907 == 0x86 {
-			__tmp1314 := _i16x8_narrow_i32x4_u
+			__tmp1314 := Operators_i16x8_narrow_i32x4_u
 			__tmp906 = __tmp1314
 		} else if __tmp907 == 0x87 {
-			__tmp1315 := _i16x8_extend_low_i8x16_s
+			__tmp1315 := Operators_i16x8_extend_low_i8x16_s
 			__tmp906 = __tmp1315
 		} else if __tmp907 == 0x88 {
-			__tmp1316 := _i16x8_extend_high_i8x16_s
+			__tmp1316 := Operators_i16x8_extend_high_i8x16_s
 			__tmp906 = __tmp1316
 		} else if __tmp907 == 0x89 {
-			__tmp1317 := _i16x8_extend_low_i8x16_u
+			__tmp1317 := Operators_i16x8_extend_low_i8x16_u
 			__tmp906 = __tmp1317
 		} else if __tmp907 == 0x8a {
-			__tmp1318 := _i16x8_extend_high_i8x16_u
+			__tmp1318 := Operators_i16x8_extend_high_i8x16_u
 			__tmp906 = __tmp1318
 		} else if __tmp907 == 0x8b {
-			__tmp1319 := _i16x8_shl
+			__tmp1319 := Operators_i16x8_shl
 			__tmp906 = __tmp1319
 		} else if __tmp907 == 0x8c {
-			__tmp1320 := _i16x8_shr_s
+			__tmp1320 := Operators_i16x8_shr_s
 			__tmp906 = __tmp1320
 		} else if __tmp907 == 0x8d {
-			__tmp1321 := _i16x8_shr_u
+			__tmp1321 := Operators_i16x8_shr_u
 			__tmp906 = __tmp1321
 		} else if __tmp907 == 0x8e {
-			__tmp1322 := _i16x8_add
+			__tmp1322 := Operators_i16x8_add
 			__tmp906 = __tmp1322
 		} else if __tmp907 == 0x8f {
-			__tmp1323 := _i16x8_add_sat_s
+			__tmp1323 := Operators_i16x8_add_sat_s
 			__tmp906 = __tmp1323
 		} else if __tmp907 == 0x90 {
-			__tmp1324 := _i16x8_add_sat_u
+			__tmp1324 := Operators_i16x8_add_sat_u
 			__tmp906 = __tmp1324
 		} else if __tmp907 == 0x91 {
-			__tmp1325 := _i16x8_sub
+			__tmp1325 := Operators_i16x8_sub
 			__tmp906 = __tmp1325
 		} else if __tmp907 == 0x92 {
-			__tmp1326 := _i16x8_sub_sat_s
+			__tmp1326 := Operators_i16x8_sub_sat_s
 			__tmp906 = __tmp1326
 		} else if __tmp907 == 0x93 {
-			__tmp1327 := _i16x8_sub_sat_u
+			__tmp1327 := Operators_i16x8_sub_sat_u
 			__tmp906 = __tmp1327
 		} else if __tmp907 == 0x94 {
-			__tmp1328 := _f64x2_nearest
+			__tmp1328 := Operators_f64x2_nearest
 			__tmp906 = __tmp1328
 		} else if __tmp907 == 0x95 {
-			__tmp1329 := _i16x8_mul
+			__tmp1329 := Operators_i16x8_mul
 			__tmp906 = __tmp1329
 		} else if __tmp907 == 0x96 {
-			__tmp1330 := _i16x8_min_s
+			__tmp1330 := Operators_i16x8_min_s
 			__tmp906 = __tmp1330
 		} else if __tmp907 == 0x97 {
-			__tmp1331 := _i16x8_min_u
+			__tmp1331 := Operators_i16x8_min_u
 			__tmp906 = __tmp1331
 		} else if __tmp907 == 0x98 {
-			__tmp1332 := _i16x8_max_s
+			__tmp1332 := Operators_i16x8_max_s
 			__tmp906 = __tmp1332
 		} else if __tmp907 == 0x99 {
-			__tmp1333 := _i16x8_max_u
+			__tmp1333 := Operators_i16x8_max_u
 			__tmp906 = __tmp1333
 		} else if __tmp907 == 0x9a {
 			_n := __tmp907
-			__tmp1335 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1335 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1335
 		} else if __tmp907 == 0x9b {
-			__tmp1340 := _i16x8_avgr_u
+			__tmp1340 := Operators_i16x8_avgr_u
 			__tmp906 = __tmp1340
 		} else if __tmp907 == 0x9c {
-			__tmp1341 := _i16x8_extmul_low_i8x16_s
+			__tmp1341 := Operators_i16x8_extmul_low_i8x16_s
 			__tmp906 = __tmp1341
 		} else if __tmp907 == 0x9d {
-			__tmp1342 := _i16x8_extmul_high_i8x16_s
+			__tmp1342 := Operators_i16x8_extmul_high_i8x16_s
 			__tmp906 = __tmp1342
 		} else if __tmp907 == 0x9e {
-			__tmp1343 := _i16x8_extmul_low_i8x16_u
+			__tmp1343 := Operators_i16x8_extmul_low_i8x16_u
 			__tmp906 = __tmp1343
 		} else if __tmp907 == 0x9f {
-			__tmp1344 := _i16x8_extmul_high_i8x16_u
+			__tmp1344 := Operators_i16x8_extmul_high_i8x16_u
 			__tmp906 = __tmp1344
 		} else if __tmp907 == 0xa0 {
-			__tmp1345 := _i32x4_abs
+			__tmp1345 := Operators_i32x4_abs
 			__tmp906 = __tmp1345
 		} else if __tmp907 == 0xa1 {
-			__tmp1346 := _i32x4_neg
+			__tmp1346 := Operators_i32x4_neg
 			__tmp906 = __tmp1346
 		} else if __tmp907 == 0xa2 {
 			_n := __tmp907
-			__tmp1348 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1348 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1348
 		} else if __tmp907 == 0xa3 {
-			__tmp1353 := _i32x4_all_true
+			__tmp1353 := Operators_i32x4_all_true
 			__tmp906 = __tmp1353
 		} else if __tmp907 == 0xa4 {
-			__tmp1354 := _i32x4_bitmask
+			__tmp1354 := Operators_i32x4_bitmask
 			__tmp906 = __tmp1354
 		} else if __tmp907 == 0xa5 || __tmp907 == 0xa6 {
 			_n := __tmp907
-			__tmp1356 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1356 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1356
 		} else if __tmp907 == 0xa7 {
-			__tmp1361 := _i32x4_extend_low_i16x8_s
+			__tmp1361 := Operators_i32x4_extend_low_i16x8_s
 			__tmp906 = __tmp1361
 		} else if __tmp907 == 0xa8 {
-			__tmp1362 := _i32x4_extend_high_i16x8_s
+			__tmp1362 := Operators_i32x4_extend_high_i16x8_s
 			__tmp906 = __tmp1362
 		} else if __tmp907 == 0xa9 {
-			__tmp1363 := _i32x4_extend_low_i16x8_u
+			__tmp1363 := Operators_i32x4_extend_low_i16x8_u
 			__tmp906 = __tmp1363
 		} else if __tmp907 == 0xaa {
-			__tmp1364 := _i32x4_extend_high_i16x8_u
+			__tmp1364 := Operators_i32x4_extend_high_i16x8_u
 			__tmp906 = __tmp1364
 		} else if __tmp907 == 0xab {
-			__tmp1365 := _i32x4_shl
+			__tmp1365 := Operators_i32x4_shl
 			__tmp906 = __tmp1365
 		} else if __tmp907 == 0xac {
-			__tmp1366 := _i32x4_shr_s
+			__tmp1366 := Operators_i32x4_shr_s
 			__tmp906 = __tmp1366
 		} else if __tmp907 == 0xad {
-			__tmp1367 := _i32x4_shr_u
+			__tmp1367 := Operators_i32x4_shr_u
 			__tmp906 = __tmp1367
 		} else if __tmp907 == 0xae {
-			__tmp1368 := _i32x4_add
+			__tmp1368 := Operators_i32x4_add
 			__tmp906 = __tmp1368
 		} else if __tmp907 == 0xaf || __tmp907 == 0xb0 {
 			_n := __tmp907
-			__tmp1370 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1370 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1370
 		} else if __tmp907 == 0xb1 {
-			__tmp1375 := _i32x4_sub
+			__tmp1375 := Operators_i32x4_sub
 			__tmp906 = __tmp1375
 		} else if __tmp907 == 0xb2 || __tmp907 == 0xb3 || __tmp907 == 0xb4 {
 			_n := __tmp907
-			__tmp1377 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1377 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1377
 		} else if __tmp907 == 0xb5 {
-			__tmp1382 := _i32x4_mul
+			__tmp1382 := Operators_i32x4_mul
 			__tmp906 = __tmp1382
 		} else if __tmp907 == 0xb6 {
-			__tmp1383 := _i32x4_min_s
+			__tmp1383 := Operators_i32x4_min_s
 			__tmp906 = __tmp1383
 		} else if __tmp907 == 0xb7 {
-			__tmp1384 := _i32x4_min_u
+			__tmp1384 := Operators_i32x4_min_u
 			__tmp906 = __tmp1384
 		} else if __tmp907 == 0xb8 {
-			__tmp1385 := _i32x4_max_s
+			__tmp1385 := Operators_i32x4_max_s
 			__tmp906 = __tmp1385
 		} else if __tmp907 == 0xb9 {
-			__tmp1386 := _i32x4_max_u
+			__tmp1386 := Operators_i32x4_max_u
 			__tmp906 = __tmp1386
 		} else if __tmp907 == 0xba {
-			__tmp1387 := _i32x4_dot_i16x8_s
+			__tmp1387 := Operators_i32x4_dot_i16x8_s
 			__tmp906 = __tmp1387
 		} else if __tmp907 == 0xbc {
-			__tmp1388 := _i32x4_extmul_low_i16x8_s
+			__tmp1388 := Operators_i32x4_extmul_low_i16x8_s
 			__tmp906 = __tmp1388
 		} else if __tmp907 == 0xbd {
-			__tmp1389 := _i32x4_extmul_high_i16x8_s
+			__tmp1389 := Operators_i32x4_extmul_high_i16x8_s
 			__tmp906 = __tmp1389
 		} else if __tmp907 == 0xbe {
-			__tmp1390 := _i32x4_extmul_low_i16x8_u
+			__tmp1390 := Operators_i32x4_extmul_low_i16x8_u
 			__tmp906 = __tmp1390
 		} else if __tmp907 == 0xbf {
-			__tmp1391 := _i32x4_extmul_high_i16x8_u
+			__tmp1391 := Operators_i32x4_extmul_high_i16x8_u
 			__tmp906 = __tmp1391
 		} else if __tmp907 == 0xc0 {
-			__tmp1392 := _i64x2_abs
+			__tmp1392 := Operators_i64x2_abs
 			__tmp906 = __tmp1392
 		} else if __tmp907 == 0xc1 {
-			__tmp1393 := _i64x2_neg
+			__tmp1393 := Operators_i64x2_neg
 			__tmp906 = __tmp1393
 		} else if __tmp907 == 0xc2 {
 			_n := __tmp907
-			__tmp1395 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1395 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1395
 		} else if __tmp907 == 0xc3 {
-			__tmp1400 := _i64x2_all_true
+			__tmp1400 := Operators_i64x2_all_true
 			__tmp906 = __tmp1400
 		} else if __tmp907 == 0xc4 {
-			__tmp1401 := _i64x2_bitmask
+			__tmp1401 := Operators_i64x2_bitmask
 			__tmp906 = __tmp1401
 		} else if __tmp907 == 0xc5 || __tmp907 == 0xc6 {
 			_n := __tmp907
-			__tmp1403 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1403 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1403
 		} else if __tmp907 == 0xc7 {
-			__tmp1408 := _i64x2_extend_low_i32x4_s
+			__tmp1408 := Operators_i64x2_extend_low_i32x4_s
 			__tmp906 = __tmp1408
 		} else if __tmp907 == 0xc8 {
-			__tmp1409 := _i64x2_extend_high_i32x4_s
+			__tmp1409 := Operators_i64x2_extend_high_i32x4_s
 			__tmp906 = __tmp1409
 		} else if __tmp907 == 0xc9 {
-			__tmp1410 := _i64x2_extend_low_i32x4_u
+			__tmp1410 := Operators_i64x2_extend_low_i32x4_u
 			__tmp906 = __tmp1410
 		} else if __tmp907 == 0xca {
-			__tmp1411 := _i64x2_extend_high_i32x4_u
+			__tmp1411 := Operators_i64x2_extend_high_i32x4_u
 			__tmp906 = __tmp1411
 		} else if __tmp907 == 0xcb {
-			__tmp1412 := _i64x2_shl
+			__tmp1412 := Operators_i64x2_shl
 			__tmp906 = __tmp1412
 		} else if __tmp907 == 0xcc {
-			__tmp1413 := _i64x2_shr_s
+			__tmp1413 := Operators_i64x2_shr_s
 			__tmp906 = __tmp1413
 		} else if __tmp907 == 0xcd {
-			__tmp1414 := _i64x2_shr_u
+			__tmp1414 := Operators_i64x2_shr_u
 			__tmp906 = __tmp1414
 		} else if __tmp907 == 0xce {
-			__tmp1415 := _i64x2_add
+			__tmp1415 := Operators_i64x2_add
 			__tmp906 = __tmp1415
 		} else if __tmp907 == 0xcf || __tmp907 == 0xd0 {
 			_n := __tmp907
-			__tmp1417 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1417 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1417
 		} else if __tmp907 == 0xd1 {
-			__tmp1422 := _i64x2_sub
+			__tmp1422 := Operators_i64x2_sub
 			__tmp906 = __tmp1422
 		} else if __tmp907 == 0xd2 || __tmp907 == 0xd3 || __tmp907 == 0xd4 {
 			_n := __tmp907
-			__tmp1424 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1424 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1424
 		} else if __tmp907 == 0xd5 {
-			__tmp1429 := _i64x2_mul
+			__tmp1429 := Operators_i64x2_mul
 			__tmp906 = __tmp1429
 		} else if __tmp907 == 0xd6 {
-			__tmp1430 := _i64x2_eq
+			__tmp1430 := Operators_i64x2_eq
 			__tmp906 = __tmp1430
 		} else if __tmp907 == 0xd7 {
-			__tmp1431 := _i64x2_ne
+			__tmp1431 := Operators_i64x2_ne
 			__tmp906 = __tmp1431
 		} else if __tmp907 == 0xd8 {
-			__tmp1432 := _i64x2_lt_s
+			__tmp1432 := Operators_i64x2_lt_s
 			__tmp906 = __tmp1432
 		} else if __tmp907 == 0xd9 {
-			__tmp1433 := _i64x2_gt_s
+			__tmp1433 := Operators_i64x2_gt_s
 			__tmp906 = __tmp1433
 		} else if __tmp907 == 0xda {
-			__tmp1434 := _i64x2_le_s
+			__tmp1434 := Operators_i64x2_le_s
 			__tmp906 = __tmp1434
 		} else if __tmp907 == 0xdb {
-			__tmp1435 := _i64x2_ge_s
+			__tmp1435 := Operators_i64x2_ge_s
 			__tmp906 = __tmp1435
 		} else if __tmp907 == 0xdc {
-			__tmp1436 := _i64x2_extmul_low_i32x4_s
+			__tmp1436 := Operators_i64x2_extmul_low_i32x4_s
 			__tmp906 = __tmp1436
 		} else if __tmp907 == 0xdd {
-			__tmp1437 := _i64x2_extmul_high_i32x4_s
+			__tmp1437 := Operators_i64x2_extmul_high_i32x4_s
 			__tmp906 = __tmp1437
 		} else if __tmp907 == 0xde {
-			__tmp1438 := _i64x2_extmul_low_i32x4_u
+			__tmp1438 := Operators_i64x2_extmul_low_i32x4_u
 			__tmp906 = __tmp1438
 		} else if __tmp907 == 0xdf {
-			__tmp1439 := _i64x2_extmul_high_i32x4_u
+			__tmp1439 := Operators_i64x2_extmul_high_i32x4_u
 			__tmp906 = __tmp1439
 		} else if __tmp907 == 0xe0 {
-			__tmp1440 := _f32x4_abs
+			__tmp1440 := Operators_f32x4_abs
 			__tmp906 = __tmp1440
 		} else if __tmp907 == 0xe1 {
-			__tmp1441 := _f32x4_neg
+			__tmp1441 := Operators_f32x4_neg
 			__tmp906 = __tmp1441
 		} else if __tmp907 == 0xe2 {
 			_n := __tmp907
-			__tmp1443 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1443 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1443
 		} else if __tmp907 == 0xe3 {
-			__tmp1448 := _f32x4_sqrt
+			__tmp1448 := Operators_f32x4_sqrt
 			__tmp906 = __tmp1448
 		} else if __tmp907 == 0xe4 {
-			__tmp1449 := _f32x4_add
+			__tmp1449 := Operators_f32x4_add
 			__tmp906 = __tmp1449
 		} else if __tmp907 == 0xe5 {
-			__tmp1450 := _f32x4_sub
+			__tmp1450 := Operators_f32x4_sub
 			__tmp906 = __tmp1450
 		} else if __tmp907 == 0xe6 {
-			__tmp1451 := _f32x4_mul
+			__tmp1451 := Operators_f32x4_mul
 			__tmp906 = __tmp1451
 		} else if __tmp907 == 0xe7 {
-			__tmp1452 := _f32x4_div
+			__tmp1452 := Operators_f32x4_div
 			__tmp906 = __tmp1452
 		} else if __tmp907 == 0xe8 {
-			__tmp1453 := _f32x4_min
+			__tmp1453 := Operators_f32x4_min
 			__tmp906 = __tmp1453
 		} else if __tmp907 == 0xe9 {
-			__tmp1454 := _f32x4_max
+			__tmp1454 := Operators_f32x4_max
 			__tmp906 = __tmp1454
 		} else if __tmp907 == 0xea {
-			__tmp1455 := _f32x4_pmin
+			__tmp1455 := Operators_f32x4_pmin
 			__tmp906 = __tmp1455
 		} else if __tmp907 == 0xeb {
-			__tmp1456 := _f32x4_pmax
+			__tmp1456 := Operators_f32x4_pmax
 			__tmp906 = __tmp1456
 		} else if __tmp907 == 0xec {
-			__tmp1457 := _f64x2_abs
+			__tmp1457 := Operators_f64x2_abs
 			__tmp906 = __tmp1457
 		} else if __tmp907 == 0xed {
-			__tmp1458 := _f64x2_neg
+			__tmp1458 := Operators_f64x2_neg
 			__tmp906 = __tmp1458
 		} else if __tmp907 == 0xef {
-			__tmp1459 := _f64x2_sqrt
+			__tmp1459 := Operators_f64x2_sqrt
 			__tmp906 = __tmp1459
 		} else if __tmp907 == 0xf0 {
-			__tmp1460 := _f64x2_add
+			__tmp1460 := Operators_f64x2_add
 			__tmp906 = __tmp1460
 		} else if __tmp907 == 0xf1 {
-			__tmp1461 := _f64x2_sub
+			__tmp1461 := Operators_f64x2_sub
 			__tmp906 = __tmp1461
 		} else if __tmp907 == 0xf2 {
-			__tmp1462 := _f64x2_mul
+			__tmp1462 := Operators_f64x2_mul
 			__tmp906 = __tmp1462
 		} else if __tmp907 == 0xf3 {
-			__tmp1463 := _f64x2_div
+			__tmp1463 := Operators_f64x2_div
 			__tmp906 = __tmp1463
 		} else if __tmp907 == 0xf4 {
-			__tmp1464 := _f64x2_min
+			__tmp1464 := Operators_f64x2_min
 			__tmp906 = __tmp1464
 		} else if __tmp907 == 0xf5 {
-			__tmp1465 := _f64x2_max
+			__tmp1465 := Operators_f64x2_max
 			__tmp906 = __tmp1465
 		} else if __tmp907 == 0xf6 {
-			__tmp1466 := _f64x2_pmin
+			__tmp1466 := Operators_f64x2_pmin
 			__tmp906 = __tmp1466
 		} else if __tmp907 == 0xf7 {
-			__tmp1467 := _f64x2_pmax
+			__tmp1467 := Operators_f64x2_pmax
 			__tmp906 = __tmp1467
 		} else if __tmp907 == 0xf8 {
-			__tmp1468 := _i32x4_trunc_sat_f32x4_s
+			__tmp1468 := Operators_i32x4_trunc_sat_f32x4_s
 			__tmp906 = __tmp1468
 		} else if __tmp907 == 0xf9 {
-			__tmp1469 := _i32x4_trunc_sat_f32x4_u
+			__tmp1469 := Operators_i32x4_trunc_sat_f32x4_u
 			__tmp906 = __tmp1469
 		} else if __tmp907 == 0xfa {
-			__tmp1470 := _f32x4_convert_i32x4_s
+			__tmp1470 := Operators_f32x4_convert_i32x4_s
 			__tmp906 = __tmp1470
 		} else if __tmp907 == 0xfb {
-			__tmp1471 := _f32x4_convert_i32x4_u
+			__tmp1471 := Operators_f32x4_convert_i32x4_u
 			__tmp906 = __tmp1471
 		} else if __tmp907 == 0xfc {
-			__tmp1472 := _i32x4_trunc_sat_f64x2_s_zero
+			__tmp1472 := Operators_i32x4_trunc_sat_f64x2_s_zero
 			__tmp906 = __tmp1472
 		} else if __tmp907 == 0xfd {
-			__tmp1473 := _i32x4_trunc_sat_f64x2_u_zero
+			__tmp1473 := Operators_i32x4_trunc_sat_f64x2_u_zero
 			__tmp906 = __tmp1473
 		} else if __tmp907 == 0xfe {
-			__tmp1474 := _f64x2_convert_low_i32x4_s
+			__tmp1474 := Operators_f64x2_convert_low_i32x4_s
 			__tmp906 = __tmp1474
 		} else if __tmp907 == 0xff {
-			__tmp1475 := _f64x2_convert_low_i32x4_u
+			__tmp1475 := Operators_f64x2_convert_low_i32x4_u
 			__tmp906 = __tmp1475
 		} else if __tmp907 == 0x100 {
-			__tmp1476 := _i8x16_relaxed_swizzle
+			__tmp1476 := Operators_i8x16_relaxed_swizzle
 			__tmp906 = __tmp1476
 		} else if __tmp907 == 0x101 {
-			__tmp1477 := _i32x4_relaxed_trunc_f32x4_s
+			__tmp1477 := Operators_i32x4_relaxed_trunc_f32x4_s
 			__tmp906 = __tmp1477
 		} else if __tmp907 == 0x102 {
-			__tmp1478 := _i32x4_relaxed_trunc_f32x4_u
+			__tmp1478 := Operators_i32x4_relaxed_trunc_f32x4_u
 			__tmp906 = __tmp1478
 		} else if __tmp907 == 0x103 {
-			__tmp1479 := _i32x4_relaxed_trunc_f64x2_s_zero
+			__tmp1479 := Operators_i32x4_relaxed_trunc_f64x2_s_zero
 			__tmp906 = __tmp1479
 		} else if __tmp907 == 0x104 {
-			__tmp1480 := _i32x4_relaxed_trunc_f64x2_u_zero
+			__tmp1480 := Operators_i32x4_relaxed_trunc_f64x2_u_zero
 			__tmp906 = __tmp1480
 		} else if __tmp907 == 0x105 {
-			__tmp1481 := _f32x4_relaxed_madd
+			__tmp1481 := Operators_f32x4_relaxed_madd
 			__tmp906 = __tmp1481
 		} else if __tmp907 == 0x106 {
-			__tmp1482 := _f32x4_relaxed_nmadd
+			__tmp1482 := Operators_f32x4_relaxed_nmadd
 			__tmp906 = __tmp1482
 		} else if __tmp907 == 0x107 {
-			__tmp1483 := _f64x2_relaxed_madd
+			__tmp1483 := Operators_f64x2_relaxed_madd
 			__tmp906 = __tmp1483
 		} else if __tmp907 == 0x108 {
-			__tmp1484 := _f64x2_relaxed_nmadd
+			__tmp1484 := Operators_f64x2_relaxed_nmadd
 			__tmp906 = __tmp1484
 		} else if __tmp907 == 0x109 {
-			__tmp1485 := _i8x16_relaxed_laneselect
+			__tmp1485 := Operators_i8x16_relaxed_laneselect
 			__tmp906 = __tmp1485
 		} else if __tmp907 == 0x10a {
-			__tmp1486 := _i16x8_relaxed_laneselect
+			__tmp1486 := Operators_i16x8_relaxed_laneselect
 			__tmp906 = __tmp1486
 		} else if __tmp907 == 0x10b {
-			__tmp1487 := _i32x4_relaxed_laneselect
+			__tmp1487 := Operators_i32x4_relaxed_laneselect
 			__tmp906 = __tmp1487
 		} else if __tmp907 == 0x10c {
-			__tmp1488 := _i64x2_relaxed_laneselect
+			__tmp1488 := Operators_i64x2_relaxed_laneselect
 			__tmp906 = __tmp1488
 		} else if __tmp907 == 0x10d {
-			__tmp1489 := _f32x4_relaxed_min
+			__tmp1489 := Operators_f32x4_relaxed_min
 			__tmp906 = __tmp1489
 		} else if __tmp907 == 0x10e {
-			__tmp1490 := _f32x4_relaxed_max
+			__tmp1490 := Operators_f32x4_relaxed_max
 			__tmp906 = __tmp1490
 		} else if __tmp907 == 0x10f {
-			__tmp1491 := _f64x2_relaxed_min
+			__tmp1491 := Operators_f64x2_relaxed_min
 			__tmp906 = __tmp1491
 		} else if __tmp907 == 0x110 {
-			__tmp1492 := _f64x2_relaxed_max
+			__tmp1492 := Operators_f64x2_relaxed_max
 			__tmp906 = __tmp1492
 		} else if __tmp907 == 0x111 {
-			__tmp1493 := _i16x8_relaxed_q15mulr_s
+			__tmp1493 := Operators_i16x8_relaxed_q15mulr_s
 			__tmp906 = __tmp1493
 		} else if __tmp907 == 0x112 {
-			__tmp1494 := _i16x8_relaxed_dot_i8x16_i7x16_s
+			__tmp1494 := Operators_i16x8_relaxed_dot_i8x16_i7x16_s
 			__tmp906 = __tmp1494
 		} else if __tmp907 == 0x113 {
-			__tmp1495 := _i32x4_relaxed_dot_i8x16_i7x16_add_s
+			__tmp1495 := Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s
 			__tmp906 = __tmp1495
 		} else if _n := __tmp907; true {
 			_ = _n
-			__tmp1498 := illegal_3(_s, _pos, I32_to_int_u_1(_n))
+			__tmp1498 := Decode_illegal_3(_s, _pos, I32_to_int_u_1(_n))
 			__tmp906 = __tmp1498
 		}
 		__tmp4 = __tmp906
 	} else if _b := __tmp5; true {
 		_ = _b
-		__tmp1505 := illegal_3(_s, _pos, _b)
+		__tmp1505 := Decode_illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp1505
 	}
 	return __tmp4
@@ -9081,10 +8765,10 @@ func __unpack_Types_addr_type___Types_limits(t struct {
 	return t.F0, t.F1
 }
 
-func __unpack_Types_local_idx_phrase___OInt___OInt64(t struct {
-	F0 Ophrase
+func __unpack_Types_local_idx_Source_phrase___OInt___OInt64(t struct {
+	F0 OSource_phrase[OTypes_local_idx]
 	F1 OInt
 	F2 OInt64
-}) (Ophrase, OInt, OInt64) {
+}) (OSource_phrase[OTypes_local_idx], OInt, OInt64) {
 	return t.F0, t.F1, t.F2
 }
