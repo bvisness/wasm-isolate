@@ -19,7 +19,8 @@ func init() {
 type Module struct {
 	ParentModules []string
 	Name          string
-	Defs          Defs
+	TypeDefs      map[string]Def
+	ValueDefs     map[string]Def
 }
 
 func NewModule(namespace []string, name string) *Module {
@@ -27,7 +28,7 @@ func NewModule(namespace []string, name string) *Module {
 		ParentModules: namespace,
 		Name:          name,
 	}
-	m.Defs = Defs{
+	m.TypeDefs = map[string]Def{
 		"bool":   Def{m.Namespace(), Primitive("bool")},
 		"string": Def{m.Namespace(), Primitive("string")},
 		"int":    Def{m.Namespace(), Primitive("OInt")},
@@ -37,6 +38,7 @@ func NewModule(namespace []string, name string) *Module {
 		"list":   Def{m.Namespace(), Primitive("list")},
 		"option": Def{m.Namespace(), Primitive("option")},
 	}
+	m.ValueDefs = map[string]Def{}
 	return m
 }
 
@@ -44,16 +46,10 @@ func (m Module) Namespace() []string {
 	return append(m.ParentModules, m.Name)
 }
 
-func (m Module) AddOwnDef(name string, ty Type) {
-	m.Defs[name] = Def{m.Namespace(), ty}
-}
-
 type Def struct {
 	Namespace []string
 	Type      Type
 }
-
-type Defs map[string]Def
 
 type TypeKind int
 
@@ -117,13 +113,17 @@ func (t Tuple) Kind() TypeKind {
 	return TTuple
 }
 
-type Cons []Type
+type Cons struct {
+	Types []Type
+	Base  Type // Not TypeDef here because we need to allow for built-in primitives
+}
 
 func (t Cons) String() string {
-	strs := make([]string, len(t))
-	for i, child := range t {
+	strs := make([]string, len(t.Types)+1)
+	for i, child := range t.Types {
 		strs[i] = child.String()
 	}
+	strs[len(t.Types)] = t.Base.String()
 	return strings.Join(strs, " ")
 }
 
@@ -250,7 +250,7 @@ func parseTypeNode(n *tree_sitter.Node, t string, currentModule *Module) Type {
 		return parseTypeNode(n.NamedChild(0), t, currentModule)
 	case "package_type", "type_variable", "type_constructor", "_lowercase_identifier":
 		name := n.Utf8Text([]byte(t))
-		if def, ok := currentModule.Defs[name]; ok {
+		if def, ok := currentModule.TypeDefs[name]; ok {
 			return def.Type
 			// return def.Type.(TypeDef) // assert
 		}
@@ -266,23 +266,15 @@ func parseTypeNode(n *tree_sitter.Node, t string, currentModule *Module) Type {
 		case Primitive, TypeDef:
 			return ty
 		default:
-			panic(fmt.Sprintf("how can you even have a %#v in a type_constructor_path", ty))
+			panic(fmt.Sprintf("how can you even have a %+v in a type_constructor_path (within %s)", ty, t))
 		}
 
 	case "constructed_type":
 		var cons Cons
-		t1 := parseTypeNode(n.NamedChild(0), t, currentModule)
-		t2 := parseTypeNode(n.NamedChild(1), t, currentModule)
-		if t1cons, ok := t1.(Cons); ok {
-			cons = append(cons, t1cons...)
-		} else {
-			cons = append(cons, t1)
+		for i := range n.NamedChildCount() - 1 {
+			cons.Types = append(cons.Types, parseTypeNode(n.NamedChild(i), t, currentModule))
 		}
-		if t2cons, ok := t2.(Cons); ok {
-			cons = append(cons, t2cons...)
-		} else {
-			cons = append(cons, t2)
-		}
+		cons.Base = parseTypeNode(n.NamedChild(n.NamedChildCount()-1), t, currentModule)
 		return cons
 	case "function_type":
 		return Func{

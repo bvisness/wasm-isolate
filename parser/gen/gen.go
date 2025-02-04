@@ -101,7 +101,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 
 	if goType, ok := base[t.String()]; ok {
 		return goType
-	} else if existing, ok := currentModule.Defs[t.String()]; ok {
+	} else if existing, ok := currentModule.TypeDefs[t.String()]; ok {
 		// TODO: This logic is probably wrong now that t.String() has modules in it, right?
 		switch existing := existing.Type.(type) {
 		case ocaml.TypeDef:
@@ -110,7 +110,7 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 			return ocaml2go(existing, &ocaml.Module{})
 		}
 	} else if asTypeVar, ok := t.(ocaml.TypeVar); ok {
-		return fmt.Sprintf("any /* %s */", asTypeVar)
+		return typeParamName(asTypeVar)
 	} else if asTypeDef, ok := t.(ocaml.TypeDef); ok {
 		return typeName(asTypeDef.Modules, asTypeDef.Name)
 	} else if asIdent, ok := t.(ocaml.Identifier); ok {
@@ -118,21 +118,33 @@ func ocaml2go(t ocaml.Type, currentModule *ocaml.Module) string {
 	} else if asPrimitive, ok := t.(ocaml.Primitive); ok {
 		return string(asPrimitive)
 	} else if asCons, ok := t.(ocaml.Cons); ok {
-		last := asCons[len(asCons)-1]
-		if last.String() == "phrase" || last.String() == "Source.phrase" {
-			// Temporary™ hack because generics
-			return fmt.Sprintf("*OSource_Phrase[%s]", ocaml2go(asCons[:len(asCons)-1], currentModule))
-		}
-		if lastAsPrimitive, ok := last.(ocaml.Primitive); ok {
-			switch lastAsPrimitive {
+		switch base := asCons.Base.(type) {
+		// case ocaml.Identifier:
+		// 	switch base.Name {
+		// 	case "phrase":
+		// 		// Temporary™ hack because generics
+		// 		return fmt.Sprintf("*OSource_Phrase[%s]", ocaml2go(asCons.Types[0], currentModule))
+		// 	}
+		case ocaml.Primitive:
+			switch base {
 			case "list":
-				return fmt.Sprintf("[]%s", ocaml2go(asCons[:len(asCons)-1], currentModule))
+				return fmt.Sprintf("[]%s", ocaml2go(asCons.Types[0], currentModule))
 			case "option":
-				return fmt.Sprintf("*%s", ocaml2go(asCons[:len(asCons)-1], currentModule))
+				return fmt.Sprintf("*%s", ocaml2go(asCons.Types[0], currentModule))
 			}
-		}
-		if len(asCons) == 1 {
-			return ocaml2go(asCons[0], currentModule)
+		case ocaml.TypeDef:
+			res := typeName(base.Modules, base.Name)
+			res += "["
+			for _, t := range asCons.Types {
+				res += ocaml2go(t, currentModule)
+				res += ", "
+			}
+			res += "]"
+			return res
+		case ocaml.Identifier:
+			return typeName(base.Modules, base.Name)
+		default:
+			exitWithError("unknown type as base type of cons: %#v", base)
 		}
 	} else if asRecord, ok := t.(ocaml.Record); ok {
 		res := "struct {"
@@ -219,13 +231,13 @@ func main() {
 						}
 						defs := p.parseTypeDef(&child, f, mod)
 						for _, def := range defs {
-							mod.Defs[def.Name] = ocaml.Def{mod.Namespace(), def}
+							mod.TypeDefs[def.Name] = ocaml.Def{mod.Namespace(), def}
 							switch ty := def.Type.(type) {
 							case ocaml.Variants:
 								for _, variant := range ty {
 									// Individual variants are added as definitions, with the entire variant type
 									// as their type.
-									mod.Defs[variant.Name] = ocaml.Def{mod.Namespace(), ty}
+									mod.ValueDefs[variant.Name] = ocaml.Def{mod.Namespace(), ty}
 								}
 							}
 						}
@@ -258,11 +270,17 @@ func main() {
 					case "open_module":
 						modName := p.s(child.NamedChild(0))
 						if otherMod, ok := modules[modName]; ok {
-							for name, def := range otherMod.Defs {
-								if _, existing := mod.Defs[name]; existing {
+							for name, def := range otherMod.TypeDefs {
+								if _, existing := mod.TypeDefs[name]; existing {
 									fmt.Fprintf(os.Stderr, "WARNING: %s.%s overrides existing definition for %s in module %s\n", otherMod.Name, name, name, mod.Name)
 								}
-								mod.Defs[name] = def
+								mod.TypeDefs[name] = def
+							}
+							for name, def := range otherMod.ValueDefs {
+								if _, existing := mod.ValueDefs[name]; existing {
+									fmt.Fprintf(os.Stderr, "WARNING: %s.%s overrides existing definition for %s in module %s\n", otherMod.Name, name, name, mod.Name)
+								}
+								mod.ValueDefs[name] = def
 							}
 						} else {
 							fmt.Fprintf(os.Stderr, "WARNING: in module %s: no module defined with name %s, so inheriting no definitions\n", mod.Name, modName)
@@ -318,16 +336,28 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, currentModule *oc
 		fmt.Fprintf(os.Stderr, "parsing type %s = ...\n", name)
 		// fmt.Fprintf(os.Stderr, "parsing type %s: %s\n", name, p.s(n))
 		fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
-		if existingType, ok := currentModule.Defs[name]; ok {
+		if existingType, ok := currentModule.TypeDefs[name]; ok {
 			fmt.Fprintf(os.Stderr, "WARNING: duplicate definition of type %s: already had %s but got %s as well\n", p.s(nName), existingType, p.s(nBody))
 		}
+
+		ty := p.parseTypeDecl(nBody, currentModule)
+		// switch ty := ty.(type) {
+		// case ocaml.Cons:
+		// 	// For constructed types, we apply type variables.
+		// 	base := ty[len(ty)-1].(ocaml.TypeDef)
+		// 	filledVars := make(map[ocaml.TypeVar]ocaml.Type)
+		// 	for _, typeVar := range base.TypeVars {
+		// 		filledVars[typeVar] =
+		// 	}
+		// 	ty = ty[len(ty)-1].ApplyTypeVars(ty[:len(ty)-1])
+		// }
 
 		def := ocaml.TypeDef{
 			Identifier: ocaml.Identifier{
 				Modules: currentModule.Namespace(),
 				Name:    name,
 			},
-			Type:     p.parseTypeDecl(nBody, currentModule),
+			Type:     ty,
 			TypeVars: nTypeVars,
 		}
 		defs = append(defs, def)
@@ -337,11 +367,11 @@ func (p *ocamlParse) parseTypeDef(n *tree_sitter.Node, f File, currentModule *oc
 }
 
 func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, currentModule *ocaml.Module) ocaml.Type {
-	fmt.Fprintf(os.Stderr, "type decl %s: %s\n", n.GrammarName(), p.s(n))
-	fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
+	// fmt.Fprintf(os.Stderr, "type decl %s: %s\n", n.GrammarName(), p.s(n))
+	// fmt.Fprintf(os.Stderr, "  %s\n", n.ToSexp())
 
 	name := p.s(n)
-	if existing, ok := currentModule.Defs[name]; ok {
+	if existing, ok := currentModule.TypeDefs[name]; ok {
 		return existing.Type
 	}
 
@@ -360,32 +390,12 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, currentModule *ocaml.Mod
 		}
 
 		return p.parseTypeDecl(n.NamedChild(n.NamedChildCount()-1), mod)
-		// switch ty := ty.(type) {
-		// case ocaml.Identifier:
-		// 	var modules []string
-		// 	for i := range n.NamedChildCount() - 1 {
-		// 		modules = append(modules, p.s(n.NamedChild(i)))
-		// 	}
-		// 	if len(modules) > 0 {
-		// 		ty.Modules = modules
-		// 	}
-		// 	return ty
-		// case ocaml.TypeDef:
-		// 	return ty
-		// default:
-		// 	exitWithError("how can you even have a %+v in a type_constructor_path", ty)
-		// 	return nil
-		// }
 	case "constructed_type":
 		var cons ocaml.Cons
-		tl := p.parseTypeDecl(n.NamedChild(0), currentModule)
-		tr := p.parseTypeDecl(n.NamedChild(1), currentModule)
-		if tlcons, ok := tl.(ocaml.Cons); ok {
-			cons = append(cons, tlcons...)
-		} else {
-			cons = append(cons, tl)
+		for i := range n.NamedChildCount() - 1 {
+			cons.Types = append(cons.Types, p.parseTypeDecl(n.NamedChild(i), currentModule))
 		}
-		cons = append(cons, tr)
+		cons.Base = p.parseTypeDecl(n.NamedChild(n.NamedChildCount()-1), currentModule)
 		return cons
 	case "function_type":
 		in := p.parseTypeDecl(n.NamedChild(0), currentModule)
@@ -454,16 +464,26 @@ func (p *ocamlParse) parseTypeDecl(n *tree_sitter.Node, currentModule *ocaml.Mod
 }
 
 func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module) {
-	if len(def.TypeVars) > 0 {
-		w("// Not writing type def %s because it has unfilled type variables.\n", def.String())
-		return
+	var typeParams string
+	var typeParamsBare string
+	{
+		var typeParamPieces []string
+		var typeParamPiecesBare []string
+		for _, v := range def.TypeVars {
+			typeParamPieces = append(typeParamPieces, typeParamName(v)+" any")
+			typeParamPiecesBare = append(typeParamPiecesBare, typeParamName(v))
+		}
+		if len(typeParamPieces) > 0 {
+			typeParams = "[" + strings.Join(typeParamPieces, ", ") + "]"
+			typeParamsBare = "[" + strings.Join(typeParamPiecesBare, ", ") + "]"
+		}
 	}
 
 	switch t := def.Type.(type) {
 	case ocaml.Identifier, ocaml.Cons, ocaml.Func, ocaml.Primitive:
 		w("type %s = %s\n", typeName(def.Modules, def.Name), ocaml2go(t, currentModule))
 	case ocaml.Tuple:
-		w("type %s = struct {\n", typeName(def.Modules, def.Name))
+		w("type %s%s struct {\n", typeName(def.Modules, def.Name), typeParams)
 		for i, f := range t {
 			w("  F%d %s\n", i, ocaml2go(f, currentModule))
 		}
@@ -483,7 +503,7 @@ func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module
 		}
 		w(")\n\n")
 
-		w("type %s interface {\n", tn)
+		w("type %s%s interface {\n", tn, typeParams)
 		w("  Kind() %s\n", kindName)
 		w("}\n\n")
 
@@ -500,16 +520,16 @@ func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module
 				w("var %s %s = Simple%s{%s}\n", varName(def.Modules, variant.Name), tn, tn, variantKindName(def.Modules, variant.Name))
 			} else {
 				variantTypeName := tn + "_" + variant.Name
-				w("type %s struct {\n", variantTypeName)
+				w("type %s%s struct {\n", variantTypeName, typeParams)
 				w("  V %s\n", ocaml2go(*variant.Type, currentModule))
 				w("}\n")
 
-				w("func (t %s) Kind() %s {\n", variantTypeName, kindName)
+				w("func (t %s%s) Kind() %s {\n", variantTypeName, typeParamsBare, kindName)
 				w("  return %s\n", variantKindName(def.Modules, variant.Name))
 				w("}\n")
 
-				w("func %s(v %s) %s {\n", funcName(def.Modules, variant.Name, 1), ocaml2go(*variant.Type, currentModule), tn)
-				w("  return %s{v}\n", variantTypeName)
+				w("func %s%s(v %s) %s%s {\n", funcName(def.Modules, variant.Name, 1), typeParams, ocaml2go(*variant.Type, currentModule), tn, typeParamsBare)
+				w("  return %s%s{v}\n", variantTypeName, typeParamsBare)
 				w("}\n")
 			}
 		}
@@ -535,7 +555,7 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node, currentModule *ocaml.Module)
 	pattern := Lookup{f}.Field("pattern", "").Node
 	body := Lookup{f}.Field("body", "").Node
 
-	fmt.Fprintf(os.Stderr, "parsing func %s = ...\n", p.s(pattern))
+	fmt.Fprintf(os.Stderr, "parsing func %s.%s = ...\n", currentModule.Name, p.s(pattern))
 
 	var params []*tree_sitter.Node
 	for _, child := range f.NamedChildren(f.Walk()) {
@@ -596,15 +616,20 @@ func (p *ocamlParse) parseFunc(f *tree_sitter.Node, currentModule *ocaml.Module)
 		w("}\n\n")
 	}
 
-	baseName := funcName(currentModule.Namespace(), p.s(pattern), -1)
+	baseName := funcName(currentModule.Namespace(), name, -1)
 	w("var %s = %s\n\n", baseName, fullFuncName)
+
+	currentModule.ValueDefs[name] = ocaml.Def{
+		Namespace: currentModule.Namespace(),
+		Type:      funcType,
+	}
 }
 
 func (p *ocamlParse) parseValueDef(def *tree_sitter.Node, currentModule *ocaml.Module) {
 	pattern := def.ChildByFieldName("pattern")
 	body := def.ChildByFieldName("body")
 
-	fmt.Fprintf(os.Stderr, "parsing value %s = ...\n", p.s(pattern))
+	fmt.Fprintf(os.Stderr, "parsing value %s.%s = ...\n", currentModule.Name, p.s(pattern))
 
 	expectedType := p.getTypeStart(pattern, currentModule)
 
@@ -629,10 +654,10 @@ func (p *ocamlParse) parseModuleDef(def *tree_sitter.Node, f File, currentModule
 				// from the outer module, but we also need functions to be generated with the
 				// right name. So we cheat.
 				phonyModule := *newMod
-				phonyModule.Defs = currentModule.Defs
+				phonyModule.TypeDefs = currentModule.TypeDefs
 				defs := p.parseTypeDef(&def, f, &phonyModule)
 				for _, def := range defs {
-					newMod.Defs[def.Name] = ocaml.Def{newMod.Namespace(), def}
+					newMod.TypeDefs[def.Name] = ocaml.Def{newMod.Namespace(), def}
 				}
 			default:
 				w("// Ignoring %s in module definition\n", def.GrammarName())
@@ -706,6 +731,10 @@ func fieldName(name string) string {
 	return camelName(nil, name)
 }
 
+func typeParamName(name ocaml.TypeVar) string {
+	return "T" + reUnsafeChar.ReplaceAllString(string(name), "_")
+}
+
 func (p *ocamlParse) parseExpr(
 	expr *tree_sitter.Node,
 	expectedType ocaml.Type,
@@ -728,7 +757,7 @@ func (p *ocamlParse) parseExpr(
 		if slices.Contains(locals, name) {
 			return ocaml.Def{}, false
 		}
-		if def, ok := module.Defs[name]; ok {
+		if def, ok := module.ValueDefs[name]; ok {
 			return def, true
 		}
 		return ocaml.Def{}, false
@@ -1009,7 +1038,7 @@ func (p *ocamlParse) parseExpr(
 			// if len(asCons) != 2 || asCons[1] != ocaml.NamedType{nil,"list"} {
 			// 	exitWithError("list_expression needs a list type, but got: %s", expectedType)
 			// }
-			elemType = asCons[0]
+			elemType = asCons.Types[0]
 		} else {
 			exitWithError("list_expression needs a cons type (that is a list), but got: %s", expectedType)
 		}

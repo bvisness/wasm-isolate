@@ -33,8 +33,8 @@ func _operatorGte_2[T constraints.Ordered](a, b T) bool {
 	return a >= b
 }
 
-func _operatorAtAt_2[T any](x T, region *Region) *Phrase[T] {
-	return &Phrase[T]{
+func _operatorAtAt_2[T any](x T, region *OSource_Region) *OSource_Phrase[T] {
+	return &OSource_Phrase[T]{
 		it: x,
 		at: region,
 	}

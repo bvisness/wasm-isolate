@@ -276,7 +276,7 @@ func Types_DefHT_1(v OTypes_def_type) OTypes_heap_type {
 
 var Types_BotHT OTypes_heap_type = SimpleOTypes_heap_type{KTypes_BotHT}
 
-type OTypes_ref_type = struct {
+type OTypes_ref_type struct {
 	F0 OTypes_null
 	F1 OTypes_heap_type
 }
@@ -1056,10 +1056,102 @@ func Types_ModuleT_1(v struct {
 
 type OTypes_subst = func(OTypes_var) OTypes_heap_type
 
-// Not writing type def Value.op because it has unfilled type variables.
-// Not writing type def Value.vecop because it has unfilled type variables.
-type OValue_num = TODO /* I32.t I64.t (kind 3) */
-type OValue_vec = TODO /* V128.t Value.vecop (kind 3) */
+type OValue_op_kind int
+
+const (
+	KValue_I32 OValue_op_kind = iota + 1
+	KValue_I64
+	KValue_F32
+	KValue_F64
+)
+
+type OValue_op[T_i32 any, T_i64 any, T_f32 any, T_f64 any] interface {
+	Kind() OValue_op_kind
+}
+
+type SimpleOValue_op struct {
+	kind OValue_op_kind
+}
+
+func (t SimpleOValue_op) Kind() OValue_op_kind {
+	return t.kind
+}
+
+type OValue_op_I32[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
+	V T_i32
+}
+
+func (t OValue_op_I32[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
+	return KValue_I32
+}
+func Value_I32_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_i32) OValue_op[T_i32, T_i64, T_f32, T_f64] {
+	return OValue_op_I32[T_i32, T_i64, T_f32, T_f64]{v}
+}
+
+type OValue_op_I64[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
+	V T_i64
+}
+
+func (t OValue_op_I64[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
+	return KValue_I64
+}
+func Value_I64_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_i64) OValue_op[T_i32, T_i64, T_f32, T_f64] {
+	return OValue_op_I64[T_i32, T_i64, T_f32, T_f64]{v}
+}
+
+type OValue_op_F32[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
+	V T_f32
+}
+
+func (t OValue_op_F32[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
+	return KValue_F32
+}
+func Value_F32_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_f32) OValue_op[T_i32, T_i64, T_f32, T_f64] {
+	return OValue_op_F32[T_i32, T_i64, T_f32, T_f64]{v}
+}
+
+type OValue_op_F64[T_i32 any, T_i64 any, T_f32 any, T_f64 any] struct {
+	V T_f64
+}
+
+func (t OValue_op_F64[T_i32, T_i64, T_f32, T_f64]) Kind() OValue_op_kind {
+	return KValue_F64
+}
+func Value_F64_1[T_i32 any, T_i64 any, T_f32 any, T_f64 any](v T_f64) OValue_op[T_i32, T_i64, T_f32, T_f64] {
+	return OValue_op_F64[T_i32, T_i64, T_f32, T_f64]{v}
+}
+
+type OValue_vecop_kind int
+
+const (
+	KValue_V128 OValue_vecop_kind = iota + 1
+)
+
+type OValue_vecop[T_v128 any] interface {
+	Kind() OValue_vecop_kind
+}
+
+type SimpleOValue_vecop struct {
+	kind OValue_vecop_kind
+}
+
+func (t SimpleOValue_vecop) Kind() OValue_vecop_kind {
+	return t.kind
+}
+
+type OValue_vecop_V128[T_v128 any] struct {
+	V T_v128
+}
+
+func (t OValue_vecop_V128[T_v128]) Kind() OValue_vecop_kind {
+	return KValue_V128
+}
+func Value_V128_1[T_v128 any](v T_v128) OValue_vecop[T_v128] {
+	return OValue_vecop_V128[T_v128]{v}
+}
+
+type OValue_num = OValue_op[OI32_t, OI64_t, OF32_t, OF64_t]
+type OValue_vec = OValue_vecop[V128]
 
 type OValue_value_kind int
 
@@ -2081,14 +2173,14 @@ func (t SimpleOAst_V128Op_vternop) Kind() OAst_V128Op_vternop_kind {
 
 var Ast_V128Op_Bitselect OAst_V128Op_vternop = SimpleOAst_V128Op_vternop{KAst_V128Op_Bitselect}
 
-type OAst_V128Op_testop = TODO    /* Ast.V128Op.itestop Ast.V128Op.itestop (kind 3) */
-type OAst_V128Op_unop = TODO      /* Ast.V128Op.iunop Ast.V128Op.iunop (kind 3) */
-type OAst_V128Op_binop = TODO     /* Ast.V128Op.ibinop Ast.V128Op.ibinop (kind 3) */
-type OAst_V128Op_ternop = TODO    /* Ast.V128Op.iternop Ast.V128Op.iternop (kind 3) */
-type OAst_V128Op_relop = TODO     /* Ast.V128Op.irelop Ast.V128Op.irelop (kind 3) */
-type OAst_V128Op_cvtop = TODO     /* Ast.V128Op.icvtop Ast.V128Op.icvtop (kind 3) */
-type OAst_V128Op_shiftop = TODO   /* Ast.V128Op.ishiftop Ast.V128Op.ishiftop (kind 3) */
-type OAst_V128Op_bitmaskop = TODO /* Ast.V128Op.ibitmaskop Ast.V128Op.ibitmaskop (kind 3) */
+type OAst_V128Op_testop = OV128_laneop
+type OAst_V128Op_unop = OV128_laneop
+type OAst_V128Op_binop = OV128_laneop
+type OAst_V128Op_ternop = OV128_laneop
+type OAst_V128Op_relop = OV128_laneop
+type OAst_V128Op_cvtop = OV128_laneop
+type OAst_V128Op_shiftop = OV128_laneop
+type OAst_V128Op_bitmaskop = OV128_laneop
 
 type OAst_V128Op_nsplatop_kind int
 
@@ -2110,7 +2202,40 @@ func (t SimpleOAst_V128Op_nsplatop) Kind() OAst_V128Op_nsplatop_kind {
 
 var Ast_V128Op_Splat OAst_V128Op_nsplatop = SimpleOAst_V128Op_nsplatop{KAst_V128Op_Splat}
 
-// Not writing type def Ast.V128Op.nextractop because it has unfilled type variables.
+type OAst_V128Op_nextractop_kind int
+
+const (
+	KAst_V128Op_Extract OAst_V128Op_nextractop_kind = iota + 1
+)
+
+type OAst_V128Op_nextractop[T_a any] interface {
+	Kind() OAst_V128Op_nextractop_kind
+}
+
+type SimpleOAst_V128Op_nextractop struct {
+	kind OAst_V128Op_nextractop_kind
+}
+
+func (t SimpleOAst_V128Op_nextractop) Kind() OAst_V128Op_nextractop_kind {
+	return t.kind
+}
+
+type OAst_V128Op_nextractop_Extract[T_a any] struct {
+	V struct {
+		F0 OInt
+		F1 T_a
+	}
+}
+
+func (t OAst_V128Op_nextractop_Extract[T_a]) Kind() OAst_V128Op_nextractop_kind {
+	return KAst_V128Op_Extract
+}
+func Ast_V128Op_Extract_1[T_a any](v struct {
+	F0 OInt
+	F1 T_a
+}) OAst_V128Op_nextractop[T_a] {
+	return OAst_V128Op_nextractop_Extract[T_a]{v}
+}
 
 type OAst_V128Op_nreplaceop_kind int
 
@@ -2141,35 +2266,46 @@ func Ast_V128Op_Replace_1(v OInt) OAst_V128Op_nreplaceop {
 	return OAst_V128Op_nreplaceop_Replace{v}
 }
 
-type OAst_V128Op_splatop = TODO   /* Ast.V128Op.nsplatop Ast.V128Op.nsplatop (kind 3) */
-type OAst_V128Op_extractop = TODO /* Pack.extension Ast.V128Op.nextractop Pack.extension Ast.V128Op.nextractop (kind 3) */
-type OAst_V128Op_replaceop = TODO /* Ast.V128Op.nreplaceop Ast.V128Op.nreplaceop (kind 3) */
-type OAst_testop = TODO           /* Ast.IntOp.testop Ast.IntOp.testop (kind 3) */
-type OAst_unop = TODO             /* Ast.IntOp.unop Ast.IntOp.unop (kind 3) */
-type OAst_binop = TODO            /* Ast.IntOp.binop Ast.IntOp.binop (kind 3) */
-type OAst_relop = TODO            /* Ast.IntOp.relop Ast.IntOp.relop (kind 3) */
-type OAst_cvtop = TODO            /* Ast.IntOp.cvtop Ast.IntOp.cvtop (kind 3) */
-type OAst_vec_testop = TODO       /* Ast.V128Op.testop Value.vecop (kind 3) */
-type OAst_vec_relop = TODO        /* Ast.V128Op.relop Value.vecop (kind 3) */
-type OAst_vec_unop = TODO         /* Ast.V128Op.unop Value.vecop (kind 3) */
-type OAst_vec_binop = TODO        /* Ast.V128Op.binop Value.vecop (kind 3) */
-type OAst_vec_ternop = TODO       /* Ast.V128Op.ternop Value.vecop (kind 3) */
-type OAst_vec_cvtop = TODO        /* Ast.V128Op.cvtop Value.vecop (kind 3) */
-type OAst_vec_shiftop = TODO      /* Ast.V128Op.shiftop Value.vecop (kind 3) */
-type OAst_vec_bitmaskop = TODO    /* Ast.V128Op.bitmaskop Value.vecop (kind 3) */
-type OAst_vec_vtestop = TODO      /* Ast.V128Op.vtestop Value.vecop (kind 3) */
-type OAst_vec_vunop = TODO        /* Ast.V128Op.vunop Value.vecop (kind 3) */
-type OAst_vec_vbinop = TODO       /* Ast.V128Op.vbinop Value.vecop (kind 3) */
-type OAst_vec_vternop = TODO      /* Ast.V128Op.vternop Value.vecop (kind 3) */
-type OAst_vec_splatop = TODO      /* Ast.V128Op.splatop Value.vecop (kind 3) */
-type OAst_vec_extractop = TODO    /* Ast.V128Op.extractop Value.vecop (kind 3) */
-type OAst_vec_replaceop = TODO    /* Ast.V128Op.replaceop Value.vecop (kind 3) */
-// Not writing type def Ast.memop because it has unfilled type variables.
-type OAst_loadop = TODO      /* Types.num_type Pack.pack_size * Pack.extension option (kind 3) */
-type OAst_storeop = TODO     /* Types.num_type Pack.pack_size option (kind 3) */
-type OAst_vec_loadop = TODO  /* Types.vec_type Pack.pack_size * Pack.vec_extension option (kind 3) */
-type OAst_vec_storeop = TODO /* Types.vec_type Ast.unit (kind 3) */
-type OAst_vec_laneop = TODO  /* Types.vec_type Pack.pack_size (kind 3) */
+type OAst_V128Op_splatop = OV128_laneop
+type OAst_V128Op_extractop = OV128_laneop
+type OAst_V128Op_replaceop = OV128_laneop
+type OAst_testop = OValue_op[OAst_IntOp_testop, OAst_IntOp_testop, OAst_FloatOp_testop, OAst_FloatOp_testop]
+type OAst_unop = OValue_op[OAst_IntOp_unop, OAst_IntOp_unop, OAst_FloatOp_unop, OAst_FloatOp_unop]
+type OAst_binop = OValue_op[OAst_IntOp_binop, OAst_IntOp_binop, OAst_FloatOp_binop, OAst_FloatOp_binop]
+type OAst_relop = OValue_op[OAst_IntOp_relop, OAst_IntOp_relop, OAst_FloatOp_relop, OAst_FloatOp_relop]
+type OAst_cvtop = OValue_op[OAst_IntOp_cvtop, OAst_IntOp_cvtop, OAst_FloatOp_cvtop, OAst_FloatOp_cvtop]
+type OAst_vec_testop = OValue_vecop[OAst_V128Op_testop]
+type OAst_vec_relop = OValue_vecop[OAst_V128Op_relop]
+type OAst_vec_unop = OValue_vecop[OAst_V128Op_unop]
+type OAst_vec_binop = OValue_vecop[OAst_V128Op_binop]
+type OAst_vec_ternop = OValue_vecop[OAst_V128Op_ternop]
+type OAst_vec_cvtop = OValue_vecop[OAst_V128Op_cvtop]
+type OAst_vec_shiftop = OValue_vecop[OAst_V128Op_shiftop]
+type OAst_vec_bitmaskop = OValue_vecop[OAst_V128Op_bitmaskop]
+type OAst_vec_vtestop = OValue_vecop[OAst_V128Op_vtestop]
+type OAst_vec_vunop = OValue_vecop[OAst_V128Op_vunop]
+type OAst_vec_vbinop = OValue_vecop[OAst_V128Op_vbinop]
+type OAst_vec_vternop = OValue_vecop[OAst_V128Op_vternop]
+type OAst_vec_splatop = OValue_vecop[OAst_V128Op_splatop]
+type OAst_vec_extractop = OValue_vecop[OAst_V128Op_extractop]
+type OAst_vec_replaceop = OValue_vecop[OAst_V128Op_replaceop]
+type OAst_memop struct {
+	ty     T_t
+	align  OInt
+	offset OInt64
+	pack   T_p
+}
+type OAst_loadop = OAst_memop[OTypes_num_type, *struct {
+	F0 OPack_pack_size
+	F1 OPack_extension
+}]
+type OAst_storeop = OAst_memop[OTypes_num_type, *OPack_pack_size]
+type OAst_vec_loadop = OAst_memop[OTypes_vec_type, *struct {
+	F0 OPack_pack_size
+	F1 OPack_vec_extension
+}]
+type OAst_vec_storeop = OAst_memop[OTypes_vec_type, OAst_unit]
+type OAst_vec_laneop = OAst_memop[OTypes_vec_type, OPack_pack_size]
 
 type OAst_initop_kind int
 
@@ -2215,9 +2351,9 @@ func (t SimpleOAst_externop) Kind() OAst_externop_kind {
 var Ast_Internalize OAst_externop = SimpleOAst_externop{KAst_Internalize}
 var Ast_Externalize OAst_externop = SimpleOAst_externop{KAst_Externalize}
 
-type OAst_idx = *OSource_Phrase[OInt32]
-type OAst_num = *OSource_Phrase[OValue_num]
-type OAst_vec = *OSource_Phrase[OValue_vec]
+type OAst_idx = OSource_phrase
+type OAst_num = OSource_phrase
+type OAst_vec = OSource_phrase
 type OAst_name = string
 
 type OAst_block_type_kind int
@@ -2261,7 +2397,7 @@ func Ast_ValBlockType_1(v *OTypes_val_type) OAst_block_type {
 	return OAst_block_type_ValBlockType{v}
 }
 
-type OAst_instr = *OSource_Phrase[OAst_instr_]
+type OAst_instr = OSource_phrase
 
 type OAst_instr__kind int
 
@@ -3520,7 +3656,7 @@ func Ast_VecReplace_1(v OAst_vec_replaceop) OAst_instr_ {
 	return OAst_instr__VecReplace{v}
 }
 
-type OAst_catch = *OSource_Phrase[OAst_catch_]
+type OAst_catch = OSource_phrase
 
 type OAst_catch__kind int
 
@@ -3599,36 +3735,36 @@ func Ast_CatchAllRef_1(v OAst_idx) OAst_catch_ {
 	return OAst_catch__CatchAllRef{v}
 }
 
-type OAst_const = *OSource_Phrase[[]OAst_instr]
-type OAst_local = *OSource_Phrase[OAst_local_]
+type OAst_const = OSource_phrase
+type OAst_local = OSource_phrase
 type OAst_local_ struct {
 	ltype OTypes_val_type
 }
-type OAst_global = *OSource_Phrase[OAst_global_]
+type OAst_global = OSource_phrase
 type OAst_global_ struct {
 	gtype OTypes_global_type
 	ginit OAst_const
 }
-type OAst_func = *OSource_Phrase[OAst_func_]
+type OAst_func = OSource_phrase
 type OAst_func_ struct {
 	ftype  OAst_idx
 	locals []OAst_local
 	body   []OAst_instr
 }
-type OAst_table = *OSource_Phrase[OAst_table_]
+type OAst_table = OSource_phrase
 type OAst_table_ struct {
 	ttype OTypes_table_type
 	tinit OAst_const
 }
-type OAst_memory = *OSource_Phrase[OAst_memory_]
+type OAst_memory = OSource_phrase
 type OAst_memory_ struct {
 	mtype OTypes_memory_type
 }
-type OAst_tag = *OSource_Phrase[OAst_tag_]
+type OAst_tag = OSource_phrase
 type OAst_tag_ struct {
 	tgtype OAst_idx
 }
-type OAst_segment_mode = *OSource_Phrase[OAst_segment_mode_]
+type OAst_segment_mode = OSource_phrase
 
 type OAst_segment_mode__kind int
 
@@ -3671,19 +3807,19 @@ func Ast_Active_1(v struct {
 
 var Ast_Declarative OAst_segment_mode_ = SimpleOAst_segment_mode_{KAst_Declarative}
 
-type OAst_elem_segment = *OSource_Phrase[OAst_elem_segment_]
+type OAst_elem_segment = OSource_phrase
 type OAst_elem_segment_ struct {
 	etype OTypes_ref_type
 	einit []OAst_const
 	emode OAst_segment_mode
 }
-type OAst_data_segment = *OSource_Phrase[OAst_data_segment_]
+type OAst_data_segment = OSource_phrase
 type OAst_data_segment_ struct {
 	dinit string
 	dmode OAst_segment_mode
 }
-type OAst_type_ = *OSource_Phrase[OTypes_rec_type]
-type OAst_export_desc = *OSource_Phrase[OAst_export_desc_]
+type OAst_type_ = OSource_phrase
+type OAst_export_desc = OSource_phrase
 
 type OAst_export_desc__kind int
 
@@ -3762,12 +3898,12 @@ func Ast_TagExport_1(v OAst_idx) OAst_export_desc_ {
 	return OAst_export_desc__TagExport{v}
 }
 
-type OAst_export = *OSource_Phrase[OAst_export_]
+type OAst_export = OSource_phrase
 type OAst_export_ struct {
 	name  OAst_name
 	edesc OAst_export_desc
 }
-type OAst_import_desc = *OSource_Phrase[OAst_import_desc_]
+type OAst_import_desc = OSource_phrase
 
 type OAst_import_desc__kind int
 
@@ -3846,17 +3982,17 @@ func Ast_TagImport_1(v OAst_idx) OAst_import_desc_ {
 	return OAst_import_desc__TagImport{v}
 }
 
-type OAst_import = *OSource_Phrase[OAst_import_]
+type OAst_import = OSource_phrase
 type OAst_import_ struct {
 	module_name OAst_name
 	item_name   OAst_name
 	idesc       OAst_import_desc
 }
-type OAst_start = *OSource_Phrase[OAst_start_]
+type OAst_start = OSource_phrase
 type OAst_start_ struct {
 	sfunc OAst_idx
 }
-type OAst_module_ = *OSource_Phrase[OAst_module__]
+type OAst_module_ = OSource_phrase
 type OAst_module__ struct {
 	types    []OAst_type_
 	globals  []OAst_global
@@ -3872,35 +4008,35 @@ type OAst_module__ struct {
 }
 
 var Ast_empty_module = nil /* TODO: record_expression */
-func Operators_i32_const_1(_n *OSource_Phrase[OTypes_type_idx]) OAst_instr_ {
+func Operators_i32_const_1(_n Ophrase) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i32_const = Operators_i32_const_1
 
-func Operators_i64_const_1(_n *OSource_Phrase[OValue_address]) OAst_instr_ {
+func Operators_i64_const_1(_n Ophrase) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_i64_const = Operators_i64_const_1
 
-func Operators_f32_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+func Operators_f32_const_1(_n Ophrase) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f32_const = Operators_f32_const_1
 
-func Operators_f64_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+func Operators_f64_const_1(_n Ophrase) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_F64_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
 
 var Operators_f64_const = Operators_f64_const_1
 
-func Operators_v128_const_1(_n *OSource_Phrase[OValue_t]) OAst_instr_ {
+func Operators_v128_const_1(_n Ophrase) OAst_instr_ {
 	__tmp1 := Ast_VecConst_1(_operatorAtAt_2(Value_V128_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
 }
@@ -3921,7 +4057,7 @@ func Operators_ref_func_1(_x OAst_idx) OAst_instr_ {
 
 var Operators_ref_func = Operators_ref_func_1
 
-func Operators_at_const_0() func(OTypes_addr_type) func(*OSource_Phrase[OValue_address]) OAst_instr_ {
+func Operators_at_const_0() func(OTypes_addr_type) func(Ophrase) OAst_instr_ {
 	TODO /* unknown expression type function_expression */
 }
 
@@ -6205,7 +6341,7 @@ var Operators_i32x4_relaxed_dot_i8x16_i7x16_add_s = Ast_VecTernary_1(Value_V128_
 type ODecode_stream struct {
 	name  string
 	bytes string
-	pos   TODO /* OInt Decode.ref (kind 3) */
+	pos   ODecode_ref
 }
 
 func Decode_bit_2(_i OInt, _n OInt) bool {
@@ -6229,9 +6365,9 @@ func Decode_byte_1(_s ODecode_stream) OInt {
 var Decode_byte = Decode_byte_1
 
 func Decode_word16_1(_s ODecode_stream) OInt {
-	__tmp1 := byte_1(_s)
+	__tmp1 := Decode_byte_1(_s)
 	_lo := __tmp1
-	__tmp4 := byte_1(_s)
+	__tmp4 := Decode_byte_1(_s)
 	_hi := __tmp4
 	__tmp7 := _operatorPlus_2(_operatorlsl_2(_hi, 8), _lo)
 	return __tmp7
@@ -6240,9 +6376,9 @@ func Decode_word16_1(_s ODecode_stream) OInt {
 var Decode_word16 = Decode_word16_1
 
 func Decode_word32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Int32_of_int_1(word16_1(_s))
+	__tmp1 := Int32_of_int_1(Decode_word16_1(_s))
 	_lo := __tmp1
-	__tmp5 := Int32_of_int_1(word16_1(_s))
+	__tmp5 := Int32_of_int_1(Decode_word16_1(_s))
 	_hi := __tmp5
 	__tmp9 := add_2(_lo, shift_left_2(_hi, 16))
 	return __tmp9
@@ -6251,9 +6387,9 @@ func Decode_word32_1(_s ODecode_stream) OInt32 {
 var Decode_word32 = Decode_word32_1
 
 func Decode_word64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := I64_convert_extend_i32_u_1(word32_1(_s))
+	__tmp1 := I64_convert_extend_i32_u_1(Decode_word32_1(_s))
 	_lo := __tmp1
-	__tmp5 := I64_convert_extend_i32_u_1(word32_1(_s))
+	__tmp5 := I64_convert_extend_i32_u_1(Decode_word32_1(_s))
 	_hi := __tmp5
 	__tmp9 := add_2(_lo, shift_left_2(_hi, 32))
 	return __tmp9
@@ -6262,11 +6398,11 @@ func Decode_word64_1(_s ODecode_stream) OInt64 {
 var Decode_word64 = Decode_word64_1
 
 func Decode_uN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, Source_pos_1(_s), "integer representation too long")
+	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := byte_1(_s)
+	__tmp7 := Decode_byte_1(_s)
 	_b := __tmp7
-	__tmp10 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(Source_pos_1(_s), 1), "integer too large")
+	__tmp10 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorLt_2(_operatorland_2(_b, 0x7f), _operatorlsl_2(1, _n))), _s, _operatorMinus_2(pos_1(_s), 1), "integer too large")
 	_ = __tmp10
 	__tmp23 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp23
@@ -6291,13 +6427,13 @@ func Decode_uN_1(_n OInt) func(_s ODecode_stream) OInt64 {
 var Decode_uN = Decode_uN_2
 
 func Decode_sN_2(_n OInt, _s ODecode_stream) OInt64 {
-	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, Source_pos_1(_s), "integer representation too long")
+	__tmp1 := require_4(_operatorGt_2(_n, 0), _s, pos_1(_s), "integer representation too long")
 	_ = __tmp1
-	__tmp7 := byte_1(_s)
+	__tmp7 := Decode_byte_1(_s)
 	_b := __tmp7
 	__tmp10 := _operatorland_2(_operatorlsl_2(-(1), _operatorMinus_2(_n, 1)), 0x7f)
 	_mask := __tmp10
-	__tmp15 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(Source_pos_1(_s), 1), "integer too large")
+	__tmp15 := require_4(_operatorOr_2(_operatorGte_2(_n, 7), _operatorOr_2(_operatorEq_2(_operatorland_2(_b, _mask), 0), _operatorEq_2(_operatorland_2(_b, _mask), _mask))), _s, _operatorMinus_2(pos_1(_s), 1), "integer too large")
 	_ = __tmp15
 	__tmp33 := Int64_of_int_1(_operatorland_2(_b, 0x7f))
 	_x := __tmp33
@@ -6329,56 +6465,56 @@ func Decode_sN_1(_n OInt) func(_s ODecode_stream) OInt64 {
 var Decode_sN = Decode_sN_2
 
 func Decode_u32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Int64_to_int32_1(uN_2(32, _s))
+	__tmp1 := Int64_to_int32_1(Decode_uN_2(32, _s))
 	return __tmp1
 }
 
 var Decode_u32 = Decode_u32_1
 
 func Decode_u64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := uN_2(64, _s)
+	__tmp1 := Decode_uN_2(64, _s)
 	return __tmp1
 }
 
 var Decode_u64 = Decode_u64_1
 
 func Decode_s7_1(_s ODecode_stream) OInt {
-	__tmp1 := Int64_to_int_1(sN_2(7, _s))
+	__tmp1 := Int64_to_int_1(Decode_sN_2(7, _s))
 	return __tmp1
 }
 
 var Decode_s7 = Decode_s7_1
 
 func Decode_s32_1(_s ODecode_stream) OInt32 {
-	__tmp1 := Int64_to_int32_1(sN_2(32, _s))
+	__tmp1 := Int64_to_int32_1(Decode_sN_2(32, _s))
 	return __tmp1
 }
 
 var Decode_s32 = Decode_s32_1
 
 func Decode_s33_1(_s ODecode_stream) OInt32 {
-	__tmp1 := I32_convert_wrap_i64_1(sN_2(33, _s))
+	__tmp1 := I32_convert_wrap_i64_1(Decode_sN_2(33, _s))
 	return __tmp1
 }
 
 var Decode_s33 = Decode_s33_1
 
 func Decode_s64_1(_s ODecode_stream) OInt64 {
-	__tmp1 := sN_2(64, _s)
+	__tmp1 := Decode_sN_2(64, _s)
 	return __tmp1
 }
 
 var Decode_s64 = Decode_s64_1
 
 func Decode_f32_1(_s ODecode_stream) OF32_t {
-	__tmp1 := F32_of_bits_1(word32_1(_s))
+	__tmp1 := F32_of_bits_1(Decode_word32_1(_s))
 	return __tmp1
 }
 
 var Decode_f32 = Decode_f32_1
 
 func Decode_f64_1(_s ODecode_stream) OF64_t {
-	__tmp1 := F64_of_bits_1(word64_1(_s))
+	__tmp1 := F64_of_bits_1(Decode_word64_1(_s))
 	return __tmp1
 }
 
@@ -6392,9 +6528,9 @@ func Decode_v128_1(_s ODecode_stream) V128 {
 var Decode_v128 = Decode_v128_1
 
 func Decode_len32_1(_s ODecode_stream) OInt {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
-	__tmp4 := u32_1(_s)
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
+	__tmp4 := Decode_u32_1(_s)
 	_n := __tmp4
 	var __tmp7 OInt
 	if I32_le_u_2(_n, Int32_of_int_1(_operatorMinus_2(len_1(_s), _pos))) {
@@ -6410,7 +6546,7 @@ func Decode_len32_1(_s ODecode_stream) OInt {
 var Decode_len32 = Decode_len32_1
 
 func Decode_string_1(_s ODecode_stream) string {
-	__tmp1 := len32_1(_s)
+	__tmp1 := Decode_len32_1(_s)
 	_n := __tmp1
 	__tmp4 := get_string_2(_n, _s)
 	return __tmp4
@@ -6426,7 +6562,7 @@ func Decode_zero_1(_s ODecode_stream) Ounit {
 var Decode_zero = Decode_zero_1
 
 func Decode_var_1(_s ODecode_stream) OTypes_local_idx {
-	__tmp1 := u32_1(_s)
+	__tmp1 := Decode_u32_1(_s)
 	return __tmp1
 }
 
@@ -6434,7 +6570,7 @@ var Decode_var = Decode_var_1
 
 func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 	var __tmp1 OTypes_mut
-	__tmp2 := byte_1(_s)
+	__tmp2 := Decode_byte_1(_s)
 	if __tmp2 == 0 {
 		__tmp5 := Types_Cons
 		__tmp1 = __tmp5
@@ -6443,7 +6579,7 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 		__tmp1 = __tmp7
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp11 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed mutability")
+		__tmp11 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed mutability")
 		__tmp1 = __tmp11
 	}
 	return __tmp1
@@ -6452,8 +6588,8 @@ func Decode_mutability_1(_s ODecode_stream) OTypes_mut {
 var Decode_mutability = Decode_mutability_1
 
 func Decode_var_type_2(_var func(ODecode_stream) OTypes_local_idx, _s ODecode_stream) OTypes_var {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
 	var __tmp4 OTypes_var
 	__tmp5 := var_1(_s)
 	if _i := __tmp5; _operatorGte_2(_i, 0) {
@@ -6478,7 +6614,7 @@ var Decode_var_type = Decode_var_type_2
 
 func Decode_num_type_1(_s ODecode_stream) OTypes_num_type {
 	var __tmp1 OTypes_num_type
-	__tmp2 := s7_1(_s)
+	__tmp2 := Decode_s7_1(_s)
 	if __tmp2 == -0x01 {
 		__tmp5 := Types_I32T
 		__tmp1 = __tmp5
@@ -6493,7 +6629,7 @@ func Decode_num_type_1(_s ODecode_stream) OTypes_num_type {
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp15 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed number type")
+		__tmp15 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed number type")
 		__tmp1 = __tmp15
 	}
 	return __tmp1
@@ -6503,13 +6639,13 @@ var Decode_num_type = Decode_num_type_1
 
 func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 	var __tmp1 OTypes_vec_type
-	__tmp2 := s7_1(_s)
+	__tmp2 := Decode_s7_1(_s)
 	if __tmp2 == -0x05 {
 		__tmp5 := Types_V128T
 		__tmp1 = __tmp5
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp9 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed vector type")
+		__tmp9 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed vector type")
 		__tmp1 = __tmp9
 	}
 	return __tmp1
@@ -6518,14 +6654,14 @@ func Decode_vec_type_1(_s ODecode_stream) OTypes_vec_type {
 var Decode_vec_type = Decode_vec_type_1
 
 func Decode_heap_type_1(_s ODecode_stream) OTypes_heap_type {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
 	__tmp4 := either_2([]func(ODecode_stream) OTypes_heap_type{func(_s ODecode_stream) OTypes_heap_type {
-		__tmp5 := Types_VarHT_1(var_type_2(_s33, _s))
+		__tmp5 := Types_VarHT_1(Decode_var_type_2(Decode_s33, _s))
 		return __tmp5
 	}, func(_s ODecode_stream) OTypes_heap_type {
 		var __tmp9 OTypes_heap_type
-		__tmp10 := s7_1(_s)
+		__tmp10 := Decode_s7_1(_s)
 		if __tmp10 == -0x0c {
 			__tmp13 := Types_NoExnHT
 			__tmp9 = __tmp13
@@ -6578,13 +6714,13 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 	F0 OTypes_null
 	F1 OTypes_heap_type
 } {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
 	var __tmp4 struct {
 		F0 OTypes_null
 		F1 OTypes_heap_type
 	}
-	__tmp5 := s7_1(_s)
+	__tmp5 := Decode_s7_1(_s)
 	if __tmp5 == -0x0c {
 		__tmp8 := struct {
 			F0 OTypes_null
@@ -6661,13 +6797,13 @@ func Decode_ref_type_1(_s ODecode_stream) struct {
 		__tmp68 := struct {
 			F0 OTypes_null
 			F1 OTypes_heap_type
-		}{Types_NoNull, Types_heap_type_1(_s)}
+		}{Types_NoNull, Decode_heap_type_1(_s)}
 		__tmp4 = __tmp68
 	} else if __tmp5 == -0x1d {
 		__tmp73 := struct {
 			F0 OTypes_null
 			F1 OTypes_heap_type
-		}{Types_Null, Types_heap_type_1(_s)}
+		}{Types_Null, Decode_heap_type_1(_s)}
 		__tmp4 = __tmp73
 	} else if __ := __tmp5; true {
 		_ = __
@@ -6681,13 +6817,13 @@ var Decode_ref_type = Decode_ref_type_1
 
 func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
 	__tmp1 := either_2([]func(ODecode_stream) OTypes_val_type{func(_s ODecode_stream) OTypes_val_type {
-		__tmp2 := Types_NumT_1(Types_num_type_1(_s))
+		__tmp2 := Types_NumT_1(Decode_num_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_val_type {
-		__tmp5 := Types_VecT_1(Types_vec_type_1(_s))
+		__tmp5 := Types_VecT_1(Decode_vec_type_1(_s))
 		return __tmp5
 	}, func(_s ODecode_stream) OTypes_val_type {
-		__tmp8 := Types_RefT_1(Types_ref_type_1(_s))
+		__tmp8 := Types_RefT_1(Decode_ref_type_1(_s))
 		return __tmp8
 	}}, _s)
 	return __tmp1
@@ -6696,17 +6832,17 @@ func Decode_val_type_1(_s ODecode_stream) OTypes_val_type {
 var Decode_val_type = Decode_val_type_1
 
 func Decode_result_type_1(_s ODecode_stream) []OTypes_val_type {
-	__tmp1 := vec_2(Types_val_type, _s)
+	__tmp1 := vec_2(Decode_val_type, _s)
 	return __tmp1
 }
 
 var Decode_result_type = Decode_result_type_1
 
 func Decode_pack_type_1(_s ODecode_stream) OPack_pack_size {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
 	var __tmp4 OPack_pack_size
-	__tmp5 := s7_1(_s)
+	__tmp5 := Decode_s7_1(_s)
 	if __tmp5 == -0x08 {
 		__tmp8 := /*Pack.*/ _Pack8
 		__tmp4 = __tmp8
@@ -6725,10 +6861,10 @@ var Decode_pack_type = Decode_pack_type_1
 
 func Decode_storage_type_1(_s ODecode_stream) OTypes_storage_type {
 	__tmp1 := either_2([]func(ODecode_stream) OTypes_storage_type{func(_s ODecode_stream) OTypes_storage_type {
-		__tmp2 := Types_ValStorageT_1(Types_val_type_1(_s))
+		__tmp2 := Types_ValStorageT_1(Decode_val_type_1(_s))
 		return __tmp2
 	}, func(_s ODecode_stream) OTypes_storage_type {
-		__tmp5 := Types_PackStorageT_1(pack_type_1(_s))
+		__tmp5 := Types_PackStorageT_1(Decode_pack_type_1(_s))
 		return __tmp5
 	}}, _s)
 	return __tmp1
@@ -6737,10 +6873,10 @@ func Decode_storage_type_1(_s ODecode_stream) OTypes_storage_type {
 var Decode_storage_type = Decode_storage_type_1
 
 func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
-	__tmp1 := Types_storage_type_1(_s)
+	__tmp1 := Decode_storage_type_1(_s)
 	_t := __tmp1
-	__tmp4 := mutability_1(_s)
-	Types_mut := __tmp4
+	__tmp4 := Decode_mutability_1(_s)
+	_mut := __tmp4
 	__tmp7 := Types_FieldT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_storage_type
@@ -6751,23 +6887,23 @@ func Decode_field_type_1(_s ODecode_stream) OTypes_field_type {
 var Decode_field_type = Decode_field_type_1
 
 func Decode_struct_type_1(_s ODecode_stream) OTypes_struct_type {
-	__tmp1 := Types_StructT_1(vec_2(Types_field_type, _s))
+	__tmp1 := Types_StructT_1(vec_2(Decode_field_type, _s))
 	return __tmp1
 }
 
 var Decode_struct_type = Decode_struct_type_1
 
 func Decode_array_type_1(_s ODecode_stream) OTypes_array_type {
-	__tmp1 := Types_ArrayT_1(Types_field_type_1(_s))
+	__tmp1 := Types_ArrayT_1(Decode_field_type_1(_s))
 	return __tmp1
 }
 
 var Decode_array_type = Decode_array_type_1
 
 func Decode_func_type_1(_s ODecode_stream) OTypes_func_type {
-	__tmp1 := Types_result_type_1(_s)
+	__tmp1 := Decode_result_type_1(_s)
 	_ts1 := __tmp1
-	__tmp4 := Types_result_type_1(_s)
+	__tmp4 := Decode_result_type_1(_s)
 	_ts2 := __tmp4
 	__tmp7 := Types_FuncT_1(struct {
 		F0 OTypes_result_type
@@ -6780,19 +6916,19 @@ var Decode_func_type = Decode_func_type_1
 
 func Decode_str_type_1(_s ODecode_stream) OTypes_str_type {
 	var __tmp1 OTypes_str_type
-	__tmp2 := s7_1(_s)
+	__tmp2 := Decode_s7_1(_s)
 	if __tmp2 == -0x20 {
-		__tmp5 := Types_DefFuncT_1(Types_func_type_1(_s))
+		__tmp5 := Types_DefFuncT_1(Decode_func_type_1(_s))
 		__tmp1 = __tmp5
 	} else if __tmp2 == -0x21 {
-		__tmp8 := Types_DefStructT_1(Types_struct_type_1(_s))
+		__tmp8 := Types_DefStructT_1(Decode_struct_type_1(_s))
 		__tmp1 = __tmp8
 	} else if __tmp2 == -0x22 {
-		__tmp11 := Types_DefArrayT_1(Types_array_type_1(_s))
+		__tmp11 := Types_DefArrayT_1(Decode_array_type_1(_s))
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp16 := error_3(_s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed definition type")
+		__tmp16 := error_3(_s, _operatorMinus_2(pos_1(_s), 1), "malformed definition type")
 		__tmp1 = __tmp16
 	}
 	return __tmp1
@@ -6806,7 +6942,7 @@ func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x30), 0x7f))) {
 		__tmp9 := skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := vec_2(var_type_1(_u32), _s)
+		__tmp11 := vec_2(Decode_var_type_1(Decode_u32), _s)
 		_xs := __tmp11
 		__tmp16 := Types_SubT_1(struct {
 			F0 OTypes_final
@@ -6815,13 +6951,13 @@ func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 		}{Types_NoFinal, List_map_2(func(_x OTypes_var) OTypes_heap_type {
 			__tmp21 := Types_VarHT_1(_x)
 			return __tmp21
-		}, _xs), Types_str_type_1(_s)})
+		}, _xs), Decode_str_type_1(_s)})
 
 		__tmp1 = __tmp16
 	} else if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x31), 0x7f))) {
 		__tmp30 := skip_2(1, _s)
 		_ = __tmp30
-		__tmp32 := vec_2(var_type_1(_u32), _s)
+		__tmp32 := vec_2(Decode_var_type_1(Decode_u32), _s)
 		_xs := __tmp32
 		__tmp37 := Types_SubT_1(struct {
 			F0 OTypes_final
@@ -6830,7 +6966,7 @@ func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 		}{Types_Final, List_map_2(func(_x OTypes_var) OTypes_heap_type {
 			__tmp42 := Types_VarHT_1(_x)
 			return __tmp42
-		}, _xs), Types_str_type_1(_s)})
+		}, _xs), Decode_str_type_1(_s)})
 
 		__tmp1 = __tmp37
 	} else if __ := __tmp2; true {
@@ -6839,7 +6975,7 @@ func Decode_sub_type_1(_s ODecode_stream) OTypes_sub_type {
 			F0 OTypes_final
 			F1 []OTypes_heap_type
 			F2 OTypes_str_type
-		}{Types_Final, []OTypes_heap_type{}, Types_str_type_1(_s)})
+		}{Types_Final, []OTypes_heap_type{}, Decode_str_type_1(_s)})
 		__tmp1 = __tmp49
 	}
 	return __tmp1
@@ -6853,12 +6989,12 @@ func Decode_rec_type_1(_s ODecode_stream) OTypes_rec_type {
 	if _i := __derefIfNotNil(__tmp2); __tmp2 != nil && (_operatorEq_2(_i, _operatorland_2(-(0x32), 0x7f))) {
 		__tmp9 := skip_2(1, _s)
 		_ = __tmp9
-		__tmp11 := Types_RecT_1(vec_2(Types_sub_type, _s))
+		__tmp11 := Types_RecT_1(vec_2(Decode_sub_type, _s))
 
 		__tmp1 = __tmp11
 	} else if __ := __tmp2; true {
 		_ = __
-		__tmp17 := Types_RecT_1([]OTypes_sub_type{Types_sub_type_1(_s)})
+		__tmp17 := Types_RecT_1([]OTypes_sub_type{Decode_sub_type_1(_s)})
 		__tmp1 = __tmp17
 	}
 	return __tmp1
@@ -6870,9 +7006,9 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 	F0 OTypes_addr_type
 	F1 OTypes_limits
 } {
-	__tmp1 := byte_1(_s)
+	__tmp1 := Decode_byte_1(_s)
 	_flags := __tmp1
-	__tmp4 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(Source_pos_1(_s), 1), "malformed limits flags")
+	__tmp4 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfa), 0), _s, _operatorMinus_2(pos_1(_s), 1), "malformed limits flags")
 	_ = __tmp4
 	__tmp12 := _operatorEq_2(_operatorland_2(_flags, 1), 1)
 	_has_max := __tmp12
@@ -6909,9 +7045,9 @@ func Decode_limits_1(_uN func(ODecode_stream) OInt64) func(_s ODecode_stream) st
 var Decode_limits = Decode_limits_2
 
 func Decode_table_type_1(_s ODecode_stream) OTypes_table_type {
-	__tmp1 := Types_ref_type_1(_s)
+	__tmp1 := Decode_ref_type_1(_s)
 	_t := __tmp1
-	__tmp4 := Types_limits_2(_u64, _s)
+	__tmp4 := Decode_limits_2(Decode_u64, _s)
 	_at, _lim := __unpack_Types_addr_type___Types_limits(__tmp4)
 	__tmp9 := Types_TableT_1(struct {
 		F0 OTypes_addr_type
@@ -6924,10 +7060,10 @@ func Decode_table_type_1(_s ODecode_stream) OTypes_table_type {
 var Decode_table_type = Decode_table_type_1
 
 func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
-	__tmp1 := Types_val_type_1(_s)
+	__tmp1 := Decode_val_type_1(_s)
 	_t := __tmp1
-	__tmp4 := mutability_1(_s)
-	Types_mut := __tmp4
+	__tmp4 := Decode_mutability_1(_s)
+	_mut := __tmp4
 	__tmp7 := Types_GlobalT_1(struct {
 		F0 OTypes_mut
 		F1 OTypes_val_type
@@ -6937,10 +7073,10 @@ func Decode_global_type_1(_s ODecode_stream) OTypes_global_type {
 
 var Decode_global_type = Decode_global_type_1
 
-func Decode_tag_type_1(_s ODecode_stream) *OSource_Phrase[OTypes_local_idx] {
-	__tmp1 := zero_1(_s)
+func Decode_tag_type_1(_s ODecode_stream) Ophrase {
+	__tmp1 := Decode_zero_1(_s)
 	_ = __tmp1
-	__tmp3 := at_2(Types_var, _s)
+	__tmp3 := at_2(Decode_var, _s)
 	return __tmp3
 
 }
@@ -6948,7 +7084,7 @@ func Decode_tag_type_1(_s ODecode_stream) *OSource_Phrase[OTypes_local_idx] {
 var Decode_tag_type = Decode_tag_type_1
 
 func Decode_op_1(_s ODecode_stream) OInt {
-	__tmp1 := byte_1(_s)
+	__tmp1 := Decode_byte_1(_s)
 	return __tmp1
 }
 
@@ -6962,21 +7098,21 @@ func Decode_end__1(_s ODecode_stream) Ounit {
 var Decode_end_ = Decode_end__1
 
 func Decode_memop_1(_s ODecode_stream) struct {
-	F0 *OSource_Phrase[OTypes_local_idx]
+	F0 Ophrase
 	F1 OInt
 	F2 OInt64
 } {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
-	__tmp4 := u32_1(_s)
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
+	__tmp4 := Decode_u32_1(_s)
 	_flags := __tmp4
 	__tmp7 := require_4(I32_lt_u_2(_flags, 0x80), _s, _pos, "malformed memop flags")
 	_ = __tmp7
 	__tmp12 := _operatorNotEq_2(Int32_logand_2(_flags, 0x40), 0)
 	_has_var := __tmp12
-	var __tmp16 *OSource_Phrase[OTypes_local_idx]
+	var __tmp16 Ophrase
 	if _has_var {
-		__tmp18 := at_2(Types_var, _s)
+		__tmp18 := at_2(Decode_var, _s)
 		__tmp16 = __tmp18
 	} else {
 		__tmp21 := _operatorAtAt_2(0, _no_region)
@@ -6985,10 +7121,10 @@ func Decode_memop_1(_s ODecode_stream) struct {
 	_x := __tmp16
 	__tmp24 := to_int_1(logand_2(_flags, 0x3f))
 	_align := __tmp24
-	__tmp28 := u64_1(_s)
+	__tmp28 := Decode_u64_1(_s)
 	_offset := __tmp28
 	return struct {
-		F0 *OSource_Phrase[OTypes_local_idx]
+		F0 Ophrase
 		F1 OInt
 		F2 OInt64
 	}{_x, _align, _offset}
@@ -7000,7 +7136,7 @@ var Decode_memop = Decode_memop_1
 func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
 	__tmp1 := either_2([]func(ODecode_stream) OAst_block_type{func(_s ODecode_stream) OAst_block_type {
 		__tmp2 := Ast_VarBlockType_1(at_2(func(_s ODecode_stream) OTypes_local_idx {
-			__tmp4 := as_stat_var_1(var_type_2(_s33, _s))
+			__tmp4 := as_stat_var_1(Decode_var_type_2(Decode_s33, _s))
 			return __tmp4
 		}, _s))
 		return __tmp2
@@ -7011,7 +7147,7 @@ func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
 		return __tmp11
 
 	}, func(_s ODecode_stream) OAst_block_type {
-		__tmp14 := Ast_ValBlockType_1(Some_1(Types_val_type_1(_s)))
+		__tmp14 := Ast_ValBlockType_1(Some_1(Decode_val_type_1(_s)))
 		return __tmp14
 	}}, _s)
 	return __tmp1
@@ -7021,25 +7157,25 @@ var Decode_block_type = Decode_block_type_1
 
 func Decode_local_1(_s ODecode_stream) struct {
 	F0 OTypes_local_idx
-	F1 *OSource_Phrase[OAst_local_]
+	F1 Ophrase
 } {
-	__tmp1 := u32_1(_s)
+	__tmp1 := Decode_u32_1(_s)
 	_n := __tmp1
-	__tmp4 := at_2(Types_val_type, _s)
-	Value_t := __tmp4
+	__tmp4 := at_2(Decode_val_type, _s)
+	_t := __tmp4
 	return struct {
 		F0 OTypes_local_idx
-		F1 *OSource_Phrase[OAst_local_]
+		F1 Ophrase
 	}{_n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)}
 }
 
 var Decode_local = Decode_local_1
 
 func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
-	__tmp1 := Source_pos_1(_s)
-	Source_pos := __tmp1
+	__tmp1 := pos_1(_s)
+	_pos := __tmp1
 	var __tmp4 OAst_instr_
-	__tmp5 := Value_op_1(_s)
+	__tmp5 := Decode_op_1(_s)
 	if __tmp5 == 0x00 {
 		__tmp8 := _unreachable
 		__tmp4 = __tmp8
@@ -7047,27 +7183,27 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp9 := _nop
 		__tmp4 = __tmp9
 	} else if __tmp5 == 0x02 {
-		__tmp10 := Ast_block_type_1(_s)
+		__tmp10 := Decode_block_type_1(_s)
 		_bt := __tmp10
 		__tmp13 := instr_block_1(_s)
 		_es_ := __tmp13
-		__tmp16 := end__1(_s)
+		__tmp16 := Decode_end__1(_s)
 		_ = __tmp16
-		__tmp18 := block_2(_bt, _es_)
+		__tmp18 := Operators_block_2(_bt, _es_)
 
 		__tmp4 = __tmp18
 	} else if __tmp5 == 0x03 {
-		__tmp21 := Ast_block_type_1(_s)
+		__tmp21 := Decode_block_type_1(_s)
 		_bt := __tmp21
 		__tmp24 := instr_block_1(_s)
 		_es_ := __tmp24
-		__tmp27 := end__1(_s)
+		__tmp27 := Decode_end__1(_s)
 		_ = __tmp27
-		__tmp29 := loop_2(_bt, _es_)
+		__tmp29 := Operators_loop_2(_bt, _es_)
 
 		__tmp4 = __tmp29
 	} else if __tmp5 == 0x04 {
-		__tmp32 := Ast_block_type_1(_s)
+		__tmp32 := Decode_block_type_1(_s)
 		_bt := __tmp32
 		__tmp35 := instr_block_1(_s)
 		_es1 := __tmp35
@@ -7077,15 +7213,15 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			_ = __tmp43
 			__tmp45 := instr_block_1(_s)
 			_es2 := __tmp45
-			__tmp48 := end__1(_s)
+			__tmp48 := Decode_end__1(_s)
 			_ = __tmp48
-			__tmp50 := if__3(_bt, _es1, _es2)
+			__tmp50 := Operators_if__3(_bt, _es1, _es2)
 
 			__tmp38 = __tmp50
 		} else {
-			__tmp54 := end__1(_s)
+			__tmp54 := Decode_end__1(_s)
 			_ = __tmp54
-			__tmp56 := if__3(_bt, _es1, []OAst_instr{})
+			__tmp56 := Operators_if__3(_bt, _es1, []OAst_instr{})
 
 			__tmp38 = __tmp56
 		}
@@ -7098,7 +7234,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp63 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp63
 	} else if __tmp5 == 0x08 {
-		__tmp67 := throw_1(at_2(Types_var, _s))
+		__tmp67 := Operators_throw_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp67
 	} else if __tmp5 == 0x09 {
 		_b := __tmp5
@@ -7111,46 +7247,46 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp77 := error_3(_s, _pos, "misplaced END opcode")
 		__tmp4 = __tmp77
 	} else if __tmp5 == 0x0c {
-		__tmp80 := br_1(at_2(Types_var, _s))
+		__tmp80 := Operators_br_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp80
 	} else if __tmp5 == 0x0d {
-		__tmp84 := br_if_1(at_2(Types_var, _s))
+		__tmp84 := Operators_br_if_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp84
 	} else if __tmp5 == 0x0e {
-		__tmp88 := Ast_vec_2(at_1(Types_var), _s)
+		__tmp88 := vec_2(at_1(Decode_var), _s)
 		_xs := __tmp88
-		__tmp93 := at_2(Types_var, _s)
+		__tmp93 := at_2(Decode_var, _s)
 		_x := __tmp93
-		__tmp97 := br_table_2(_xs, _x)
+		__tmp97 := Operators_br_table_2(_xs, _x)
 		__tmp4 = __tmp97
 	} else if __tmp5 == 0x0f {
 		__tmp100 := _return
 		__tmp4 = __tmp100
 	} else if __tmp5 == 0x10 {
-		__tmp101 := call_1(at_2(Types_var, _s))
+		__tmp101 := Operators_call_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp101
 	} else if __tmp5 == 0x11 {
-		__tmp105 := at_2(Types_var, _s)
+		__tmp105 := at_2(Decode_var, _s)
 		_y := __tmp105
-		__tmp109 := at_2(Types_var, _s)
+		__tmp109 := at_2(Decode_var, _s)
 		_x := __tmp109
-		__tmp113 := call_indirect_2(_x, _y)
+		__tmp113 := Operators_call_indirect_2(_x, _y)
 		__tmp4 = __tmp113
 	} else if __tmp5 == 0x12 {
-		__tmp116 := return_call_1(at_2(Types_var, _s))
+		__tmp116 := Operators_return_call_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp116
 	} else if __tmp5 == 0x13 {
-		__tmp120 := at_2(Types_var, _s)
+		__tmp120 := at_2(Decode_var, _s)
 		_y := __tmp120
-		__tmp124 := at_2(Types_var, _s)
+		__tmp124 := at_2(Decode_var, _s)
 		_x := __tmp124
-		__tmp128 := return_call_indirect_2(_x, _y)
+		__tmp128 := Operators_return_call_indirect_2(_x, _y)
 		__tmp4 = __tmp128
 	} else if __tmp5 == 0x14 {
-		__tmp131 := call_ref_1(at_2(Types_var, _s))
+		__tmp131 := Operators_call_ref_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp131
 	} else if __tmp5 == 0x15 {
-		__tmp135 := return_call_ref_1(at_2(Types_var, _s))
+		__tmp135 := Operators_return_call_ref_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp135
 	} else if __tmp5 == 0x16 || __tmp5 == 0x17 || __tmp5 == 0x18 || __tmp5 == 0x19 {
 		_b := __tmp5
@@ -7160,184 +7296,184 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp144 := _drop
 		__tmp4 = __tmp144
 	} else if __tmp5 == 0x1b {
-		__tmp145 := select_1(nil)
+		__tmp145 := Operators_select_1(nil)
 		__tmp4 = __tmp145
 	} else if __tmp5 == 0x1c {
-		__tmp148 := select_1(Some_1(Ast_vec_2(Types_val_type, _s)))
+		__tmp148 := Operators_select_1(Some_1(vec_2(Decode_val_type, _s)))
 		__tmp4 = __tmp148
 	} else if __tmp5 == 0x1d || __tmp5 == 0x1e {
 		_b := __tmp5
 		__tmp154 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp154
 	} else if __tmp5 == 0x1f {
-		__tmp158 := Ast_block_type_1(_s)
+		__tmp158 := Decode_block_type_1(_s)
 		_bt := __tmp158
-		__tmp161 := Ast_vec_2(at_1(Ast_catch), _s)
+		__tmp161 := vec_2(at_1(Operators_catch), _s)
 		_cs := __tmp161
 		__tmp166 := instr_block_1(_s)
 		_es := __tmp166
-		__tmp169 := end__1(_s)
+		__tmp169 := Decode_end__1(_s)
 		_ = __tmp169
-		__tmp171 := try_table_3(_bt, _cs, _es)
+		__tmp171 := Operators_try_table_3(_bt, _cs, _es)
 
 		__tmp4 = __tmp171
 	} else if __tmp5 == 0x20 {
-		__tmp175 := local_get_1(at_2(Types_var, _s))
+		__tmp175 := Operators_local_get_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp175
 	} else if __tmp5 == 0x21 {
-		__tmp179 := local_set_1(at_2(Types_var, _s))
+		__tmp179 := Operators_local_set_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp179
 	} else if __tmp5 == 0x22 {
-		__tmp183 := local_tee_1(at_2(Types_var, _s))
+		__tmp183 := Operators_local_tee_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp183
 	} else if __tmp5 == 0x23 {
-		__tmp187 := global_get_1(at_2(Types_var, _s))
+		__tmp187 := Operators_global_get_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp187
 	} else if __tmp5 == 0x24 {
-		__tmp191 := global_set_1(at_2(Types_var, _s))
+		__tmp191 := Operators_global_set_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp191
 	} else if __tmp5 == 0x25 {
-		__tmp195 := table_get_1(at_2(Types_var, _s))
+		__tmp195 := Operators_table_get_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp195
 	} else if __tmp5 == 0x26 {
-		__tmp199 := table_set_1(at_2(Types_var, _s))
+		__tmp199 := Operators_table_set_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp199
 	} else if __tmp5 == 0x27 {
 		_b := __tmp5
 		__tmp204 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp204
 	} else if __tmp5 == 0x28 {
-		__tmp208 := Ast_memop_1(_s)
+		__tmp208 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp208)
-		__tmp213 := i32_load_3(_x, _a, _o)
+		__tmp213 := Operators_i32_load_3(_x, _a, _o)
 		__tmp4 = __tmp213
 	} else if __tmp5 == 0x29 {
-		__tmp217 := Ast_memop_1(_s)
+		__tmp217 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp217)
-		__tmp222 := i64_load_3(_x, _a, _o)
+		__tmp222 := Operators_i64_load_3(_x, _a, _o)
 		__tmp4 = __tmp222
 	} else if __tmp5 == 0x2a {
-		__tmp226 := Ast_memop_1(_s)
+		__tmp226 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp226)
-		__tmp231 := f32_load_3(_x, _a, _o)
+		__tmp231 := Operators_f32_load_3(_x, _a, _o)
 		__tmp4 = __tmp231
 	} else if __tmp5 == 0x2b {
-		__tmp235 := Ast_memop_1(_s)
+		__tmp235 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp235)
-		__tmp240 := f64_load_3(_x, _a, _o)
+		__tmp240 := Operators_f64_load_3(_x, _a, _o)
 		__tmp4 = __tmp240
 	} else if __tmp5 == 0x2c {
-		__tmp244 := Ast_memop_1(_s)
+		__tmp244 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp244)
-		__tmp249 := i32_load8_s_3(_x, _a, _o)
+		__tmp249 := Operators_i32_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp249
 	} else if __tmp5 == 0x2d {
-		__tmp253 := Ast_memop_1(_s)
+		__tmp253 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp253)
-		__tmp258 := i32_load8_u_3(_x, _a, _o)
+		__tmp258 := Operators_i32_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp258
 	} else if __tmp5 == 0x2e {
-		__tmp262 := Ast_memop_1(_s)
+		__tmp262 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp262)
-		__tmp267 := i32_load16_s_3(_x, _a, _o)
+		__tmp267 := Operators_i32_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp267
 	} else if __tmp5 == 0x2f {
-		__tmp271 := Ast_memop_1(_s)
+		__tmp271 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp271)
-		__tmp276 := i32_load16_u_3(_x, _a, _o)
+		__tmp276 := Operators_i32_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp276
 	} else if __tmp5 == 0x30 {
-		__tmp280 := Ast_memop_1(_s)
+		__tmp280 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp280)
-		__tmp285 := i64_load8_s_3(_x, _a, _o)
+		__tmp285 := Operators_i64_load8_s_3(_x, _a, _o)
 		__tmp4 = __tmp285
 	} else if __tmp5 == 0x31 {
-		__tmp289 := Ast_memop_1(_s)
+		__tmp289 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp289)
-		__tmp294 := i64_load8_u_3(_x, _a, _o)
+		__tmp294 := Operators_i64_load8_u_3(_x, _a, _o)
 		__tmp4 = __tmp294
 	} else if __tmp5 == 0x32 {
-		__tmp298 := Ast_memop_1(_s)
+		__tmp298 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp298)
-		__tmp303 := i64_load16_s_3(_x, _a, _o)
+		__tmp303 := Operators_i64_load16_s_3(_x, _a, _o)
 		__tmp4 = __tmp303
 	} else if __tmp5 == 0x33 {
-		__tmp307 := Ast_memop_1(_s)
+		__tmp307 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp307)
-		__tmp312 := i64_load16_u_3(_x, _a, _o)
+		__tmp312 := Operators_i64_load16_u_3(_x, _a, _o)
 		__tmp4 = __tmp312
 	} else if __tmp5 == 0x34 {
-		__tmp316 := Ast_memop_1(_s)
+		__tmp316 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp316)
-		__tmp321 := i64_load32_s_3(_x, _a, _o)
+		__tmp321 := Operators_i64_load32_s_3(_x, _a, _o)
 		__tmp4 = __tmp321
 	} else if __tmp5 == 0x35 {
-		__tmp325 := Ast_memop_1(_s)
+		__tmp325 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp325)
-		__tmp330 := i64_load32_u_3(_x, _a, _o)
+		__tmp330 := Operators_i64_load32_u_3(_x, _a, _o)
 		__tmp4 = __tmp330
 	} else if __tmp5 == 0x36 {
-		__tmp334 := Ast_memop_1(_s)
+		__tmp334 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp334)
-		__tmp339 := i32_store_3(_x, _a, _o)
+		__tmp339 := Operators_i32_store_3(_x, _a, _o)
 		__tmp4 = __tmp339
 	} else if __tmp5 == 0x37 {
-		__tmp343 := Ast_memop_1(_s)
+		__tmp343 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp343)
-		__tmp348 := i64_store_3(_x, _a, _o)
+		__tmp348 := Operators_i64_store_3(_x, _a, _o)
 		__tmp4 = __tmp348
 	} else if __tmp5 == 0x38 {
-		__tmp352 := Ast_memop_1(_s)
+		__tmp352 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp352)
-		__tmp357 := f32_store_3(_x, _a, _o)
+		__tmp357 := Operators_f32_store_3(_x, _a, _o)
 		__tmp4 = __tmp357
 	} else if __tmp5 == 0x39 {
-		__tmp361 := Ast_memop_1(_s)
+		__tmp361 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp361)
-		__tmp366 := f64_store_3(_x, _a, _o)
+		__tmp366 := Operators_f64_store_3(_x, _a, _o)
 		__tmp4 = __tmp366
 	} else if __tmp5 == 0x3a {
-		__tmp370 := Ast_memop_1(_s)
+		__tmp370 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp370)
-		__tmp375 := i32_store8_3(_x, _a, _o)
+		__tmp375 := Operators_i32_store8_3(_x, _a, _o)
 		__tmp4 = __tmp375
 	} else if __tmp5 == 0x3b {
-		__tmp379 := Ast_memop_1(_s)
+		__tmp379 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp379)
-		__tmp384 := i32_store16_3(_x, _a, _o)
+		__tmp384 := Operators_i32_store16_3(_x, _a, _o)
 		__tmp4 = __tmp384
 	} else if __tmp5 == 0x3c {
-		__tmp388 := Ast_memop_1(_s)
+		__tmp388 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp388)
-		__tmp393 := i64_store8_3(_x, _a, _o)
+		__tmp393 := Operators_i64_store8_3(_x, _a, _o)
 		__tmp4 = __tmp393
 	} else if __tmp5 == 0x3d {
-		__tmp397 := Ast_memop_1(_s)
+		__tmp397 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp397)
-		__tmp402 := i64_store16_3(_x, _a, _o)
+		__tmp402 := Operators_i64_store16_3(_x, _a, _o)
 		__tmp4 = __tmp402
 	} else if __tmp5 == 0x3e {
-		__tmp406 := Ast_memop_1(_s)
+		__tmp406 := Decode_memop_1(_s)
 		_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp406)
-		__tmp411 := i64_store32_3(_x, _a, _o)
+		__tmp411 := Operators_i64_store32_3(_x, _a, _o)
 		__tmp4 = __tmp411
 	} else if __tmp5 == 0x3f {
-		__tmp415 := memory_size_1(at_2(Types_var, _s))
+		__tmp415 := Operators_memory_size_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp415
 	} else if __tmp5 == 0x40 {
-		__tmp419 := memory_grow_1(at_2(Types_var, _s))
+		__tmp419 := Operators_memory_grow_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp419
 	} else if __tmp5 == 0x41 {
-		__tmp423 := i32_const_1(at_2(_s32, _s))
+		__tmp423 := Operators_i32_const_1(at_2(Decode_s32, _s))
 		__tmp4 = __tmp423
 	} else if __tmp5 == 0x42 {
-		__tmp427 := i64_const_1(at_2(_s64, _s))
+		__tmp427 := Operators_i64_const_1(at_2(Decode_s64, _s))
 		__tmp4 = __tmp427
 	} else if __tmp5 == 0x43 {
-		__tmp431 := f32_const_1(at_2(_f32, _s))
+		__tmp431 := Operators_f32_const_1(at_2(Decode_f32, _s))
 		__tmp4 = __tmp431
 	} else if __tmp5 == 0x44 {
-		__tmp435 := f64_const_1(at_2(_f64, _s))
+		__tmp435 := Operators_f64_const_1(at_2(Decode_f64, _s))
 		__tmp4 = __tmp435
 	} else if __tmp5 == 0x45 {
 		__tmp439 := _i32_eqz
@@ -7728,13 +7864,13 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp568 := illegal_3(_s, _pos, _b)
 		__tmp4 = __tmp568
 	} else if __tmp5 == 0xd0 {
-		__tmp572 := ref_null_1(Types_heap_type_1(_s))
+		__tmp572 := Operators_ref_null_1(Decode_heap_type_1(_s))
 		__tmp4 = __tmp572
 	} else if __tmp5 == 0xd1 {
 		__tmp575 := _ref_is_null
 		__tmp4 = __tmp575
 	} else if __tmp5 == 0xd2 {
-		__tmp576 := ref_func_1(at_2(Types_var, _s))
+		__tmp576 := Operators_ref_func_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp576
 	} else if __tmp5 == 0xd3 {
 		__tmp580 := _ref_eq
@@ -7743,153 +7879,153 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp581 := _ref_as_non_null
 		__tmp4 = __tmp581
 	} else if __tmp5 == 0xd5 {
-		__tmp582 := br_on_null_1(at_2(Types_var, _s))
+		__tmp582 := Operators_br_on_null_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp582
 	} else if __tmp5 == 0xd6 {
-		__tmp586 := br_on_non_null_1(at_2(Types_var, _s))
+		__tmp586 := Operators_br_on_non_null_1(at_2(Decode_var, _s))
 		__tmp4 = __tmp586
 	} else if __tmp5 == 0xfb {
 		_b := __tmp5
 		var __tmp591 OAst_instr_
-		__tmp592 := u32_1(_s)
+		__tmp592 := Decode_u32_1(_s)
 		if __tmp592 == 0x00 {
-			__tmp595 := struct_new_1(at_2(Types_var, _s))
+			__tmp595 := Operators_struct_new_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp595
 		} else if __tmp592 == 0x01 {
-			__tmp599 := struct_new_default_1(at_2(Types_var, _s))
+			__tmp599 := Operators_struct_new_default_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp599
 		} else if __tmp592 == 0x02 {
-			__tmp603 := at_2(Types_var, _s)
+			__tmp603 := at_2(Decode_var, _s)
 			_x := __tmp603
-			__tmp607 := at_2(Types_var, _s)
+			__tmp607 := at_2(Decode_var, _s)
 			_y := __tmp607
-			__tmp611 := struct_get_2(_x, _y)
+			__tmp611 := Operators_struct_get_2(_x, _y)
 			__tmp591 = __tmp611
 		} else if __tmp592 == 0x03 {
-			__tmp614 := at_2(Types_var, _s)
+			__tmp614 := at_2(Decode_var, _s)
 			_x := __tmp614
-			__tmp618 := at_2(Types_var, _s)
+			__tmp618 := at_2(Decode_var, _s)
 			_y := __tmp618
-			__tmp622 := struct_get_s_2(_x, _y)
+			__tmp622 := Operators_struct_get_s_2(_x, _y)
 			__tmp591 = __tmp622
 		} else if __tmp592 == 0x04 {
-			__tmp625 := at_2(Types_var, _s)
+			__tmp625 := at_2(Decode_var, _s)
 			_x := __tmp625
-			__tmp629 := at_2(Types_var, _s)
+			__tmp629 := at_2(Decode_var, _s)
 			_y := __tmp629
-			__tmp633 := struct_get_u_2(_x, _y)
+			__tmp633 := Operators_struct_get_u_2(_x, _y)
 			__tmp591 = __tmp633
 		} else if __tmp592 == 0x05 {
-			__tmp636 := at_2(Types_var, _s)
+			__tmp636 := at_2(Decode_var, _s)
 			_x := __tmp636
-			__tmp640 := at_2(Types_var, _s)
+			__tmp640 := at_2(Decode_var, _s)
 			_y := __tmp640
-			__tmp644 := struct_set_2(_x, _y)
+			__tmp644 := Operators_struct_set_2(_x, _y)
 			__tmp591 = __tmp644
 		} else if __tmp592 == 0x06 {
-			__tmp647 := array_new_1(at_2(Types_var, _s))
+			__tmp647 := Operators_array_new_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp647
 		} else if __tmp592 == 0x07 {
-			__tmp651 := array_new_default_1(at_2(Types_var, _s))
+			__tmp651 := Operators_array_new_default_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp651
 		} else if __tmp592 == 0x08 {
-			__tmp655 := at_2(Types_var, _s)
+			__tmp655 := at_2(Decode_var, _s)
 			_x := __tmp655
-			__tmp659 := u32_1(_s)
+			__tmp659 := Decode_u32_1(_s)
 			_n := __tmp659
-			__tmp662 := array_new_fixed_2(_x, _n)
+			__tmp662 := Operators_array_new_fixed_2(_x, _n)
 			__tmp591 = __tmp662
 		} else if __tmp592 == 0x09 {
-			__tmp665 := at_2(Types_var, _s)
+			__tmp665 := at_2(Decode_var, _s)
 			_x := __tmp665
-			__tmp669 := at_2(Types_var, _s)
+			__tmp669 := at_2(Decode_var, _s)
 			_y := __tmp669
-			__tmp673 := array_new_data_2(_x, _y)
+			__tmp673 := Operators_array_new_data_2(_x, _y)
 			__tmp591 = __tmp673
 		} else if __tmp592 == 0x0a {
-			__tmp676 := at_2(Types_var, _s)
+			__tmp676 := at_2(Decode_var, _s)
 			_x := __tmp676
-			__tmp680 := at_2(Types_var, _s)
+			__tmp680 := at_2(Decode_var, _s)
 			_y := __tmp680
-			__tmp684 := array_new_elem_2(_x, _y)
+			__tmp684 := Operators_array_new_elem_2(_x, _y)
 			__tmp591 = __tmp684
 		} else if __tmp592 == 0x0b {
-			__tmp687 := array_get_1(at_2(Types_var, _s))
+			__tmp687 := Operators_array_get_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp687
 		} else if __tmp592 == 0x0c {
-			__tmp691 := array_get_s_1(at_2(Types_var, _s))
+			__tmp691 := Operators_array_get_s_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp691
 		} else if __tmp592 == 0x0d {
-			__tmp695 := array_get_u_1(at_2(Types_var, _s))
+			__tmp695 := Operators_array_get_u_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp695
 		} else if __tmp592 == 0x0e {
-			__tmp699 := array_set_1(at_2(Types_var, _s))
+			__tmp699 := Operators_array_set_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp699
 		} else if __tmp592 == 0x0f {
 			__tmp703 := _array_len
 			__tmp591 = __tmp703
 		} else if __tmp592 == 0x10 {
-			__tmp704 := array_fill_1(at_2(Types_var, _s))
+			__tmp704 := Operators_array_fill_1(at_2(Decode_var, _s))
 			__tmp591 = __tmp704
 		} else if __tmp592 == 0x11 {
-			__tmp708 := at_2(Types_var, _s)
+			__tmp708 := at_2(Decode_var, _s)
 			_x := __tmp708
-			__tmp712 := at_2(Types_var, _s)
+			__tmp712 := at_2(Decode_var, _s)
 			_y := __tmp712
-			__tmp716 := array_copy_2(_x, _y)
+			__tmp716 := Operators_array_copy_2(_x, _y)
 			__tmp591 = __tmp716
 		} else if __tmp592 == 0x12 {
-			__tmp719 := at_2(Types_var, _s)
+			__tmp719 := at_2(Decode_var, _s)
 			_x := __tmp719
-			__tmp723 := at_2(Types_var, _s)
+			__tmp723 := at_2(Decode_var, _s)
 			_y := __tmp723
-			__tmp727 := array_init_data_2(_x, _y)
+			__tmp727 := Operators_array_init_data_2(_x, _y)
 			__tmp591 = __tmp727
 		} else if __tmp592 == 0x13 {
-			__tmp730 := at_2(Types_var, _s)
+			__tmp730 := at_2(Decode_var, _s)
 			_x := __tmp730
-			__tmp734 := at_2(Types_var, _s)
+			__tmp734 := at_2(Decode_var, _s)
 			_y := __tmp734
-			__tmp738 := array_init_elem_2(_x, _y)
+			__tmp738 := Operators_array_init_elem_2(_x, _y)
 			__tmp591 = __tmp738
 		} else if __tmp592 == 0x14 {
-			__tmp741 := ref_test_1(struct {
+			__tmp741 := Operators_ref_test_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{Types_NoNull, Types_heap_type_1(_s)})
+			}{Types_NoNull, Decode_heap_type_1(_s)})
 			__tmp591 = __tmp741
 		} else if __tmp592 == 0x15 {
-			__tmp747 := ref_test_1(struct {
+			__tmp747 := Operators_ref_test_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{Types_Null, Types_heap_type_1(_s)})
+			}{Types_Null, Decode_heap_type_1(_s)})
 			__tmp591 = __tmp747
 		} else if __tmp592 == 0x16 {
-			__tmp753 := ref_cast_1(struct {
+			__tmp753 := Operators_ref_cast_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{Types_NoNull, Types_heap_type_1(_s)})
+			}{Types_NoNull, Decode_heap_type_1(_s)})
 			__tmp591 = __tmp753
 		} else if __tmp592 == 0x17 {
-			__tmp759 := ref_cast_1(struct {
+			__tmp759 := Operators_ref_cast_1(struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
-			}{Types_Null, Types_heap_type_1(_s)})
+			}{Types_Null, Decode_heap_type_1(_s)})
 			__tmp591 = __tmp759
 		} else if __tmp592 == 0x18 || __tmp592 == 0x19 {
 			_opcode := __tmp592
-			__tmp766 := byte_1(_s)
+			__tmp766 := Decode_byte_1(_s)
 			_flags := __tmp766
 			__tmp769 := require_4(_operatorEq_2(_operatorland_2(_flags, 0xfc), 0), _s, _operatorPlus_2(_pos, 2), "malformed br_on_cast flags")
 			_ = __tmp769
-			__tmp776 := at_2(Types_var, _s)
+			__tmp776 := at_2(Decode_var, _s)
 			_x := __tmp776
 			__tmp780 := struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
 			}{func() OTypes_null {
 				var __tmp781 OTypes_null
-				if bit_2(0, _flags) {
+				if Decode_bit_2(0, _flags) {
 					__tmp784 := Types_Null
 					__tmp781 = __tmp784
 				} else {
@@ -7897,14 +8033,14 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 					__tmp781 = __tmp786
 				}
 				return __tmp781
-			}(), Types_heap_type_1(_s)}
+			}(), Decode_heap_type_1(_s)}
 			_rt1 := __tmp780
 			__tmp791 := struct {
 				F0 OTypes_null
 				F1 OTypes_heap_type
 			}{func() OTypes_null {
 				var __tmp792 OTypes_null
-				if bit_2(1, _flags) {
+				if Decode_bit_2(1, _flags) {
 					__tmp795 := Types_Null
 					__tmp792 = __tmp795
 				} else {
@@ -7912,7 +8048,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 					__tmp792 = __tmp797
 				}
 				return __tmp792
-			}(), Types_heap_type_1(_s)}
+			}(), Decode_heap_type_1(_s)}
 			_rt2 := __tmp791
 			__tmp802 := _if_opcode___0x18l_then_br_on_cast_else_br_on_cast_fail__3(_x, _rt1, _rt2)
 
@@ -7941,7 +8077,7 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 	} else if __tmp5 == 0xfc {
 		_b := __tmp5
 		var __tmp819 OAst_instr_
-		__tmp820 := u32_1(_s)
+		__tmp820 := Decode_u32_1(_s)
 		if __tmp820 == 0x00 {
 			__tmp823 := _i32_trunc_sat_f32_s
 			__tmp819 = __tmp823
@@ -7967,50 +8103,50 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp830 := _i64_trunc_sat_f64_u
 			__tmp819 = __tmp830
 		} else if __tmp820 == 0x08 {
-			__tmp831 := at_2(Types_var, _s)
+			__tmp831 := at_2(Decode_var, _s)
 			_y := __tmp831
-			__tmp835 := at_2(Types_var, _s)
+			__tmp835 := at_2(Decode_var, _s)
 			_x := __tmp835
-			__tmp839 := memory_init_2(_x, _y)
+			__tmp839 := Operators_memory_init_2(_x, _y)
 			__tmp819 = __tmp839
 		} else if __tmp820 == 0x09 {
-			__tmp842 := data_drop_1(at_2(Types_var, _s))
+			__tmp842 := Operators_data_drop_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp842
 		} else if __tmp820 == 0x0a {
-			__tmp846 := at_2(Types_var, _s)
+			__tmp846 := at_2(Decode_var, _s)
 			_x := __tmp846
-			__tmp850 := at_2(Types_var, _s)
+			__tmp850 := at_2(Decode_var, _s)
 			_y := __tmp850
-			__tmp854 := memory_copy_2(_x, _y)
+			__tmp854 := Operators_memory_copy_2(_x, _y)
 			__tmp819 = __tmp854
 		} else if __tmp820 == 0x0b {
-			__tmp857 := memory_fill_1(at_2(Types_var, _s))
+			__tmp857 := Operators_memory_fill_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp857
 		} else if __tmp820 == 0x0c {
-			__tmp861 := at_2(Types_var, _s)
+			__tmp861 := at_2(Decode_var, _s)
 			_y := __tmp861
-			__tmp865 := at_2(Types_var, _s)
+			__tmp865 := at_2(Decode_var, _s)
 			_x := __tmp865
-			__tmp869 := table_init_2(_x, _y)
+			__tmp869 := Operators_table_init_2(_x, _y)
 			__tmp819 = __tmp869
 		} else if __tmp820 == 0x0d {
-			__tmp872 := elem_drop_1(at_2(Types_var, _s))
+			__tmp872 := Operators_elem_drop_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp872
 		} else if __tmp820 == 0x0e {
-			__tmp876 := at_2(Types_var, _s)
+			__tmp876 := at_2(Decode_var, _s)
 			_x := __tmp876
-			__tmp880 := at_2(Types_var, _s)
+			__tmp880 := at_2(Decode_var, _s)
 			_y := __tmp880
-			__tmp884 := table_copy_2(_x, _y)
+			__tmp884 := Operators_table_copy_2(_x, _y)
 			__tmp819 = __tmp884
 		} else if __tmp820 == 0x0f {
-			__tmp887 := table_grow_1(at_2(Types_var, _s))
+			__tmp887 := Operators_table_grow_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp887
 		} else if __tmp820 == 0x10 {
-			__tmp891 := table_size_1(at_2(Types_var, _s))
+			__tmp891 := Operators_table_size_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp891
 		} else if __tmp820 == 0x11 {
-			__tmp895 := table_fill_1(at_2(Types_var, _s))
+			__tmp895 := Operators_table_fill_1(at_2(Decode_var, _s))
 			__tmp819 = __tmp895
 		} else if _n := __tmp820; true {
 			_ = _n
@@ -8020,73 +8156,73 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 		__tmp4 = __tmp819
 	} else if __tmp5 == 0xfd {
 		var __tmp906 OAst_instr_
-		__tmp907 := u32_1(_s)
+		__tmp907 := Decode_u32_1(_s)
 		if __tmp907 == 0x00 {
-			__tmp910 := Ast_memop_1(_s)
+			__tmp910 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp910)
-			__tmp915 := v128_load_3(_x, _a, _o)
+			__tmp915 := Operators_v128_load_3(_x, _a, _o)
 			__tmp906 = __tmp915
 		} else if __tmp907 == 0x01 {
-			__tmp919 := Ast_memop_1(_s)
+			__tmp919 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp919)
-			__tmp924 := v128_load8x8_s_3(_x, _a, _o)
+			__tmp924 := Operators_v128_load8x8_s_3(_x, _a, _o)
 			__tmp906 = __tmp924
 		} else if __tmp907 == 0x02 {
-			__tmp928 := Ast_memop_1(_s)
+			__tmp928 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp928)
-			__tmp933 := v128_load8x8_u_3(_x, _a, _o)
+			__tmp933 := Operators_v128_load8x8_u_3(_x, _a, _o)
 			__tmp906 = __tmp933
 		} else if __tmp907 == 0x03 {
-			__tmp937 := Ast_memop_1(_s)
+			__tmp937 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp937)
-			__tmp942 := v128_load16x4_s_3(_x, _a, _o)
+			__tmp942 := Operators_v128_load16x4_s_3(_x, _a, _o)
 			__tmp906 = __tmp942
 		} else if __tmp907 == 0x04 {
-			__tmp946 := Ast_memop_1(_s)
+			__tmp946 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp946)
-			__tmp951 := v128_load16x4_u_3(_x, _a, _o)
+			__tmp951 := Operators_v128_load16x4_u_3(_x, _a, _o)
 			__tmp906 = __tmp951
 		} else if __tmp907 == 0x05 {
-			__tmp955 := Ast_memop_1(_s)
+			__tmp955 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp955)
-			__tmp960 := v128_load32x2_s_3(_x, _a, _o)
+			__tmp960 := Operators_v128_load32x2_s_3(_x, _a, _o)
 			__tmp906 = __tmp960
 		} else if __tmp907 == 0x06 {
-			__tmp964 := Ast_memop_1(_s)
+			__tmp964 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp964)
-			__tmp969 := v128_load32x2_u_3(_x, _a, _o)
+			__tmp969 := Operators_v128_load32x2_u_3(_x, _a, _o)
 			__tmp906 = __tmp969
 		} else if __tmp907 == 0x07 {
-			__tmp973 := Ast_memop_1(_s)
+			__tmp973 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp973)
-			__tmp978 := v128_load8_splat_3(_x, _a, _o)
+			__tmp978 := Operators_v128_load8_splat_3(_x, _a, _o)
 			__tmp906 = __tmp978
 		} else if __tmp907 == 0x08 {
-			__tmp982 := Ast_memop_1(_s)
+			__tmp982 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp982)
-			__tmp987 := v128_load16_splat_3(_x, _a, _o)
+			__tmp987 := Operators_v128_load16_splat_3(_x, _a, _o)
 			__tmp906 = __tmp987
 		} else if __tmp907 == 0x09 {
-			__tmp991 := Ast_memop_1(_s)
+			__tmp991 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp991)
-			__tmp996 := v128_load32_splat_3(_x, _a, _o)
+			__tmp996 := Operators_v128_load32_splat_3(_x, _a, _o)
 			__tmp906 = __tmp996
 		} else if __tmp907 == 0x0a {
-			__tmp1000 := Ast_memop_1(_s)
+			__tmp1000 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1000)
-			__tmp1005 := v128_load64_splat_3(_x, _a, _o)
+			__tmp1005 := Operators_v128_load64_splat_3(_x, _a, _o)
 			__tmp906 = __tmp1005
 		} else if __tmp907 == 0x0b {
-			__tmp1009 := Ast_memop_1(_s)
+			__tmp1009 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1009)
-			__tmp1014 := v128_store_3(_x, _a, _o)
+			__tmp1014 := Operators_v128_store_3(_x, _a, _o)
 			__tmp906 = __tmp1014
 		} else if __tmp907 == 0x0c {
-			__tmp1018 := v128_const_1(at_2(_v128, _s))
+			__tmp1018 := Operators_v128_const_1(at_2(Decode_v128, _s))
 			__tmp906 = __tmp1018
 		} else if __tmp907 == 0x0d {
-			__tmp1022 := i8x16_shuffle_1(List_init_2(16, func(__ OInt) OInt {
-				__tmp1024 := byte_1(_s)
+			__tmp1022 := Operators_i8x16_shuffle_1(List_init_2(16, func(__ OInt) OInt {
+				__tmp1024 := Decode_byte_1(_s)
 				return __tmp1024
 			}))
 			__tmp906 = __tmp1022
@@ -8112,74 +8248,74 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp1032 := _f64x2_splat
 			__tmp906 = __tmp1032
 		} else if __tmp907 == 0x15 {
-			__tmp1033 := byte_1(_s)
+			__tmp1033 := Decode_byte_1(_s)
 			_i := __tmp1033
-			__tmp1036 := i8x16_extract_lane_s_1(_i)
+			__tmp1036 := Operators_i8x16_extract_lane_s_1(_i)
 			__tmp906 = __tmp1036
 		} else if __tmp907 == 0x16 {
-			__tmp1038 := byte_1(_s)
+			__tmp1038 := Decode_byte_1(_s)
 			_i := __tmp1038
-			__tmp1041 := i8x16_extract_lane_u_1(_i)
+			__tmp1041 := Operators_i8x16_extract_lane_u_1(_i)
 			__tmp906 = __tmp1041
 		} else if __tmp907 == 0x17 {
-			__tmp1043 := byte_1(_s)
+			__tmp1043 := Decode_byte_1(_s)
 			_i := __tmp1043
-			__tmp1046 := i8x16_replace_lane_1(_i)
+			__tmp1046 := Operators_i8x16_replace_lane_1(_i)
 			__tmp906 = __tmp1046
 		} else if __tmp907 == 0x18 {
-			__tmp1048 := byte_1(_s)
+			__tmp1048 := Decode_byte_1(_s)
 			_i := __tmp1048
-			__tmp1051 := i16x8_extract_lane_s_1(_i)
+			__tmp1051 := Operators_i16x8_extract_lane_s_1(_i)
 			__tmp906 = __tmp1051
 		} else if __tmp907 == 0x19 {
-			__tmp1053 := byte_1(_s)
+			__tmp1053 := Decode_byte_1(_s)
 			_i := __tmp1053
-			__tmp1056 := i16x8_extract_lane_u_1(_i)
+			__tmp1056 := Operators_i16x8_extract_lane_u_1(_i)
 			__tmp906 = __tmp1056
 		} else if __tmp907 == 0x1a {
-			__tmp1058 := byte_1(_s)
+			__tmp1058 := Decode_byte_1(_s)
 			_i := __tmp1058
-			__tmp1061 := i16x8_replace_lane_1(_i)
+			__tmp1061 := Operators_i16x8_replace_lane_1(_i)
 			__tmp906 = __tmp1061
 		} else if __tmp907 == 0x1b {
-			__tmp1063 := byte_1(_s)
+			__tmp1063 := Decode_byte_1(_s)
 			_i := __tmp1063
-			__tmp1066 := i32x4_extract_lane_1(_i)
+			__tmp1066 := Operators_i32x4_extract_lane_1(_i)
 			__tmp906 = __tmp1066
 		} else if __tmp907 == 0x1c {
-			__tmp1068 := byte_1(_s)
+			__tmp1068 := Decode_byte_1(_s)
 			_i := __tmp1068
-			__tmp1071 := i32x4_replace_lane_1(_i)
+			__tmp1071 := Operators_i32x4_replace_lane_1(_i)
 			__tmp906 = __tmp1071
 		} else if __tmp907 == 0x1d {
-			__tmp1073 := byte_1(_s)
+			__tmp1073 := Decode_byte_1(_s)
 			_i := __tmp1073
-			__tmp1076 := i64x2_extract_lane_1(_i)
+			__tmp1076 := Operators_i64x2_extract_lane_1(_i)
 			__tmp906 = __tmp1076
 		} else if __tmp907 == 0x1e {
-			__tmp1078 := byte_1(_s)
+			__tmp1078 := Decode_byte_1(_s)
 			_i := __tmp1078
-			__tmp1081 := i64x2_replace_lane_1(_i)
+			__tmp1081 := Operators_i64x2_replace_lane_1(_i)
 			__tmp906 = __tmp1081
 		} else if __tmp907 == 0x1f {
-			__tmp1083 := byte_1(_s)
+			__tmp1083 := Decode_byte_1(_s)
 			_i := __tmp1083
-			__tmp1086 := f32x4_extract_lane_1(_i)
+			__tmp1086 := Operators_f32x4_extract_lane_1(_i)
 			__tmp906 = __tmp1086
 		} else if __tmp907 == 0x20 {
-			__tmp1088 := byte_1(_s)
+			__tmp1088 := Decode_byte_1(_s)
 			_i := __tmp1088
-			__tmp1091 := f32x4_replace_lane_1(_i)
+			__tmp1091 := Operators_f32x4_replace_lane_1(_i)
 			__tmp906 = __tmp1091
 		} else if __tmp907 == 0x21 {
-			__tmp1093 := byte_1(_s)
+			__tmp1093 := Decode_byte_1(_s)
 			_i := __tmp1093
-			__tmp1096 := f64x2_extract_lane_1(_i)
+			__tmp1096 := Operators_f64x2_extract_lane_1(_i)
 			__tmp906 = __tmp1096
 		} else if __tmp907 == 0x22 {
-			__tmp1098 := byte_1(_s)
+			__tmp1098 := Decode_byte_1(_s)
 			_i := __tmp1098
-			__tmp1101 := f64x2_replace_lane_1(_i)
+			__tmp1101 := Operators_f64x2_replace_lane_1(_i)
 			__tmp906 = __tmp1101
 		} else if __tmp907 == 0x23 {
 			__tmp1103 := _i8x16_eq
@@ -8329,70 +8465,70 @@ func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 			__tmp1151 := _v128_any_true
 			__tmp906 = __tmp1151
 		} else if __tmp907 == 0x54 {
-			__tmp1152 := Ast_memop_1(_s)
+			__tmp1152 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1152)
-			__tmp1157 := byte_1(_s)
+			__tmp1157 := Decode_byte_1(_s)
 			_lane := __tmp1157
-			__tmp1160 := v128_load8_lane_4(_x, _a, _o, _lane)
+			__tmp1160 := Operators_v128_load8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1160
 		} else if __tmp907 == 0x55 {
-			__tmp1165 := Ast_memop_1(_s)
+			__tmp1165 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1165)
-			__tmp1170 := byte_1(_s)
+			__tmp1170 := Decode_byte_1(_s)
 			_lane := __tmp1170
-			__tmp1173 := v128_load16_lane_4(_x, _a, _o, _lane)
+			__tmp1173 := Operators_v128_load16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1173
 		} else if __tmp907 == 0x56 {
-			__tmp1178 := Ast_memop_1(_s)
+			__tmp1178 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1178)
-			__tmp1183 := byte_1(_s)
+			__tmp1183 := Decode_byte_1(_s)
 			_lane := __tmp1183
-			__tmp1186 := v128_load32_lane_4(_x, _a, _o, _lane)
+			__tmp1186 := Operators_v128_load32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1186
 		} else if __tmp907 == 0x57 {
-			__tmp1191 := Ast_memop_1(_s)
+			__tmp1191 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1191)
-			__tmp1196 := byte_1(_s)
+			__tmp1196 := Decode_byte_1(_s)
 			_lane := __tmp1196
-			__tmp1199 := v128_load64_lane_4(_x, _a, _o, _lane)
+			__tmp1199 := Operators_v128_load64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1199
 		} else if __tmp907 == 0x58 {
-			__tmp1204 := Ast_memop_1(_s)
+			__tmp1204 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1204)
-			__tmp1209 := byte_1(_s)
+			__tmp1209 := Decode_byte_1(_s)
 			_lane := __tmp1209
-			__tmp1212 := v128_store8_lane_4(_x, _a, _o, _lane)
+			__tmp1212 := Operators_v128_store8_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1212
 		} else if __tmp907 == 0x59 {
-			__tmp1217 := Ast_memop_1(_s)
+			__tmp1217 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1217)
-			__tmp1222 := byte_1(_s)
+			__tmp1222 := Decode_byte_1(_s)
 			_lane := __tmp1222
-			__tmp1225 := v128_store16_lane_4(_x, _a, _o, _lane)
+			__tmp1225 := Operators_v128_store16_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1225
 		} else if __tmp907 == 0x5a {
-			__tmp1230 := Ast_memop_1(_s)
+			__tmp1230 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1230)
-			__tmp1235 := byte_1(_s)
+			__tmp1235 := Decode_byte_1(_s)
 			_lane := __tmp1235
-			__tmp1238 := v128_store32_lane_4(_x, _a, _o, _lane)
+			__tmp1238 := Operators_v128_store32_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1238
 		} else if __tmp907 == 0x5b {
-			__tmp1243 := Ast_memop_1(_s)
+			__tmp1243 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1243)
-			__tmp1248 := byte_1(_s)
+			__tmp1248 := Decode_byte_1(_s)
 			_lane := __tmp1248
-			__tmp1251 := v128_store64_lane_4(_x, _a, _o, _lane)
+			__tmp1251 := Operators_v128_store64_lane_4(_x, _a, _o, _lane)
 			__tmp906 = __tmp1251
 		} else if __tmp907 == 0x5c {
-			__tmp1256 := Ast_memop_1(_s)
+			__tmp1256 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1256)
-			__tmp1261 := v128_load32_zero_3(_x, _a, _o)
+			__tmp1261 := Operators_v128_load32_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1261
 		} else if __tmp907 == 0x5d {
-			__tmp1265 := Ast_memop_1(_s)
+			__tmp1265 := Decode_memop_1(_s)
 			_x, _a, _o := __unpack_Types_local_idx_phrase___OInt___OInt64(__tmp1265)
-			__tmp1270 := v128_load64_zero_3(_x, _a, _o)
+			__tmp1270 := Operators_v128_load64_zero_3(_x, _a, _o)
 			__tmp906 = __tmp1270
 		} else if __tmp907 == 0x5e {
 			__tmp1274 := _f32x4_demote_f64x2_zero
@@ -8946,9 +9082,9 @@ func __unpack_Types_addr_type___Types_limits(t struct {
 }
 
 func __unpack_Types_local_idx_phrase___OInt___OInt64(t struct {
-	F0 *OSource_Phrase[OTypes_local_idx]
+	F0 Ophrase
 	F1 OInt
 	F2 OInt64
-}) (*OSource_Phrase[OTypes_local_idx], OInt, OInt64) {
+}) (Ophrase, OInt, OInt64) {
 	return t.F0, t.F1, t.F2
 }
