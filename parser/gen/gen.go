@@ -47,7 +47,6 @@ var files = []File{
 	{
 		Path:       []string{"interpreter", "util", "source.ml"},
 		ModuleName: "Source",
-		Skip:       []string{"phrase"},
 	},
 	{
 		Path:       []string{"interpreter", "syntax", "ast.ml"},
@@ -588,7 +587,7 @@ func (p *ocamlParse) writeTypeDef(def ocaml.TypeDef, currentModule *ocaml.Module
 			}
 		}
 	case ocaml.Record:
-		w("type %s struct {\n", typeName(def.Modules, def.Name))
+		w("type %s%s struct {\n", typeName(def.Modules, def.Name), typeParams)
 		for _, f := range t {
 			w("  %s %s\n", fieldName(f.Name), ocaml2go(f.Type, currentModule))
 		}

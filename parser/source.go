@@ -13,10 +13,10 @@ package parser
 // 	right *Pos
 // }
 
-type OSource_Phrase[T any] struct {
-	at *OSource_Region
-	it T
-}
+// type OSource_Phrase[T any] struct {
+// 	at *OSource_Region
+// 	it T
+// }
 
 // var _no_pos = &Pos{
 // 	file:   "",

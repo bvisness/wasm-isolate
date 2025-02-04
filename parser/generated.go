@@ -1336,6 +1336,10 @@ type OSource_region struct {
 	left  OSource_pos
 	right OSource_pos
 }
+type OSource_phrase[T_a any] struct {
+	at OSource_region
+	it T_a
+}
 
 var Source_no_pos = nil    /* TODO: record_expression */
 var Source_no_region = nil /* TODO: record_expression */
@@ -1973,7 +1977,7 @@ type OAst_vec_vternop = OValue_vecop[OAst_V128Op_vternop]
 type OAst_vec_splatop = OValue_vecop[OAst_V128Op_splatop]
 type OAst_vec_extractop = OValue_vecop[OAst_V128Op_extractop]
 type OAst_vec_replaceop = OValue_vecop[OAst_V128Op_replaceop]
-type OAst_memop struct {
+type OAst_memop[T_t any, T_p any] struct {
 	ty     T_t
 	align  OInt
 	offset OInt64
