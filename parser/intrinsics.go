@@ -8,12 +8,12 @@ func __derefIfNotNil[T any](p *T) T {
 	return zero
 }
 
-// Void is defined as an empty variant type, so we follow that pattern here.
+// Unit should only ever have a value of nil.
 
-type OVoidKind int
+type OUnitKind int
 
-type OVoid interface {
-	Kind() OVoidKind
+type OUnit interface {
+	Kind() OUnitKind
 }
 
 type OI32_t = OInt32

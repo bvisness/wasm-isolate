@@ -1992,7 +1992,7 @@ type OAst_vec_loadop = OAst_memop[OTypes_vec_type, *struct {
 	F0 OPack_pack_size
 	F1 OPack_vec_extension
 }]
-type OAst_vec_storeop = OAst_memop[OTypes_vec_type, OAst_unit]
+type OAst_vec_storeop = OAst_memop[OTypes_vec_type, OUnit]
 type OAst_vec_laneop = OAst_memop[OTypes_vec_type, OPack_pack_size]
 
 type OAst_initop_kind int
@@ -6242,7 +6242,7 @@ func Decode_string_1(_s ODecode_stream) string {
 
 var Decode_string = Decode_string_1
 
-func Decode_zero_1(_s ODecode_stream) Ounit {
+func Decode_zero_1(_s ODecode_stream) OUnit {
 	__tmp1 := Decode_expect_3(0x00, _s, "zero byte expected")
 	return __tmp1
 }
@@ -6778,7 +6778,7 @@ func Decode_op_1(_s ODecode_stream) OInt {
 
 var Decode_op = Decode_op_1
 
-func Decode_end__1(_s ODecode_stream) Ounit {
+func Decode_end__1(_s ODecode_stream) OUnit {
 	__tmp1 := Decode_expect_3(0x0b, _s, "END opcode expected")
 	return __tmp1
 }

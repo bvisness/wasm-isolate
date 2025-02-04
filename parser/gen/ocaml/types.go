@@ -30,6 +30,7 @@ func NewModule(namespace []string, name string) *Module {
 		ValueDefs:     map[string]Def{},
 	}
 	m.TypeDefs = map[string]Def{
+		"unit":   Def{m.Namespace(), Primitive("OUnit")},
 		"bool":   Def{m.Namespace(), Primitive("bool")},
 		"string": Def{m.Namespace(), Primitive("string")},
 		"int":    Def{m.Namespace(), Primitive("OInt")},
