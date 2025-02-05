@@ -1180,10 +1180,13 @@ func (p *ocamlParse) parseExpr(
 		case ocaml.TypeDef:
 			tup = t.Type.(ocaml.Tuple)
 		default:
-			exitWithError("unexpected type in product_expression: %s (kind %d)", expectedType, expectedType.Kind())
+			// Derive a tuple type from the values present. Hope and pray.
+			fmt.Fprintf(os.Stderr, "WARNING: unexpected type in product_expression: %s (kind %d). Attempting to derive a tuple type from the values.\n", expectedType, expectedType.Kind())
+			tup = make(ocaml.Tuple, len(nodes))
+			for i, n := range nodes {
+				tup[i] = p.getTypeStart(n, module)
+			}
 		}
-
-		utils.Assert(len(nodes) == len(tup), "mismatch between product values and expected tuple type")
 
 		w("%s{", ocaml2go(tup, module))
 		for i, n := range nodes {
@@ -1203,29 +1206,34 @@ func (p *ocamlParse) parseExpr(
 	case "record_expression":
 		utils.Assert(expectedType.Kind() == ocaml.TTypeDef, "record_expression must have expected typedef")
 		def := expectedType.(ocaml.TypeDef)
+		var rec ocaml.Record
 		switch ty := def.Type.(type) {
 		case ocaml.Record:
-			w("%s{", typeName(def.Modules, def.Name))
-			for _, nField := range expr.NamedChildren(expr.Walk()) {
-				switch nField.GrammarName() {
-				case "field_expression":
-					nName := nField.ChildByFieldName("name")
-					nBody := nField.ChildByFieldName("body") // may be nil
-					w("%s: ", fieldName(p.s(nName)))
-					if nBody == nil {
-						w("%s", varName(nil, p.s(nName)))
-					} else {
-						p.parseExpr(nBody, ty.FieldType(p.s(nName)), module, locals, false, false)
-					}
-					w(", ")
-				default:
-					fmt.Fprintf(os.Stderr, "WARNING: Ignoring unexpected %s in record_expression\n", nField.GrammarName())
-				}
-			}
-			w("}")
+			rec = ty
+		case ocaml.Cons:
+			rec = ty.Collapsed().(ocaml.Record)
 		default:
 			w("nil /* TODO: record_expression with expected type %s (kind %d) */", ty, ty.Kind())
+			return ""
 		}
+		w("%s{", typeName(def.Modules, def.Name))
+		for _, nField := range expr.NamedChildren(expr.Walk()) {
+			switch nField.GrammarName() {
+			case "field_expression":
+				nName := nField.ChildByFieldName("name")
+				nBody := nField.ChildByFieldName("body") // may be nil
+				w("%s: ", fieldName(p.s(nName)))
+				if nBody == nil {
+					w("%s", varName(nil, p.s(nName)))
+				} else {
+					p.parseExpr(nBody, rec.FieldType(p.s(nName)), module, locals, false, false)
+				}
+				w(", ")
+			default:
+				fmt.Fprintf(os.Stderr, "WARNING: Ignoring unexpected %s in record_expression\n", nField.GrammarName())
+			}
+		}
+		w("}")
 	case "sequence_expression":
 		if !statement {
 			exitWithError("cannot use sequence_expression as an expression")

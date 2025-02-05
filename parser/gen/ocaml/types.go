@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bvisness/wasm-isolate/utils"
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
 	tree_sitter_ocaml "github.com/tree-sitter/tree-sitter-ocaml/bindings/go"
 )
@@ -95,6 +96,7 @@ const (
 type Type interface {
 	fmt.Stringer
 	Kind() TypeKind
+	Apply(r map[TypeVar]Type) Type
 }
 
 type Func struct {
@@ -108,6 +110,13 @@ func (f Func) String() string {
 
 func (f Func) Kind() TypeKind {
 	return TFunc
+}
+
+func (f Func) Apply(r map[TypeVar]Type) Type {
+	return Func{
+		In:  f.In.Apply(r),
+		Out: f.Out.Apply(r),
+	}
 }
 
 func (f Func) GetArgType(i int) Type {
@@ -140,6 +149,14 @@ func (t Tuple) Kind() TypeKind {
 	return TTuple
 }
 
+func (t Tuple) Apply(r map[TypeVar]Type) Type {
+	res := make(Tuple, len(t))
+	for i, ty := range t {
+		res[i] = ty.Apply(r)
+	}
+	return res
+}
+
 type Cons struct {
 	Types []Type
 	Base  Type // Not TypeDef here because we need to allow for built-in primitives
@@ -156,6 +173,30 @@ func (t Cons) String() string {
 
 func (t Cons) Kind() TypeKind {
 	return TCons
+}
+
+func (t Cons) Apply(r map[TypeVar]Type) Type {
+	newTypes := make([]Type, len(t.Types))
+	for i, ty := range t.Types {
+		newTypes[i] = ty.Apply(r)
+	}
+	newCons := Cons{
+		Types: newTypes,
+		Base:  t.Base,
+	}
+	return newCons.Collapsed()
+}
+
+// Get a de-genericified version of the type.
+func (t Cons) Collapsed() Type {
+	utils.Assert(t.Base.Kind() == TTypeDef, "%s is not a TypeDef", t.Base)
+	base := t.Base.(TypeDef)
+	utils.Assert(len(base.TypeVars) == len(t.Types), "Cons did not have enough type vars to satisfy its TypeDef %s: had %d vars but expected %d", base, len(t.Types), len(base.TypeVars))
+	r := make(map[TypeVar]Type)
+	for i, ty := range t.Types {
+		r[base.TypeVars[i]] = ty
+	}
+	return base.Type.Apply(r)
 }
 
 type Variant struct {
@@ -181,6 +222,22 @@ func (t Variants) Kind() TypeKind {
 	return TVariants
 }
 
+func (t Variants) Apply(r map[TypeVar]Type) Type {
+	res := make(Variants, len(t))
+	for i, variant := range res {
+		var ty *Type
+		if variant.Type != nil {
+			applied := (*variant.Type).Apply(r)
+			ty = &applied
+		}
+		res[i] = Variant{
+			Name: variant.Name,
+			Type: ty,
+		}
+	}
+	return res
+}
+
 type Record []RecordField
 
 type RecordField struct {
@@ -202,6 +259,17 @@ func (t Record) String() string {
 
 func (t Record) Kind() TypeKind {
 	return TRecord
+}
+
+func (t Record) Apply(r map[TypeVar]Type) Type {
+	res := make(Record, len(t))
+	for i, f := range t {
+		res[i] = RecordField{
+			Name: f.Name,
+			Type: f.Type.Apply(r),
+		}
+	}
+	return res
 }
 
 func (t Record) FieldType(name string) Type {
@@ -230,6 +298,10 @@ func (t Identifier) Kind() TypeKind {
 	return TIdentifier
 }
 
+func (t Identifier) Apply(r map[TypeVar]Type) Type {
+	return t
+}
+
 type TypeDef struct {
 	// TODO: Do we need modules in this any more? Now we're tracking a module path on all
 	// definitions, so this seems redundant and likely just wrong.
@@ -246,6 +318,11 @@ func (t TypeDef) Kind() TypeKind {
 	return TTypeDef
 }
 
+func (t TypeDef) Apply(r map[TypeVar]Type) Type {
+	utils.Assert(len(t.TypeVars) == 0, "should not have attempted to Apply a TypeDef without it being handled by a Cons")
+	return t
+}
+
 type Primitive string
 
 func (t Primitive) String() string {
@@ -256,6 +333,10 @@ func (t Primitive) Kind() TypeKind {
 	return TPrimitive
 }
 
+func (t Primitive) Apply(r map[TypeVar]Type) Type {
+	return t
+}
+
 type TypeVar string
 
 func (t TypeVar) String() string {
@@ -264,6 +345,10 @@ func (t TypeVar) String() string {
 
 func (t TypeVar) Kind() TypeKind {
 	return TTypeVar
+}
+
+func (t TypeVar) Apply(r map[TypeVar]Type) Type {
+	return r[t]
 }
 
 func ParseType(t string, currentModule *Module) Type {
