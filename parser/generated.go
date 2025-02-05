@@ -1341,8 +1341,8 @@ type OSource_phrase[T_a any] struct {
 	it T_a
 }
 
-var Source_no_pos = nil    /* TODO: record_expression */
-var Source_no_region = nil /* TODO: record_expression */
+var Source_no_pos = OSource_pos{file: "", line: 0, column: 0}
+var Source_no_region = OSource_region{left: Source_no_pos, right: Source_no_pos}
 
 type OAst_IntOp_unop_kind int
 
@@ -4011,7 +4011,8 @@ type OAst_module__ struct {
 	exports  []OAst_export
 }
 
-var Ast_empty_module = nil /* TODO: record_expression */
+var Ast_empty_module = OAst_module__{types: []OAst_type_{}, globals: []OAst_global{}, tables: []OAst_table{}, memories: []OAst_memory{}, tags: []OAst_tag{}, funcs: []OAst_func{}, start: nil, elems: []OAst_elem_segment{}, datas: []OAst_data_segment{}, imports: []OAst_import{}, exports: []OAst_export{}}
+
 func Operators_i32_const_1(_n OSource_phrase[OTypes_type_idx]) OAst_instr_ {
 	__tmp1 := Ast_Const_1(_operatorAtAt_2(Value_I32_1(nil /* TODO: field_get_expression */), nil /* TODO: field_get_expression */))
 	return __tmp1
@@ -4476,7 +4477,7 @@ func Operators_i32_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4498,7 +4499,7 @@ func Operators_i64_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4520,7 +4521,7 @@ func Operators_f32_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4542,7 +4543,7 @@ func Operators_f64_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAst
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4564,7 +4565,7 @@ func Operators_i32_load8_s_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4586,7 +4587,7 @@ func Operators_i32_load8_u_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4608,7 +4609,7 @@ func Operators_i32_load16_s_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4630,7 +4631,7 @@ func Operators_i32_load16_u_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4652,7 +4653,7 @@ func Operators_i64_load8_s_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4674,7 +4675,7 @@ func Operators_i64_load8_u_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4696,7 +4697,7 @@ func Operators_i64_load16_s_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4718,7 +4719,7 @@ func Operators_i64_load16_u_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4740,7 +4741,7 @@ func Operators_i64_load32_s_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4762,7 +4763,7 @@ func Operators_i64_load32_u_3(_x OAst_idx, _align OInt, _offset OValue_address) 
 	__tmp1 := Ast_Load_1(struct {
 		F0 OAst_idx
 		F1 OAst_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size * Pack.extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4784,7 +4785,7 @@ func Operators_i32_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAs
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4806,7 +4807,7 @@ func Operators_i64_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAs
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4828,7 +4829,7 @@ func Operators_f32_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAs
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4850,7 +4851,7 @@ func Operators_f64_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OAs
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4872,7 +4873,7 @@ func Operators_i32_store8_3(_x OAst_idx, _align OInt, _offset OValue_address) OA
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4894,7 +4895,7 @@ func Operators_i32_store16_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4916,7 +4917,7 @@ func Operators_i64_store8_3(_x OAst_idx, _align OInt, _offset OValue_address) OA
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4938,7 +4939,7 @@ func Operators_i64_store16_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4960,7 +4961,7 @@ func Operators_i64_store32_3(_x OAst_idx, _align OInt, _offset OValue_address) O
 	__tmp1 := Ast_Store_1(struct {
 		F0 OAst_idx
 		F1 OAst_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.num_type Pack.pack_size option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -4982,7 +4983,7 @@ func Operators_v128_load_3(_x OAst_idx, _align OInt, _offset OValue_address) OAs
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5004,7 +5005,7 @@ func Operators_v128_load8x8_s_3(_x OAst_idx, _align OInt, _offset OValue_address
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5026,7 +5027,7 @@ func Operators_v128_load8x8_u_3(_x OAst_idx, _align OInt, _offset OValue_address
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5048,7 +5049,7 @@ func Operators_v128_load16x4_s_3(_x OAst_idx, _align OInt, _offset OValue_addres
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5070,7 +5071,7 @@ func Operators_v128_load16x4_u_3(_x OAst_idx, _align OInt, _offset OValue_addres
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5092,7 +5093,7 @@ func Operators_v128_load32x2_s_3(_x OAst_idx, _align OInt, _offset OValue_addres
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5114,7 +5115,7 @@ func Operators_v128_load32x2_u_3(_x OAst_idx, _align OInt, _offset OValue_addres
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5136,7 +5137,7 @@ func Operators_v128_load8_splat_3(_x OAst_idx, _align OInt, _offset OValue_addre
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5158,7 +5159,7 @@ func Operators_v128_load16_splat_3(_x OAst_idx, _align OInt, _offset OValue_addr
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5180,7 +5181,7 @@ func Operators_v128_load32_splat_3(_x OAst_idx, _align OInt, _offset OValue_addr
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5202,7 +5203,7 @@ func Operators_v128_load64_splat_3(_x OAst_idx, _align OInt, _offset OValue_addr
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5224,7 +5225,7 @@ func Operators_v128_load32_zero_3(_x OAst_idx, _align OInt, _offset OValue_addre
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5246,7 +5247,7 @@ func Operators_v128_load64_zero_3(_x OAst_idx, _align OInt, _offset OValue_addre
 	__tmp1 := Ast_VecLoad_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_loadop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size * Pack.vec_extension option Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5269,7 +5270,7 @@ func Operators_v128_load8_lane_4(_x OAst_idx, _align OInt, _offset OValue_addres
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5298,7 +5299,7 @@ func Operators_v128_load16_lane_4(_x OAst_idx, _align OInt, _offset OValue_addre
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5327,7 +5328,7 @@ func Operators_v128_load32_lane_4(_x OAst_idx, _align OInt, _offset OValue_addre
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5356,7 +5357,7 @@ func Operators_v128_load64_lane_4(_x OAst_idx, _align OInt, _offset OValue_addre
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5384,7 +5385,7 @@ func Operators_v128_store_3(_x OAst_idx, _align OInt, _offset OValue_address) OA
 	__tmp1 := Ast_VecStore_1(struct {
 		F0 OAst_idx
 		F1 OAst_vec_storeop
-	}{_x, nil /* TODO: record_expression */})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type OUnit Ast.memop (kind 3) */})
 	return __tmp1
 }
 
@@ -5407,7 +5408,7 @@ func Operators_v128_store8_lane_4(_x OAst_idx, _align OInt, _offset OValue_addre
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5436,7 +5437,7 @@ func Operators_v128_store16_lane_4(_x OAst_idx, _align OInt, _offset OValue_addr
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5465,7 +5466,7 @@ func Operators_v128_store32_lane_4(_x OAst_idx, _align OInt, _offset OValue_addr
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -5494,7 +5495,7 @@ func Operators_v128_store64_lane_4(_x OAst_idx, _align OInt, _offset OValue_addr
 		F0 OAst_idx
 		F1 OAst_vec_laneop
 		F2 OInt
-	}{_x, nil /* TODO: record_expression */, _i})
+	}{_x, nil /* TODO: record_expression with expected type Types.vec_type Pack.pack_size Ast.memop (kind 3) */, _i})
 	return __tmp1
 }
 
@@ -7032,7 +7033,7 @@ func Decode_limits_2(_uN func(ODecode_stream) OInt64, _s ODecode_stream) struct 
 	return struct {
 		F0 OTypes_addr_type
 		F1 OTypes_limits
-	}{_at, nil /* TODO: record_expression */}
+	}{_at, OTypes_limits{min: _min, max: _max}}
 
 }
 
@@ -7158,22 +7159,6 @@ func Decode_block_type_1(_s ODecode_stream) OAst_block_type {
 }
 
 var Decode_block_type = Decode_block_type_1
-
-func Decode_local_1(_s ODecode_stream) struct {
-	F0 OTypes_local_idx
-	F1 OSource_phrase[OAst_local_]
-} {
-	__tmp1 := Decode_u32_1(_s)
-	_n := __tmp1
-	__tmp4 := Source_at_2(Decode_val_type, _s)
-	_t := __tmp4
-	return struct {
-		F0 OTypes_local_idx
-		F1 OSource_phrase[OAst_local_]
-	}{_n, _operatorAtAt_2(nil /* TODO: record_expression */, nil /* TODO: field_get_expression */)}
-}
-
-var Decode_local = Decode_local_1
 
 func Decode_instr_1(_s ODecode_stream) OAst_instr_ {
 	__tmp1 := Decode_pos_1(_s)

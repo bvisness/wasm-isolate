@@ -62,6 +62,9 @@ var files = []File{
 	{
 		Path:       []string{"interpreter", "binary", "decode.ml"},
 		ModuleName: "Decode",
+		Skip: []string{
+			"local", // record with confusing generic type
+		},
 	},
 }
 
@@ -793,9 +796,9 @@ func (p *ocamlParse) parseExpr(
 	statement bool,
 	returnIfTerminal bool,
 ) string {
-	// fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, in module: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, currentModule, statement, returnIfTerminal)
-	// fmt.Fprintf(os.Stderr, "  %s\n", p.s(expr))
-	// fmt.Fprintf(os.Stderr, "  %s\n", expr.ToSexp())
+	fmt.Fprintf(os.Stderr, "parsing %s (expecting: %s, in module: %s, as statement: %v, returning if terminal: %v)\n", expr.GrammarName(), expectedType, module, statement, returnIfTerminal)
+	fmt.Fprintf(os.Stderr, "  %s\n", p.s(expr))
+	fmt.Fprintf(os.Stderr, "  %s\n", expr.ToSexp())
 
 	utils.Assert(module != nil, "must have a module to parse expressions")
 
@@ -1198,7 +1201,31 @@ func (p *ocamlParse) parseExpr(
 			}
 		}
 	case "record_expression":
-		w("nil /* TODO: record_expression */")
+		utils.Assert(expectedType.Kind() == ocaml.TTypeDef, "record_expression must have expected typedef")
+		def := expectedType.(ocaml.TypeDef)
+		switch ty := def.Type.(type) {
+		case ocaml.Record:
+			w("%s{", typeName(def.Modules, def.Name))
+			for _, nField := range expr.NamedChildren(expr.Walk()) {
+				switch nField.GrammarName() {
+				case "field_expression":
+					nName := nField.ChildByFieldName("name")
+					nBody := nField.ChildByFieldName("body") // may be nil
+					w("%s: ", fieldName(p.s(nName)))
+					if nBody == nil {
+						w("%s", varName(nil, p.s(nName)))
+					} else {
+						p.parseExpr(nBody, ty.FieldType(p.s(nName)), module, locals, false, false)
+					}
+					w(", ")
+				default:
+					fmt.Fprintf(os.Stderr, "WARNING: Ignoring unexpected %s in record_expression\n", nField.GrammarName())
+				}
+			}
+			w("}")
+		default:
+			w("nil /* TODO: record_expression with expected type %s (kind %d) */", ty, ty.Kind())
+		}
 	case "sequence_expression":
 		if !statement {
 			exitWithError("cannot use sequence_expression as an expression")

@@ -63,6 +63,10 @@ func (m Module) Namespace() Namespace {
 	return append(m.ParentModules, m.Name)
 }
 
+func (m Module) String() string {
+	return m.Namespace().String()
+}
+
 type Namespace []string
 
 func (n Namespace) String() string {
@@ -198,6 +202,15 @@ func (t Record) String() string {
 
 func (t Record) Kind() TypeKind {
 	return TRecord
+}
+
+func (t Record) FieldType(name string) Type {
+	for _, f := range t {
+		if f.Name == name {
+			return f.Type
+		}
+	}
+	panic(fmt.Sprintf("no field found with name %s", name))
 }
 
 type Identifier struct {
