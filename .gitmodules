@@ -1,4 +1,0 @@
-[submodule "spec"]
-	path = parser/spec
-	url = https://github.com/WebAssembly/spec.git
-	branch = wasm-3.0

@@ -1,0 +1,9 @@
+[package]
+name = "wasm-isolate"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.95"
+clap = { version = "4.5.28", features = ["derive"] }
+wasmparser = "0.225.0"
