@@ -130,7 +130,7 @@ fn main() -> Result<()> {
         let func_idx = *func_queue.first().expect("defined function");
         func_queue.remove(0);
 
-        let func = &defined_funcs[func_idx as usize];
+        let func = &defined_funcs[(func_idx - num_imported_functions) as usize];
         let uses = get_func_uses(func);
 
         println!("{:#?}", uses);
