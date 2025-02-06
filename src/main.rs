@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::{collections::HashSet, fs::File};
 
 use anyhow::{bail, Result};
 use clap::Parser as _;
@@ -126,12 +126,22 @@ fn main() -> Result<()> {
         func_queue.push(func);
     }
 
+    let mut processed_funcs = HashSet::<u32>::new();
+
     while !func_queue.is_empty() {
         let func_idx = *func_queue.first().expect("defined function");
         func_queue.remove(0);
+        processed_funcs.insert(func_idx);
 
         let func = &defined_funcs[(func_idx - num_imported_functions) as usize];
         let uses = get_func_uses(func);
+        for used_func in &uses.live_funcs {
+            if *used_func < num_imported_functions {
+                // TODO: track imports
+            } else if !processed_funcs.contains(used_func) {
+                func_queue.push(*used_func);
+            }
+        }
 
         println!("{:#?}", uses);
     }
