@@ -9,8 +9,7 @@ use wasm_encoder::{
     reencode::{
         utils::{global_type, memory_type, table_type, tag_type},
         RoundtripReencoder,
-    },
-    EntityType, ImportSection, Module, RawSection,
+    }, CodeSection, EntityType, Function, FunctionSection, ImportSection, Instruction, Module, RawSection
 };
 use wasmparser::{
     BlockType, Catch, CompositeInnerType, FuncType, HeapType, Import, MemArg, Operator, Parser,
@@ -199,14 +198,37 @@ fn main() -> Result<()> {
 
     let mut relocations = HashMap::<Relocation, u32>::new();
 
+    for type_idx in &all_uses.live_tables {
+        let new_idx = get_new_index(&all_uses.live_types, type_idx);
+        relocations.insert(Relocation::Type(*type_idx), new_idx);
+    }
     for func_idx in &all_uses.live_funcs {
-        let new_idx = all_uses
-            .live_funcs
-            .iter()
-            .position(|&idx| idx == *func_idx)
-            .expect("original func index should have been in vec of live funcs")
-            as u32;
+        let new_idx = get_new_index(&all_uses.live_funcs, func_idx);
         relocations.insert(Relocation::Func(*func_idx), new_idx);
+    }
+    for table_idx in &all_uses.live_tables {
+        let new_idx = get_new_index(&all_uses.live_tables, table_idx);
+        relocations.insert(Relocation::Table(*table_idx), new_idx);
+    }
+    for global_idx in &all_uses.live_globals {
+        let new_idx = get_new_index(&all_uses.live_globals, global_idx);
+        relocations.insert(Relocation::Global(*global_idx), new_idx);
+    }
+    for mem_idx in &all_uses.live_memories {
+        let new_idx = get_new_index(&all_uses.live_memories, mem_idx);
+        relocations.insert(Relocation::Memory(*mem_idx), new_idx);
+    }
+    for data_idx in &all_uses.live_datas {
+        let new_idx = get_new_index(&all_uses.live_datas, data_idx);
+        relocations.insert(Relocation::Data(*data_idx), new_idx);
+    }
+    for elem_idx in &all_uses.live_elems {
+        let new_idx = get_new_index(&all_uses.live_elems, elem_idx);
+        relocations.insert(Relocation::Elem(*elem_idx), new_idx);
+    }
+    for tag_idx in &all_uses.live_tags {
+        let new_idx = get_new_index(&all_uses.live_tags, tag_idx);
+        relocations.insert(Relocation::Tag(*tag_idx), new_idx);
     }
 
     //
@@ -285,8 +307,30 @@ fn main() -> Result<()> {
 
                 out.section(&import_section);
             }
-            Section::Function => {}
-            Section::Code => {}
+            Section::Function => {
+                let mut function_section = FunctionSection::new();
+                for (i, f) in defined_funcs.iter().enumerate() {
+                    let idx = i as u32 + num_imported_functions;
+                    if all_uses.live_funcs.contains(&idx) {
+                        // TODO: Relocate...or don't? Depends what we do with types.
+                        function_section.function(f.type_index);
+                    }
+                }
+                out.section(&function_section);
+            }
+            Section::Code => {
+                let mut code_section = CodeSection::new();
+                for (i, f) in defined_funcs.iter().enumerate() {
+                    let idx = i as u32 + num_imported_functions;
+                    if all_uses.live_funcs.contains(&idx) {
+                        // TODO: locals
+                        let mut new_func = Function::new(vec![]);
+                        new_func.instruction(&Instruction::End);
+                        code_section.function(&new_func);
+                    }
+                }
+                out.section(&code_section);
+            }
         }
     }
     let out_bytes = out.finish();
@@ -294,6 +338,14 @@ fn main() -> Result<()> {
     fs::write(args.out, out_bytes).expect("unable to write file");
 
     Ok(())
+}
+
+fn get_new_index(live_things: &Vec<u32>, idx: &u32) -> u32 {
+    live_things
+        .iter()
+        .position(|&v| v == *idx)
+        .expect("original index should have been in vec")
+        as u32
 }
 
 fn get_reader(filename: String) -> Box<dyn std::io::Read> {
@@ -1326,5 +1378,12 @@ impl<'a> Section<'a> {
 
 #[derive(Eq, PartialEq, Hash)]
 enum Relocation {
+    Type(u32),
     Func(u32),
+    Table(u32),
+    Global(u32),
+    Memory(u32),
+    Data(u32),
+    Elem(u32),
+    Tag(u32),
 }
