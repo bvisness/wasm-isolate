@@ -1,21 +1,23 @@
-use std::{collections::HashSet, fs::File};
+use std::{collections::HashSet, fs::{self, File}};
 
 use anyhow::{bail, Result};
 use clap::Parser as _;
+use wasm_encoder::{Module, RawSection};
 use wasmparser::{
     BlockType, Catch, CompositeInnerType, FuncType, HeapType, MemArg, Operator, Parser, Payload::*,
     RefType, ValType,
 };
 
-/// Simple program to greet a person
 #[derive(clap::Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Name of the person to greet
     filename: String,
 
     #[arg(short, long, required = true)]
     funcs: Vec<u32>,
+
+    #[arg(short, long, required = true)]
+    out: String,
 }
 
 fn main() -> Result<()> {
@@ -36,10 +38,14 @@ fn main() -> Result<()> {
 
     let mut defined_funcs: Vec<Func> = vec![];
 
+    let mut sections: Vec<Section> = vec![];
+
     for payload in parser.parse_all(&buf) {
         match payload? {
             // Sections for WebAssembly modules
             TypeSection(r) => {
+                sections.push(Section::raw(1, &buf[r.range()]));
+
                 for rg in r {
                     for t in rg?.into_types() {
                         types.push(t.composite_type.inner);
@@ -47,6 +53,8 @@ fn main() -> Result<()> {
                 }
             }
             ImportSection(r) => {
+                sections.push(Section::raw(2, &buf[r.range()]));
+
                 for import in r {
                     match import?.ty {
                         wasmparser::TypeRef::Func(..) => {
@@ -64,6 +72,8 @@ fn main() -> Result<()> {
                 }
             }
             FunctionSection(r) => {
+                sections.push(Section::Function);
+
                 for f in r {
                     let type_idx = f?;
                     if let CompositeInnerType::Func(ft) = &types[type_idx as usize] {
@@ -73,21 +83,43 @@ fn main() -> Result<()> {
                     }
                 }
             }
-            TableSection(_) => { /* ... */ }
-            MemorySection(_) => { /* ... */ }
-            TagSection(_) => { /* ... */ }
-            GlobalSection(_) => { /* ... */ }
-            ExportSection(_) => { /* ... */ }
-            StartSection { .. } => { /* ... */ }
-            ElementSection(_) => { /* ... */ }
-            DataCountSection { .. } => { /* ... */ }
-            DataSection(_) => { /* ... */ }
+            TableSection(r) => {
+                sections.push(Section::raw(4, &buf[r.range()]));
+            }
+            MemorySection(r) => {
+                sections.push(Section::raw(5, &buf[r.range()]));
+            }
+            TagSection(r) => {
+                sections.push(Section::raw(13, &buf[r.range()]));
+            }
+            GlobalSection(r) => {
+                sections.push(Section::raw(6, &buf[r.range()]));
+            }
+            ExportSection(r) => {
+                sections.push(Section::raw(7, &buf[r.range()]));
+            }
+            StartSection { func: _, range } => {
+                // TODO: Either always preserve the start function, or preserve
+                // the start section only if the start function is preserved.
+                // (Maybe this should be a flag.)
+                sections.push(Section::raw(8, &buf[range]));
+            }
+            ElementSection(r) => {
+                sections.push(Section::raw(9, &buf[r.range()]));
+            }
+            DataCountSection { count: _, range } => {
+                sections.push(Section::raw(12, &buf[range]));
+            }
+            DataSection(r) => {
+                sections.push(Section::raw(11, &buf[r.range()]));
+            }
 
             // Here we know how many functions we'll be receiving as
             // `CodeSectionEntry`, so we can prepare for that, and
             // afterwards we can parse and handle each function
             // individually.
             CodeSectionStart { .. } => {
+                sections.push(Section::Code);
                 current_func = num_imported_functions;
             }
             CodeSectionEntry(body) => {
@@ -121,9 +153,17 @@ fn main() -> Result<()> {
                 defined_funcs.push(func)
             }
 
+            CustomSection(r) => {
+                sections.push(Section::raw(0, &buf[r.range()]));
+            }
+
             _ => {}
         }
     }
+
+    //
+    // Iterate over all live objects until we have gathered all the references.
+    //
 
     let mut func_queue: Vec<u32> = vec![];
     for func in args.funcs {
@@ -149,6 +189,24 @@ fn main() -> Result<()> {
 
         println!("{:#?}", uses);
     }
+
+    //
+    // Output the new wasm module.
+    //
+
+    let mut out = Module::new();
+    for section in sections {
+        match section {
+            Section::Passthrough(sec) => {
+                out.section(&sec);
+            },
+            Section::Function => {},
+            Section::Code => {},
+        }
+    }
+    let out_bytes = out.finish();
+
+    fs::write(args.out, out_bytes).expect("unable to write file");
 
     Ok(())
 }
@@ -1164,5 +1222,18 @@ fn get_instr_uses(instr: &Operator<'_>) -> Uses {
         Operator::I64MulWideU => Uses::default(),
 
         _ => Uses::default(),
+    }
+}
+
+enum Section<'a> {
+    Passthrough(RawSection<'a>),
+    Function,
+    Code,
+}
+
+impl<'a> Section<'a> {
+    fn raw(id: u8, bytes: &'a [u8]) -> Section<'a> {
+        let foo = RawSection{ id: id, data: bytes };
+        Self::Passthrough(foo)
     }
 }
