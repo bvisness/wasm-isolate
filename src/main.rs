@@ -1,11 +1,20 @@
-use std::{collections::HashSet, fs::{self, File}};
+use std::{
+    collections::HashMap,
+    fs::{self, File},
+};
 
 use anyhow::{bail, Result};
 use clap::Parser as _;
-use wasm_encoder::{Module, RawSection};
+use wasm_encoder::{
+    reencode::{
+        utils::{global_type, memory_type, table_type, tag_type},
+        RoundtripReencoder,
+    },
+    EntityType, ImportSection, Module, RawSection,
+};
 use wasmparser::{
-    BlockType, Catch, CompositeInnerType, FuncType, HeapType, MemArg, Operator, Parser, Payload::*,
-    RefType, ValType,
+    BlockType, Catch, CompositeInnerType, FuncType, HeapType, Import, MemArg, Operator, Parser,
+    Payload::*, RefType, ValType,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -36,6 +45,7 @@ fn main() -> Result<()> {
     let mut current_func = 0;
     let mut first_func: bool = true;
 
+    let mut imports: Vec<Import> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
 
     let mut sections: Vec<Section> = vec![];
@@ -53,22 +63,17 @@ fn main() -> Result<()> {
                 }
             }
             ImportSection(r) => {
-                sections.push(Section::raw(2, &buf[r.range()]));
+                sections.push(Section::Import);
 
                 for import in r {
-                    match import?.ty {
+                    let import = import?;
+                    match import.ty {
                         wasmparser::TypeRef::Func(..) => {
                             num_imported_functions += 1;
                         }
                         _ => {}
                     }
-                }
-
-                // Yell at the user if they try to keep an imported function
-                for func_idx in &args.funcs {
-                    if *func_idx < num_imported_functions {
-                        bail!("Cannot isolate func {func_idx} because it is an imported function");
-                    }
+                    imports.push(import);
                 }
             }
             FunctionSection(r) => {
@@ -133,9 +138,6 @@ fn main() -> Result<()> {
                     &func_types[(current_func - num_imported_functions) as usize];
 
                 let mut func = Func {
-                    original_index: current_func,
-                    index_in_code_section: current_func - num_imported_functions,
-
                     type_index: *type_index,
                     ty: ty.clone(),
 
@@ -170,24 +172,41 @@ fn main() -> Result<()> {
         func_queue.push(func);
     }
 
-    let mut processed_funcs = HashSet::<u32>::new();
+    let mut all_uses = Uses::default();
 
     while !func_queue.is_empty() {
         let func_idx = *func_queue.first().expect("defined function");
         func_queue.remove(0);
-        processed_funcs.insert(func_idx);
+        all_uses.merge(Uses::single_func(func_idx));
 
         let func = &defined_funcs[(func_idx - num_imported_functions) as usize];
         let uses = get_func_uses(func);
         for used_func in &uses.live_funcs {
             if *used_func < num_imported_functions {
                 // TODO: track imports
-            } else if !processed_funcs.contains(used_func) {
+            } else if !all_uses.live_funcs.contains(used_func) {
                 func_queue.push(*used_func);
             }
         }
 
-        println!("{:#?}", uses);
+        all_uses.merge(uses);
+    }
+    println!("{:#?}", all_uses);
+
+    //
+    // Track relocations
+    //
+
+    let mut relocations = HashMap::<Relocation, u32>::new();
+
+    for func_idx in &all_uses.live_funcs {
+        let new_idx = all_uses
+            .live_funcs
+            .iter()
+            .position(|&idx| idx == *func_idx)
+            .expect("original func index should have been in vec of live funcs")
+            as u32;
+        relocations.insert(Relocation::Func(*func_idx), new_idx);
     }
 
     //
@@ -195,13 +214,79 @@ fn main() -> Result<()> {
     //
 
     let mut out = Module::new();
+    let mut reencoder = RoundtripReencoder {};
     for section in sections {
         match section {
             Section::Passthrough(sec) => {
                 out.section(&sec);
-            },
-            Section::Function => {},
-            Section::Code => {},
+            }
+            Section::Import => {
+                let mut import_section = ImportSection::new();
+
+                let mut num_imported_funcs = 0;
+                let mut num_imported_tables = 0;
+                let mut num_imported_memories = 0;
+                let mut num_imported_globals = 0;
+                let mut num_imported_tags = 0;
+                for import in &imports {
+                    match import.ty {
+                        wasmparser::TypeRef::Func(type_idx) => {
+                            if all_uses.live_funcs.contains(&num_imported_funcs) {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    EntityType::Function(type_idx),
+                                );
+                            }
+                            num_imported_funcs += 1;
+                        }
+                        wasmparser::TypeRef::Table(ty) => {
+                            if all_uses.live_tables.contains(&num_imported_tables) {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    table_type(&mut reencoder, ty).expect("infallible"),
+                                );
+                            }
+                            num_imported_tables += 1;
+                        }
+                        wasmparser::TypeRef::Memory(ty) => {
+                            if all_uses.live_memories.contains(&num_imported_memories) {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    memory_type(&mut reencoder, ty),
+                                );
+                            }
+                            num_imported_memories += 1;
+                        }
+                        wasmparser::TypeRef::Global(ty) => {
+                            if all_uses.live_globals.contains(&num_imported_globals) {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    global_type(&mut reencoder, ty).expect("infallible"),
+                                );
+                            }
+                            num_imported_globals += 1;
+                        }
+                        wasmparser::TypeRef::Tag(ty) => {
+                            if all_uses.live_tags.contains(&num_imported_tags) {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    tag_type(&mut reencoder, ty),
+                                );
+                            }
+                            num_imported_tags += 1;
+                        }
+                    }
+                }
+
+                out.section(&import_section);
+            }
+            Section::Function => {}
+            Section::Code => {}
         }
     }
     let out_bytes = out.finish();
@@ -220,9 +305,6 @@ fn get_reader(filename: String) -> Box<dyn std::io::Read> {
 }
 
 struct Func<'a> {
-    original_index: u32,
-    index_in_code_section: u32,
-
     type_index: u32,
     ty: FuncType,
 
@@ -1227,13 +1309,22 @@ fn get_instr_uses(instr: &Operator<'_>) -> Uses {
 
 enum Section<'a> {
     Passthrough(RawSection<'a>),
+    Import,
     Function,
     Code,
 }
 
 impl<'a> Section<'a> {
     fn raw(id: u8, bytes: &'a [u8]) -> Section<'a> {
-        let foo = RawSection{ id: id, data: bytes };
+        let foo = RawSection {
+            id: id,
+            data: bytes,
+        };
         Self::Passthrough(foo)
     }
+}
+
+#[derive(Eq, PartialEq, Hash)]
+enum Relocation {
+    Func(u32),
 }
