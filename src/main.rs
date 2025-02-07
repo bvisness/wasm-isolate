@@ -11,7 +11,7 @@ use clap::Parser as _;
 use wasm_encoder::{
     reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
     ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
-    FunctionSection, GlobalSection, ImportSection, Module, RawSection, TableSection,
+    FunctionSection, GlobalSection, ImportSection, Module, RawSection, TableSection, TagSection,
 };
 use wasmparser::{
     CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
@@ -86,7 +86,6 @@ fn main() -> Result<()> {
                 for import in r {
                     let import = import?;
                     match import.ty {
-                        // TODO: Save these types for walking later.
                         wasmparser::TypeRef::Func(type_idx) => {
                             num_imported_functions += 1;
                             func_types.push(type_idx);
@@ -132,7 +131,10 @@ fn main() -> Result<()> {
                 }
             }
             TagSection(r) => {
-                sections.push(Section::raw(13, &buf[r.range()]));
+                sections.push(Section::Tag);
+                for tag_type in r {
+                    tag_types.push(tag_type?);
+                }
             }
             GlobalSection(r) => {
                 sections.push(Section::Global);
@@ -264,7 +266,11 @@ fn main() -> Result<()> {
             WorkItem::Memory(idx) => Uses::single_memory(*idx),
             WorkItem::Data(_) => todo!(),
             WorkItem::Elem(_) => todo!(),
-            WorkItem::Tag(_) => todo!(),
+            WorkItem::Tag(idx) => {
+                let mut res = Uses::single_tag(*idx);
+                res.merge(get_tagtype_uses(&tag_types[*idx as usize]));
+                res
+            },
         };
         work_queue.remove(0);
 
@@ -575,8 +581,21 @@ fn main() -> Result<()> {
                 }
                 out.section(&data_section);
             }
-            Section::DataCount => todo!(),
-            Section::Tag => todo!(),
+            Section::DataCount => {
+                out.section(&wasm_encoder::DataCountSection {
+                    count: all_uses.live_datas.len() as u32,
+                });
+            }
+            Section::Tag => {
+                let mut tag_section = TagSection::new();
+                for idx in num_imported_tags..(tag_types.len() as u32) {
+                    if relocations.get(&Relocation::Tag(idx)).is_some() {
+                        let tag_type = &tag_types[idx as usize];
+                        tag_section.tag(reencoder.tag_type(tag_type.clone()));
+                    }
+                }
+                out.section(&tag_section);
+            },
         }
     }
     let out_bytes = out.finish();

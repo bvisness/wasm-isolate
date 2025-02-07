@@ -1,6 +1,5 @@
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, FieldType, FuncType, GlobalType, HeapType,
-    MemArg, Operator, RefType, StorageType, StructType, TableType, ValType,
+    ArrayType, BlockType, Catch, CompositeInnerType, FieldType, FuncType, GlobalType, HeapType, MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType
 };
 
 #[derive(Default, Debug)]
@@ -150,6 +149,10 @@ pub fn get_tabletype_uses(ty: &TableType) -> Uses {
 
 pub fn get_globaltype_uses(ty: &GlobalType) -> Uses {
     get_valtype_uses(&ty.content_type)
+}
+
+pub fn get_tagtype_uses(ty: &TagType) -> Uses {
+    Uses::single_type(ty.func_type_idx)
 }
 
 pub fn get_valtype_uses(ty: &ValType) -> Uses {
