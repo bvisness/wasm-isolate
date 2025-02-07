@@ -7,14 +7,14 @@ use anyhow::Result;
 use clap::Parser as _;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
-    CodeSection, ConstExpr, ElementMode, ElementSection, ElementSegment, EntityType, ExportSection,
-    Function, FunctionSection, GlobalSection, ImportSection, Instruction, Module, RawSection,
-    StartSection, TableSection,
+    CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode, ElementMode, ElementSection,
+    ElementSegment, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
+    ImportSection, Instruction, Module, RawSection, StartSection, TableSection,
 };
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, Element, Export, FieldType, FuncType, Global,
-    GlobalType, HeapType, Import, MemArg, MemoryType, Operator, Parser, Payload::*, RefType,
-    StorageType, StructType, Table, TableType, TagType, ValType,
+    ArrayType, BlockType, Catch, CompositeInnerType, Data, Element, Export, FieldType, FuncType,
+    Global, GlobalType, HeapType, Import, MemArg, MemoryType, Operator, Parser, Payload::*,
+    RefType, StorageType, StructType, Table, TableType, TagType, ValType,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -60,6 +60,7 @@ fn main() -> Result<()> {
     let mut start_idx: Option<u32> = None;
     let mut elems: Vec<Element> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
+    let mut datas: Vec<Data> = vec![];
 
     let mut sections: Vec<Section> = vec![];
 
@@ -153,15 +154,17 @@ fn main() -> Result<()> {
             ElementSection(r) => {
                 sections.push(Section::Element);
                 for elem in r {
-                    let elem = elem?;
-                    elems.push(elem);
+                    elems.push(elem?);
                 }
             }
             DataCountSection { count: _, range } => {
                 sections.push(Section::raw(12, &buf[range]));
             }
             DataSection(r) => {
-                sections.push(Section::raw(11, &buf[r.range()]));
+                sections.push(Section::Data);
+                for data in r {
+                    datas.push(data?);
+                }
             }
 
             // Here we know how many functions we'll be receiving as
@@ -533,7 +536,32 @@ fn main() -> Result<()> {
                 }
                 out.section(&code_section);
             }
-            Section::Data => todo!(),
+            Section::Data => {
+                let mut data_section = DataSection::new();
+                for (i, data) in datas.iter().enumerate() {
+                    let idx = i as u32;
+                    if relocations.get(&Relocation::Data(idx)).is_some() {
+                        let expr: ConstExpr;
+                        data_section.segment(DataSegment {
+                            mode: match &data.kind {
+                                wasmparser::DataKind::Passive => DataSegmentMode::Passive,
+                                wasmparser::DataKind::Active {
+                                    memory_index,
+                                    offset_expr,
+                                } => {
+                                    expr = RoundtripReencoder.const_expr(offset_expr.clone())?;
+                                    DataSegmentMode::Active {
+                                        memory_index: *memory_index,
+                                        offset: &expr,
+                                    }
+                                }
+                            },
+                            data: vec![],
+                        });
+                    }
+                }
+                out.section(&data_section);
+            }
             Section::Tag => todo!(),
         }
     }
