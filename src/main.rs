@@ -158,7 +158,7 @@ fn main() -> Result<()> {
                 }
             }
             DataCountSection { count: _, range } => {
-                sections.push(Section::raw(12, &buf[range]));
+                sections.push(Section::DataCount);
             }
             DataSection(r) => {
                 sections.push(Section::Data);
@@ -562,6 +562,7 @@ fn main() -> Result<()> {
                 }
                 out.section(&data_section);
             }
+            Section::DataCount => todo!(),
             Section::Tag => todo!(),
         }
     }
@@ -1636,6 +1637,7 @@ enum Section<'a> {
     Element,
     Code,
     Data,
+    DataCount,
     Tag,
 }
 
