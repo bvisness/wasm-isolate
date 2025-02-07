@@ -9,11 +9,13 @@ use wasm_encoder::{
     reencode::{
         utils::{global_type, memory_type, table_type, tag_type},
         RoundtripReencoder,
-    }, CodeSection, EntityType, Function, FunctionSection, ImportSection, Instruction, Module, RawSection
+    },
+    CodeSection, EntityType, ExportSection, Function, FunctionSection, ImportSection, Instruction,
+    Module, RawSection,
 };
 use wasmparser::{
-    BlockType, Catch, CompositeInnerType, FuncType, HeapType, Import, MemArg, Operator, Parser,
-    Payload::*, RefType, ValType,
+    BlockType, Catch, CompositeInnerType, Export, FuncType, HeapType, Import, MemArg, Operator,
+    Parser, Payload::*, RefType, ValType,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -45,6 +47,7 @@ fn main() -> Result<()> {
     let mut first_func: bool = true;
 
     let mut imports: Vec<Import> = vec![];
+    let mut exports: Vec<Export> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
 
     let mut sections: Vec<Section> = vec![];
@@ -100,7 +103,11 @@ fn main() -> Result<()> {
                 sections.push(Section::raw(6, &buf[r.range()]));
             }
             ExportSection(r) => {
-                sections.push(Section::raw(7, &buf[r.range()]));
+                sections.push(Section::Export);
+                for export in r {
+                    let export = export?;
+                    exports.push(export);
+                }
             }
             StartSection { func: _, range } => {
                 // TODO: Either always preserve the start function, or preserve
@@ -156,7 +163,7 @@ fn main() -> Result<()> {
 
             CustomSection(r) => {
                 if r.name() == "name" {
-                    continue
+                    continue;
                 }
                 sections.push(Section::raw(0, &buf[r.range()]));
             }
@@ -239,7 +246,6 @@ fn main() -> Result<()> {
     //
 
     let mut out = Module::new();
-    let mut reencoder = RoundtripReencoder {};
     for section in sections {
         match section {
             Section::Passthrough(sec) => {
@@ -270,7 +276,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    table_type(&mut reencoder, ty).expect("infallible"),
+                                    table_type(&mut RoundtripReencoder, ty).expect("infallible"),
                                 );
                             }
                             num_imported_tables += 1;
@@ -280,7 +286,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    memory_type(&mut reencoder, ty),
+                                    memory_type(&mut RoundtripReencoder, ty),
                                 );
                             }
                             num_imported_memories += 1;
@@ -290,7 +296,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    global_type(&mut reencoder, ty).expect("infallible"),
+                                    global_type(&mut RoundtripReencoder, ty).expect("infallible"),
                                 );
                             }
                             num_imported_globals += 1;
@@ -300,7 +306,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    tag_type(&mut reencoder, ty),
+                                    tag_type(&mut RoundtripReencoder, ty),
                                 );
                             }
                             num_imported_tags += 1;
@@ -334,6 +340,22 @@ fn main() -> Result<()> {
                 }
                 out.section(&code_section);
             }
+            Section::Export => {
+                let mut export_section = ExportSection::new();
+                for export in &exports {
+                    let reloc = match export.kind {
+                        wasmparser::ExternalKind::Func => Relocation::Func(export.index),
+                        wasmparser::ExternalKind::Table => Relocation::Table(export.index),
+                        wasmparser::ExternalKind::Memory => Relocation::Memory(export.index),
+                        wasmparser::ExternalKind::Global => Relocation::Global(export.index),
+                        wasmparser::ExternalKind::Tag => Relocation::Tag(export.index),
+                    };
+                    if let Some(new_idx) = relocations.get(&reloc) {
+                        export_section.export(export.name, export.kind.into(), *new_idx);
+                    }
+                }
+                out.section(&export_section);
+            }
         }
     }
     let out_bytes = out.finish();
@@ -347,8 +369,7 @@ fn get_new_index(live_things: &Vec<u32>, idx: &u32) -> u32 {
     live_things
         .iter()
         .position(|&v| v == *idx)
-        .expect("original index should have been in vec")
-        as u32
+        .expect("original index should have been in vec") as u32
 }
 
 fn get_reader(filename: String) -> Box<dyn std::io::Read> {
@@ -1366,6 +1387,7 @@ enum Section<'a> {
     Passthrough(RawSection<'a>),
     Import,
     Function,
+    Export,
     Code,
 }
 
