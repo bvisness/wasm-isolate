@@ -7,11 +7,12 @@ use anyhow::Result;
 use clap::Parser as _;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
-    CodeSection, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
-    ImportSection, Instruction, Module, RawSection, StartSection, TableSection,
+    CodeSection, ConstExpr, ElementMode, ElementSection, ElementSegment, EntityType, ExportSection,
+    Function, FunctionSection, GlobalSection, ImportSection, Instruction, Module, RawSection,
+    StartSection, TableSection,
 };
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, Export, FieldType, FuncType, Global,
+    ArrayType, BlockType, Catch, CompositeInnerType, Element, Export, FieldType, FuncType, Global,
     GlobalType, HeapType, Import, MemArg, MemoryType, Operator, Parser, Payload::*, RefType,
     StorageType, StructType, Table, TableType, TagType, ValType,
 };
@@ -57,6 +58,7 @@ fn main() -> Result<()> {
     let mut defined_globals: Vec<Global> = vec![];
     let mut exports: Vec<Export> = vec![];
     let mut start_idx: Option<u32> = None;
+    let mut elems: Vec<Element> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
 
     let mut sections: Vec<Section> = vec![];
@@ -121,8 +123,7 @@ fn main() -> Result<()> {
             MemorySection(r) => {
                 sections.push(Section::Memory);
                 for mem_type in r {
-                    let mem_type = mem_type?;
-                    memory_types.push(mem_type);
+                    memory_types.push(mem_type?);
                 }
             }
             TagSection(r) => {
@@ -150,7 +151,11 @@ fn main() -> Result<()> {
                 start_idx = Some(func);
             }
             ElementSection(r) => {
-                sections.push(Section::raw(9, &buf[r.range()]));
+                sections.push(Section::Element);
+                for elem in r {
+                    let elem = elem?;
+                    elems.push(elem);
+                }
             }
             DataCountSection { count: _, range } => {
                 sections.push(Section::raw(12, &buf[range]));
@@ -488,7 +493,33 @@ fn main() -> Result<()> {
                     }
                 }
             }
-            Section::Element => todo!(),
+            Section::Element => {
+                let mut element_section = ElementSection::new();
+                for (i, elem) in elems.iter().enumerate() {
+                    let idx = i as u32;
+                    if relocations.get(&Relocation::Elem(idx)).is_some() {
+                        let expr: ConstExpr;
+                        element_section.segment(ElementSegment {
+                            mode: match &elem.kind {
+                                wasmparser::ElementKind::Passive => ElementMode::Passive,
+                                wasmparser::ElementKind::Active {
+                                    table_index,
+                                    offset_expr,
+                                } => {
+                                    expr = RoundtripReencoder.const_expr(offset_expr.clone())?;
+                                    ElementMode::Active {
+                                        table: *table_index,
+                                        offset: &expr,
+                                    }
+                                }
+                                wasmparser::ElementKind::Declared => todo!(),
+                            },
+                            elements: RoundtripReencoder.element_items(elem.items.clone())?,
+                        });
+                    }
+                }
+                out.section(&element_section);
+            }
             Section::Code => {
                 let mut code_section = CodeSection::new();
                 for (i, _) in defined_funcs.iter().enumerate() {
