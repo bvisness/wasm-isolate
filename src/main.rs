@@ -7,8 +7,8 @@ use anyhow::{bail, Result};
 use clap::Parser as _;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
-    CodeSection, EntityType, ExportSection, Function, FunctionSection, ImportSection, Instruction,
-    Module, RawSection, TableSection,
+    CodeSection, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
+    ImportSection, Instruction, Module, RawSection, TableSection,
 };
 use wasmparser::{
     ArrayType, BlockType, Catch, CompositeInnerType, Export, FieldType, FuncType, Global,
@@ -118,13 +118,17 @@ fn main() -> Result<()> {
                 }
             }
             MemorySection(r) => {
-                sections.push(Section::raw(5, &buf[r.range()]));
+                sections.push(Section::Memory);
+                for mem_type in r {
+                    let mem_type = mem_type?;
+                    memory_types.push(mem_type);
+                }
             }
             TagSection(r) => {
                 sections.push(Section::raw(13, &buf[r.range()]));
             }
             GlobalSection(r) => {
-                sections.push(Section::raw(6, &buf[r.range()]));
+                sections.push(Section::Global);
                 for global in r {
                     let global = global?;
                     global_types.push(global.ty);
@@ -408,7 +412,7 @@ fn main() -> Result<()> {
             }
             Section::Function => {
                 let mut function_section = FunctionSection::new();
-                for (i, f) in defined_funcs.iter().enumerate() {
+                for (i, _) in defined_funcs.iter().enumerate() {
                     let idx = num_imported_functions + i as u32;
                     if relocations.get(&Relocation::Func(idx)).is_some() {
                         // TODO: Relocate...or don't? Depends what we do with types.
@@ -438,6 +442,21 @@ fn main() -> Result<()> {
                 }
                 out.section(&table_section);
             }
+            Section::Memory => todo!(),
+            Section::Global => {
+                let mut global_section = GlobalSection::new();
+                for (i, global) in defined_globals.iter().enumerate() {
+                    let idx = num_imported_globals + i as u32;
+                    if relocations.get(&Relocation::Global(idx)).is_some() {
+                        // TODO: Re-encode the init expression with relocations.
+                        global_section.global(
+                            RoundtripReencoder.global_type(global.ty)?,
+                            &RoundtripReencoder.const_expr(global.init_expr.clone())?,
+                        );
+                    }
+                }
+                out.section(&global_section);
+            }
             Section::Export => {
                 let mut export_section = ExportSection::new();
                 for export in &exports {
@@ -454,6 +473,8 @@ fn main() -> Result<()> {
                 }
                 out.section(&export_section);
             }
+            Section::Start => todo!(),
+            Section::Element => todo!(),
             Section::Code => {
                 let mut code_section = CodeSection::new();
                 for (i, _) in defined_funcs.iter().enumerate() {
@@ -467,6 +488,8 @@ fn main() -> Result<()> {
                 }
                 out.section(&code_section);
             }
+            Section::Data => todo!(),
+            Section::Tag => todo!(),
         }
     }
     let out_bytes = out.finish();
@@ -1529,8 +1552,14 @@ enum Section<'a> {
     Import,
     Function,
     Table,
+    Memory,
+    Global,
     Export,
+    Start,
+    Element,
     Code,
+    Data,
+    Tag,
 }
 
 impl<'a> Section<'a> {
