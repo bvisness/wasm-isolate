@@ -11,7 +11,7 @@ use clap::Parser as _;
 use wasm_encoder::{
     reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
     ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
-    FunctionSection, GlobalSection, ImportSection, Instruction, Module, RawSection, TableSection,
+    FunctionSection, GlobalSection, ImportSection, Module, RawSection, TableSection,
 };
 use wasmparser::{
     CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
