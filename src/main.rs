@@ -11,8 +11,9 @@ use wasm_encoder::{
     Module, RawSection, TableSection,
 };
 use wasmparser::{
-    BlockType, Catch, CompositeInnerType, Export, FuncType, HeapType, Import, MemArg, Operator,
-    Parser, Payload::*, RefType, Table, ValType,
+    ArrayType, BlockType, Catch, CompositeInnerType, Export, FieldType, FuncType, Global,
+    GlobalType, HeapType, Import, MemArg, MemoryType, Operator, Parser, Payload::*, RefType,
+    StorageType, StructType, Table, TableType, TagType, ValType,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -37,18 +38,23 @@ fn main() -> Result<()> {
     let parser = Parser::new(0);
 
     let mut types: Vec<CompositeInnerType> = vec![];
-    let mut num_imported_functions = 0;
-    let mut num_imported_tables = 0;
-    let mut num_imported_memories = 0;
-    let mut num_imported_globals = 0;
-    let mut num_imported_tags = 0;
-    let mut func_types: Vec<(u32, FuncType)> = vec![];
+    let mut num_imported_functions: u32 = 0;
+    let mut num_imported_tables: u32 = 0;
+    let mut num_imported_memories: u32 = 0;
+    let mut num_imported_globals: u32 = 0;
+    let mut num_imported_tags: u32 = 0;
+    let mut func_types: Vec<u32> = vec![];
+    let mut table_types: Vec<TableType> = vec![];
+    let mut memory_types: Vec<MemoryType> = vec![];
+    let mut global_types: Vec<GlobalType> = vec![];
+    let mut tag_types: Vec<TagType> = vec![];
 
     let mut current_func = 0;
     let mut first_func: bool = true;
 
     let mut imports: Vec<Import> = vec![];
-    let mut tables: Vec<Table> = vec![];
+    let mut defined_tables: Vec<Table> = vec![];
+    let mut defined_globals: Vec<Global> = vec![];
     let mut exports: Vec<Export> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
 
@@ -73,20 +79,25 @@ fn main() -> Result<()> {
                     let import = import?;
                     match import.ty {
                         // TODO: Save these types for walking later.
-                        wasmparser::TypeRef::Func(..) => {
+                        wasmparser::TypeRef::Func(type_idx) => {
                             num_imported_functions += 1;
+                            func_types.push(type_idx);
                         }
-                        wasmparser::TypeRef::Table(..) => {
+                        wasmparser::TypeRef::Table(ty) => {
                             num_imported_tables += 1;
+                            table_types.push(ty);
                         }
-                        wasmparser::TypeRef::Memory(..) => {
+                        wasmparser::TypeRef::Memory(ty) => {
                             num_imported_memories += 1;
+                            memory_types.push(ty);
                         }
-                        wasmparser::TypeRef::Global(..) => {
+                        wasmparser::TypeRef::Global(ty) => {
                             num_imported_globals += 1;
+                            global_types.push(ty);
                         }
-                        wasmparser::TypeRef::Tag(..) => {
+                        wasmparser::TypeRef::Tag(ty) => {
                             num_imported_tags += 1;
+                            tag_types.push(ty);
                         }
                     }
                     imports.push(import);
@@ -94,20 +105,16 @@ fn main() -> Result<()> {
             }
             FunctionSection(r) => {
                 sections.push(Section::Function);
-
                 for f in r {
-                    let type_idx = f?;
-                    if let CompositeInnerType::Func(ft) = &types[type_idx as usize] {
-                        func_types.push((type_idx, ft.clone()));
-                    } else {
-                        bail!("ERROR: Type {} is not a func type", type_idx)
-                    }
+                    func_types.push(f?);
                 }
             }
             TableSection(r) => {
                 sections.push(Section::Table);
                 for table in r {
-                    tables.push(table?);
+                    let table = table?;
+                    table_types.push(table.ty);
+                    defined_tables.push(table);
                 }
             }
             MemorySection(r) => {
@@ -118,6 +125,11 @@ fn main() -> Result<()> {
             }
             GlobalSection(r) => {
                 sections.push(Section::raw(6, &buf[r.range()]));
+                for global in r {
+                    let global = global?;
+                    global_types.push(global.ty);
+                    defined_globals.push(global);
+                }
             }
             ExportSection(r) => {
                 sections.push(Section::Export);
@@ -156,13 +168,8 @@ fn main() -> Result<()> {
                     current_func += 1;
                 }
 
-                let (type_index, ty) =
-                    &func_types[(current_func - num_imported_functions) as usize];
-
                 let mut func = Func {
-                    type_index: *type_index,
-                    ty: ty.clone(),
-
+                    type_idx: func_types[current_func as usize],
                     locals: vec![],
                     instructions: vec![],
                 };
@@ -192,29 +199,96 @@ fn main() -> Result<()> {
     // Iterate over all live objects until we have gathered all the references.
     //
 
-    let mut func_queue: Vec<u32> = vec![];
+    let mut work_queue: Vec<WorkItem> = vec![];
     for func in args.funcs {
-        func_queue.push(func);
+        work_queue.push(WorkItem::Func(func));
     }
 
     let mut all_uses = Uses::default();
 
-    while !func_queue.is_empty() {
-        let func_idx = *func_queue.first().expect("defined function");
-        func_queue.remove(0);
-        all_uses.merge(Uses::single_func(func_idx));
+    while !work_queue.is_empty() {
+        let work = work_queue.first().expect("non-empty queue");
 
-        let func = &defined_funcs[(func_idx - num_imported_functions) as usize];
-        let uses = get_func_uses(func);
-        for used_func in &uses.live_funcs {
-            if *used_func < num_imported_functions {
-                // TODO: track imports
-            } else if !all_uses.live_funcs.contains(used_func) {
-                func_queue.push(*used_func);
+        let new_uses = match work {
+            WorkItem::Type(idx) => {
+                let mut res = Uses::single_type(*idx);
+                res.merge(get_type_uses(&types[*idx as usize]));
+                res
+            }
+            WorkItem::Func(idx) => {
+                let mut res = Uses::single_func(*idx);
+                if *idx < num_imported_functions {
+                    // TODO: Track type of imported function
+                    // Suggestion: Make an array of all func types, both imports and defined.
+                    // This can be separate from the array of defined functions.
+                } else {
+                    let func = &defined_funcs[(idx - num_imported_functions) as usize];
+                    res.merge(Uses::single_type(func.type_idx));
+                    for (_, ty) in &func.locals {
+                        res.merge(get_valtype_uses(ty));
+                    }
+                    for instr in &func.instructions {
+                        res.merge(get_instr_uses(instr));
+                    }
+                }
+                res
+            }
+            WorkItem::Table(_) => todo!(),
+            WorkItem::Global(idx) => {
+                let mut res = Uses::single_global(*idx);
+                res.merge(get_globaltype_uses(&global_types[*idx as usize]));
+                res
+            }
+            WorkItem::Memory(idx) => Uses::single_memory(*idx),
+            WorkItem::Data(_) => todo!(),
+            WorkItem::Elem(_) => todo!(),
+            WorkItem::Tag(_) => todo!(),
+        };
+        work_queue.remove(0);
+
+        // Push all unused things to the queue
+        for idx in &new_uses.live_types {
+            if !all_uses.live_types.contains(idx) {
+                work_queue.push(WorkItem::Type(*idx));
+            }
+        }
+        for idx in &new_uses.live_funcs {
+            if !all_uses.live_funcs.contains(idx) {
+                work_queue.push(WorkItem::Func(*idx));
+            }
+        }
+        for idx in &new_uses.live_tables {
+            if !all_uses.live_tables.contains(idx) {
+                work_queue.push(WorkItem::Table(*idx));
+            }
+        }
+        for idx in &new_uses.live_globals {
+            if !all_uses.live_globals.contains(idx) {
+                work_queue.push(WorkItem::Global(*idx));
+            }
+        }
+        for idx in &new_uses.live_memories {
+            if !all_uses.live_memories.contains(idx) {
+                work_queue.push(WorkItem::Memory(*idx));
+            }
+        }
+        for idx in &new_uses.live_datas {
+            if !all_uses.live_datas.contains(idx) {
+                work_queue.push(WorkItem::Data(*idx));
+            }
+        }
+        for idx in &new_uses.live_elems {
+            if !all_uses.live_elems.contains(idx) {
+                work_queue.push(WorkItem::Elem(*idx));
+            }
+        }
+        for idx in &new_uses.live_tags {
+            if !all_uses.live_tags.contains(idx) {
+                work_queue.push(WorkItem::Tag(*idx));
             }
         }
 
-        all_uses.merge(uses);
+        all_uses.merge(new_uses);
     }
     println!("{:#?}", all_uses);
 
@@ -335,21 +409,19 @@ fn main() -> Result<()> {
             Section::Function => {
                 let mut function_section = FunctionSection::new();
                 for (i, f) in defined_funcs.iter().enumerate() {
-                    let idx = i as u32 + num_imported_functions;
-                    if all_uses.live_funcs.contains(&idx) {
+                    let idx = num_imported_functions + i as u32;
+                    if relocations.get(&Relocation::Func(idx)).is_some() {
                         // TODO: Relocate...or don't? Depends what we do with types.
-                        function_section.function(f.type_index);
+                        function_section.function(func_types[idx as usize]);
                     }
                 }
                 out.section(&function_section);
             }
             Section::Table => {
                 let mut table_section = TableSection::new();
-                for (i, table) in tables.iter().enumerate() {
-                    if relocations
-                        .get(&Relocation::Table(num_imported_tables + i as u32))
-                        .is_some()
-                    {
+                for (i, table) in defined_tables.iter().enumerate() {
+                    let idx = num_imported_tables + i as u32;
+                    if relocations.get(&Relocation::Table(idx)).is_some() {
                         match &table.init {
                             wasmparser::TableInit::RefNull => {
                                 table_section.table(RoundtripReencoder.table_type(table.ty)?);
@@ -420,11 +492,20 @@ fn get_reader(filename: String) -> Box<dyn std::io::Read> {
 }
 
 struct Func<'a> {
-    type_index: u32,
-    ty: FuncType,
-
+    type_idx: u32,
     locals: Vec<(u32, ValType)>,
     instructions: Vec<Operator<'a>>,
+}
+
+enum WorkItem {
+    Type(u32),
+    Func(u32),
+    Table(u32),
+    Global(u32),
+    Memory(u32),
+    Data(u32),
+    Elem(u32),
+    Tag(u32),
 }
 
 #[derive(Default, Debug)]
@@ -525,19 +606,13 @@ impl Uses {
     }
 }
 
-fn get_func_uses(func: &Func) -> Uses {
-    let mut res = Uses::default();
-
-    res.live_types.push(func.type_index);
-    res.merge(get_functype_uses(&func.ty));
-    for (_, ty) in &func.locals {
-        res.merge(get_valtype_uses(ty));
+fn get_type_uses(ty: &CompositeInnerType) -> Uses {
+    match ty {
+        CompositeInnerType::Func(func_type) => get_functype_uses(func_type),
+        CompositeInnerType::Array(array_type) => get_arraytype_uses(array_type),
+        CompositeInnerType::Struct(struct_type) => get_structtype_uses(struct_type),
+        CompositeInnerType::Cont(_) => todo!(),
     }
-    for instr in &func.instructions {
-        res.merge(get_instr_uses(instr));
-    }
-
-    res
 }
 
 fn get_functype_uses(ty: &FuncType) -> Uses {
@@ -549,6 +624,33 @@ fn get_functype_uses(ty: &FuncType) -> Uses {
         res.merge(get_valtype_uses(vt));
     }
     res
+}
+
+fn get_arraytype_uses(ty: &ArrayType) -> Uses {
+    get_fieldtype_uses(&ty.0)
+}
+
+fn get_structtype_uses(ty: &StructType) -> Uses {
+    let mut res = Uses::default();
+    for f in ty.fields.iter() {
+        res.merge(get_fieldtype_uses(f));
+    }
+    res
+}
+
+fn get_fieldtype_uses(ty: &FieldType) -> Uses {
+    get_storagetype_uses(&ty.element_type)
+}
+
+fn get_storagetype_uses(ty: &StorageType) -> Uses {
+    match ty {
+        StorageType::I8 | StorageType::I16 => Uses::default(),
+        StorageType::Val(val_type) => get_valtype_uses(val_type),
+    }
+}
+
+fn get_globaltype_uses(ty: &GlobalType) -> Uses {
+    get_valtype_uses(&ty.content_type)
 }
 
 fn get_valtype_uses(ty: &ValType) -> Uses {
