@@ -6,16 +6,13 @@ use std::{
 use anyhow::{bail, Result};
 use clap::Parser as _;
 use wasm_encoder::{
-    reencode::{
-        utils::{global_type, memory_type, table_type, tag_type},
-        RoundtripReencoder,
-    },
+    reencode::{Reencode, RoundtripReencoder},
     CodeSection, EntityType, ExportSection, Function, FunctionSection, ImportSection, Instruction,
-    Module, RawSection,
+    Module, RawSection, TableSection,
 };
 use wasmparser::{
     BlockType, Catch, CompositeInnerType, Export, FuncType, HeapType, Import, MemArg, Operator,
-    Parser, Payload::*, RefType, ValType,
+    Parser, Payload::*, RefType, Table, ValType,
 };
 
 #[derive(clap::Parser, Debug)]
@@ -41,12 +38,17 @@ fn main() -> Result<()> {
 
     let mut types: Vec<CompositeInnerType> = vec![];
     let mut num_imported_functions = 0;
+    let mut num_imported_tables = 0;
+    let mut num_imported_memories = 0;
+    let mut num_imported_globals = 0;
+    let mut num_imported_tags = 0;
     let mut func_types: Vec<(u32, FuncType)> = vec![];
 
     let mut current_func = 0;
     let mut first_func: bool = true;
 
     let mut imports: Vec<Import> = vec![];
+    let mut tables: Vec<Table> = vec![];
     let mut exports: Vec<Export> = vec![];
     let mut defined_funcs: Vec<Func> = vec![];
 
@@ -70,10 +72,22 @@ fn main() -> Result<()> {
                 for import in r {
                     let import = import?;
                     match import.ty {
+                        // TODO: Save these types for walking later.
                         wasmparser::TypeRef::Func(..) => {
                             num_imported_functions += 1;
                         }
-                        _ => {}
+                        wasmparser::TypeRef::Table(..) => {
+                            num_imported_tables += 1;
+                        }
+                        wasmparser::TypeRef::Memory(..) => {
+                            num_imported_memories += 1;
+                        }
+                        wasmparser::TypeRef::Global(..) => {
+                            num_imported_globals += 1;
+                        }
+                        wasmparser::TypeRef::Tag(..) => {
+                            num_imported_tags += 1;
+                        }
                     }
                     imports.push(import);
                 }
@@ -91,7 +105,10 @@ fn main() -> Result<()> {
                 }
             }
             TableSection(r) => {
-                sections.push(Section::raw(4, &buf[r.range()]));
+                sections.push(Section::Table);
+                for table in r {
+                    tables.push(table?);
+                }
             }
             MemorySection(r) => {
                 sections.push(Section::raw(5, &buf[r.range()]));
@@ -105,8 +122,7 @@ fn main() -> Result<()> {
             ExportSection(r) => {
                 sections.push(Section::Export);
                 for export in r {
-                    let export = export?;
-                    exports.push(export);
+                    exports.push(export?);
                 }
             }
             StartSection { func: _, range } => {
@@ -276,7 +292,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    table_type(&mut RoundtripReencoder, ty).expect("infallible"),
+                                    RoundtripReencoder.table_type(ty)?,
                                 );
                             }
                             num_imported_tables += 1;
@@ -286,7 +302,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    memory_type(&mut RoundtripReencoder, ty),
+                                    RoundtripReencoder.memory_type(ty),
                                 );
                             }
                             num_imported_memories += 1;
@@ -296,7 +312,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    global_type(&mut RoundtripReencoder, ty).expect("infallible"),
+                                    RoundtripReencoder.global_type(ty)?,
                                 );
                             }
                             num_imported_globals += 1;
@@ -306,7 +322,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    tag_type(&mut RoundtripReencoder, ty),
+                                    RoundtripReencoder.tag_type(ty),
                                 );
                             }
                             num_imported_tags += 1;
@@ -327,18 +343,28 @@ fn main() -> Result<()> {
                 }
                 out.section(&function_section);
             }
-            Section::Code => {
-                let mut code_section = CodeSection::new();
-                for (i, f) in defined_funcs.iter().enumerate() {
-                    let idx = i as u32 + num_imported_functions;
-                    if all_uses.live_funcs.contains(&idx) {
-                        // TODO: locals
-                        let mut new_func = Function::new(vec![]);
-                        new_func.instruction(&Instruction::End);
-                        code_section.function(&new_func);
+            Section::Table => {
+                let mut table_section = TableSection::new();
+                for (i, table) in tables.iter().enumerate() {
+                    if relocations
+                        .get(&Relocation::Table(num_imported_tables + i as u32))
+                        .is_some()
+                    {
+                        match &table.init {
+                            wasmparser::TableInit::RefNull => {
+                                table_section.table(RoundtripReencoder.table_type(table.ty)?);
+                            }
+                            wasmparser::TableInit::Expr(init_expr) => {
+                                // TODO: Re-encode the init expression with relocations.
+                                table_section.table_with_init(
+                                    RoundtripReencoder.table_type(table.ty)?,
+                                    &RoundtripReencoder.const_expr(init_expr.clone())?,
+                                );
+                            }
+                        }
                     }
                 }
-                out.section(&code_section);
+                out.section(&table_section);
             }
             Section::Export => {
                 let mut export_section = ExportSection::new();
@@ -355,6 +381,19 @@ fn main() -> Result<()> {
                     }
                 }
                 out.section(&export_section);
+            }
+            Section::Code => {
+                let mut code_section = CodeSection::new();
+                for (i, _) in defined_funcs.iter().enumerate() {
+                    let idx = i as u32 + num_imported_functions;
+                    if all_uses.live_funcs.contains(&idx) {
+                        // TODO: locals
+                        let mut new_func = Function::new(vec![]);
+                        new_func.instruction(&Instruction::End);
+                        code_section.function(&new_func);
+                    }
+                }
+                out.section(&code_section);
             }
         }
     }
@@ -1387,6 +1426,7 @@ enum Section<'a> {
     Passthrough(RawSection<'a>),
     Import,
     Function,
+    Table,
     Export,
     Code,
 }
