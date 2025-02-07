@@ -164,7 +164,7 @@ fn main() -> Result<()> {
                     elems.push(elem?);
                 }
             }
-            DataCountSection { count: _, range } => {
+            DataCountSection { count: _, range: _ } => {
                 sections.push(Section::DataCount);
             }
             DataSection(r) => {
@@ -389,7 +389,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    EntityType::Function(type_idx),
+                                    EntityType::Function(reencoder.type_index(type_idx)),
                                 );
                             }
                             num_imported_funcs += 1;
@@ -444,8 +444,7 @@ fn main() -> Result<()> {
                 for (i, _) in defined_funcs.iter().enumerate() {
                     let idx = num_imported_functions + i as u32;
                     if relocations.get(&Relocation::Func(idx)).is_some() {
-                        // TODO: Relocate...or don't? Depends what we do with types.
-                        function_section.function(func_types[idx as usize]);
+                        function_section.function(reencoder.type_index(func_types[idx as usize]));
                     }
                 }
                 out.section(&function_section);
@@ -460,7 +459,6 @@ fn main() -> Result<()> {
                                 table_section.table(reencoder.table_type(table.ty)?);
                             }
                             wasmparser::TableInit::Expr(init_expr) => {
-                                // TODO: Re-encode the init expression with relocations.
                                 table_section.table_with_init(
                                     reencoder.table_type(table.ty)?,
                                     &reencoder.const_expr(init_expr.clone())?,
@@ -498,6 +496,9 @@ fn main() -> Result<()> {
             Section::Export => {
                 let mut export_section = ExportSection::new();
                 for export in &exports {
+                    // We don't use the reencoder here because we need to actually look up from the
+                    // relocation map anyway to figure out if we should export at all. So then we
+                    // might as well just write the value we find there.
                     let reloc = match export.kind {
                         wasmparser::ExternalKind::Func => Relocation::Func(export.index),
                         wasmparser::ExternalKind::Table => Relocation::Table(export.index),
@@ -513,9 +514,9 @@ fn main() -> Result<()> {
             }
             Section::Start => {
                 if let Some(idx) = start_idx {
-                    if relocations.get(&Relocation::Func(idx)).is_some() {
+                    if let Some(new_idx) = relocations.get(&Relocation::Func(idx)) {
                         out.section(&wasm_encoder::StartSection {
-                            function_index: idx,
+                            function_index: *new_idx,
                         });
                     }
                 }
