@@ -8,7 +8,7 @@ use clap::Parser as _;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
     CodeSection, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
-    ImportSection, Instruction, Module, RawSection, TableSection,
+    ImportSection, Instruction, Module, RawSection, StartSection, TableSection,
 };
 use wasmparser::{
     ArrayType, BlockType, Catch, CompositeInnerType, Export, FieldType, FuncType, Global,
@@ -56,6 +56,7 @@ fn main() -> Result<()> {
     let mut defined_tables: Vec<Table> = vec![];
     let mut defined_globals: Vec<Global> = vec![];
     let mut exports: Vec<Export> = vec![];
+    let mut start_idx: Option<u32> = None;
     let mut defined_funcs: Vec<Func> = vec![];
 
     let mut sections: Vec<Section> = vec![];
@@ -141,11 +142,12 @@ fn main() -> Result<()> {
                     exports.push(export?);
                 }
             }
-            StartSection { func: _, range } => {
-                // TODO: Either always preserve the start function, or preserve
-                // the start section only if the start function is preserved.
-                // (Maybe this should be a flag.)
-                sections.push(Section::raw(8, &buf[range]));
+            wasmparser::Payload::StartSection { func, range: _ } => {
+                // IDEA: Just because we presere the start function doesn't
+                // necessarily mean we want to preserve the start section.
+                // Should we have a flag for this?
+                sections.push(Section::Start);
+                start_idx = Some(func);
             }
             ElementSection(r) => {
                 sections.push(Section::raw(9, &buf[r.range()]));
@@ -477,7 +479,15 @@ fn main() -> Result<()> {
                 }
                 out.section(&export_section);
             }
-            Section::Start => todo!(),
+            Section::Start => {
+                if let Some(idx) = start_idx {
+                    if relocations.get(&Relocation::Func(idx)).is_some() {
+                        out.section(&StartSection {
+                            function_index: idx,
+                        });
+                    }
+                }
+            }
             Section::Element => todo!(),
             Section::Code => {
                 let mut code_section = CodeSection::new();
