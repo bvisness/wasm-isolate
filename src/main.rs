@@ -237,7 +237,11 @@ fn main() -> Result<()> {
                 }
                 res
             }
-            WorkItem::Table(_) => todo!(),
+            WorkItem::Table(idx) => {
+                let mut res = Uses::single_table(*idx);
+                res.merge(get_tabletype_uses(&table_types[*idx as usize]));
+                res
+            }
             WorkItem::Global(idx) => {
                 let mut res = Uses::single_global(*idx);
                 res.merge(get_globaltype_uses(&global_types[*idx as usize]));
@@ -670,6 +674,10 @@ fn get_storagetype_uses(ty: &StorageType) -> Uses {
         StorageType::I8 | StorageType::I16 => Uses::default(),
         StorageType::Val(val_type) => get_valtype_uses(val_type),
     }
+}
+
+fn get_tabletype_uses(ty: &TableType) -> Uses {
+    get_reftype_uses(&ty.element_type)
 }
 
 fn get_globaltype_uses(ty: &GlobalType) -> Uses {
