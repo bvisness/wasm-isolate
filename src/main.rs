@@ -11,7 +11,8 @@ use clap::Parser as _;
 use wasm_encoder::{
     reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
     ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
-    FunctionSection, GlobalSection, ImportSection, Module, RawSection, TableSection, TagSection,
+    FunctionSection, GlobalSection, ImportSection, MemorySection, Module, RawSection, TableSection,
+    TagSection,
 };
 use wasmparser::{
     CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
@@ -270,7 +271,7 @@ fn main() -> Result<()> {
                 let mut res = Uses::single_tag(*idx);
                 res.merge(get_tagtype_uses(&tag_types[*idx as usize]));
                 res
-            },
+            }
         };
         work_queue.remove(0);
 
@@ -470,7 +471,16 @@ fn main() -> Result<()> {
                 }
                 out.section(&table_section);
             }
-            Section::Memory => todo!(),
+            Section::Memory => {
+                let mut memory_section = MemorySection::new();
+                for idx in num_imported_memories..(memory_types.len() as u32) {
+                    if relocations.get(&Relocation::Memory(idx)).is_some() {
+                        let mem_type = &memory_types[idx as usize];
+                        memory_section.memory(reencoder.memory_type(mem_type.clone()));
+                    }
+                }
+                out.section(&memory_section);
+            }
             Section::Global => {
                 let mut global_section = GlobalSection::new();
                 for (i, global) in defined_globals.iter().enumerate() {
@@ -595,7 +605,7 @@ fn main() -> Result<()> {
                     }
                 }
                 out.section(&tag_section);
-            },
+            }
         }
     }
     let out_bytes = out.finish();

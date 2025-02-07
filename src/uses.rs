@@ -1,5 +1,6 @@
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, FieldType, FuncType, GlobalType, HeapType, MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType
+    ArrayType, BlockType, Catch, CompositeInnerType, FieldType, FuncType, GlobalType, HeapType,
+    MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType,
 };
 
 #[derive(Default, Debug)]
