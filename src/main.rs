@@ -3,7 +3,7 @@ use std::{
     fs::{self, File},
 };
 
-use anyhow::{bail, Result};
+use anyhow::Result;
 use clap::Parser as _;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
