@@ -1,4 +1,4 @@
-mod reencoder;
+mod relocation;
 mod uses;
 
 use std::{
@@ -9,18 +9,16 @@ use std::{
 use anyhow::Result;
 use clap::Parser as _;
 use wasm_encoder::{
-    reencode::{Reencode, RoundtripReencoder},
-    CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode, ElementMode, ElementSection,
-    ElementSegment, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
-    ImportSection, Instruction, Module, RawSection, StartSection, TableSection,
+    reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
+    ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
+    FunctionSection, GlobalSection, ImportSection, Instruction, Module, RawSection, TableSection,
 };
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, Data, Element, Export, FieldType, FuncType,
-    Global, GlobalType, HeapType, Import, MemArg, MemoryType, Operator, Parser, Payload::*,
-    RefType, StorageType, StructType, Table, TableType, TagType, ValType,
+    CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
+    Parser, Payload::*, Table, TableType, TagType, ValType,
 };
 
-use reencoder::*;
+use relocation::*;
 use uses::*;
 
 #[derive(clap::Parser, Debug)]
@@ -150,7 +148,7 @@ fn main() -> Result<()> {
                     exports.push(export?);
                 }
             }
-            wasmparser::Payload::StartSection { func, range: _ } => {
+            StartSection { func, range: _ } => {
                 // IDEA: Just because we presere the start function doesn't
                 // necessarily mean we want to preserve the start section.
                 // Should we have a flag for this?
@@ -322,10 +320,11 @@ fn main() -> Result<()> {
 
     let mut relocations = HashMap::<Relocation, u32>::new();
 
-    for type_idx in &all_uses.live_tables {
-        let new_idx = get_new_index(&all_uses.live_types, type_idx);
-        relocations.insert(Relocation::Type(*type_idx), new_idx);
-    }
+    // TODO: We do not relocate types for now.
+    // for type_idx in &all_uses.live_tables {
+    //     let new_idx = get_new_index(&all_uses.live_types, type_idx);
+    //     relocations.insert(Relocation::Type(*type_idx), new_idx);
+    // }
     for func_idx in &all_uses.live_funcs {
         let new_idx = get_new_index(&all_uses.live_funcs, func_idx);
         relocations.insert(Relocation::Func(*func_idx), new_idx);
@@ -360,6 +359,9 @@ fn main() -> Result<()> {
     //
 
     let mut out = Module::new();
+    let mut reencoder = RelocatingReencoder {
+        relocations: &relocations,
+    };
     for section in sections {
         match section {
             Section::Passthrough(sec) => {
@@ -390,7 +392,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    RoundtripReencoder.table_type(ty)?,
+                                    reencoder.table_type(ty)?,
                                 );
                             }
                             num_imported_tables += 1;
@@ -400,7 +402,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    RoundtripReencoder.memory_type(ty),
+                                    reencoder.memory_type(ty),
                                 );
                             }
                             num_imported_memories += 1;
@@ -410,7 +412,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    RoundtripReencoder.global_type(ty)?,
+                                    reencoder.global_type(ty)?,
                                 );
                             }
                             num_imported_globals += 1;
@@ -420,7 +422,7 @@ fn main() -> Result<()> {
                                 import_section.import(
                                     import.module,
                                     import.name,
-                                    RoundtripReencoder.tag_type(ty),
+                                    reencoder.tag_type(ty),
                                 );
                             }
                             num_imported_tags += 1;
@@ -448,13 +450,13 @@ fn main() -> Result<()> {
                     if relocations.get(&Relocation::Table(idx)).is_some() {
                         match &table.init {
                             wasmparser::TableInit::RefNull => {
-                                table_section.table(RoundtripReencoder.table_type(table.ty)?);
+                                table_section.table(reencoder.table_type(table.ty)?);
                             }
                             wasmparser::TableInit::Expr(init_expr) => {
                                 // TODO: Re-encode the init expression with relocations.
                                 table_section.table_with_init(
-                                    RoundtripReencoder.table_type(table.ty)?,
-                                    &RoundtripReencoder.const_expr(init_expr.clone())?,
+                                    reencoder.table_type(table.ty)?,
+                                    &reencoder.const_expr(init_expr.clone())?,
                                 );
                             }
                         }
@@ -470,8 +472,8 @@ fn main() -> Result<()> {
                     if relocations.get(&Relocation::Global(idx)).is_some() {
                         // TODO: Re-encode the init expression with relocations.
                         global_section.global(
-                            RoundtripReencoder.global_type(global.ty)?,
-                            &RoundtripReencoder.const_expr(global.init_expr.clone())?,
+                            reencoder.global_type(global.ty)?,
+                            &reencoder.const_expr(global.init_expr.clone())?,
                         );
                     }
                 }
@@ -496,7 +498,7 @@ fn main() -> Result<()> {
             Section::Start => {
                 if let Some(idx) = start_idx {
                     if relocations.get(&Relocation::Func(idx)).is_some() {
-                        out.section(&StartSection {
+                        out.section(&wasm_encoder::StartSection {
                             function_index: idx,
                         });
                     }
@@ -515,7 +517,7 @@ fn main() -> Result<()> {
                                     table_index,
                                     offset_expr,
                                 } => {
-                                    expr = RoundtripReencoder.const_expr(offset_expr.clone())?;
+                                    expr = reencoder.const_expr(offset_expr.clone())?;
                                     ElementMode::Active {
                                         table: *table_index,
                                         offset: &expr,
@@ -523,7 +525,7 @@ fn main() -> Result<()> {
                                 }
                                 wasmparser::ElementKind::Declared => todo!(),
                             },
-                            elements: RoundtripReencoder.element_items(elem.items.clone())?,
+                            elements: reencoder.element_items(elem.items.clone())?,
                         });
                     }
                 }
@@ -531,12 +533,17 @@ fn main() -> Result<()> {
             }
             Section::Code => {
                 let mut code_section = CodeSection::new();
-                for (i, _) in defined_funcs.iter().enumerate() {
+                for (i, func) in defined_funcs.iter().enumerate() {
                     let idx = i as u32 + num_imported_functions;
                     if all_uses.live_funcs.contains(&idx) {
-                        // TODO: locals
-                        let mut new_func = Function::new(vec![]);
-                        new_func.instruction(&Instruction::End);
+                        let mut new_locals: Vec<(u32, wasm_encoder::ValType)> = vec![];
+                        for (n, ty) in &func.locals {
+                            new_locals.push((*n, reencoder.val_type(*ty)?));
+                        }
+                        let mut new_func = Function::new(new_locals);
+                        for instr in &func.instructions {
+                            new_func.instruction(&reencoder.instruction(instr.clone())?);
+                        }
                         code_section.function(&new_func);
                     }
                 }
@@ -555,7 +562,7 @@ fn main() -> Result<()> {
                                     memory_index,
                                     offset_expr,
                                 } => {
-                                    expr = RoundtripReencoder.const_expr(offset_expr.clone())?;
+                                    expr = reencoder.const_expr(offset_expr.clone())?;
                                     DataSegmentMode::Active {
                                         memory_index: *memory_index,
                                         offset: &expr,
@@ -635,16 +642,4 @@ impl<'a> Section<'a> {
         };
         Self::Passthrough(foo)
     }
-}
-
-#[derive(Eq, PartialEq, Hash)]
-enum Relocation {
-    Type(u32),
-    Func(u32),
-    Table(u32),
-    Global(u32),
-    Memory(u32),
-    Data(u32),
-    Elem(u32),
-    Tag(u32),
 }
