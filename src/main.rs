@@ -155,6 +155,9 @@ fn main() -> Result<()> {
             }
 
             CustomSection(r) => {
+                if r.name() == "name" {
+                    continue
+                }
                 sections.push(Section::raw(0, &buf[r.range()]));
             }
 
