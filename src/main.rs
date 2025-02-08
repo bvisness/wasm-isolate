@@ -15,8 +15,8 @@ use wasm_encoder::{
     TagSection, TypeSection,
 };
 use wasmparser::{
-    CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
-    Parser, Payload::*, RecGroup, Table, TableInit, TableType, TagType, ValType,
+    CompositeInnerType, Data, DataKind, Element, Export, Global, GlobalType, Import, MemoryType,
+    Operator, Parser, Payload::*, RecGroup, Table, TableInit, TableType, TagType, ValType,
 };
 
 use relocation::*;
@@ -27,7 +27,7 @@ use uses::*;
 struct Args {
     filename: String,
 
-    #[arg(short, long, required = true)]
+    #[arg(short, long, num_args = 1.., value_delimiter = ',', required = true)]
     funcs: Vec<u32>,
 
     #[arg(short, long, required = true)]
@@ -275,7 +275,21 @@ fn main() -> Result<()> {
                 res
             }
             WorkItem::Memory(idx) => Uses::single_memory(*idx),
-            WorkItem::Data(_) => todo!(),
+            WorkItem::Data(idx) => {
+                let mut res = Uses::single_data(*idx);
+                let data = &datas[*idx as usize];
+                match &data.kind {
+                    DataKind::Passive => (),
+                    DataKind::Active {
+                        memory_index,
+                        offset_expr,
+                    } => {
+                        res.merge(Uses::single_memory(*memory_index));
+                        res.merge(get_constexpr_uses(offset_expr)?);
+                    }
+                };
+                res
+            }
             WorkItem::Elem(_) => todo!(),
             WorkItem::Tag(idx) => {
                 let mut res = Uses::single_tag(*idx);
