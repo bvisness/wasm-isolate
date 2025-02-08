@@ -1,6 +1,7 @@
+use anyhow::Result;
 use wasmparser::{
-    ArrayType, BlockType, Catch, CompositeInnerType, FieldType, FuncType, GlobalType, HeapType,
-    MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType,
+    ArrayType, BlockType, Catch, CompositeInnerType, ConstExpr, FieldType, FuncType, GlobalType,
+    HeapType, MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType,
 };
 
 #[derive(Default, Debug)]
@@ -196,6 +197,15 @@ pub fn get_catch_uses(catch: &Catch) -> Uses {
         Catch::All { label: _ } => Uses::default(),
         Catch::AllRef { label: _ } => Uses::default(),
     }
+}
+
+pub fn get_constexpr_uses(expr: &ConstExpr) -> Result<Uses> {
+    let mut res = Uses::default();
+    let r = expr.get_operators_reader();
+    for instr in r {
+        res.merge(get_instr_uses(&instr?));
+    }
+    Ok(res)
 }
 
 pub fn get_instr_uses(instr: &Operator<'_>) -> Uses {

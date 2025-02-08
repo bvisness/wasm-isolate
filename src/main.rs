@@ -16,7 +16,7 @@ use wasm_encoder::{
 };
 use wasmparser::{
     CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
-    Parser, Payload::*, Table, TableType, TagType, ValType,
+    Parser, Payload::*, Table, TableInit, TableType, TagType, ValType,
 };
 
 use relocation::*;
@@ -238,11 +238,8 @@ fn main() -> Result<()> {
             }
             WorkItem::Func(idx) => {
                 let mut res = Uses::single_func(*idx);
-                if *idx < num_imported_functions {
-                    // TODO: Track type of imported function
-                    // Suggestion: Make an array of all func types, both imports and defined.
-                    // This can be separate from the array of defined functions.
-                } else {
+                res.merge(Uses::single_type(func_types[*idx as usize]));
+                if *idx >= num_imported_functions {
                     let func = &defined_funcs[(idx - num_imported_functions) as usize];
                     res.merge(Uses::single_type(func.type_idx));
                     for (_, ty) in &func.locals {
@@ -257,11 +254,21 @@ fn main() -> Result<()> {
             WorkItem::Table(idx) => {
                 let mut res = Uses::single_table(*idx);
                 res.merge(get_tabletype_uses(&table_types[*idx as usize]));
+                if *idx >= num_imported_tables {
+                    let table = &defined_tables[(idx - num_imported_tables) as usize];
+                    if let TableInit::Expr(expr) = &table.init {
+                        res.merge(get_constexpr_uses(expr)?);
+                    }
+                }
                 res
             }
             WorkItem::Global(idx) => {
                 let mut res = Uses::single_global(*idx);
                 res.merge(get_globaltype_uses(&global_types[*idx as usize]));
+                if *idx >= num_imported_globals {
+                    let global = &defined_globals[(idx - num_imported_globals) as usize];
+                    res.merge(get_constexpr_uses(&global.init_expr)?)
+                }
                 res
             }
             WorkItem::Memory(idx) => Uses::single_memory(*idx),
