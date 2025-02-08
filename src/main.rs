@@ -672,7 +672,7 @@ fn main() -> Result<()> {
                                     }
                                 }
                             },
-                            data: vec![],
+                            data: data.data.iter().map(|b| *b).collect::<Vec<u8>>(),
                         });
                     }
                 }
