@@ -246,28 +246,44 @@ fn main() -> Result<()> {
 
     let mut work_queue: Vec<WorkItem> = vec![];
     for idx in args.types {
-        work_queue.push(WorkItem::Type(idx));
+        if idx < types.len() as u32 {
+            work_queue.push(WorkItem::Type(idx));
+        }
     }
     for idx in args.funcs {
-        work_queue.push(WorkItem::Func(idx));
+        if idx < func_types.len() as u32 {
+            work_queue.push(WorkItem::Func(idx));
+        }
     }
     for idx in args.tables {
-        work_queue.push(WorkItem::Table(idx));
+        if idx < table_types.len() as u32 {
+            work_queue.push(WorkItem::Table(idx));
+        }
     }
     for idx in args.globals {
-        work_queue.push(WorkItem::Global(idx));
+        if idx < global_types.len() as u32 {
+            work_queue.push(WorkItem::Global(idx));
+        }
     }
     for idx in args.memories {
-        work_queue.push(WorkItem::Memory(idx));
+        if idx < memory_types.len() as u32 {
+            work_queue.push(WorkItem::Memory(idx));
+        }
     }
     for idx in args.datas {
-        work_queue.push(WorkItem::Data(idx));
+        if idx < datas.len() as u32 {
+            work_queue.push(WorkItem::Data(idx));
+        }
     }
     for idx in args.elems {
-        work_queue.push(WorkItem::Elem(idx));
+        if idx < elems.len() as u32 {
+            work_queue.push(WorkItem::Elem(idx));
+        }
     }
     for idx in args.tags {
-        work_queue.push(WorkItem::Tag(idx));
+        if idx < tag_types.len() as u32 {
+            work_queue.push(WorkItem::Tag(idx));
+        }
     }
 
     let mut all_uses = Uses::default();
