@@ -1,7 +1,8 @@
 use anyhow::Result;
 use wasmparser::{
     ArrayType, BlockType, Catch, CompositeInnerType, ConstExpr, FieldType, FuncType, GlobalType,
-    HeapType, MemArg, Operator, RefType, StorageType, StructType, TableType, TagType, ValType,
+    HeapType, MemArg, Operator, RefType, StorageType, StructType, SubType, TableType, TagType,
+    ValType,
 };
 
 #[derive(Default, Debug)]
@@ -102,13 +103,21 @@ impl Uses {
     }
 }
 
-pub fn get_type_uses(ty: &CompositeInnerType) -> Uses {
-    match ty {
+pub fn get_type_uses(ty: &SubType) -> Uses {
+    let mut res = Uses::default();
+    if let Some(idx) = &ty.supertype_idx {
+        res.merge(match idx.unpack() {
+            wasmparser::UnpackedIndex::Module(idx) => Uses::single_type(idx),
+            _ => todo!(),
+        });
+    }
+    res.merge(match &ty.composite_type.inner {
         CompositeInnerType::Func(func_type) => get_functype_uses(func_type),
         CompositeInnerType::Array(array_type) => get_arraytype_uses(array_type),
         CompositeInnerType::Struct(struct_type) => get_structtype_uses(struct_type),
         CompositeInnerType::Cont(_) => todo!(),
-    }
+    });
+    res
 }
 
 pub fn get_functype_uses(ty: &FuncType) -> Uses {

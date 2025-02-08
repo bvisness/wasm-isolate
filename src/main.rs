@@ -15,8 +15,8 @@ use wasm_encoder::{
     TagSection, TypeSection,
 };
 use wasmparser::{
-    CompositeInnerType, Data, DataKind, Element, Export, Global, GlobalType, Import, MemoryType,
-    Operator, Parser, Payload::*, RecGroup, Table, TableInit, TableType, TagType, ValType,
+    Data, DataKind, Element, Export, Global, GlobalType, Import, MemoryType, Operator, Parser,
+    Payload::*, RecGroup, SubType, Table, TableInit, TableType, TagType, ValType,
 };
 
 use relocation::*;
@@ -43,7 +43,7 @@ fn main() -> Result<()> {
     reader.read_to_end(&mut buf)?;
     let parser = Parser::new(0);
 
-    let mut types: Vec<CompositeInnerType> = vec![];
+    let mut types: Vec<SubType> = vec![];
     let mut rec_groups: Vec<RecGroup> = vec![];
     let mut num_imported_functions: u32 = 0;
     let mut num_imported_tables: u32 = 0;
@@ -80,7 +80,7 @@ fn main() -> Result<()> {
                     let rg = rg?;
                     rec_groups.push(rg.clone());
                     for t in rg.into_types() {
-                        types.push(t.composite_type.inner);
+                        types.push(t);
                     }
                 }
             }
