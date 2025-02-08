@@ -27,8 +27,29 @@ use uses::*;
 struct Args {
     filename: String,
 
-    #[arg(short, long, num_args = 1.., value_delimiter = ',', required = true)]
+    #[arg(long, num_args = 1.., value_delimiter = ',')]
+    types: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     funcs: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
+    tables: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
+    globals: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
+    memories: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
+    datas: Vec<u32>,
+
+    #[arg(short, long, num_args = 1.., value_delimiter = ',')]
+    elems: Vec<u32>,
+
+    #[arg(long, num_args = 1.., value_delimiter = ',')]
+    tags: Vec<u32>,
 
     #[arg(short, long, required = true)]
     out: String,
@@ -224,8 +245,29 @@ fn main() -> Result<()> {
     //
 
     let mut work_queue: Vec<WorkItem> = vec![];
-    for func in args.funcs {
-        work_queue.push(WorkItem::Func(func));
+    for idx in args.types {
+        work_queue.push(WorkItem::Type(idx));
+    }
+    for idx in args.funcs {
+        work_queue.push(WorkItem::Func(idx));
+    }
+    for idx in args.tables {
+        work_queue.push(WorkItem::Table(idx));
+    }
+    for idx in args.globals {
+        work_queue.push(WorkItem::Global(idx));
+    }
+    for idx in args.memories {
+        work_queue.push(WorkItem::Memory(idx));
+    }
+    for idx in args.datas {
+        work_queue.push(WorkItem::Data(idx));
+    }
+    for idx in args.elems {
+        work_queue.push(WorkItem::Elem(idx));
+    }
+    for idx in args.tags {
+        work_queue.push(WorkItem::Tag(idx));
     }
 
     let mut all_uses = Uses::default();
