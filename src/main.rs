@@ -12,11 +12,11 @@ use wasm_encoder::{
     reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
     ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
     FunctionSection, GlobalSection, ImportSection, MemorySection, Module, RawSection, TableSection,
-    TagSection,
+    TagSection, TypeSection,
 };
 use wasmparser::{
     CompositeInnerType, Data, Element, Export, Global, GlobalType, Import, MemoryType, Operator,
-    Parser, Payload::*, Table, TableInit, TableType, TagType, ValType,
+    Parser, Payload::*, RecGroup, Table, TableInit, TableType, TagType, ValType,
 };
 
 use relocation::*;
@@ -44,6 +44,7 @@ fn main() -> Result<()> {
     let parser = Parser::new(0);
 
     let mut types: Vec<CompositeInnerType> = vec![];
+    let mut rec_groups: Vec<RecGroup> = vec![];
     let mut num_imported_functions: u32 = 0;
     let mut num_imported_tables: u32 = 0;
     let mut num_imported_memories: u32 = 0;
@@ -73,10 +74,12 @@ fn main() -> Result<()> {
         match payload? {
             // Sections for WebAssembly modules
             TypeSection(r) => {
-                sections.push(Section::raw(1, &buf[r.range()]));
+                sections.push(Section::Type);
 
                 for rg in r {
-                    for t in rg?.into_types() {
+                    let rg = rg?;
+                    rec_groups.push(rg.clone());
+                    for t in rg.into_types() {
                         types.push(t.composite_type.inner);
                     }
                 }
@@ -334,11 +337,12 @@ fn main() -> Result<()> {
 
     let mut relocations = HashMap::<Relocation, u32>::new();
 
-    // TODO: We do not relocate types for now.
-    // for type_idx in &all_uses.live_tables {
-    //     let new_idx = get_new_index(&all_uses.live_types, type_idx);
-    //     relocations.insert(Relocation::Type(*type_idx), new_idx);
-    // }
+    for type_idx in &all_uses.live_types {
+        // Type canonicalization be damned. Surely no self-respecting compiler would leave
+        // redundant types in its output.
+        let new_idx = get_new_index(&all_uses.live_types, type_idx);
+        relocations.insert(Relocation::Type(*type_idx), new_idx);
+    }
     for func_idx in &all_uses.live_funcs {
         let new_idx = get_new_index(&all_uses.live_funcs, func_idx);
         relocations.insert(Relocation::Func(*func_idx), new_idx);
@@ -380,6 +384,26 @@ fn main() -> Result<()> {
         match section {
             Section::Passthrough(sec) => {
                 out.section(&sec);
+            }
+
+            Section::Type => {
+                let mut type_section = TypeSection::new();
+                let mut idx: u32 = 0;
+                for rg in &rec_groups {
+                    let mut sub_types: Vec<wasm_encoder::SubType> = vec![];
+                    for ty in rg.types() {
+                        if relocations.get(&Relocation::Type(idx)).is_some() {
+                            sub_types.push(reencoder.sub_type(ty.clone())?);
+                        }
+                        idx += 1;
+                    }
+                    if sub_types.len() == 1 {
+                        type_section.ty().subtype(sub_types.first().unwrap());
+                    } else if sub_types.len() > 1 || rg.is_explicit_rec_group() {
+                        type_section.ty().rec(sub_types)
+                    }
+                }
+                out.section(&type_section);
             }
             Section::Import => {
                 let mut import_section = ImportSection::new();
@@ -491,7 +515,6 @@ fn main() -> Result<()> {
                 for (i, global) in defined_globals.iter().enumerate() {
                     let idx = num_imported_globals + i as u32;
                     if relocations.get(&Relocation::Global(idx)).is_some() {
-                        // TODO: Re-encode the init expression with relocations.
                         global_section.global(
                             reencoder.global_type(global.ty)?,
                             &reencoder.const_expr(global.init_expr.clone())?,
@@ -547,7 +570,7 @@ fn main() -> Result<()> {
                                         offset: &expr,
                                     }
                                 }
-                                wasmparser::ElementKind::Declared => todo!(),
+                                wasmparser::ElementKind::Declared => ElementMode::Declared,
                             },
                             elements: reencoder.element_items(elem.items.clone())?,
                         });
@@ -657,6 +680,7 @@ enum WorkItem {
 
 enum Section<'a> {
     Passthrough(RawSection<'a>),
+    Type,
     Import,
     Function,
     Table,
