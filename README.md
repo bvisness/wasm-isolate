@@ -6,6 +6,8 @@ wasm-isolate will walk the module and preserve any other functions, tables, memo
 
 ## Installation
 
+[Install Rust](https://www.rust-lang.org/tools/install) or whatever. Then:
+
 ```
 cargo install --path .
 ```
