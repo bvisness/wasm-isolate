@@ -4,6 +4,7 @@ mod uses;
 use std::{
     collections::HashMap,
     fs::{self, File},
+    io::Write,
 };
 
 use anyhow::Result;
@@ -15,44 +16,56 @@ use wasm_encoder::{
     TagSection, TypeSection,
 };
 use wasmparser::{
-    Data, DataKind, Element, Export, Global, GlobalType, Import, MemoryType, Operator, Parser,
-    Payload::*, RecGroup, SubType, Table, TableInit, TableType, TagType, ValType,
+    Data, DataKind, Element, ElementKind, Export, Global, GlobalType, Import, MemoryType, Operator,
+    Parser, Payload::*, RecGroup, SubType, Table, TableInit, TableType, TagType, ValType,
 };
 
 use relocation::*;
 use uses::*;
 
 #[derive(clap::Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(
+    version,
+    about = "wasm-isolate strips a WebAssembly module down to specific features of interest without breaking validation."
+)]
 struct Args {
+    /// The file to read from, or "-" to read from stdin
     filename: String,
 
+    /// Type indices to preserve, separated by commas
     #[arg(long, num_args = 1.., value_delimiter = ',')]
     types: Vec<u32>,
 
+    /// Function indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     funcs: Vec<u32>,
 
+    /// Table indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     tables: Vec<u32>,
 
+    /// Global indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     globals: Vec<u32>,
 
+    /// Memory indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     memories: Vec<u32>,
 
+    /// Data segment indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     datas: Vec<u32>,
 
+    /// Elem segment indices to preserve, separated by commas
     #[arg(short, long, num_args = 1.., value_delimiter = ',')]
     elems: Vec<u32>,
 
+    /// Tag indices to preserve, separated by commas
     #[arg(long, num_args = 1.., value_delimiter = ',')]
     tags: Vec<u32>,
 
-    #[arg(short, long, required = true)]
-    out: String,
+    #[arg(short, long)]
+    out: Option<String>,
 }
 
 fn main() -> Result<()> {
@@ -245,44 +258,44 @@ fn main() -> Result<()> {
     //
 
     let mut work_queue: Vec<WorkItem> = vec![];
-    for idx in args.types {
-        if idx < types.len() as u32 {
-            work_queue.push(WorkItem::Type(idx));
+    for idx in &args.types {
+        if *idx < types.len() as u32 {
+            work_queue.push(WorkItem::Type(*idx));
         }
     }
-    for idx in args.funcs {
-        if idx < func_types.len() as u32 {
-            work_queue.push(WorkItem::Func(idx));
+    for idx in &args.funcs {
+        if *idx < func_types.len() as u32 {
+            work_queue.push(WorkItem::Func(*idx));
         }
     }
-    for idx in args.tables {
-        if idx < table_types.len() as u32 {
-            work_queue.push(WorkItem::Table(idx));
+    for idx in &args.tables {
+        if *idx < table_types.len() as u32 {
+            work_queue.push(WorkItem::Table(*idx));
         }
     }
-    for idx in args.globals {
-        if idx < global_types.len() as u32 {
-            work_queue.push(WorkItem::Global(idx));
+    for idx in &args.globals {
+        if *idx < global_types.len() as u32 {
+            work_queue.push(WorkItem::Global(*idx));
         }
     }
-    for idx in args.memories {
-        if idx < memory_types.len() as u32 {
-            work_queue.push(WorkItem::Memory(idx));
+    for idx in &args.memories {
+        if *idx < memory_types.len() as u32 {
+            work_queue.push(WorkItem::Memory(*idx));
         }
     }
-    for idx in args.datas {
-        if idx < datas.len() as u32 {
-            work_queue.push(WorkItem::Data(idx));
+    for idx in &args.datas {
+        if *idx < datas.len() as u32 {
+            work_queue.push(WorkItem::Data(*idx));
         }
     }
-    for idx in args.elems {
-        if idx < elems.len() as u32 {
-            work_queue.push(WorkItem::Elem(idx));
+    for idx in &args.elems {
+        if *idx < elems.len() as u32 {
+            work_queue.push(WorkItem::Elem(*idx));
         }
     }
-    for idx in args.tags {
-        if idx < tag_types.len() as u32 {
-            work_queue.push(WorkItem::Tag(idx));
+    for idx in &args.tags {
+        if *idx < tag_types.len() as u32 {
+            work_queue.push(WorkItem::Tag(*idx));
         }
     }
 
@@ -348,7 +361,36 @@ fn main() -> Result<()> {
                 };
                 res
             }
-            WorkItem::Elem(_) => todo!(),
+            WorkItem::Elem(idx) => {
+                let mut res = Uses::single_elem(*idx);
+                let elem = &elems[*idx as usize];
+                match &elem.kind {
+                    ElementKind::Passive | ElementKind::Declared => (),
+                    ElementKind::Active {
+                        table_index,
+                        offset_expr,
+                    } => {
+                        // It's not clear to me why the table index is optional at this stage, but
+                        // other code in wasm-tools defaults to zero if it's missing.
+                        res.merge(Uses::single_table(table_index.unwrap_or(0)));
+                        res.merge(get_constexpr_uses(offset_expr)?);
+                    }
+                };
+                match &elem.items {
+                    wasmparser::ElementItems::Functions(funcs) => {
+                        for func_idx in funcs.clone() {
+                            res.merge(Uses::single_func(func_idx?));
+                        }
+                    }
+                    wasmparser::ElementItems::Expressions(ref_type, exprs) => {
+                        res.merge(get_reftype_uses(ref_type));
+                        for expr in exprs.clone() {
+                            res.merge(get_constexpr_uses(&expr?)?);
+                        }
+                    }
+                };
+                res
+            }
             WorkItem::Tag(idx) => {
                 let mut res = Uses::single_tag(*idx);
                 res.merge(get_tagtype_uses(&tag_types[*idx as usize]));
@@ -401,7 +443,6 @@ fn main() -> Result<()> {
 
         all_uses.merge(new_uses);
     }
-    println!("{:#?}", all_uses);
 
     //
     // Track relocations
@@ -713,7 +754,78 @@ fn main() -> Result<()> {
     }
     let out_bytes = out.finish();
 
-    fs::write(args.out, out_bytes).expect("unable to write file");
+    if let Some(path) = &args.out {
+        fs::write(path, out_bytes).expect("unable to write file");
+    } else {
+        std::io::stdout()
+            .write_all(&out_bytes)
+            .expect("unable to write output");
+    }
+
+    // Tell the user where the new things are
+    eprintln!("Success! The requested items are now located at these indices:");
+    for idx in &args.types {
+        if let Some(new_idx) = relocations.get(&Relocation::Type(*idx)) {
+            eprintln!("  Type {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Type {} was out of range and therefore ignored.", *idx);
+        }
+    }
+    for idx in &args.funcs {
+        if let Some(new_idx) = relocations.get(&Relocation::Func(*idx)) {
+            eprintln!("  Func {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Func {} was out of range and therefore ignored.", *idx);
+        }
+    }
+    for idx in &args.tables {
+        if let Some(new_idx) = relocations.get(&Relocation::Table(*idx)) {
+            eprintln!("  Table {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Table {} was out of range and therefore ignored.", *idx);
+        }
+    }
+    for idx in &args.globals {
+        if let Some(new_idx) = relocations.get(&Relocation::Global(*idx)) {
+            eprintln!("  Global {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Global {} was out of range and therefore ignored.", *idx);
+        }
+    }
+    for idx in &args.memories {
+        if let Some(new_idx) = relocations.get(&Relocation::Memory(*idx)) {
+            eprintln!("  Memory {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Memory {} was out of range and therefore ignored.", *idx);
+        }
+    }
+    for idx in &args.datas {
+        if let Some(new_idx) = relocations.get(&Relocation::Data(*idx)) {
+            eprintln!("  Data segment {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!(
+                "  Data segment {} was out of range and therefore ignored.",
+                *idx
+            );
+        }
+    }
+    for idx in &args.elems {
+        if let Some(new_idx) = relocations.get(&Relocation::Elem(*idx)) {
+            eprintln!("  Elem segment {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!(
+                "  Elem segment {} was out of range and therefore ignored.",
+                *idx
+            );
+        }
+    }
+    for idx in &args.tags {
+        if let Some(new_idx) = relocations.get(&Relocation::Tag(*idx)) {
+            eprintln!("  Tag {} -> {}", *idx, new_idx);
+        } else {
+            eprintln!("  Tag {} was out of range and therefore ignored.", *idx);
+        }
+    }
 
     Ok(())
 }
