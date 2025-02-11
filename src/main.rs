@@ -254,6 +254,10 @@ fn main() -> Result<()> {
     }
 
     //
+    // TODO: Ensure that we have an export section for later.
+    //
+
+    //
     // Iterate over all live objects until we have gathered all the references.
     //
 
@@ -653,6 +657,54 @@ fn main() -> Result<()> {
                         export_section.export(export.name, export.kind.into(), *new_idx);
                     }
                 }
+
+                // Also export the explicitly-requested things so it's easy to test them in isolation.
+                for idx in &args.funcs {
+                    if let Some(new_idx) = relocations.get(&Relocation::Func(*idx)) {
+                        export_section.export(
+                            &format!("isolated_func_{}", *idx),
+                            wasm_encoder::ExportKind::Func,
+                            *new_idx,
+                        );
+                    }
+                }
+                for idx in &args.tables {
+                    if let Some(new_idx) = relocations.get(&Relocation::Table(*idx)) {
+                        export_section.export(
+                            &format!("isolated_table_{}", *idx),
+                            wasm_encoder::ExportKind::Table,
+                            *new_idx,
+                        );
+                    }
+                }
+                for idx in &args.globals {
+                    if let Some(new_idx) = relocations.get(&Relocation::Global(*idx)) {
+                        export_section.export(
+                            &format!("isolated_global_{}", *idx),
+                            wasm_encoder::ExportKind::Global,
+                            *new_idx,
+                        );
+                    }
+                }
+                for idx in &args.memories {
+                    if let Some(new_idx) = relocations.get(&Relocation::Memory(*idx)) {
+                        export_section.export(
+                            &format!("isolated_memory_{}", *idx),
+                            wasm_encoder::ExportKind::Memory,
+                            *new_idx,
+                        );
+                    }
+                }
+                for idx in &args.tags {
+                    if let Some(new_idx) = relocations.get(&Relocation::Tag(*idx)) {
+                        export_section.export(
+                            &format!("isolated_tag_{}", *idx),
+                            wasm_encoder::ExportKind::Tag,
+                            *new_idx,
+                        );
+                    }
+                }
+
                 out.section(&export_section);
             }
             Section::Start => {
