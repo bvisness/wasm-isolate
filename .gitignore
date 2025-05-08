@@ -1,6 +1,7 @@
 .vscode
 *.wasm
 *.wat
+*.dump
 
 .DS_Store
 

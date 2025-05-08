@@ -2,6 +2,7 @@ mod isolate;
 mod relocation;
 mod replay;
 mod uses;
+mod util;
 
 use anyhow::Result;
 use clap::Parser as _;
@@ -18,18 +19,17 @@ use replay::*;
 struct Args {
     #[clap(subcommand)]
     sub: Option<Commands>,
-
-    #[clap(flatten)]
-    isolate: ArgsIsolate,
+    // #[clap(flatten)]
+    // isolate: IsolateArgs,
 }
 
 #[derive(clap::Parser, Debug)]
 enum Commands {
     /// Strip a WebAssembly module down to specific features of interest. The default command.
-    Isolate(ArgsIsolate),
+    Isolate(IsolateArgs),
 
     /// Instrument a WebAssembly module to record and replay runs of a specific function.
-    Replay(ArgsReplay),
+    Replay(ReplayArgs),
 }
 
 fn main() -> Result<()> {
@@ -38,6 +38,7 @@ fn main() -> Result<()> {
     match args.sub {
         Some(Commands::Isolate(args)) => isolate(args),
         Some(Commands::Replay(args)) => replay(args),
-        None => isolate(args.isolate),
+        // None => isolate(args.isolate),
+        None => panic!("no!"),
     }
 }

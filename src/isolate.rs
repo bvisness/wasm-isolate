@@ -1,15 +1,11 @@
-use std::{
-    collections::HashMap,
-    fs::{self, File},
-    io::Write,
-};
+use std::{collections::HashMap, fs, io::Write};
 
 use anyhow::Result;
 use wasm_encoder::{
     reencode::Reencode, CodeSection, ConstExpr, DataSection, DataSegment, DataSegmentMode,
     ElementMode, ElementSection, ElementSegment, EntityType, ExportSection, Function,
-    FunctionSection, GlobalSection, ImportSection, MemorySection, Module, RawSection, TableSection,
-    TagSection, TypeSection,
+    FunctionSection, GlobalSection, ImportSection, MemorySection, Module, TableSection, TagSection,
+    TypeSection,
 };
 use wasmparser::{
     Data, DataKind, Element, ElementKind, Export, Global, GlobalType, Import, MemoryType, Operator,
@@ -18,9 +14,10 @@ use wasmparser::{
 
 use crate::relocation::*;
 use crate::uses::*;
+use crate::util::*;
 
 #[derive(clap::Parser, Debug)]
-pub struct ArgsIsolate {
+pub struct IsolateArgs {
     /// The file to read from, or "-" to read from stdin
     filename: String,
 
@@ -60,7 +57,7 @@ pub struct ArgsIsolate {
     out: Option<String>,
 }
 
-pub fn isolate(args: ArgsIsolate) -> Result<()> {
+pub fn isolate(args: IsolateArgs) -> Result<()> {
     let filename = args.filename;
     let mut reader = get_reader(filename);
     let mut buf = Vec::new();
@@ -69,11 +66,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
 
     let mut types: Vec<SubType> = vec![];
     let mut rec_groups: Vec<RecGroup> = vec![];
-    let mut num_imported_functions: u32 = 0;
-    let mut num_imported_tables: u32 = 0;
-    let mut num_imported_memories: u32 = 0;
-    let mut num_imported_globals: u32 = 0;
-    let mut num_imported_tags: u32 = 0;
+    let mut num_imported: ImportCounts = ImportCounts::default();
     let mut func_types: Vec<u32> = vec![];
     let mut table_types: Vec<TableType> = vec![];
     let mut memory_types: Vec<MemoryType> = vec![];
@@ -115,23 +108,23 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
                     let import = import?;
                     match import.ty {
                         wasmparser::TypeRef::Func(type_idx) => {
-                            num_imported_functions += 1;
+                            num_imported.functions += 1;
                             func_types.push(type_idx);
                         }
                         wasmparser::TypeRef::Table(ty) => {
-                            num_imported_tables += 1;
+                            num_imported.tables += 1;
                             table_types.push(ty);
                         }
                         wasmparser::TypeRef::Memory(ty) => {
-                            num_imported_memories += 1;
+                            num_imported.memories += 1;
                             memory_types.push(ty);
                         }
                         wasmparser::TypeRef::Global(ty) => {
-                            num_imported_globals += 1;
+                            num_imported.globals += 1;
                             global_types.push(ty);
                         }
                         wasmparser::TypeRef::Tag(ty) => {
-                            num_imported_tags += 1;
+                            num_imported.tags += 1;
                             tag_types.push(ty);
                         }
                     }
@@ -179,7 +172,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
                 }
             }
             StartSection { func, range: _ } => {
-                // IDEA: Just because we presere the start function doesn't
+                // IDEA: Just because we preserve the start function doesn't
                 // necessarily mean we want to preserve the start section.
                 // Should we have a flag for this?
                 sections.push(Section::Start);
@@ -207,7 +200,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             // individually.
             CodeSectionStart { .. } => {
                 sections.push(Section::Code);
-                current_func = num_imported_functions;
+                current_func = num_imported.functions;
             }
             CodeSectionEntry(body) => {
                 if first_func {
@@ -307,8 +300,8 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             WorkItem::Func(idx) => {
                 let mut res = Uses::single_func(*idx);
                 res.merge(Uses::single_type(func_types[*idx as usize]));
-                if *idx >= num_imported_functions {
-                    let func = &defined_funcs[(idx - num_imported_functions) as usize];
+                if *idx >= num_imported.functions {
+                    let func = &defined_funcs[(idx - num_imported.functions) as usize];
                     res.merge(Uses::single_type(func.type_idx));
                     for (_, ty) in &func.locals {
                         res.merge(get_valtype_uses(ty));
@@ -322,8 +315,8 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             WorkItem::Table(idx) => {
                 let mut res = Uses::single_table(*idx);
                 res.merge(get_tabletype_uses(&table_types[*idx as usize]));
-                if *idx >= num_imported_tables {
-                    let table = &defined_tables[(idx - num_imported_tables) as usize];
+                if *idx >= num_imported.tables {
+                    let table = &defined_tables[(idx - num_imported.tables) as usize];
                     if let TableInit::Expr(expr) = &table.init {
                         res.merge(get_constexpr_uses(expr)?);
                     }
@@ -333,8 +326,8 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             WorkItem::Global(idx) => {
                 let mut res = Uses::single_global(*idx);
                 res.merge(get_globaltype_uses(&global_types[*idx as usize]));
-                if *idx >= num_imported_globals {
-                    let global = &defined_globals[(idx - num_imported_globals) as usize];
+                if *idx >= num_imported.globals {
+                    let global = &defined_globals[(idx - num_imported.globals) as usize];
                     res.merge(get_constexpr_uses(&global.init_expr)?)
                 }
                 res
@@ -580,7 +573,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             Section::Function => {
                 let mut function_section = FunctionSection::new();
                 for (i, _) in defined_funcs.iter().enumerate() {
-                    let idx = num_imported_functions + i as u32;
+                    let idx = num_imported.functions + i as u32;
                     if relocations.get(&Relocation::Func(idx)).is_some() {
                         function_section.function(reencoder.type_index(func_types[idx as usize]));
                     }
@@ -590,7 +583,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             Section::Table => {
                 let mut table_section = TableSection::new();
                 for (i, table) in defined_tables.iter().enumerate() {
-                    let idx = num_imported_tables + i as u32;
+                    let idx = num_imported.tables + i as u32;
                     if relocations.get(&Relocation::Table(idx)).is_some() {
                         match &table.init {
                             wasmparser::TableInit::RefNull => {
@@ -609,7 +602,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             }
             Section::Memory => {
                 let mut memory_section = MemorySection::new();
-                for idx in num_imported_memories..(memory_types.len() as u32) {
+                for idx in num_imported.memories..(memory_types.len() as u32) {
                     if relocations.get(&Relocation::Memory(idx)).is_some() {
                         let mem_type = &memory_types[idx as usize];
                         memory_section.memory(reencoder.memory_type(mem_type.clone()));
@@ -620,7 +613,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             Section::Global => {
                 let mut global_section = GlobalSection::new();
                 for (i, global) in defined_globals.iter().enumerate() {
-                    let idx = num_imported_globals + i as u32;
+                    let idx = num_imported.globals + i as u32;
                     if relocations.get(&Relocation::Global(idx)).is_some() {
                         global_section.global(
                             reencoder.global_type(global.ty)?,
@@ -736,7 +729,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             Section::Code => {
                 let mut code_section = CodeSection::new();
                 for (i, func) in defined_funcs.iter().enumerate() {
-                    let idx = i as u32 + num_imported_functions;
+                    let idx = i as u32 + num_imported.functions;
                     if all_uses.live_funcs.contains(&idx) {
                         let mut new_locals: Vec<(u32, wasm_encoder::ValType)> = vec![];
                         for (n, ty) in &func.locals {
@@ -784,7 +777,7 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
             }
             Section::Tag => {
                 let mut tag_section = TagSection::new();
-                for idx in num_imported_tags..(tag_types.len() as u32) {
+                for idx in num_imported.tags..(tag_types.len() as u32) {
                     if relocations.get(&Relocation::Tag(idx)).is_some() {
                         let tag_type = &tag_types[idx as usize];
                         tag_section.tag(reencoder.tag_type(tag_type.clone()));
@@ -872,46 +865,11 @@ pub fn isolate(args: ArgsIsolate) -> Result<()> {
     Ok(())
 }
 
-fn get_reader(filename: String) -> Box<dyn std::io::Read> {
-    if filename == "-" {
-        Box::new(std::io::stdin())
-    } else {
-        Box::new(File::open(filename).expect("Failed to open file"))
-    }
-}
-
 fn get_new_index(live_things: &Vec<u32>, idx: &u32) -> u32 {
     live_things
         .iter()
         .position(|&v| v == *idx)
         .expect("original index should have been in vec") as u32
-}
-
-enum Section<'a> {
-    Passthrough(RawSection<'a>),
-    Type,
-    Import,
-    Function,
-    Table,
-    Memory,
-    Global,
-    Export,
-    Start,
-    Element,
-    Code,
-    Data,
-    DataCount,
-    Tag,
-}
-
-impl<'a> Section<'a> {
-    fn raw(id: u8, bytes: &'a [u8]) -> Section<'a> {
-        let foo = RawSection {
-            id: id,
-            data: bytes,
-        };
-        Self::Passthrough(foo)
-    }
 }
 
 struct Func<'a> {

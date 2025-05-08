@@ -1,0 +1,37 @@
+call_log = num_calls [num_calls]call_state
+call_state = func_idx memories tables mut_globals params<func>
+
+memories = [num memories]memory
+memory = length<at> [length]byte
+
+tables = [num tables]table
+table = length<at> [length]ref_ctor
+
+mut_globals = [num mutable globals]val_ctor
+
+params<func> = [func.num_params]val_ctor
+
+val_ctor = num_ctor | vec_ctor | ref_ctor
+
+num_ctor = i32_ctor | i64_ctor | f32_ctor | f64_ctor
+i32_ctor = 0x7F [4]byte
+i64_ctor = 0x7E [8]byte
+f32_ctor = 0x7D [4]byte
+f64_ctor = 0x7C [8]byte
+
+vec_ctor = 0x7B [16]byte
+
+ref_ctor = null_ctor
+         | funcref_ctor
+         | externref_ctor
+         | struct_ctor
+         | array_ctor
+         | i31_ctor
+null_ctor = 0x00
+funcref_ctor = 0x70 idx<func>
+externref_ctor = TODO
+struct_ctor = TODO
+array_ctor = TODO
+i31_ctor = TODO
+
+idx<T> = [4]byte
