@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::{cmp::Ordering, fs::File};
 
 use wasm_encoder::RawSection;
 
@@ -36,6 +36,61 @@ impl<'a> Section<'a> {
         };
         Self::Passthrough(foo)
     }
+
+    fn binary_order(&self) -> u8 {
+        match self {
+            Section::Type => 0,
+            Section::Import => 1,
+            Section::Function => 2,
+            Section::Table => 3,
+            Section::Memory => 4,
+            Section::Tag => 5,
+            Section::Global => 6,
+            Section::Export => 7,
+            Section::Start => 8,
+            Section::Element => 9,
+            Section::DataCount => 10,
+            Section::Code => 11,
+            Section::Data => 12,
+            Section::Passthrough(_) => 255, // Custom sections are not reordered
+        }
+    }
+}
+
+pub fn ensure_section<'a>(sections: &mut Vec<Section<'a>>, new_section: Section<'a>) {
+    // Do not insert if a section of the same kind already exists
+    if sections
+        .iter()
+        .any(|s| std::mem::discriminant(s) == std::mem::discriminant(&new_section))
+    {
+        return;
+    }
+
+    let new_order = match &new_section {
+        Section::Passthrough(_) => return, // Do not insert custom sections here
+        _ => new_section.binary_order(),
+    };
+
+    // Find correct insertion index
+    let mut insert_index = sections.len();
+    for (i, section) in sections.iter().enumerate() {
+        match section {
+            // Skip over custom/unknown sections
+            Section::Passthrough(_) => continue,
+
+            // If we encounter a section with a binary order greater than ours,
+            // insert the new section there (immediately before it).
+            _ if section.binary_order() > new_order => {
+                insert_index = i;
+                break;
+            }
+
+            // Rust!
+            _ => {}
+        }
+    }
+
+    sections.insert(insert_index, new_section);
 }
 
 #[derive(Default)]

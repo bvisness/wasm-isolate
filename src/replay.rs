@@ -4,7 +4,7 @@ use anyhow::Result;
 use wasm_encoder::{
     reencode::{Reencode, RoundtripReencoder},
     CodeSection, ConstExpr, EntityType, ExportSection, Function, FunctionSection, GlobalSection,
-    ImportSection, Instruction, MemArg, Module, TypeSection,
+    ImportSection, Instruction, MemArg, MemorySection, Module, TypeSection,
 };
 use wasmparser::{
     Export, Global, GlobalType, Import, MemoryType, Operator, Parser, Payload::*, RecGroup,
@@ -197,6 +197,9 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
         }
     }
 
+    ensure_section(&mut sections, Section::Memory);
+    ensure_section(&mut sections, Section::Global);
+
     //
     // Record instrumentation
     //
@@ -299,6 +302,26 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                 }
 
                 out.section(&function_section);
+            }
+            Section::Memory => {
+                let mut memory_section = MemorySection::new();
+
+                // Pass through all existing memories
+                for idx in num_imported.memories..(memory_types.len() as u32) {
+                    let mem_type = &memory_types[idx as usize];
+                    memory_section.memory(reencoder.memory_type(mem_type.clone()));
+                }
+
+                // Create memory for buffer
+                memory_section.memory(wasm_encoder::MemoryType {
+                    minimum: 128,
+                    maximum: Some(128),
+                    memory64: false,
+                    shared: false,
+                    page_size_log2: None,
+                });
+
+                out.section(&memory_section);
             }
             Section::Global => {
                 let mut global_section = GlobalSection::new();
