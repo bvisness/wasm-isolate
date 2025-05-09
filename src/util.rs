@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, fs::File};
+use std::fs::File;
 
 use wasm_encoder::RawSection;
 

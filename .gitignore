@@ -2,6 +2,8 @@
 *.wasm
 *.wat
 *.dump
+*.call_log
+*.js
 
 .DS_Store
 

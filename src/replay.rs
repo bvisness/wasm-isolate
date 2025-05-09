@@ -127,7 +127,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                 }
             }
             MemorySection(r) => {
-                sections.push(Section::raw(5, &buf[r.range()]));
+                sections.push(Section::Memory);
                 for mem_type in r {
                     memory_types.push(mem_type?);
                 }
@@ -204,9 +204,19 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
     // Record instrumentation
     //
 
+    // The new functions we are adding are:
+    // - 0..n-1: Recorders for the requested functions. Each recorder writes an
+    //   entire call state into the buffer.
+    //
+    // We also add a new dedicated memory to serve as the output buffer,
+    // exported as "_replay:call_log". Finally we add a global to serve as the
+    // cursor within the buffer.
+
     let mut out = Module::new();
     let mut reencoder = RoundtripReencoder {};
 
+    let recorder_base_typeidx = types.len() as u32;
+    let recorder_base_funcidx = func_types.len() as u32;
     let buf_memidx = memory_types.len() as u32;
     let cur_globalidx = global_types.len() as u32;
 
@@ -232,9 +242,25 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                     }
                 }
 
+                // Add types for recorders. We don't worry about duplicate
+                // types; type equality/canonicalization has our back.
+                for idx_to_record in &args.funcs {
+                    let func_type_idx = func_types[*idx_to_record as usize];
+                    let func_type = types[func_type_idx as usize].unwrap_func();
+                    type_section.ty().func_type(&wasm_encoder::FuncType::new(
+                        func_type
+                            .params()
+                            .iter()
+                            .map(|p| reencoder.val_type(*p).unwrap()),
+                        vec![],
+                    ));
+                }
+
                 // TODO: Add func types for the init/call stubs. (We may not
                 // have the right signature in the module already, and we
                 // definitely don't know the index.)
+                //
+                // Actually this is for replay, not record, so never mind.
 
                 out.section(&type_section);
             }
@@ -296,9 +322,9 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                 }
 
                 // Add types for recorders
-                for idx_to_record in &args.funcs {
-                    let func_type_idx = func_types[*idx_to_record as usize];
-                    function_section.function(reencoder.type_index(func_type_idx));
+                for i in 0..args.funcs.len() {
+                    function_section
+                        .function(reencoder.type_index(recorder_base_typeidx + i as u32));
                 }
 
                 out.section(&function_section);
@@ -354,24 +380,55 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                     export_section.export(export.name, export.kind.into(), export.index);
                 }
 
+                // Export the buffer memory and cursor
+                export_section.export(
+                    "_replay:call_log",
+                    wasm_encoder::ExportKind::Memory,
+                    buf_memidx,
+                );
+                export_section.export(
+                    "_replay:call_log_cursor",
+                    wasm_encoder::ExportKind::Global,
+                    cur_globalidx,
+                );
+
                 // TODO: Export the init and call stubs, and also every
                 // function probably for ref reasons
+                //
+                // Again the init/call is only for replay...
 
                 out.section(&export_section);
             }
             Section::Code => {
                 let mut code_section = CodeSection::new();
 
-                // Pass through all existing functions
-                for func in &defined_funcs {
+                // Pass through all existing functions - BUT insert a call to
+                // the corresponding recorder if requested.
+                for (i, func) in defined_funcs.iter().enumerate() {
+                    let func_idx = i as u32 + num_imported.functions;
+                    let func_type = types[func_types[func_idx as usize] as usize].unwrap_func();
+
                     let mut new_locals: Vec<(u32, wasm_encoder::ValType)> = vec![];
                     for (n, ty) in &func.locals {
                         new_locals.push((*n, reencoder.val_type(*ty)?));
                     }
                     let mut new_func = Function::new(new_locals);
+
+                    // Call the recorder
+                    if let Some(recorder_idx) = args.funcs.iter().position(|idx| *idx == func_idx) {
+                        for i in 0..func_type.params().len() {
+                            new_func.instruction(&Instruction::LocalGet(i as u32));
+                        }
+                        new_func.instruction(&Instruction::Call(
+                            recorder_base_funcidx + recorder_idx as u32,
+                        ));
+                    }
+
+                    // Pass through the function body
                     for instr in &func.instructions {
                         new_func.instruction(&reencoder.instruction(instr.clone())?);
                     }
+
                     code_section.function(&new_func);
                 }
 
@@ -386,24 +443,39 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                         cur: cur_globalidx,
                     };
 
+                    // Write func idx to begin call state
+                    w.i32_imm(*idx_to_record as i32);
+
                     // Write memories
                     for (i, mem_type) in memory_types.iter().enumerate() {
-                        let size = &Instruction::MemorySize(i as u32);
                         match mem_type.index_type() {
-                            ValType::I32 => w.i32(size),
-                            ValType::I64 => w.i64(size),
+                            ValType::I32 => {
+                                w.i32(&Instruction::MemorySize(i as u32));
+                                w.bytes(
+                                    i as u32,
+                                    &Instruction::I32Const(0),
+                                    &[
+                                        &Instruction::MemorySize(i as u32),
+                                        &Instruction::I32Const(65536),
+                                        &Instruction::I32Mul,
+                                    ],
+                                );
+                            }
+                            ValType::I64 => {
+                                w.i64(&Instruction::MemorySize(i as u32));
+                                w.bytes(
+                                    i as u32,
+                                    &Instruction::I64Const(0),
+                                    &[
+                                        &Instruction::MemorySize(i as u32),
+                                        &Instruction::I64Const(65536),
+                                        &Instruction::I64Mul,
+                                        &Instruction::I32WrapI64,
+                                    ],
+                                );
+                            }
                             _ => panic!("invalid address type"),
                         }
-
-                        w.bytes(
-                            i as u32,
-                            match mem_type.index_type() {
-                                ValType::I32 => &Instruction::I32Const(0),
-                                ValType::I64 => &Instruction::I64Const(0),
-                                _ => panic!("invalid address type"),
-                            },
-                            size,
-                        );
                     }
 
                     // Write tables
@@ -455,6 +527,8 @@ struct RecorderWriter<'a> {
     cur: u32,
 }
 
+type Instructions<'a> = [&'a Instruction<'a>];
+
 impl RecorderWriter<'_> {
     fn in_buf(&self) -> MemArg {
         MemArg {
@@ -464,25 +538,32 @@ impl RecorderWriter<'_> {
         }
     }
 
-    fn bump_cur(&mut self, ins: &Instruction) {
+    fn instructions<'a>(&mut self, instructions: &Instructions) {
+        for ins in instructions {
+            self.f.instruction(ins);
+        }
+    }
+
+    fn bump_cur<'a>(&mut self, delta: &Instructions) {
         self.f.instruction(&Instruction::GlobalGet(self.cur));
-        self.f.instruction(ins);
+        self.instructions(delta);
         self.f.instruction(&Instruction::I32Add);
         self.f.instruction(&Instruction::GlobalSet(self.cur));
     }
 
     fn bump_cur_imm(&mut self, n: i32) {
+        self.bump_cur(&[&Instruction::I32Const(n)]);
+    }
+
+    fn byte(&mut self, value: &Instructions) {
         self.f.instruction(&Instruction::GlobalGet(self.cur));
-        self.f.instruction(&Instruction::I32Const(n));
-        self.f.instruction(&Instruction::I32Add);
-        self.f.instruction(&Instruction::GlobalSet(self.cur));
+        self.instructions(value);
+        self.f.instruction(&Instruction::I32Store8(self.in_buf()));
+        self.bump_cur_imm(1);
     }
 
     fn byte_imm(&mut self, byte: i32) {
-        self.f.instruction(&Instruction::GlobalGet(self.cur));
-        self.f.instruction(&Instruction::I32Const(byte));
-        self.f.instruction(&Instruction::I32Store8(self.in_buf()));
-        self.bump_cur_imm(1);
+        self.byte(&[&Instruction::I32Const(byte)]);
     }
 
     fn i32(&mut self, ins: &Instruction) {
@@ -490,6 +571,10 @@ impl RecorderWriter<'_> {
         self.f.instruction(ins);
         self.f.instruction(&Instruction::I32Store(self.in_buf()));
         self.bump_cur_imm(4);
+    }
+
+    fn i32_imm(&mut self, n: i32) {
+        self.i32(&Instruction::I32Const(n));
     }
 
     fn i64(&mut self, ins: &Instruction) {
@@ -548,10 +633,10 @@ impl RecorderWriter<'_> {
 
     /// It is your responsibility to ensure that base has the correct address type for the given memory.
     /// Len should always be i32 because the destination buffer is i32.
-    fn bytes(&mut self, mem_idx: u32, base: &Instruction, len: &Instruction) {
-        self.f.instruction(base);
-        self.f.instruction(&Instruction::GlobalGet(self.cur));
-        self.f.instruction(len);
+    fn bytes<'a>(&mut self, mem_idx: u32, base: &Instruction, len: &Instructions) {
+        self.f.instruction(&Instruction::GlobalGet(self.cur)); // dst offset
+        self.f.instruction(base); // src offset
+        self.instructions(len); // len
         self.f.instruction(&Instruction::MemoryCopy {
             src_mem: mem_idx,
             dst_mem: self.buf,
