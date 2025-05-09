@@ -1,4 +1,4 @@
-use std::{fs, io::Write};
+use std::{fs, io::Write, path::Path};
 
 use anyhow::Result;
 use wasm_encoder::{
@@ -28,6 +28,8 @@ pub struct ReplayArgs {
 
 pub fn replay(args: ReplayArgs) -> Result<()> {
     let filename = args.filename;
+    let out = args.out.unwrap_or("replay".to_string());
+
     let mut reader = get_reader(filename);
     let mut buf = Vec::new();
     reader.read_to_end(&mut buf)?;
@@ -196,320 +198,365 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
             _ => {}
         }
     }
-
     ensure_section(&mut sections, Section::Memory);
     ensure_section(&mut sections, Section::Global);
 
     //
-    // Record instrumentation
+    // Record/replay instrumentation
     //
 
-    // The new functions we are adding are:
-    // - 0..n-1: Recorders for the requested functions. Each recorder writes an
-    //   entire call state into the buffer.
+    // For the most part, we just proxy the contents of the module through
+    // unchanged. However, we make some modifications and additions for the
+    // record and replay modes. Both are done inline to avoid duplication.
     //
-    // We also add a new dedicated memory to serve as the output buffer,
-    // exported as "_replay:call_log". Finally we add a global to serve as the
-    // cursor within the buffer.
+    // Record mode adds:
+    // - Recorder functions for each of the requested functions. Each recorder
+    //   writes an entire call state into the buffer.
+    // - A memory to serve as the output buffer (exported as
+    //   "_replay:call_log") and a global to serve as a cursor into the output
+    //   (exported as "_replay:call_log_cursor").
+    //
+    // Replay mode adds:
+    // - Direct-call stub functions for each of the requested functions.
+    // - A module init function that resets the entire module to a particular
+    //   call state.
 
-    let mut out = Module::new();
-    let mut reencoder = RoundtripReencoder {};
+    fs::create_dir_all(&out).expect("unable to create output directory");
+    for mode in [InstrumentationMode::Record, InstrumentationMode::Replay] {
+        let mut module = Module::new();
+        let mut reencoder = RoundtripReencoder {};
 
-    let recorder_base_typeidx = types.len() as u32;
-    let recorder_base_funcidx = func_types.len() as u32;
-    let buf_memidx = memory_types.len() as u32;
-    let cur_globalidx = global_types.len() as u32;
+        let recorder_base_typeidx = types.len() as u32;
+        let recorder_base_funcidx = func_types.len() as u32;
+        let buf_memidx = memory_types.len() as u32;
+        let cur_globalidx = global_types.len() as u32;
 
-    for section in sections {
-        match section {
-            Section::Passthrough(sec) => {
-                out.section(&sec);
-            }
-
-            Section::Type => {
-                let mut type_section = TypeSection::new();
-
-                // Pass through all existing rec groups
-                for rg in &rec_groups {
-                    let mut sub_types: Vec<wasm_encoder::SubType> = vec![];
-                    for ty in rg.types() {
-                        sub_types.push(reencoder.sub_type(ty.clone())?);
-                    }
-                    if sub_types.len() == 1 {
-                        type_section.ty().subtype(sub_types.first().unwrap());
-                    } else if sub_types.len() > 1 || rg.is_explicit_rec_group() {
-                        type_section.ty().rec(sub_types)
-                    }
+        for section in &sections {
+            match section {
+                Section::Passthrough(sec) => {
+                    module.section(sec);
                 }
 
-                // Add types for recorders. We don't worry about duplicate
-                // types; type equality/canonicalization has our back.
-                for idx_to_record in &args.funcs {
-                    let func_type_idx = func_types[*idx_to_record as usize];
-                    let func_type = types[func_type_idx as usize].unwrap_func();
-                    type_section.ty().func_type(&wasm_encoder::FuncType::new(
-                        func_type
-                            .params()
-                            .iter()
-                            .map(|p| reencoder.val_type(*p).unwrap()),
-                        vec![],
-                    ));
-                }
+                Section::Type => {
+                    let mut type_section = TypeSection::new();
 
-                // TODO: Add func types for the init/call stubs. (We may not
-                // have the right signature in the module already, and we
-                // definitely don't know the index.)
-                //
-                // Actually this is for replay, not record, so never mind.
-
-                out.section(&type_section);
-            }
-            Section::Import => {
-                let mut import_section = ImportSection::new();
-
-                // Pass through existing imports
-                for import in &imports {
-                    match import.ty {
-                        wasmparser::TypeRef::Func(type_idx) => {
-                            import_section.import(
-                                import.module,
-                                import.name,
-                                EntityType::Function(reencoder.type_index(type_idx)),
-                            );
+                    // Pass through all existing rec groups
+                    for rg in &rec_groups {
+                        let mut sub_types: Vec<wasm_encoder::SubType> = vec![];
+                        for ty in rg.types() {
+                            sub_types.push(reencoder.sub_type(ty.clone())?);
                         }
-                        wasmparser::TypeRef::Table(ty) => {
-                            import_section.import(
-                                import.module,
-                                import.name,
-                                reencoder.table_type(ty)?,
-                            );
-                        }
-                        wasmparser::TypeRef::Memory(ty) => {
-                            import_section.import(
-                                import.module,
-                                import.name,
-                                reencoder.memory_type(ty),
-                            );
-                        }
-                        wasmparser::TypeRef::Global(ty) => {
-                            import_section.import(
-                                import.module,
-                                import.name,
-                                reencoder.global_type(ty)?,
-                            );
-                        }
-                        wasmparser::TypeRef::Tag(ty) => {
-                            import_section.import(
-                                import.module,
-                                import.name,
-                                reencoder.tag_type(ty),
-                            );
+                        if sub_types.len() == 1 {
+                            type_section.ty().subtype(sub_types.first().unwrap());
+                        } else if sub_types.len() > 1 || rg.is_explicit_rec_group() {
+                            type_section.ty().rec(sub_types)
                         }
                     }
-                }
 
-                // TODO: Add imports for instrumentation.
-
-                out.section(&import_section);
-            }
-            Section::Function => {
-                let mut function_section = FunctionSection::new();
-
-                // Pass through all existing functions
-                for (i, _) in defined_funcs.iter().enumerate() {
-                    let idx = num_imported.functions + i as u32;
-                    function_section.function(reencoder.type_index(func_types[idx as usize]));
-                }
-
-                // Add types for recorders
-                for i in 0..args.funcs.len() {
-                    function_section
-                        .function(reencoder.type_index(recorder_base_typeidx + i as u32));
-                }
-
-                out.section(&function_section);
-            }
-            Section::Memory => {
-                let mut memory_section = MemorySection::new();
-
-                // Pass through all existing memories
-                for idx in num_imported.memories..(memory_types.len() as u32) {
-                    let mem_type = &memory_types[idx as usize];
-                    memory_section.memory(reencoder.memory_type(mem_type.clone()));
-                }
-
-                // Create memory for buffer
-                memory_section.memory(wasm_encoder::MemoryType {
-                    minimum: 128,
-                    maximum: Some(128),
-                    memory64: false,
-                    shared: false,
-                    page_size_log2: None,
-                });
-
-                out.section(&memory_section);
-            }
-            Section::Global => {
-                let mut global_section = GlobalSection::new();
-
-                // Pass through all existing globals
-                for global in &defined_globals {
-                    global_section.global(
-                        reencoder.global_type(global.ty)?,
-                        &reencoder.const_expr(global.init_expr.clone())?,
-                    );
-                }
-
-                // Define the global for the cursor
-                global_section.global(
-                    wasm_encoder::GlobalType {
-                        val_type: wasm_encoder::ValType::I32,
-                        mutable: true,
-                        shared: false,
-                    },
-                    &ConstExpr::i32_const(0),
-                );
-
-                out.section(&global_section);
-            }
-            Section::Export => {
-                let mut export_section = ExportSection::new();
-
-                // Pass through all existing exports
-                for export in &exports {
-                    export_section.export(export.name, export.kind.into(), export.index);
-                }
-
-                // Export the buffer memory and cursor
-                export_section.export(
-                    "_replay:call_log",
-                    wasm_encoder::ExportKind::Memory,
-                    buf_memidx,
-                );
-                export_section.export(
-                    "_replay:call_log_cursor",
-                    wasm_encoder::ExportKind::Global,
-                    cur_globalidx,
-                );
-
-                // TODO: Export the init and call stubs, and also every
-                // function probably for ref reasons
-                //
-                // Again the init/call is only for replay...
-
-                out.section(&export_section);
-            }
-            Section::Code => {
-                let mut code_section = CodeSection::new();
-
-                // Pass through all existing functions - BUT insert a call to
-                // the corresponding recorder if requested.
-                for (i, func) in defined_funcs.iter().enumerate() {
-                    let func_idx = i as u32 + num_imported.functions;
-                    let func_type = types[func_types[func_idx as usize] as usize].unwrap_func();
-
-                    let mut new_locals: Vec<(u32, wasm_encoder::ValType)> = vec![];
-                    for (n, ty) in &func.locals {
-                        new_locals.push((*n, reencoder.val_type(*ty)?));
-                    }
-                    let mut new_func = Function::new(new_locals);
-
-                    // Call the recorder
-                    if let Some(recorder_idx) = args.funcs.iter().position(|idx| *idx == func_idx) {
-                        for i in 0..func_type.params().len() {
-                            new_func.instruction(&Instruction::LocalGet(i as u32));
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Add types for recorders. We don't worry about duplicate
+                            // types; type equality/canonicalization has our back.
+                            for idx_to_record in &args.funcs {
+                                let func_type_idx = func_types[*idx_to_record as usize];
+                                let func_type = types[func_type_idx as usize].unwrap_func();
+                                type_section.ty().func_type(&wasm_encoder::FuncType::new(
+                                    func_type
+                                        .params()
+                                        .iter()
+                                        .map(|p| reencoder.val_type(*p).unwrap()),
+                                    vec![],
+                                ));
+                            }
                         }
-                        new_func.instruction(&Instruction::Call(
-                            recorder_base_funcidx + recorder_idx as u32,
-                        ));
+                        InstrumentationMode::Replay => {
+                            // TODO: Add func types for the init/call stubs. (We may not
+                            // have the right signature in the module already, and we
+                            // definitely don't know the index.)
+                        }
                     }
 
-                    // Pass through the function body
-                    for instr in &func.instructions {
-                        new_func.instruction(&reencoder.instruction(instr.clone())?);
-                    }
-
-                    code_section.function(&new_func);
+                    module.section(&type_section);
                 }
+                Section::Import => {
+                    let mut import_section = ImportSection::new();
 
-                // Generate recorders
-                for idx_to_record in &args.funcs {
-                    let func_type_idx = func_types[*idx_to_record as usize];
-                    let func_type = types[func_type_idx as usize].unwrap_func();
-
-                    let mut w = RecorderWriter {
-                        f: &mut Function::new(vec![]),
-                        buf: buf_memidx,
-                        cur: cur_globalidx,
-                    };
-
-                    // Write func idx to begin call state
-                    w.i32_imm(*idx_to_record as i32);
-
-                    // Write memories
-                    for (i, mem_type) in memory_types.iter().enumerate() {
-                        match mem_type.index_type() {
-                            ValType::I32 => {
-                                w.i32(&Instruction::MemorySize(i as u32));
-                                w.bytes(
-                                    i as u32,
-                                    &Instruction::I32Const(0),
-                                    &[
-                                        &Instruction::MemorySize(i as u32),
-                                        &Instruction::I32Const(65536),
-                                        &Instruction::I32Mul,
-                                    ],
+                    // Pass through existing imports
+                    for import in &imports {
+                        match import.ty {
+                            wasmparser::TypeRef::Func(type_idx) => {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    EntityType::Function(reencoder.type_index(type_idx)),
                                 );
                             }
-                            ValType::I64 => {
-                                w.i64(&Instruction::MemorySize(i as u32));
-                                w.bytes(
-                                    i as u32,
-                                    &Instruction::I64Const(0),
-                                    &[
-                                        &Instruction::MemorySize(i as u32),
-                                        &Instruction::I64Const(65536),
-                                        &Instruction::I64Mul,
-                                        &Instruction::I32WrapI64,
-                                    ],
+                            wasmparser::TypeRef::Table(ty) => {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    reencoder.table_type(ty)?,
                                 );
                             }
-                            _ => panic!("invalid address type"),
+                            wasmparser::TypeRef::Memory(ty) => {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    reencoder.memory_type(ty),
+                                );
+                            }
+                            wasmparser::TypeRef::Global(ty) => {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    reencoder.global_type(ty)?,
+                                );
+                            }
+                            wasmparser::TypeRef::Tag(ty) => {
+                                import_section.import(
+                                    import.module,
+                                    import.name,
+                                    reencoder.tag_type(ty),
+                                );
+                            }
                         }
                     }
 
-                    // Write tables
-                    // TODO
+                    // TODO: Add imports for instrumentation.
 
-                    // Write mutable globals
-                    for (i, global_type) in global_types.iter().enumerate() {
-                        if global_type.mutable {
-                            w.val(&global_type.content_type, &Instruction::GlobalGet(i as u32))
-                        }
-                    }
-
-                    // Write params
-                    for (i, param_type) in func_type.params().iter().enumerate() {
-                        w.val(param_type, &Instruction::LocalGet(i as u32));
-                    }
-
-                    w.end();
-                    code_section.function(w.f);
+                    module.section(&import_section);
                 }
+                Section::Function => {
+                    let mut function_section = FunctionSection::new();
 
-                out.section(&code_section);
+                    // Pass through all existing functions
+                    for (i, _) in defined_funcs.iter().enumerate() {
+                        let idx = num_imported.functions + i as u32;
+                        function_section.function(reencoder.type_index(func_types[idx as usize]));
+                    }
+
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Add types for recorders
+                            for i in 0..args.funcs.len() {
+                                function_section.function(
+                                    reencoder.type_index(recorder_base_typeidx + i as u32),
+                                );
+                            }
+                        }
+                        InstrumentationMode::Replay => {}
+                    }
+
+                    module.section(&function_section);
+                }
+                Section::Memory => {
+                    let mut memory_section = MemorySection::new();
+
+                    // Pass through all existing memories
+                    for idx in num_imported.memories..(memory_types.len() as u32) {
+                        let mem_type = &memory_types[idx as usize];
+                        memory_section.memory(reencoder.memory_type(mem_type.clone()));
+                    }
+
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Create memory for buffer
+                            memory_section.memory(wasm_encoder::MemoryType {
+                                minimum: 128,
+                                maximum: Some(128),
+                                memory64: false,
+                                shared: false,
+                                page_size_log2: None,
+                            });
+                        }
+                        InstrumentationMode::Replay => {}
+                    }
+
+                    module.section(&memory_section);
+                }
+                Section::Global => {
+                    let mut global_section = GlobalSection::new();
+
+                    // Pass through all existing globals
+                    for global in &defined_globals {
+                        global_section.global(
+                            reencoder.global_type(global.ty)?,
+                            &reencoder.const_expr(global.init_expr.clone())?,
+                        );
+                    }
+
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Define the global for the cursor
+                            global_section.global(
+                                wasm_encoder::GlobalType {
+                                    val_type: wasm_encoder::ValType::I32,
+                                    mutable: true,
+                                    shared: false,
+                                },
+                                &ConstExpr::i32_const(0),
+                            );
+                        }
+                        InstrumentationMode::Replay => {}
+                    }
+
+                    module.section(&global_section);
+                }
+                Section::Export => {
+                    let mut export_section = ExportSection::new();
+
+                    // Pass through all existing exports
+                    for export in &exports {
+                        export_section.export(export.name, export.kind.into(), export.index);
+                    }
+
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Export the buffer memory and cursor
+                            export_section.export(
+                                "_replay:call_log",
+                                wasm_encoder::ExportKind::Memory,
+                                buf_memidx,
+                            );
+                            export_section.export(
+                                "_replay:call_log_cursor",
+                                wasm_encoder::ExportKind::Global,
+                                cur_globalidx,
+                            );
+                        }
+                        InstrumentationMode::Replay => {
+                            // TODO: Export the init and call stubs, and also every
+                            // function probably for ref reasons
+                        }
+                    }
+
+                    module.section(&export_section);
+                }
+                Section::Code => {
+                    let mut code_section = CodeSection::new();
+
+                    // Pass through all existing functions - BUT insert a call to
+                    // the corresponding recorder if requested.
+                    for (i, func) in defined_funcs.iter().enumerate() {
+                        let func_idx = i as u32 + num_imported.functions;
+                        let func_type = types[func_types[func_idx as usize] as usize].unwrap_func();
+
+                        let mut new_locals: Vec<(u32, wasm_encoder::ValType)> = vec![];
+                        for (n, ty) in &func.locals {
+                            new_locals.push((*n, reencoder.val_type(*ty)?));
+                        }
+                        let mut new_func = Function::new(new_locals);
+
+                        // Call the recorder, if requested
+                        if matches!(mode, InstrumentationMode::Record) {
+                            if let Some(recorder_idx) =
+                                args.funcs.iter().position(|idx| *idx == func_idx)
+                            {
+                                for i in 0..func_type.params().len() {
+                                    new_func.instruction(&Instruction::LocalGet(i as u32));
+                                }
+                                new_func.instruction(&Instruction::Call(
+                                    recorder_base_funcidx + recorder_idx as u32,
+                                ));
+                            }
+                        }
+
+                        // Pass through the function body
+                        for instr in &func.instructions {
+                            new_func.instruction(&reencoder.instruction(instr.clone())?);
+                        }
+
+                        code_section.function(&new_func);
+                    }
+
+                    match mode {
+                        InstrumentationMode::Record => {
+                            // Generate recorders
+                            for idx_to_record in &args.funcs {
+                                let func_type_idx = func_types[*idx_to_record as usize];
+                                let func_type = types[func_type_idx as usize].unwrap_func();
+
+                                let mut w = RecorderWriter {
+                                    f: &mut Function::new(vec![]),
+                                    buf: buf_memidx,
+                                    cur: cur_globalidx,
+                                };
+
+                                // Write func idx to begin call state
+                                w.i32_imm(*idx_to_record as i32);
+
+                                // Write memories
+                                for (i, mem_type) in memory_types.iter().enumerate() {
+                                    match mem_type.index_type() {
+                                        ValType::I32 => {
+                                            w.i32(&Instruction::MemorySize(i as u32));
+                                            w.bytes(
+                                                i as u32,
+                                                &Instruction::I32Const(0),
+                                                &[
+                                                    &Instruction::MemorySize(i as u32),
+                                                    &Instruction::I32Const(65536),
+                                                    &Instruction::I32Mul,
+                                                ],
+                                            );
+                                        }
+                                        ValType::I64 => {
+                                            w.i64(&Instruction::MemorySize(i as u32));
+                                            w.bytes(
+                                                i as u32,
+                                                &Instruction::I64Const(0),
+                                                &[
+                                                    &Instruction::MemorySize(i as u32),
+                                                    &Instruction::I64Const(65536),
+                                                    &Instruction::I64Mul,
+                                                    &Instruction::I32WrapI64,
+                                                ],
+                                            );
+                                        }
+                                        _ => panic!("invalid address type"),
+                                    }
+                                }
+
+                                // Write tables
+                                // TODO
+
+                                // Write mutable globals
+                                for (i, global_type) in global_types.iter().enumerate() {
+                                    if global_type.mutable {
+                                        w.val(
+                                            &global_type.content_type,
+                                            &Instruction::GlobalGet(i as u32),
+                                        )
+                                    }
+                                }
+
+                                // Write params
+                                for (i, param_type) in func_type.params().iter().enumerate() {
+                                    w.val(param_type, &Instruction::LocalGet(i as u32));
+                                }
+
+                                w.end();
+                                code_section.function(w.f);
+                            }
+                        }
+                        InstrumentationMode::Replay => {}
+                    }
+
+                    module.section(&code_section);
+                }
+                _ => todo!("{:?} section", section),
             }
-            _ => todo!("{:?} section", section),
         }
-    }
-    let out_bytes = out.finish();
+        let module_bytes = module.finish();
 
-    if let Some(path) = &args.out {
-        fs::write(path, out_bytes).expect("unable to write file");
-    } else {
-        std::io::stdout()
-            .write_all(&out_bytes)
-            .expect("unable to write output");
+        fs::write(
+            match mode {
+                InstrumentationMode::Record => Path::new(&out).join("record.wasm"),
+                InstrumentationMode::Replay => Path::new(&out).join("replay.wasm"),
+            },
+            module_bytes,
+        )
+        .expect("unable to write file");
     }
 
     Ok(())
@@ -519,6 +566,11 @@ struct Func<'a> {
     type_idx: u32,
     locals: Vec<(u32, ValType)>,
     instructions: Vec<Operator<'a>>,
+}
+
+enum InstrumentationMode {
+    Record,
+    Replay,
 }
 
 struct RecorderWriter<'a> {
