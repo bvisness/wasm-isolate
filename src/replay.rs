@@ -720,6 +720,16 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                 _ => todo!("{:?} section", section),
             }
         }
+
+        // Emit a custom section describing the instrumentation mode
+        module.section(&wasm_encoder::CustomSection {
+            name: "_replay:mode".into(),
+            data: match mode {
+                InstrumentationMode::Record => vec![0].into(),
+                InstrumentationMode::Replay => vec![1].into(),
+            },
+        });
+
         let module_bytes = module.finish();
 
         fs::write(
