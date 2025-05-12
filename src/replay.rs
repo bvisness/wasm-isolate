@@ -226,6 +226,13 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
         let mut module = Module::new();
         let mut reencoder = RoundtripReencoder {};
 
+        let buf_memtype = wasm_encoder::MemoryType {
+            minimum: 128,
+            maximum: Some(128),
+            memory64: false,
+            shared: false,
+            page_size_log2: None,
+        };
         let buf_memidx = memory_types.len() as u32;
         let cur_globalidx = global_types.len() as u32;
 
@@ -234,6 +241,8 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
         let replay_modinit_typeidx = types.len() as u32;
         let replay_modinit_funcidx = func_types.len() as u32;
+        let replay_callstub_base_typeidx = replay_modinit_typeidx + 1;
+        let replay_callstub_base_funcidx = replay_modinit_funcidx + 1;
 
         for section in &sections {
             match section {
@@ -283,9 +292,21 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 vec![wasm_encoder::ValType::I32],
                             ));
 
-                            // TODO: Add func types for the init/call stubs. (We may not
-                            // have the right signature in the module already, and we
-                            // definitely don't know the index.)
+                            // Add types for call stubs.
+                            // Signature: [i32] -> <original results>
+                            // Pass the index of the params within a call state. (The intent is to
+                            // get this from the module initializer function.)
+                            for idx_to_call in &args.funcs {
+                                let func_type_idx = func_types[*idx_to_call as usize];
+                                let func_type = types[func_type_idx as usize].unwrap_func();
+                                type_section.ty().func_type(&wasm_encoder::FuncType::new(
+                                    vec![wasm_encoder::ValType::I32],
+                                    func_type
+                                        .results()
+                                        .iter()
+                                        .map(|r| reencoder.val_type(*r).unwrap()),
+                                ));
+                            }
                         }
                     }
 
@@ -335,7 +356,9 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                         }
                     }
 
-                    // TODO: Add imports for instrumentation.
+                    // We do NOT add any other imports here because this will
+                    // mess with the indexes of everything else in the module.
+                    // Instead we must get everything else we need via refs.
 
                     module.section(&import_section);
                 }
@@ -345,21 +368,24 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                     // Pass through all existing functions
                     for (i, _) in defined_funcs.iter().enumerate() {
                         let idx = num_imported.functions + i as u32;
-                        function_section.function(reencoder.type_index(func_types[idx as usize]));
+                        function_section.function(func_types[idx as usize]);
                     }
 
                     match mode {
                         InstrumentationMode::Record => {
                             // Add types for recorders
                             for i in 0..args.funcs.len() {
-                                function_section.function(
-                                    reencoder.type_index(recorder_base_typeidx + i as u32),
-                                );
+                                function_section.function(recorder_base_typeidx + i as u32);
                             }
                         }
                         InstrumentationMode::Replay => {
                             // Add type for the module-state initializer
                             function_section.function(replay_modinit_typeidx as u32);
+
+                            // Add types for call stubs
+                            for i in 0..args.funcs.len() {
+                                function_section.function(replay_callstub_base_typeidx + i as u32);
+                            }
                         }
                     }
 
@@ -416,23 +442,33 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                         export_section.export(export.name, export.kind.into(), export.index);
                     }
 
+                    // Export the buffer memory and cursor
+                    export_section.export(
+                        "_replay:call_log",
+                        wasm_encoder::ExportKind::Memory,
+                        buf_memidx,
+                    );
+                    export_section.export(
+                        "_replay:call_log_cursor",
+                        wasm_encoder::ExportKind::Global,
+                        cur_globalidx,
+                    );
+
                     match mode {
-                        InstrumentationMode::Record => {
-                            // Export the buffer memory and cursor
-                            export_section.export(
-                                "_replay:call_log",
-                                wasm_encoder::ExportKind::Memory,
-                                buf_memidx,
-                            );
-                            export_section.export(
-                                "_replay:call_log_cursor",
-                                wasm_encoder::ExportKind::Global,
-                                cur_globalidx,
-                            );
-                        }
+                        InstrumentationMode::Record => {}
                         InstrumentationMode::Replay => {
-                            // TODO: Export the init and call stubs, and also every
-                            // function probably for ref reasons
+                            export_section.export(
+                                "_replay:module_init",
+                                wasm_encoder::ExportKind::Func,
+                                replay_modinit_funcidx,
+                            );
+                            for (i, funcidx) in args.funcs.iter().enumerate() {
+                                export_section.export(
+                                    format!("_replay:callstub_{funcidx}").as_str(),
+                                    wasm_encoder::ExportKind::Func,
+                                    replay_callstub_base_funcidx + i as u32,
+                                );
+                            }
                         }
                     }
 
@@ -654,10 +690,28 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 code_section.function(r.f);
                             }
 
-                            // // Generate call stubs
-                            // for idx_to_call in &args.funcs {
+                            // Generate call stubs
+                            for idx_to_call in &args.funcs {
+                                use Instruction::*;
 
-                            // }
+                                let func_type_idx = func_types[*idx_to_call as usize];
+                                let func_type = types[func_type_idx as usize].unwrap_func();
+
+                                // The function signature is [i32] -> <original results>
+                                let mut r = ReplayReader {
+                                    f: &mut Function::new(vec![]),
+                                    buf: buf_memidx,
+                                    cur: cur_globalidx,
+                                };
+
+                                for param_type in func_type.params() {
+                                    r.val(param_type);
+                                }
+                                r.add(&Call(*idx_to_call));
+
+                                r.end();
+                                code_section.function(r.f);
+                            }
                         }
                     }
 
@@ -877,6 +931,21 @@ impl ReplayReader<'_> {
         self.add(&I32Load8U(self.in_buf()));
     }
 
+    fn expect_byte(&mut self, n: u8) {
+        use Instruction::*;
+        self.add(&Block(wasm_encoder::BlockType::Empty));
+        {
+            self.add(&GlobalGet(self.cur));
+            self.add(&I32Load8U(self.in_buf()));
+            self.add(&I32Const(n as i32));
+            self.add(&I32Eq);
+            self.add(&BrIf(0));
+            self.add(&Unreachable);
+        }
+        self.add(&End);
+        self.bump_cur_imm(1);
+    }
+
     fn i32(&mut self) {
         use Instruction::*;
         self.add(&GlobalGet(self.cur));
@@ -916,23 +985,23 @@ impl ReplayReader<'_> {
         use Instruction::*;
         match val_type {
             ValType::I32 => {
-                self.bump_cur_imm(1);
+                self.expect_byte(0x7F);
                 self.i32();
             }
             ValType::I64 => {
-                self.bump_cur_imm(1);
+                self.expect_byte(0x7E);
                 self.i64();
             }
             ValType::F32 => {
-                self.bump_cur_imm(1);
+                self.expect_byte(0x7D);
                 self.f32();
             }
             ValType::F64 => {
-                self.bump_cur_imm(1);
+                self.expect_byte(0x7C);
                 self.f64();
             }
             ValType::V128 => {
-                self.bump_cur_imm(1);
+                self.expect_byte(0x7B);
                 self.v128();
             }
             ValType::Ref(ref_type) => todo!(),

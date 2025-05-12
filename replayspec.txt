@@ -1,8 +1,13 @@
+;; TODO
+;; - Make this format more self-descriptive for multiple reasons:
+;;   - Ability to view in a binary viewer like ImHex without module context
+;;   - Ability to validate as you read (critical to avoid mix-ups with record/replay versions)
+
 call_log = [...]call_state
 call_state = func_idx memories tables mut_globals params<func>
 
 memories = [num memories]memory
-memory = length<at> [length]byte
+memory = length_pages<at> [length]byte
 
 tables = [num tables]table
 table = length<at> [length]ref_ctor
