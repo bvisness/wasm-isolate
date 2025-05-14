@@ -220,6 +220,8 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
     // - Direct-call stub functions for each of the requested functions.
     // - A module init function that resets the entire module to a particular
     //   call state.
+    // - A call log walker that reads the binary format without executing
+    //   anything.
 
     fs::create_dir_all(&out).expect("unable to create output directory");
     for mode in [InstrumentationMode::Record, InstrumentationMode::Replay] {
@@ -241,8 +243,10 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
         let replay_modinit_typeidx = types.len() as u32;
         let replay_modinit_funcidx = func_types.len() as u32;
-        let replay_callstub_base_typeidx = replay_modinit_typeidx + 1;
-        let replay_callstub_base_funcidx = replay_modinit_funcidx + 1;
+        let replay_walker_typeidx = replay_modinit_typeidx + 1;
+        let replay_walker_funcidx = replay_modinit_funcidx + 1;
+        let replay_callstub_base_typeidx = replay_walker_typeidx + 1;
+        let replay_callstub_base_funcidx = replay_walker_funcidx + 1;
 
         for section in &sections {
             match section {
@@ -283,14 +287,24 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                             }
                         }
                         InstrumentationMode::Replay => {
+                            use wasm_encoder::ValType::*;
+
                             // Add type for module-state initializer.
                             // Signature: [i32] -> [i32]
                             // Pass the index of a call state; it will return the cursor position
                             // for the call state's params so you can call the call stub.
-                            type_section.ty().func_type(&wasm_encoder::FuncType::new(
-                                vec![wasm_encoder::ValType::I32],
-                                vec![wasm_encoder::ValType::I32],
-                            ));
+                            type_section
+                                .ty()
+                                .func_type(&wasm_encoder::FuncType::new(vec![I32], vec![I32]));
+
+                            // Add type for call log walker.
+                            // Signature: [i32] -> [i32 i32]
+                            // Pass a cursor position; it will return a func index and the next
+                            // cursor position. Note that there is no indication here of when you
+                            // are done with the log.
+                            type_section
+                                .ty()
+                                .func_type(&wasm_encoder::FuncType::new(vec![I32], vec![I32, I32]));
 
                             // Add types for call stubs.
                             // Signature: [i32] -> <original results>
@@ -300,7 +314,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 let func_type_idx = func_types[*idx_to_call as usize];
                                 let func_type = types[func_type_idx as usize].unwrap_func();
                                 type_section.ty().func_type(&wasm_encoder::FuncType::new(
-                                    vec![wasm_encoder::ValType::I32],
+                                    vec![I32],
                                     func_type
                                         .results()
                                         .iter()
@@ -382,6 +396,9 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                             // Add type for the module-state initializer
                             function_section.function(replay_modinit_typeidx as u32);
 
+                            // Add type for the call log walker
+                            function_section.function(replay_walker_typeidx as u32);
+
                             // Add types for call stubs
                             for i in 0..args.funcs.len() {
                                 function_section.function(replay_callstub_base_typeidx + i as u32);
@@ -462,6 +479,11 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 wasm_encoder::ExportKind::Func,
                                 replay_modinit_funcidx,
                             );
+                            export_section.export(
+                                "_replay:walk_call_log",
+                                wasm_encoder::ExportKind::Func,
+                                replay_walker_funcidx,
+                            );
                             for (i, funcidx) in args.funcs.iter().enumerate() {
                                 export_section.export(
                                     format!("_replay:callstub_{funcidx}").as_str(),
@@ -510,6 +532,9 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                         code_section.function(&new_func);
                     }
+
+                    // TODO:
+                    // - We are definitely not handling overflow correctly for memory64.
 
                     match mode {
                         InstrumentationMode::Record => {
@@ -568,6 +593,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 }
 
                                 // Write params
+                                w.i32(&I32Const(func_type.params().len() as i32));
                                 for (i, param_type) in func_type.params().iter().enumerate() {
                                     w.val(param_type, &LocalGet(i as u32));
                                 }
@@ -690,6 +716,95 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 code_section.function(r.f);
                             }
 
+                            // Generate call log walker
+                            {
+                                use Instruction::*;
+
+                                // The function signature is [i32] -> [i32 i32]
+                                let mut r = ReplayReader {
+                                    f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
+                                    buf: buf_memidx,
+                                    cur: cur_globalidx,
+                                };
+                                let funcidx = 1;
+                                let num_params = 2;
+                                let tmp_i32 = 3;
+
+                                // Reset cursor
+                                r.add(&LocalGet(0));
+                                r.add(&GlobalSet(cur_globalidx));
+
+                                // Read func idx
+                                r.i32();
+                                r.add(&LocalSet(funcidx));
+
+                                // Skip memories
+                                r.add(&Nop);
+                                for mem_type in &memory_types {
+                                    match mem_type.index_type() {
+                                        ValType::I32 => {
+                                            r.i32();
+                                            r.add(&I32Const(65536));
+                                            r.add(&I32Mul);
+                                            r.bump_cur();
+                                        }
+                                        ValType::I64 => {
+                                            r.i64();
+                                            r.add(&I64Const(65536));
+                                            r.add(&I64Mul);
+                                            r.add(&I32WrapI64);
+                                            r.bump_cur();
+                                        }
+                                        _ => panic!("invalid address type"),
+                                    }
+                                }
+
+                                // TODO: Skip tables
+                                r.add(&Nop);
+
+                                // Skip mutable globals
+                                r.add(&Nop);
+                                for global_type in &global_types {
+                                    if global_type.mutable {
+                                        r.val(&global_type.content_type);
+                                        r.add(&Drop);
+                                    }
+                                }
+
+                                // Skip params
+                                r.add(&Nop);
+                                r.i32();
+                                r.add(&LocalSet(num_params));
+                                r.add(&Block(wasm_encoder::BlockType::Empty));
+                                {
+                                    r.add(&Loop(wasm_encoder::BlockType::Empty));
+                                    {
+                                        // if (n == 0) break;
+                                        r.add(&LocalGet(num_params));
+                                        r.add(&I32Eqz);
+                                        r.add(&BrIf(1));
+
+                                        r.skip_val(tmp_i32);
+
+                                        // n -= 1; continue;
+                                        r.add(&LocalGet(num_params));
+                                        r.add(&I32Const(1));
+                                        r.add(&I32Sub);
+                                        r.add(&LocalSet(num_params));
+                                        r.add(&Br(0));
+                                    }
+                                    r.add(&End);
+                                };
+                                r.add(&End);
+
+                                // Return values
+                                r.add(&LocalGet(funcidx));
+                                r.add(&GlobalGet(cur_globalidx));
+
+                                r.end();
+                                code_section.function(r.f);
+                            }
+
                             // Generate call stubs
                             for idx_to_call in &args.funcs {
                                 use Instruction::*;
@@ -704,6 +819,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                     cur: cur_globalidx,
                                 };
 
+                                r.expect_i32(func_type.params().len() as i32);
                                 for param_type in func_type.params() {
                                     r.val(param_type);
                                 }
@@ -921,17 +1037,17 @@ impl ReplayReader<'_> {
         }
     }
 
-    fn bump_cur<'a>(&mut self, delta: &Instructions) {
+    fn bump_cur(&mut self) {
         use Instruction::*;
         self.add(&GlobalGet(self.cur));
-        self.instructions(delta);
         self.add(&I32Add);
         self.add(&GlobalSet(self.cur));
     }
 
     fn bump_cur_imm(&mut self, n: i32) {
         use Instruction::*;
-        self.bump_cur(&[&I32Const(n)]);
+        self.add(&I32Const(n));
+        self.bump_cur();
     }
 
     fn byte(&mut self) {
@@ -963,6 +1079,21 @@ impl ReplayReader<'_> {
         self.add(&I32Load(self.in_buf()));
     }
 
+    fn expect_i32(&mut self, n: i32) {
+        use Instruction::*;
+        self.add(&Block(wasm_encoder::BlockType::Empty));
+        {
+            self.add(&GlobalGet(self.cur));
+            self.add(&I32Load(self.in_buf()));
+            self.add(&I32Const(n));
+            self.add(&I32Eq);
+            self.add(&BrIf(0));
+            self.add(&Unreachable);
+        }
+        self.add(&End);
+        self.bump_cur_imm(4);
+    }
+
     fn i64(&mut self) {
         use Instruction::*;
         self.add(&GlobalGet(self.cur));
@@ -992,7 +1123,6 @@ impl ReplayReader<'_> {
     }
 
     fn val(&mut self, val_type: &ValType) {
-        use Instruction::*;
         match val_type {
             ValType::I32 => {
                 self.expect_byte(0x7F);
@@ -1018,6 +1148,71 @@ impl ReplayReader<'_> {
         }
     }
 
+    fn skip_val(&mut self, tmp_i32: u32) {
+        use Instruction::*;
+
+        self.byte();
+        self.add(&LocalSet(tmp_i32));
+
+        self.add(&Block(wasm_encoder::BlockType::Empty));
+        {
+            self.add(&Block(wasm_encoder::BlockType::Empty));
+            {
+                self.add(&Block(wasm_encoder::BlockType::Empty));
+                {
+                    self.add(&Block(wasm_encoder::BlockType::Empty));
+                    {
+                        // Skip i32
+                        self.add(&LocalGet(tmp_i32));
+                        self.add(&I32Const(0x7F));
+                        self.add(&I32Eq);
+                        self.add(&BrIf(0));
+
+                        // Skip i64
+                        self.add(&LocalGet(tmp_i32));
+                        self.add(&I32Const(0x7E));
+                        self.add(&I32Eq);
+                        self.add(&BrIf(1));
+
+                        // Skip f32
+                        self.add(&LocalGet(tmp_i32));
+                        self.add(&I32Const(0x7D));
+                        self.add(&I32Eq);
+                        self.add(&BrIf(0));
+
+                        // Skip f64
+                        self.add(&LocalGet(tmp_i32));
+                        self.add(&I32Const(0x7C));
+                        self.add(&I32Eq);
+                        self.add(&BrIf(1));
+
+                        // Skip v128
+                        self.add(&LocalGet(tmp_i32));
+                        self.add(&I32Const(0x7B));
+                        self.add(&I32Eq);
+                        self.add(&BrIf(2));
+
+                        // Unknown val type
+                        self.add(&Unreachable);
+                    }
+                    self.add(&End);
+
+                    self.bump_cur_imm(4);
+                    self.add(&Br(2));
+                }
+                self.add(&End);
+
+                self.bump_cur_imm(8);
+                self.add(&Br(1));
+            }
+            self.add(&End);
+
+            self.bump_cur_imm(16);
+            self.add(&Br(0));
+        }
+        self.add(&End);
+    }
+
     /// It is your responsibility to ensure that base has the correct address type for the given memory.
     /// Len should always be i32 because the source buffer is i32.
     fn bytes<'a>(&mut self, mem_idx: u32, base: &Instruction, len: &Instructions) {
@@ -1029,7 +1224,8 @@ impl ReplayReader<'_> {
             src_mem: self.buf,
             dst_mem: mem_idx,
         });
-        self.bump_cur(len);
+        self.instructions(len);
+        self.bump_cur();
     }
 
     fn end(&mut self) {

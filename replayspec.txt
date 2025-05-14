@@ -14,7 +14,7 @@ table = length<at> [length]ref_ctor
 
 mut_globals = [num mutable globals]val_ctor
 
-params<func> = [func.num_params]val_ctor
+params<func> = num_params<i32> [num_params]val_ctor
 
 val_ctor = num_ctor | vec_ctor | ref_ctor
 
