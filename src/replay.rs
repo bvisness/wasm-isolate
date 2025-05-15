@@ -1,4 +1,4 @@
-use std::{fs, io::Write, path::Path};
+use std::{fs, path::Path};
 
 use anyhow::Result;
 use wasm_encoder::{
@@ -176,7 +176,6 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                 }
 
                 let mut func = Func {
-                    type_idx: func_types[current_func as usize],
                     locals: vec![],
                     instructions: vec![],
                 };
@@ -418,13 +417,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                     }
 
                     // Create memory for buffer (used in both modes)
-                    memory_section.memory(wasm_encoder::MemoryType {
-                        minimum: 128,
-                        maximum: Some(128),
-                        memory64: false,
-                        shared: false,
-                        page_size_log2: None,
-                    });
+                    memory_section.memory(buf_memtype);
 
                     module.section(&memory_section);
                 }
@@ -862,7 +855,6 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 }
 
 struct Func<'a> {
-    type_idx: u32,
     locals: Vec<(u32, ValType)>,
     instructions: Vec<Operator<'a>>,
 }
