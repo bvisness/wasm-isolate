@@ -228,8 +228,8 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
         let mut reencoder = RoundtripReencoder {};
 
         let buf_memtype = wasm_encoder::MemoryType {
-            minimum: 128,
-            maximum: Some(128),
+            minimum: 65536,
+            maximum: None,
             memory64: false,
             shared: false,
             page_size_log2: None,
@@ -539,37 +539,32 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 let func_type = types[func_type_idx as usize].unwrap_func();
 
                                 let mut w = RecorderWriter {
-                                    f: &mut Function::new(vec![]),
+                                    f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
                                 };
+                                let i32_tmps = func_type.params().len() as u32;
 
                                 // Write func idx to begin call state
                                 w.i32_imm(*idx_to_record as i32);
 
                                 // Write memories
                                 for (i, mem_type) in memory_types.iter().enumerate() {
+                                    // We now inline an RLE compressor because it has to be specialized
+                                    // to a specific memory.
                                     match mem_type.index_type() {
                                         ValType::I32 => {
+                                            // Write memory size in pages
                                             w.i32(&MemorySize(i as u32));
-                                            w.bytes(
+                                            w.rle(
                                                 i as u32,
-                                                &I32Const(0),
-                                                &[&MemorySize(i as u32), &I32Const(65536), &I32Mul],
+                                                i32_tmps + 0,
+                                                i32_tmps + 1,
+                                                i32_tmps + 2,
                                             );
                                         }
                                         ValType::I64 => {
-                                            w.i64(&MemorySize(i as u32));
-                                            w.bytes(
-                                                i as u32,
-                                                &I64Const(0),
-                                                &[
-                                                    &MemorySize(i as u32),
-                                                    &I64Const(65536),
-                                                    &I64Mul,
-                                                    &I32WrapI64,
-                                                ],
-                                            );
+                                            todo!();
                                         }
                                         _ => panic!("invalid address type"),
                                     }
@@ -602,15 +597,11 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // The function signature is [i32] -> [i32]
                                 let mut r = ReplayReader {
-                                    f: &mut Function::new(vec![
-                                        (1, wasm_encoder::ValType::I32),
-                                        (1, wasm_encoder::ValType::I64),
-                                    ]),
+                                    f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
                                 };
-                                let tmp_i32 = 1;
-                                let tmp_i64 = 2;
+                                let tmps_i32 = 1;
 
                                 // Reset cursor to start of call state
                                 r.add(&LocalGet(0));
@@ -627,16 +618,16 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                         ValType::I32 => {
                                             // Read size in pages
                                             r.i32();
-                                            r.add(&LocalSet(tmp_i32));
+                                            r.add(&LocalSet(tmps_i32 + 0));
 
                                             // Grow memory if necessary
                                             r.add(&MemorySize(i as u32));
-                                            r.add(&LocalGet(tmp_i32));
+                                            r.add(&LocalGet(tmps_i32 + 0));
                                             r.add(&I32LtU);
                                             r.add(&If(wasm_encoder::BlockType::Empty));
                                             {
                                                 r.add(&MemorySize(i as u32));
-                                                r.add(&LocalGet(tmp_i32));
+                                                r.add(&LocalGet(tmps_i32 + 0));
                                                 r.add(&I32Sub);
                                                 r.add(&MemoryGrow(i as u32));
                                                 r.add(&I32Const(0));
@@ -646,44 +637,16 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                             }
                                             r.add(&End);
 
-                                            r.bytes(
+                                            // RLE decompress the memory
+                                            r.rle(
                                                 i as u32,
-                                                &I32Const(0),
-                                                &[&LocalGet(tmp_i32), &I32Const(65536), &I32Mul],
+                                                tmps_i32 + 0,
+                                                tmps_i32 + 1,
+                                                tmps_i32 + 2,
                                             );
                                         }
                                         ValType::I64 => {
-                                            // Read size in pages
-                                            r.i64();
-                                            r.add(&LocalSet(tmp_i64));
-
-                                            // Grow memory if necessary
-                                            r.add(&MemorySize(i as u32));
-                                            r.add(&LocalGet(tmp_i64));
-                                            r.add(&I64LtU);
-                                            r.add(&If(wasm_encoder::BlockType::Empty));
-                                            {
-                                                r.add(&MemorySize(i as u32));
-                                                r.add(&LocalGet(tmp_i64));
-                                                r.add(&I64Sub);
-                                                r.add(&MemoryGrow(i as u32));
-                                                r.add(&I64Const(0));
-                                                r.add(&I64GeS);
-                                                r.add(&BrIf(0));
-                                                r.add(&Unreachable);
-                                            }
-                                            r.add(&End);
-
-                                            r.bytes(
-                                                i as u32,
-                                                &I64Const(0),
-                                                &[
-                                                    &LocalGet(tmp_i64),
-                                                    &I64Const(65536),
-                                                    &I64Mul,
-                                                    &I32WrapI64,
-                                                ],
-                                            );
+                                            todo!();
                                         }
                                         _ => panic!("invalid address type"),
                                     }
@@ -736,17 +699,13 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 for mem_type in &memory_types {
                                     match mem_type.index_type() {
                                         ValType::I32 => {
-                                            r.i32();
-                                            r.add(&I32Const(65536));
-                                            r.add(&I32Mul);
+                                            r.i32(); // length in pages
+                                            r.add(&Drop);
+                                            r.i32(); // length of compressed data
                                             r.bump_cur();
                                         }
                                         ValType::I64 => {
-                                            r.i64();
-                                            r.add(&I64Const(65536));
-                                            r.add(&I64Mul);
-                                            r.add(&I32WrapI64);
-                                            r.bump_cur();
+                                            todo!();
                                         }
                                         _ => panic!("invalid address type"),
                                     }
@@ -888,6 +847,10 @@ impl RecorderWriter<'_> {
         }
     }
 
+    fn add(&mut self, ins: &Instruction) {
+        self.f.instruction(ins);
+    }
+
     fn instructions<'a>(&mut self, instructions: &Instructions) {
         for ins in instructions {
             self.f.instruction(ins);
@@ -1003,6 +966,98 @@ impl RecorderWriter<'_> {
             dst_mem: self.buf,
         });
         self.bump_cur(len);
+    }
+
+    fn rle(&mut self, mem_idx: u32, tmp_i32_1: u32, tmp_i32_2: u32, tmp_i32_3: u32) {
+        use Instruction::*;
+        let i = tmp_i32_1;
+        let current_byte = tmp_i32_2;
+        let current_count = tmp_i32_3;
+
+        let from_mem = MemArg {
+            offset: 0,
+            align: 0,
+            memory_index: mem_idx,
+        };
+
+        // TODO: This will probably not work if you have an entire 4GiB memory
+        // filled with a nonzero value. That would mean a run of length 2^32 of
+        // a value that is not zero, and we will therefore overflow. Please do
+        // not do this!
+
+        // Write dummy length and prepare it to be overwritten
+        self.add(&GlobalGet(self.cur));
+        self.add(&GlobalGet(self.cur));
+        self.i32(&I32Const(-1));
+
+        // current_byte = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(current_byte));
+
+        // current_count = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(current_count));
+
+        // for (i = 0; ...)
+        self.add(&I32Const(0));
+        self.add(&LocalSet(i));
+        self.add(&Loop(wasm_encoder::BlockType::Empty));
+        {
+            // if (mem[i] === current_byte)
+            self.add(&LocalGet(i));
+            self.add(&I32Load8U(from_mem));
+            self.add(&LocalGet(current_byte));
+            self.add(&I32Eq);
+            self.add(&If(wasm_encoder::BlockType::Empty));
+            {
+                // current_count++
+                self.add(&LocalGet(current_count));
+                self.add(&I32Const(1));
+                self.add(&I32Add);
+                self.add(&LocalSet(current_count));
+            }
+            self.add(&Else);
+            {
+                // Write run length and contents
+                self.i32(&LocalGet(current_count));
+                self.byte(&[&LocalGet(current_byte)]);
+
+                // current_byte = mem[i]
+                self.add(&LocalGet(i));
+                self.add(&I32Load8U(from_mem));
+                self.add(&LocalSet(current_byte));
+
+                // current_count = 1
+                self.add(&I32Const(1));
+                self.add(&LocalSet(current_count));
+            }
+            self.add(&End);
+
+            // i++; if (i < memory.size_bytes) continue;
+            self.add(&LocalGet(i));
+            self.add(&I32Const(1));
+            self.add(&I32Add);
+            self.add(&LocalTee(i));
+            self.add(&MemorySize(mem_idx));
+            self.add(&I32Const(65536));
+            self.add(&I32Mul);
+            self.add(&I32LtU);
+            self.add(&BrIf(0));
+        }
+        self.add(&End);
+
+        // Write final run length and contents
+        self.i32(&LocalGet(current_count));
+        self.byte(&[&LocalGet(current_byte)]);
+
+        // Write final length into dummy slot
+        self.add(&GlobalGet(self.cur));
+        self.add(&I32Sub); // cur_old - cur_new
+        self.add(&I32Const(-1));
+        self.add(&I32Mul); // cur_new - cur_old
+        self.add(&I32Const(4));
+        self.add(&I32Sub); // cur_new - cur_old - 4
+        self.add(&I32Store(self.in_buf())) // uses first global.get as its address
     }
 
     fn end(&mut self) {
@@ -1225,6 +1280,46 @@ impl ReplayReader<'_> {
         });
         self.instructions(len);
         self.bump_cur();
+    }
+
+    fn rle(&mut self, mem_idx: u32, tmp_i32_1: u32, tmp_i32_2: u32, tmp_i32_3: u32) {
+        use Instruction::*;
+        let i = tmp_i32_1;
+        let end = tmp_i32_2;
+        let run_length = tmp_i32_3;
+
+        // i = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(i));
+
+        // end = len + cur (after len);
+        self.i32();
+        self.add(&GlobalGet(self.cur));
+        self.add(&I32Add);
+        self.add(&LocalSet(end));
+
+        // while (cur < end)
+        self.add(&Loop(wasm_encoder::BlockType::Empty));
+        {
+            // memory.fill(addr=i, val=run_byte, len=run_length)
+            self.add(&LocalGet(i));
+            self.byte();
+            self.i32();
+            self.add(&LocalTee(run_length));
+            self.add(&MemoryFill(mem_idx));
+
+            // i += run_length
+            self.add(&LocalGet(i));
+            self.add(&LocalGet(run_length));
+            self.add(&I32Add);
+            self.add(&LocalSet(i));
+
+            self.add(&GlobalGet(self.cur));
+            self.add(&LocalGet(end));
+            self.add(&I32LtU);
+            self.add(&BrIf(0));
+        }
+        self.add(&End);
     }
 
     fn end(&mut self) {

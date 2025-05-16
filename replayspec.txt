@@ -7,7 +7,7 @@ call_log = [...]call_state
 call_state = func_idx memories tables mut_globals params<func>
 
 memories = [num memories]memory
-memory = length_pages<at> [length]byte
+memory = length_pages<at> length_compressed [length_compressed]byte
 
 tables = [num tables]table
 table = length<at> [length]ref_ctor
