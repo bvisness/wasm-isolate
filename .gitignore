@@ -4,6 +4,7 @@
 *.dump
 *.call_log
 *.js
+*.mjs
 
 .DS_Store
 

@@ -851,6 +851,13 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
         .expect("unable to write file");
     }
 
+    // Write the JS instrumentation
+    fs::write(
+        Path::new(&out).join("index.mjs"),
+        include_bytes!("index.mjs"),
+    )
+    .expect("unable to write file");
+
     Ok(())
 }
 
