@@ -70,6 +70,16 @@ export class Recorder {
     }.bind(this);
     WebAssembly.Instance.prototype = this._WebAssembly_Instance_orig.prototype;
 
+    assertNotAlreadyPolyfilled(["WebAssembly", "instantiate"], "instantiate");
+    this._WebAssembly_instantiate_orig = WebAssembly.instantiate;
+    WebAssembly.instantiate = async function _record_instantiate(source, importObject) {
+      const res = await this._WebAssembly_instantiate_orig(source, importObject);
+      assertReplayMode(res.module, 0);
+      this._callLogMemory = res.instance.exports["_replay:call_log"];
+      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
+      return res;
+    }.bind(this);
+
     assertNotAlreadyPolyfilled(["WebAssembly", "instantiateStreaming"], "instantiateStreaming");
     this._WebAssembly_instantiateStreaming_orig = WebAssembly.instantiateStreaming;
     WebAssembly.instantiateStreaming = async function _record_instantiateStreaming(source, importObject) {
@@ -89,11 +99,19 @@ export class Recorder {
     WebAssembly.instantiateStreaming = this._WebAssembly_instantiateStreaming_orig;
   }
 
+  assertInstantiated() {
+    if (!this._callLogMemory || !this._callLogCursor) {
+      throw "No WebAssembly module was instantiated for recording.";
+    }
+  }
+
   /**
    * Returns the call log from memory as a Uint8Array.
    * @returns {Uint8Array}
    */
   getCallLog() {
+    this.assertInstantiated();
+
     const cur = this._callLogCursor.value;
     return new Uint8Array(this._callLogMemory.buffer).slice(0, cur);
   }
@@ -139,6 +157,26 @@ export class Replayer {
    * Polyfills the WebAssembly API for replay.
    */
   hook() {
+    // TODO: WebAssembly.Instance
+
+    assertNotAlreadyPolyfilled(["WebAssembly", "instantiate"], "instantiate");
+    this._WebAssembly_instantiate_orig = WebAssembly.instantiate;
+    WebAssembly.instantiate = async function _replay_instantiate(source, importObject) {
+      const res = await this._WebAssembly_instantiate_orig(source, importObject);
+      assertReplayMode(res.module, 1);
+      this._callLogMemory = res.instance.exports["_replay:call_log"];
+      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
+      this._moduleInit = res.instance.exports["_replay:module_init"];
+      this._walkCallLog = res.instance.exports["_replay:walk_call_log"];
+      for (const [name, func] of Object.entries(res.instance.exports)) {
+        if (name.startsWith("_replay:callstub_")) {
+          const funcIdx = Number(name.substring("_replay:callstub_".length));
+          this._callStubs[funcIdx] = func;
+        }
+      }
+      return res;
+    }.bind(this);
+
     assertNotAlreadyPolyfilled(["WebAssembly", "instantiateStreaming"], "instantiateStreaming");
     this._WebAssembly_instantiateStreaming_orig = WebAssembly.instantiateStreaming;
     WebAssembly.instantiateStreaming = async function _replay_instantiateStreaming(source, importObject) {
@@ -165,11 +203,19 @@ export class Replayer {
     WebAssembly.instantiateStreaming = this._WebAssembly_instantiateStreaming_orig;
   }
 
+  assertInstantiated() {
+    if (!this._callLogMemory || !this._callLogCursor) {
+      throw "No WebAssembly module was instantiated for replay.";
+    }
+  }
+
   /**
    * Loads a call log into memory and loads all call descriptors.
    * @param {Uint8Array} callLog - The call log to load.
    */
   loadCallLog(callLog) {
+    this.assertInstantiated();
+
     const dst = new Uint8Array(this._callLogMemory.buffer);
     dst.set(callLog);
     this._callLogCursor.value = 0;
@@ -198,6 +244,8 @@ export class Replayer {
    * @returns {function()} A function that performs the actual call, returning what the original function returned.
    */
   init(callDesc) {
+    this.assertInstantiated();
+
     this._moduleInit(callDesc.cursor);
     const paramPosition = this._callLogCursor.value;
     return () => {
@@ -216,6 +264,8 @@ export class Replayer {
    * @returns {*} The return values of the replayed call.
    */
   initAndCall(callDesc) {
+    this.assertInstantiated();
+
     return this.init(callDesc)();
   }
 }
