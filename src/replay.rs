@@ -562,7 +562,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 let func_type = types[func_type_idx as usize].unwrap_func();
 
                                 let mut w = RecorderWriter {
-                                    f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
+                                    f: &mut Function::new(vec![(4, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
                                 };
@@ -582,9 +582,12 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                             w.i64(&[&MemorySize(i as u32), &I64ExtendI32U]);
                                             w.rle(
                                                 i as u32,
-                                                i32_tmps + 0,
-                                                i32_tmps + 1,
-                                                i32_tmps + 2,
+                                                &[
+                                                    i32_tmps + 0,
+                                                    i32_tmps + 1,
+                                                    i32_tmps + 2,
+                                                    i32_tmps + 3,
+                                                ],
                                             );
                                         }
                                         ValType::I64 => {
@@ -926,6 +929,14 @@ impl RecorderWriter<'_> {
         self.byte(&[&I32Const(byte)]);
     }
 
+    fn i16(&mut self, ins: &Instruction) {
+        use Instruction::*;
+        self.f.instruction(&GlobalGet(self.cur));
+        self.f.instruction(ins);
+        self.f.instruction(&I32Store16(self.in_buf()));
+        self.bump_cur_imm(2);
+    }
+
     fn i32(&mut self, ins: &Instruction) {
         use Instruction::*;
         self.f.instruction(&GlobalGet(self.cur));
@@ -999,10 +1010,10 @@ impl RecorderWriter<'_> {
 
     /// It is your responsibility to ensure that base has the correct address type for the given memory.
     /// Len should always be i32 because the destination buffer is i32.
-    fn bytes<'a>(&mut self, mem_idx: u32, base: &Instruction, len: &Instructions) {
+    fn bytes<'a>(&mut self, mem_idx: u32, base: &Instructions, len: &Instructions) {
         use Instruction::*;
         self.f.instruction(&GlobalGet(self.cur)); // dst offset
-        self.f.instruction(base); // src offset
+        self.instructions(base); // src offset
         self.instructions(len); // len
         self.f.instruction(&MemoryCopy {
             src_mem: mem_idx,
@@ -1013,11 +1024,9 @@ impl RecorderWriter<'_> {
 
     // Encodes the contents of memory in RLE form as a vector of bytes (i32
     // length, then contents). TODO: i64 length?
-    fn rle(&mut self, mem_idx: u32, tmp_i32_1: u32, tmp_i32_2: u32, tmp_i32_3: u32) {
+    fn rle(&mut self, mem_idx: u32, tmp_i32s: &[u32; 4]) {
         use Instruction::*;
-        let i = tmp_i32_1;
-        let current_byte = tmp_i32_2;
-        let current_count = tmp_i32_3;
+        let [i, mode, current_byte, current_count] = *tmp_i32s;
 
         let from_mem = MemArg {
             offset: 0,
@@ -1025,15 +1034,18 @@ impl RecorderWriter<'_> {
             memory_index: mem_idx,
         };
 
-        // TODO: This will probably not work if you have an entire 4GiB memory
-        // filled with a nonzero value. That would mean a run of length 2^32 of
-        // a value that is not zero, and we will therefore overflow. Please do
-        // not do this!
-
         // Write dummy length and prepare it to be overwritten
         self.add(&GlobalGet(self.cur));
         self.add(&GlobalGet(self.cur));
         self.i32(&I32Const(-1));
+
+        // i = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(i));
+
+        // mode = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(mode));
 
         // current_byte = 0;
         self.add(&I32Const(0));
@@ -1043,57 +1055,121 @@ impl RecorderWriter<'_> {
         self.add(&I32Const(0));
         self.add(&LocalSet(current_count));
 
-        // for (i = 0; ...)
-        self.add(&I32Const(0));
-        self.add(&LocalSet(i));
-        self.add(&Loop(wasm_encoder::BlockType::Empty));
+        // while (i < mem.length) ...
+        self.add(&Block(wasm_encoder::BlockType::Empty));
         {
-            // if (mem[i] === current_byte)
-            self.add(&LocalGet(i));
-            self.add(&I32Load8U(from_mem));
-            self.add(&LocalGet(current_byte));
-            self.add(&I32Eq);
-            self.add(&If(wasm_encoder::BlockType::Empty));
+            self.add(&Loop(wasm_encoder::BlockType::Empty));
             {
-                // current_count++
-                self.add(&LocalGet(current_count));
-                self.add(&I32Const(1));
-                self.add(&I32Add);
-                self.add(&LocalSet(current_count));
-            }
-            self.add(&Else);
-            {
-                // Write run length and contents
-                self.i32(&LocalGet(current_count));
-                self.byte(&[&LocalGet(current_byte)]);
+                // if (i >= mem.length) break;
+                self.add(&LocalGet(i));
+                self.add(&MemorySize(mem_idx));
+                self.add(&I32Const(65536));
+                self.add(&I32Mul);
+                self.add(&I32GeU);
+                self.add(&BrIf(1)); // break;
 
                 // current_byte = mem[i]
                 self.add(&LocalGet(i));
                 self.add(&I32Load8U(from_mem));
                 self.add(&LocalSet(current_byte));
 
-                // current_count = 1
+                // current_count = 1;
                 self.add(&I32Const(1));
                 self.add(&LocalSet(current_count));
+
+                // i++;
+                self.add(&LocalGet(i));
+                self.add(&I32Const(1));
+                self.add(&I32Add);
+                self.add(&LocalSet(i));
+
+                // while (i < mem.length && currentCount < max) ...
+                self.add(&Block(wasm_encoder::BlockType::Empty));
+                {
+                    self.add(&Loop(wasm_encoder::BlockType::Empty));
+                    {
+                        // if (i >= mem.length || currentCount >= max) break;
+                        self.add(&LocalGet(i));
+                        self.add(&MemorySize(mem_idx));
+                        self.add(&I32Const(65536));
+                        self.add(&I32Mul);
+                        self.add(&I32GeU);
+                        self.add(&LocalGet(current_count));
+                        self.add(&I32Const(65535));
+                        self.add(&I32GeU);
+                        self.add(&I32Or);
+                        self.add(&BrIf(1)); // break;
+
+                        // if ((mode === 0) xor (mem[i] === current_byte)) break;
+                        // (this condition conveniently encodes exit logic for both modes)
+                        self.add(&LocalGet(mode));
+                        self.add(&I32Eqz);
+                        self.add(&LocalGet(i));
+                        self.add(&I32Load8U(from_mem));
+                        self.add(&LocalGet(current_byte));
+                        self.add(&I32Eq);
+                        self.add(&I32Xor);
+                        self.add(&BrIf(1)); // break;
+
+                        // current_count++
+                        self.add(&LocalGet(current_count));
+                        self.add(&I32Const(1));
+                        self.add(&I32Add);
+                        self.add(&LocalSet(current_count));
+
+                        // current_byte = mem[i]
+                        self.add(&LocalGet(i));
+                        self.add(&I32Load8U(from_mem));
+                        self.add(&LocalSet(current_byte));
+
+                        // i++;
+                        self.add(&LocalGet(i));
+                        self.add(&I32Const(1));
+                        self.add(&I32Add);
+                        self.add(&LocalSet(i));
+
+                        // continue;
+                        self.add(&Br(0));
+                    }
+                    self.add(&End);
+                }
+                self.add(&End);
+
+                // if (mode === 0) ...
+                self.add(&LocalGet(mode));
+                self.add(&I32Eqz);
+                self.add(&If(wasm_encoder::BlockType::Empty));
+                {
+                    // Flush run
+                    self.i16(&LocalGet(current_count));
+                    self.byte(&[&LocalGet(current_byte)]);
+                }
+                self.add(&Else);
+                {
+                    // Flush literals
+                    self.i16(&LocalGet(current_count));
+                    self.bytes(
+                        mem_idx,
+                        &[&LocalGet(i), &LocalGet(current_count), &I32Sub],
+                        &[&LocalGet(current_count)],
+                    );
+                }
+                self.add(&End);
+
+                // mode = (mode + 1) % 2; // toggle
+                self.add(&LocalGet(mode));
+                self.add(&I32Const(1));
+                self.add(&I32Add);
+                self.add(&I32Const(2));
+                self.add(&I32RemU);
+                self.add(&LocalSet(mode));
+
+                // continue;
+                self.add(&Br(0))
             }
             self.add(&End);
-
-            // i++; if (i < memory.size_bytes) continue;
-            self.add(&LocalGet(i));
-            self.add(&I32Const(1));
-            self.add(&I32Add);
-            self.add(&LocalTee(i));
-            self.add(&MemorySize(mem_idx));
-            self.add(&I32Const(65536));
-            self.add(&I32Mul);
-            self.add(&I32LtU);
-            self.add(&BrIf(0));
         }
         self.add(&End);
-
-        // Write final run length and contents
-        self.i32(&LocalGet(current_count));
-        self.byte(&[&LocalGet(current_byte)]);
 
         // Write final length into dummy slot
         self.add(&GlobalGet(self.cur));
