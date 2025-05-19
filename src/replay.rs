@@ -26,6 +26,8 @@ pub struct ReplayArgs {
     out: Option<String>,
 }
 
+const INDEX_MJS: &[u8] = include_bytes!("index.mjs");
+
 pub fn replay(args: ReplayArgs) -> Result<()> {
     let filename = args.filename;
     let out = args.out.unwrap_or("replay".to_string());
@@ -643,7 +645,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                         ValType::I32 => {
                                             // Read size in pages
                                             r.i64();
-                                            r.add(&I32WrapI64); // TODO
+                                            r.add(&I32WrapI64);
                                             r.add(&LocalSet(tmps_i32 + 0));
 
                                             // Grow memory if necessary
@@ -659,7 +661,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                                 r.add(&I32Const(0));
                                                 r.add(&I32GeS);
                                                 r.add(&BrIf(0));
-                                                r.add(&Unreachable);
+                                                r.abort(ErrCode::FailedToGrowMemory);
                                             }
                                             r.add(&End);
 
@@ -851,9 +853,10 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
     }
 
     // Write the JS instrumentation
+    fs::write(Path::new(&out).join("index.mjs"), INDEX_MJS).expect("unable to write file");
     fs::write(
-        Path::new(&out).join("index.mjs"),
-        include_bytes!("index.mjs"),
+        Path::new(&out).join("index.js"),
+        std::str::from_utf8(INDEX_MJS)?.replace("export ", ""),
     )
     .expect("unable to write file");
 
@@ -1115,6 +1118,9 @@ enum ErrCode {
     WrongNumParams = 4,
 
     WrongValType = 10,
+    UnknownValType = 11,
+
+    FailedToGrowMemory = 20,
 }
 
 struct ReplayReader<'a> {
@@ -1141,6 +1147,13 @@ impl ReplayReader<'_> {
         for ins in instructions {
             self.f.instruction(ins);
         }
+    }
+
+    fn abort(&mut self, errcode: ErrCode) {
+        use Instruction::*;
+        self.add(&I32Const(errcode as i32));
+        self.add(&GlobalSet(self.errcode));
+        self.add(&Unreachable);
     }
 
     fn bump_cur(&mut self) {
@@ -1172,9 +1185,7 @@ impl ReplayReader<'_> {
             self.add(&I32Const(n as i32));
             self.add(&I32Eq);
             self.add(&BrIf(0));
-            self.add(&I32Const(errcode as i32));
-            self.add(&GlobalSet(self.errcode));
-            self.add(&Unreachable);
+            self.abort(errcode);
         }
         self.add(&End);
         self.bump_cur_imm(1);
@@ -1196,9 +1207,7 @@ impl ReplayReader<'_> {
             self.add(&I32Const(n));
             self.add(&I32Eq);
             self.add(&BrIf(0));
-            self.add(&I32Const(errcode as i32));
-            self.add(&GlobalSet(self.errcode));
-            self.add(&Unreachable);
+            self.abort(errcode);
         }
         self.add(&End);
         self.bump_cur_imm(4);
@@ -1303,7 +1312,7 @@ impl ReplayReader<'_> {
                         self.add(&BrIf(2));
 
                         // Unknown val type
-                        self.add(&Unreachable);
+                        self.abort(ErrCode::UnknownValType);
                     }
                     self.add(&End);
 

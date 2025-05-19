@@ -3,7 +3,7 @@
  * @param {number} modeID - The mode ID (0 = record, 1 = replay).
  * @returns {string} A string representation of the mode.
  */
-function mode2str(modeID) {
+function _mode2str(modeID) {
   switch (modeID) {
     case 0: return "record";
     case 1: return "replay";
@@ -11,7 +11,7 @@ function mode2str(modeID) {
   };
 }
 
-function code2msg(code) {
+function _code2msg(code) {
   switch (code) {
     case 1: return "Incorrect number of memories";
     case 2: return "Incorrect number of tables";
@@ -36,7 +36,7 @@ function assertReplayMode(module, expected) {
   }
   const mode = new Uint8Array(modeSections[0])[0];
   if (mode !== expected) {
-    throw new Error(`The given WebAssembly module was instrumented for ${mode2str(mode)}, not ${mode2str(expected)}.`);
+    throw new Error(`The given WebAssembly module was instrumented for ${_mode2str(mode)}, not ${_mode2str(expected)}.`);
   }
 }
 
@@ -229,7 +229,7 @@ export class Replayer {
           && e.message.includes("unreachable")
           && this._errCode.value !== 0
         ) {
-          e.message += `: ${code2msg(this._errCode.value)} at offset 0x${this._callLogCursor.value.toString(16)}`;
+          e.message += `: ${_code2msg(this._errCode.value)} at offset 0x${this._callLogCursor.value.toString(16)}`;
         }
         throw e;
       }
