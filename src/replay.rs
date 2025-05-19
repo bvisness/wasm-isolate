@@ -246,6 +246,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
         let replay_walker_funcidx = replay_modinit_funcidx + 1;
         let replay_callstub_base_typeidx = replay_walker_typeidx + 1;
         let replay_callstub_base_funcidx = replay_walker_funcidx + 1;
+        let replay_errcode_globalidx = cur_globalidx + 1;
 
         for section in &sections {
             match section {
@@ -442,6 +443,21 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                         &ConstExpr::i32_const(0),
                     );
 
+                    match mode {
+                        InstrumentationMode::Record => {}
+                        InstrumentationMode::Replay => {
+                            // Define the global for the error code
+                            global_section.global(
+                                wasm_encoder::GlobalType {
+                                    val_type: wasm_encoder::ValType::I32,
+                                    mutable: true,
+                                    shared: false,
+                                },
+                                &ConstExpr::i32_const(0),
+                            );
+                        }
+                    }
+
                     module.section(&global_section);
                 }
                 Section::Export => {
@@ -467,6 +483,11 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                     match mode {
                         InstrumentationMode::Record => {}
                         InstrumentationMode::Replay => {
+                            export_section.export(
+                                "_replay:err_code",
+                                wasm_encoder::ExportKind::Global,
+                                replay_errcode_globalidx,
+                            );
                             export_section.export(
                                 "_replay:module_init",
                                 wasm_encoder::ExportKind::Func,
@@ -549,13 +570,14 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 w.i32_imm(*idx_to_record as i32);
 
                                 // Write memories
+                                w.i32(&I32Const(memory_types.len() as i32));
                                 for (i, mem_type) in memory_types.iter().enumerate() {
                                     // We now inline an RLE compressor because it has to be specialized
                                     // to a specific memory.
                                     match mem_type.index_type() {
                                         ValType::I32 => {
                                             // Write memory size in pages
-                                            w.i32(&MemorySize(i as u32));
+                                            w.i64(&[&MemorySize(i as u32), &I64ExtendI32U]);
                                             w.rle(
                                                 i as u32,
                                                 i32_tmps + 0,
@@ -574,6 +596,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                 // TODO
 
                                 // Write mutable globals
+                                w.i32(&I32Const(global_types.len() as i32));
                                 for (i, global_type) in global_types.iter().enumerate() {
                                     if global_type.mutable {
                                         w.val(&global_type.content_type, &GlobalGet(i as u32))
@@ -600,6 +623,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                     f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
+                                    errcode: replay_errcode_globalidx,
                                 };
                                 let tmps_i32 = 1;
 
@@ -613,11 +637,13 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // Initialize memories
                                 r.add(&Nop);
+                                r.expect_i32(memory_types.len() as i32, ErrCode::WrongNumMemories);
                                 for (i, mem_type) in memory_types.iter().enumerate() {
                                     match mem_type.index_type() {
                                         ValType::I32 => {
                                             // Read size in pages
-                                            r.i32();
+                                            r.i64();
+                                            r.add(&I32WrapI64); // TODO
                                             r.add(&LocalSet(tmps_i32 + 0));
 
                                             // Grow memory if necessary
@@ -657,6 +683,10 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // Initialize mutable globals
                                 r.add(&Nop);
+                                r.expect_i32(
+                                    global_types.iter().filter(|t| t.mutable).count() as i32,
+                                    ErrCode::WrongNumMutableGlobals,
+                                );
                                 for (i, global_type) in global_types.iter().enumerate() {
                                     if global_type.mutable {
                                         r.val(&global_type.content_type);
@@ -681,6 +711,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                     f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
+                                    errcode: replay_errcode_globalidx,
                                 };
                                 let funcidx = 1;
                                 let num_params = 2;
@@ -696,10 +727,11 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // Skip memories
                                 r.add(&Nop);
+                                r.expect_i32(memory_types.len() as i32, ErrCode::WrongNumMemories);
                                 for mem_type in &memory_types {
                                     match mem_type.index_type() {
                                         ValType::I32 => {
-                                            r.i32(); // length in pages
+                                            r.i64(); // length in pages
                                             r.add(&Drop);
                                             r.i32(); // length of compressed data
                                             r.bump_cur();
@@ -716,6 +748,10 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // Skip mutable globals
                                 r.add(&Nop);
+                                r.expect_i32(
+                                    global_types.iter().filter(|t| t.mutable).count() as i32,
+                                    ErrCode::WrongNumMutableGlobals,
+                                );
                                 for global_type in &global_types {
                                     if global_type.mutable {
                                         r.val(&global_type.content_type);
@@ -769,9 +805,13 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                     f: &mut Function::new(vec![]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
+                                    errcode: replay_errcode_globalidx,
                                 };
 
-                                r.expect_i32(func_type.params().len() as i32);
+                                r.expect_i32(
+                                    func_type.params().len() as i32,
+                                    ErrCode::WrongNumParams,
+                                );
                                 for param_type in func_type.params() {
                                     r.val(param_type);
                                 }
@@ -896,10 +936,10 @@ impl RecorderWriter<'_> {
         self.i32(&I32Const(n));
     }
 
-    fn i64(&mut self, ins: &Instruction) {
+    fn i64(&mut self, ins: &Instructions) {
         use Instruction::*;
         self.f.instruction(&GlobalGet(self.cur));
-        self.f.instruction(ins);
+        self.instructions(ins);
         self.f.instruction(&I64Store(self.in_buf()));
         self.bump_cur_imm(8);
     }
@@ -936,7 +976,7 @@ impl RecorderWriter<'_> {
             }
             ValType::I64 => {
                 self.byte_imm(0x7E);
-                self.i64(load);
+                self.i64(&[load]);
             }
             ValType::F32 => {
                 self.byte_imm(0x7D);
@@ -968,6 +1008,8 @@ impl RecorderWriter<'_> {
         self.bump_cur(len);
     }
 
+    // Encodes the contents of memory in RLE form as a vector of bytes (i32
+    // length, then contents). TODO: i64 length?
     fn rle(&mut self, mem_idx: u32, tmp_i32_1: u32, tmp_i32_2: u32, tmp_i32_3: u32) {
         use Instruction::*;
         let i = tmp_i32_1;
@@ -1066,10 +1108,20 @@ impl RecorderWriter<'_> {
     }
 }
 
+enum ErrCode {
+    WrongNumMemories = 1,
+    WrongNumTables = 2,
+    WrongNumMutableGlobals = 3,
+    WrongNumParams = 4,
+
+    WrongValType = 10,
+}
+
 struct ReplayReader<'a> {
     f: &'a mut Function,
     buf: u32,
     cur: u32,
+    errcode: u32,
 }
 
 impl ReplayReader<'_> {
@@ -1111,7 +1163,7 @@ impl ReplayReader<'_> {
         self.add(&I32Load8U(self.in_buf()));
     }
 
-    fn expect_byte(&mut self, n: u8) {
+    fn expect_byte(&mut self, n: u8, errcode: ErrCode) {
         use Instruction::*;
         self.add(&Block(wasm_encoder::BlockType::Empty));
         {
@@ -1120,6 +1172,8 @@ impl ReplayReader<'_> {
             self.add(&I32Const(n as i32));
             self.add(&I32Eq);
             self.add(&BrIf(0));
+            self.add(&I32Const(errcode as i32));
+            self.add(&GlobalSet(self.errcode));
             self.add(&Unreachable);
         }
         self.add(&End);
@@ -1133,7 +1187,7 @@ impl ReplayReader<'_> {
         self.add(&I32Load(self.in_buf()));
     }
 
-    fn expect_i32(&mut self, n: i32) {
+    fn expect_i32(&mut self, n: i32, errcode: ErrCode) {
         use Instruction::*;
         self.add(&Block(wasm_encoder::BlockType::Empty));
         {
@@ -1142,6 +1196,8 @@ impl ReplayReader<'_> {
             self.add(&I32Const(n));
             self.add(&I32Eq);
             self.add(&BrIf(0));
+            self.add(&I32Const(errcode as i32));
+            self.add(&GlobalSet(self.errcode));
             self.add(&Unreachable);
         }
         self.add(&End);
@@ -1179,23 +1235,23 @@ impl ReplayReader<'_> {
     fn val(&mut self, val_type: &ValType) {
         match val_type {
             ValType::I32 => {
-                self.expect_byte(0x7F);
+                self.expect_byte(0x7F, ErrCode::WrongValType);
                 self.i32();
             }
             ValType::I64 => {
-                self.expect_byte(0x7E);
+                self.expect_byte(0x7E, ErrCode::WrongValType);
                 self.i64();
             }
             ValType::F32 => {
-                self.expect_byte(0x7D);
+                self.expect_byte(0x7D, ErrCode::WrongValType);
                 self.f32();
             }
             ValType::F64 => {
-                self.expect_byte(0x7C);
+                self.expect_byte(0x7C, ErrCode::WrongValType);
                 self.f64();
             }
             ValType::V128 => {
-                self.expect_byte(0x7B);
+                self.expect_byte(0x7B, ErrCode::WrongValType);
                 self.v128();
             }
             ValType::Ref(ref_type) => todo!(),

@@ -11,6 +11,19 @@ function mode2str(modeID) {
   };
 }
 
+function code2msg(code) {
+  switch (code) {
+    case 1: return "Incorrect number of memories";
+    case 2: return "Incorrect number of tables";
+    case 3: return "Incorrect number of mutable globals";
+    case 4: return "Incorrect number of params";
+
+    case 10: return "Incorrect val type";
+
+    default: return "???";
+  }
+}
+
 /**
  * Verifies that the WebAssembly module was instrumented with the expected mode.
  * @param {WebAssembly.Module} module - The WebAssembly module to check.
@@ -64,8 +77,7 @@ export class Recorder {
     WebAssembly.Instance = function _record_Instance(module, ...args) {
       assertReplayMode(module, 0);
       const instance = new _WebAssembly_Instance_orig(module, ...args);
-      this._callLogMemory = instance.exports["_replay:call_log"];
-      this._callLogCursor = instance.exports["_replay:call_log_cursor"];
+      this._extractExports(instance.exports);
       return instance;
     }.bind(this);
     WebAssembly.Instance.prototype = this._WebAssembly_Instance_orig.prototype;
@@ -75,8 +87,7 @@ export class Recorder {
     WebAssembly.instantiate = async function _record_instantiate(source, importObject) {
       const res = await this._WebAssembly_instantiate_orig(source, importObject);
       assertReplayMode(res.module, 0);
-      this._callLogMemory = res.instance.exports["_replay:call_log"];
-      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
+      this._extractExports(res.instance.exports);
       return res;
     }.bind(this);
 
@@ -85,8 +96,7 @@ export class Recorder {
     WebAssembly.instantiateStreaming = async function _record_instantiateStreaming(source, importObject) {
       const res = await this._WebAssembly_instantiateStreaming_orig(source, importObject);
       assertReplayMode(res.module, 0);
-      this._callLogMemory = res.instance.exports["_replay:call_log"];
-      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
+      this._extractExports(res.instance.exports);
       return res;
     }.bind(this);
   }
@@ -96,10 +106,16 @@ export class Recorder {
    */
   unhook() {
     WebAssembly.Instance = this._WebAssembly_Instance_orig;
+    WebAssembly.instantiate = this._WebAssembly_instantiate_orig;
     WebAssembly.instantiateStreaming = this._WebAssembly_instantiateStreaming_orig;
   }
 
-  assertInstantiated() {
+  _extractExports(exports) {
+    this._callLogMemory = exports["_replay:call_log"];
+    this._callLogCursor = exports["_replay:call_log_cursor"];
+  }
+
+  _assertInstantiated() {
     if (!this._callLogMemory || !this._callLogCursor) {
       throw "No WebAssembly module was instantiated for recording.";
     }
@@ -110,7 +126,7 @@ export class Recorder {
    * @returns {Uint8Array}
    */
   getCallLog() {
-    this.assertInstantiated();
+    this._assertInstantiated();
 
     const cur = this._callLogCursor.value;
     return new Uint8Array(this._callLogMemory.buffer).slice(0, cur);
@@ -130,6 +146,9 @@ export class Replayer {
 
     /** @type {?WebAssembly.Global} */
     this._callLogCursor = null;
+
+    /** @type {?WebAssembly.Global} */
+    this._errCode = null;
 
     this._moduleInit = null;
     this._walkCallLog = null;
@@ -164,16 +183,7 @@ export class Replayer {
     WebAssembly.instantiate = async function _replay_instantiate(source, importObject) {
       const res = await this._WebAssembly_instantiate_orig(source, importObject);
       assertReplayMode(res.module, 1);
-      this._callLogMemory = res.instance.exports["_replay:call_log"];
-      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
-      this._moduleInit = res.instance.exports["_replay:module_init"];
-      this._walkCallLog = res.instance.exports["_replay:walk_call_log"];
-      for (const [name, func] of Object.entries(res.instance.exports)) {
-        if (name.startsWith("_replay:callstub_")) {
-          const funcIdx = Number(name.substring("_replay:callstub_".length));
-          this._callStubs[funcIdx] = func;
-        }
-      }
+      this._extractExports(res.instance.exports);
       return res;
     }.bind(this);
 
@@ -182,16 +192,7 @@ export class Replayer {
     WebAssembly.instantiateStreaming = async function _replay_instantiateStreaming(source, importObject) {
       const res = await this._WebAssembly_instantiateStreaming_orig(source, importObject);
       assertReplayMode(res.module, 1);
-      this._callLogMemory = res.instance.exports["_replay:call_log"];
-      this._callLogCursor = res.instance.exports["_replay:call_log_cursor"];
-      this._moduleInit = res.instance.exports["_replay:module_init"];
-      this._walkCallLog = res.instance.exports["_replay:walk_call_log"];
-      for (const [name, func] of Object.entries(res.instance.exports)) {
-        if (name.startsWith("_replay:callstub_")) {
-          const funcIdx = Number(name.substring("_replay:callstub_".length));
-          this._callStubs[funcIdx] = func;
-        }
-      }
+      this._extractExports(res.instance.exports);
       return res;
     }.bind(this);
   }
@@ -200,10 +201,42 @@ export class Replayer {
    * Restores the original WebAssembly API.
    */
   unhook() {
+    WebAssembly.instantiate = this._WebAssembly_instantiate_orig;
     WebAssembly.instantiateStreaming = this._WebAssembly_instantiateStreaming_orig;
   }
 
-  assertInstantiated() {
+  _extractExports(exports) {
+    this._callLogMemory = exports["_replay:call_log"];
+    this._callLogCursor = exports["_replay:call_log_cursor"];
+    this._errCode = exports["_replay:err_code"];
+    this._moduleInit = this._captureErrors(exports["_replay:module_init"]);
+    this._walkCallLog = this._captureErrors(exports["_replay:walk_call_log"]);
+    for (const [name, func] of Object.entries(exports)) {
+      if (name.startsWith("_replay:callstub_")) {
+        const funcIdx = Number(name.substring("_replay:callstub_".length));
+        this._callStubs[funcIdx] = func;
+      }
+    }
+  }
+
+  _captureErrors(f) {
+    return (...args) => {
+      try {
+        return f(...args);
+      } catch (e) {
+        if (
+          e instanceof WebAssembly.RuntimeError
+          && e.message.includes("unreachable")
+          && this._errCode.value !== 0
+        ) {
+          e.message += `: ${code2msg(this._errCode.value)} at offset 0x${this._callLogCursor.value.toString(16)}`;
+        }
+        throw e;
+      }
+    }
+  }
+
+  _assertInstantiated() {
     if (!this._callLogMemory || !this._callLogCursor) {
       throw "No WebAssembly module was instantiated for replay.";
     }
@@ -214,7 +247,7 @@ export class Replayer {
    * @param {Uint8Array} callLog - The call log to load.
    */
   loadCallLog(callLog) {
-    this.assertInstantiated();
+    this._assertInstantiated();
 
     const dst = new Uint8Array(this._callLogMemory.buffer);
     dst.set(callLog);
@@ -244,7 +277,7 @@ export class Replayer {
    * @returns {function()} A function that performs the actual call, returning what the original function returned.
    */
   init(callDesc) {
-    this.assertInstantiated();
+    this._assertInstantiated();
 
     this._moduleInit(callDesc.cursor);
     const paramPosition = this._callLogCursor.value;
@@ -264,7 +297,7 @@ export class Replayer {
    * @returns {*} The return values of the replayed call.
    */
   initAndCall(callDesc) {
-    this.assertInstantiated();
+    this._assertInstantiated();
 
     return this.init(callDesc)();
   }

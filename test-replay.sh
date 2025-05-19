@@ -16,3 +16,5 @@ wasm-tools print -o $1/replay.wat $1/replay.wasm
 echo "Validating..."
 wasm-tools validate --features all $1/record.wasm
 wasm-tools validate --features all $1/replay.wasm
+
+js -m dumb.mjs
