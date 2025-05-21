@@ -45,26 +45,29 @@ function encode(mem) {
   return out;
 }
 
-function decode(mem) {
+function decode(buf) {
+  // The pseudocode here is a bit weird because we are just pushing to the
+  // the output instead of writing into it, so we don't need that separate `i`
+  // variable that we have in the real code.
   const out = [];
 
-  let i = 0;
+  let cur = 0;
   let mode = 0;
-  while (i < mem.length) {
-    let n = mem[i];
-    i++;
+  while (cur < buf.length) {
+    let n = buf[cur];
+    cur++;
 
     if (mode === 0) {
       // run
-      out.push(...new Array(n).fill(mem[i])); // memory.fill where start=cur, len=n
-      i++;
-      mode = 1;
+      out.push(...new Array(n).fill(buf[cur])); // memory.fill where start=cur, len=n
+      cur++;
     } else {
       // literals
-      out.push(...mem.slice(i, i + n)); // memory.copy where src=i, dst=cur, len=n
-      i += n;
-      mode = 0;
+      out.push(...buf.slice(cur, cur + n)); // memory.copy where src=cur, dst=i, len=n
+      cur += n;
     }
+
+    mode = (mode + 1) % 2;
   }
 
   return out;

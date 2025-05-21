@@ -625,7 +625,7 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
 
                                 // The function signature is [i32] -> [i32]
                                 let mut r = ReplayReader {
-                                    f: &mut Function::new(vec![(3, wasm_encoder::ValType::I32)]),
+                                    f: &mut Function::new(vec![(4, wasm_encoder::ValType::I32)]),
                                     buf: buf_memidx,
                                     cur: cur_globalidx,
                                     errcode: replay_errcode_globalidx,
@@ -671,9 +671,12 @@ pub fn replay(args: ReplayArgs) -> Result<()> {
                                             // RLE decompress the memory
                                             r.rle(
                                                 i as u32,
-                                                tmps_i32 + 0,
-                                                tmps_i32 + 1,
-                                                tmps_i32 + 2,
+                                                &[
+                                                    tmps_i32 + 0,
+                                                    tmps_i32 + 1,
+                                                    tmps_i32 + 2,
+                                                    tmps_i32 + 3,
+                                                ],
                                             );
                                         }
                                         ValType::I64 => {
@@ -1267,6 +1270,13 @@ impl ReplayReader<'_> {
         self.bump_cur_imm(1);
     }
 
+    fn i16(&mut self) {
+        use Instruction::*;
+        self.add(&GlobalGet(self.cur));
+        self.bump_cur_imm(2);
+        self.add(&I32Load16U(self.in_buf()));
+    }
+
     fn i32(&mut self) {
         use Instruction::*;
         self.add(&GlobalGet(self.cur));
@@ -1423,42 +1433,88 @@ impl ReplayReader<'_> {
         self.bump_cur();
     }
 
-    fn rle(&mut self, mem_idx: u32, tmp_i32_1: u32, tmp_i32_2: u32, tmp_i32_3: u32) {
+    fn rle(&mut self, mem_idx: u32, tmp_i32s: &[u32; 4]) {
         use Instruction::*;
-        let i = tmp_i32_1;
-        let end = tmp_i32_2;
-        let run_length = tmp_i32_3;
+        let [end, i, mode, n] = *tmp_i32s;
 
-        // i = 0;
-        self.add(&I32Const(0));
-        self.add(&LocalSet(i));
-
-        // end = len + cur (after len);
+        // end = cur + len
+        // (but we get cur after getting len so we don't have to account for
+        // the size of len itself)
         self.i32();
         self.add(&GlobalGet(self.cur));
         self.add(&I32Add);
         self.add(&LocalSet(end));
 
-        // while (cur < end)
-        self.add(&Loop(wasm_encoder::BlockType::Empty));
+        // i = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(i));
+
+        // mode = 0;
+        self.add(&I32Const(0));
+        self.add(&LocalSet(mode));
+
+        // while (cur < end) ...
+        self.add(&Block(wasm_encoder::BlockType::Empty));
         {
-            // memory.fill(addr=i, val=run_byte, len=run_length)
-            self.add(&LocalGet(i));
-            self.byte();
-            self.i32();
-            self.add(&LocalTee(run_length));
-            self.add(&MemoryFill(mem_idx));
+            self.add(&Loop(wasm_encoder::BlockType::Empty));
+            {
+                // if (cur >= end) break;
+                self.add(&GlobalGet(self.cur));
+                self.add(&LocalGet(end));
+                self.add(&I32GeU);
+                self.add(&BrIf(1));
 
-            // i += run_length
-            self.add(&LocalGet(i));
-            self.add(&LocalGet(run_length));
-            self.add(&I32Add);
-            self.add(&LocalSet(i));
+                // let n = mem.i16();
+                self.i16();
+                self.add(&LocalSet(n));
 
-            self.add(&GlobalGet(self.cur));
-            self.add(&LocalGet(end));
-            self.add(&I32LtU);
-            self.add(&BrIf(0));
+                self.add(&LocalGet(mode));
+                self.add(&I32Eqz);
+                self.add(&If(wasm_encoder::BlockType::Empty));
+                {
+                    // Run: memory.fill(dst=i, val=run_byte, len=n)
+                    self.add(&LocalGet(i));
+                    self.byte();
+                    self.add(&LocalGet(n));
+                    self.add(&MemoryFill(mem_idx));
+
+                    // no need to further adjust cur
+                }
+                self.add(&Else);
+                {
+                    // Literals: memory.copy(dst=i, src=cur, len=n)
+                    self.add(&LocalGet(i));
+                    self.add(&GlobalGet(self.cur));
+                    self.add(&LocalGet(n));
+                    self.add(&MemoryCopy {
+                        src_mem: self.buf,
+                        dst_mem: mem_idx,
+                    });
+
+                    // cur += n
+                    self.add(&LocalGet(n));
+                    self.bump_cur();
+                }
+                self.add(&End);
+
+                // i += n;
+                self.add(&LocalGet(i));
+                self.add(&LocalGet(n));
+                self.add(&I32Add);
+                self.add(&LocalSet(i));
+
+                // mode = (mode + 1) % 2; // toggle
+                self.add(&LocalGet(mode));
+                self.add(&I32Const(1));
+                self.add(&I32Add);
+                self.add(&I32Const(2));
+                self.add(&I32RemU);
+                self.add(&LocalSet(mode));
+
+                // continue;
+                self.add(&Br(0));
+            }
+            self.add(&End);
         }
         self.add(&End);
     }
